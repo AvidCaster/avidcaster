@@ -105,6 +105,8 @@ export class AuthService implements OnDestroy {
     this.claimSlice();
     this.initState();
     this.subState();
+
+    // Disable auth for now - to enable, have the api server running and uncomment the below line
     // this.tokenRefreshRequest$().pipe(first(), takeUntil(this.destroy$)).subscribe();
 
     logger.info(
