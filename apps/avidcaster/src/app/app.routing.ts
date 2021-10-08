@@ -32,6 +32,11 @@ import { UserVerifyComponent } from './pages/user-verify/user-verify.component';
 export const AppRoutes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'annotate/draw',
+  },
+  {
+    path: 'home',
     component: HomeComponent,
     data: {
       title: _('APP.HEADLINE'),
