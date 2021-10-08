@@ -69,7 +69,9 @@
     "prepare": "husky install",
     "serve:dist": "cd dist/apps/fullerstack; open http://localhost:8080; python3 -m http.server 8080",
     "<--------- [ test related ] ------->": "test related",
-    "test:ipware": "yarn nx test nax-ipware"
+    "test:ipware": "yarn nx test nax-ipware",
+    "build:azure": "yarn install && yarn nx build avidtrader --prod"
+
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"
