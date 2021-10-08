@@ -11,7 +11,7 @@
       },
       "outputs": ["{options.outputFile}"]
     },
-    "test": {
+    "test-disabled": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/ngx-uix"],
       "options": {

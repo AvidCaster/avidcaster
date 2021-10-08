@@ -4,7 +4,7 @@
   "sourceRoot": "libs/ngx-annotator/src",
   "prefix": "fullerstack",
   "targets": {
-    "test": {
+    "test-disabled": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/ngx-annotator"],
       "options": {
