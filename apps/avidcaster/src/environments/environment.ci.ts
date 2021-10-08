@@ -110,7 +110,7 @@ const annotator: AnnotatorConfig = {
 export const environment: Readonly<ApplicationConfig> = {
   version: '0.0.1',
   production: false,
-  appName: 'AvidTrader',
+  appName: 'AvidCaster-CI',
   logger,
   i18n,
   gql,

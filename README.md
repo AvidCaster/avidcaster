@@ -15,7 +15,7 @@ To create an open source dashboard from the ground-up. `Quality of Experience` i
 
 <img width="auto" src="https://raw.githubusercontent.com/neekware/fullerstack/main/libs/agx-assets/src/lib/images/misc/login.png">
 
-Screenshots: ([screenshots](FEATURES.md)) // Demo: ( [avidtrader.co](https://app.avidtrader.co/forex/100/USD/EUR) )
+Screenshots: ([screenshots](FEATURES.md)) // Demo: ( [avidcaster.co](https://app.avidcaster.co/forex/100/USD/EUR) )
 
 <br/>
 
@@ -132,7 +132,7 @@ cd fullerstack
 yarn install
 
 # Create a database (postgres) for the angular app
-createdb avidtrader
+createdb avidcaster
 
 # Copy environment variables and update
 cp env.example .env
@@ -147,7 +147,7 @@ yarn prisma:seed
 yarn start:api
 
 # Start the frontend (in terminal #2)
-yarn start:avidtrader
+yarn start:avidcaster
 
 # Visit frontend (on mac use open, on windows, just type it in)
 open http://localhost:4200
@@ -160,7 +160,7 @@ open http://localhost:4200
 
 ```bash
 # Webpack analyzer
-yarn nx build avidtrader --stats-json --prod && yarn stats
+yarn nx build avidcaster --stats-json --prod && yarn stats
 
 # Format changed files
 yarn format:all

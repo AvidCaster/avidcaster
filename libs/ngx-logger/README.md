@@ -70,7 +70,7 @@ import { ConfigService } from '@fullerstack/ngx-config';
 import { LoggerService } from '@fullerstack/ngx-logger';
 
 @Component({
-  selector: 'avidtrader-root',
+  selector: 'avidcaster-root',
 })
 export class AppComponent {
   title = 'FullerStack';

@@ -121,7 +121,7 @@ export const AppMenuTree: MenuItem[] = [
 ];
 
 @Component({
-  selector: 'avidtrader-root',
+  selector: 'avidcaster-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

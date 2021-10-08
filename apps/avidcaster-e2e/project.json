@@ -1,0 +1,29 @@
+{
+  "root": "apps/avidcaster-e2e",
+  "sourceRoot": "apps/avidcaster-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/avidcaster-e2e/cypress.json",
+        "devServerTarget": "avidcaster:serve:development",
+        "tsConfig": "apps/avidcaster-e2e/tsconfig.json"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "avidcaster:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/avidcaster-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["avidcaster"]
+}
