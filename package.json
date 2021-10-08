@@ -70,8 +70,7 @@
     "serve:dist": "cd dist/apps/fullerstack; open http://localhost:8080; python3 -m http.server 8080",
     "<--------- [ test related ] ------->": "test related",
     "test:ipware": "yarn nx test nax-ipware",
-    "build:azure": "yarn install && yarn nx build avidtrader --prod"
-
+    "build:azure": "yarn install && yarn nx build avidcaster --prod"
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"
@@ -103,7 +102,7 @@
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
     "@nrwl/angular": "12.9.0",
-    "@prisma/client": "3.1.1",
+    "@prisma/client": "^3.2.1",
     "apollo-server-express": "3.3.0",
     "bcrypt": "5.0.1",
     "bcryptjs": "2.4.3",
@@ -201,7 +200,7 @@
     "postcss": "8.2.13",
     "prettier": "2.3.2",
     "prettier-plugin-import-sort": "0.0.6",
-    "prisma": "3.1.1",
+    "prisma": "^3.2.1",
     "prisma-dbml-generator": "0.7.0",
     "react-refresh": "0.10.0",
     "source-map-loader": "3.0.0",
