@@ -1,0 +1,105 @@
+<div
+  (click)="$event.stopPropagation()"
+  [fxLayout]="flexLayout"
+  [ngStyle]="{ 'z-index': 2, position: 'absolute', top: topPosition, bottom: bottomPosition, left: leftPosition, right: rightPosition }"
+>
+  <button mat-icon-button class="quick-menu-button material-icons color-black" [matMenuTriggerFor]="buttonVisibility">
+    <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.vertical ? 'dots-horizontal' : 'dots-vertical'"></mat-icon>
+  </button>
+
+  <mat-menu #buttonVisibility="matMenu">
+    <div fxLayout="row" fxLayoutGap="18px">
+      <fullerstack-menu-position></fullerstack-menu-position>
+      <fullerstack-hide-menu></fullerstack-hide-menu>
+    </div>
+    <mat-divider class="mb1"></mat-divider>
+    <div style="font-weight: 600">
+      By: Avid Caster <a href="mailto:avidcaster@neekware.com?subject=Feature Request">(avidcaster@neekware.com)</a>
+    </div>
+  </mat-menu>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.trash"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    [@wiggleIt]="trashIconState"
+    (click)="trash()"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="trash-can-outline"></mat-icon>
+  </button>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.undo"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    [@wiggleIt]="undoIconState"
+    (click)="undo()"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="undo"></mat-icon>
+  </button>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.redo"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    [@wiggleIt]="redoIconState"
+    (click)="redo()"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="redo"></mat-icon>
+  </button>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.lineWidth"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    [matMenuTriggerFor]="lineWidthPicker"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="format-line-weight"></mat-icon>
+  </button>
+  <mat-menu #lineWidthPicker="matMenu">
+    <mat-slider
+      color="primary"
+      thumbLabel
+      tickInterval=".1"
+      step=".5"
+      min="2"
+      max="10"
+      bubbles="true"
+      aria-label="units"
+      (change)="setLineWidth($event)"
+      [value]="annotation.state.lineWidth"
+    ></mat-slider>
+    <mat-divider class="slider-line-width" [ngStyle]="{ 'border-top': annotation.state.lineWidth * 1.4 + 'px solid black' }"></mat-divider>
+  </mat-menu>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.cursor"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    [@wiggleIt]="cursorIconState"
+    (click)="toggleCursor()"
+  >
+    <mat-icon
+      class="clickable-menu-icon"
+      [svgIcon]="annotation.state.cursor ? 'cursor-default-click' : 'cursor-default-click-outline'"
+    ></mat-icon>
+  </button>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.fullscreen"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    (click)="toggleFullscreen()"
+  >
+    <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse-all' : 'arrow-expand-all'"></mat-icon>
+  </button>
+
+  <button
+    *ngIf="annotation.state.buttonVisibility.refresh"
+    mat-icon-button
+    class="quick-menu-button material-icons color-black"
+    (click)="uix.refreshPage()"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="web-refresh"></mat-icon>
+  </button>
+</div>

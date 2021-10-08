@@ -105,7 +105,9 @@ export class AuthService implements OnDestroy {
     this.claimSlice();
     this.initState();
     this.subState();
-    this.tokenRefreshRequest$().pipe(first(), takeUntil(this.destroy$)).subscribe();
+
+    // Disable auth for now - to enable, have the api server running and uncomment the below line
+    // this.tokenRefreshRequest$().pipe(first(), takeUntil(this.destroy$)).subscribe();
 
     logger.info(
       `[${this.nameSpace}] AuthService ready ... (${
@@ -144,8 +146,11 @@ export class AuthService implements OnDestroy {
    * Claim Auth state:slice
    */
   private claimSlice() {
-    const logger = this.options?.auth?.logState ? this.logger.debug.bind(this.logger) : undefined;
-    this.claimId = this.store.claimSlice(this.nameSpace, logger);
+    if (!this.options?.auth?.logState) {
+      this.claimId = this.store.claimSlice(this.nameSpace);
+    } else {
+      this.claimId = this.store.claimSlice(this.nameSpace, this.logger.debug.bind(this.logger));
+    }
   }
 
   /**

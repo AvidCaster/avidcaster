@@ -32,16 +32,17 @@
       "style": "scss"
     }
   },
-  "defaultProject": "avidtrader",
+  "defaultProject": "avidcaster",
   "projects": {
     "agx-assets": "libs/agx-assets",
     "agx-dto": "libs/agx-dto",
     "agx-store": "libs/agx-store",
     "agx-util": "libs/agx-util",
     "api": "apps/api",
-    "avidtrader": "apps/avidtrader",
-    "avidtrader-e2e": "apps/avidtrader-e2e",
+    "avidcaster": "apps/avidcaster",
+    "avidcaster-e2e": "apps/avidcaster-e2e",
     "nax-ipware": "libs/nax-ipware",
+    "ngx-annotator": "libs/ngx-annotator",
     "ngx-auth": "libs/ngx-auth",
     "ngx-cachify": "libs/ngx-cachify",
     "ngx-config": "libs/ngx-config",

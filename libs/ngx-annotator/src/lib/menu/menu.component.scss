@@ -1,0 +1,53 @@
+.clickable-menu-icon:hover {
+  cursor: pointer;
+}
+
+.quick-menu-button {
+  margin-top: -2px;
+  margin-bottom: -2px;
+}
+
+.line-width {
+  margin: 2px;
+  padding: 2px;
+}
+
+.material-icons.color-black {
+  color: #000000;
+}
+
+.mat-menu-content ng-tns-c248-1 {
+  padding: 10px;
+}
+
+::ng-deep .mat-menu-panel {
+  padding: 15px;
+  min-width: unset;
+  max-width: unset;
+  box-shadow: unset;
+}
+
+::ng-deep .mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+  background-color: black;
+}
+
+mat-slider {
+  width: 100%;
+}
+
+md-slider[md-discrete] .md-sign,
+md-slider[md-discrete] .md-sign:after {
+  opacity: 1;
+  -webkit-transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.slider-line-width {
+  margin-top: -25px;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+}

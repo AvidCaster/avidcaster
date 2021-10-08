@@ -1,0 +1,36 @@
+.material-icons.color-black {
+  color: #000000;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.quick-menu-button {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.reverse-icon-rotate {
+  transform: rotate(90deg);
+}
+
+.header {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.flip-horizontal {
+  transform: rotate(360deg) scaleX(-1);
+}
+
+.flip-vertical {
+  transform: rotate(360deg) scaleY(-1);
+}
+
+.flip-vertical-horizontal {
+  transform: rotate(360deg) scaleX(-1) scaleY(-1);
+}

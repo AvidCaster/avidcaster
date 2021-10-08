@@ -1,0 +1,40 @@
+<div class="header">{{ 'COMMON.MENU_POSITION' | translate }}</div>
+<mat-divider class="mb1" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+
+<div class="mb1">
+  <mat-radio-group fxLayout="column">
+    <div
+      *ngFor="let corner of corners"
+      class="selection-box"
+      fxLayout="row"
+      fxLayoutGap="8px"
+      fxLayoutAlign="space-between center"
+      (click)="setPosition($event, corner.position)"
+    >
+      <mat-radio-button class="quick-menu-button" [value]="corner.position" [checked]="isPosition(corner.position)" color="primary">
+        {{ corner.label | translate }}
+      </mat-radio-button>
+      <mat-icon [ngClass]="corner.class" [svgIcon]="corner.icon"></mat-icon>
+    </div>
+  </mat-radio-group>
+</div>
+
+<div class="header">{{ 'COMMON.MENU_ORIENTATION' | translate }}</div>
+<mat-divider class="mb1" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+
+<div class="mb1" fxLayout="column" fxLayoutGap="5px">
+  <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleVertical($event)">
+    <mat-icon [svgIcon]="annotation.state.vertical ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+    <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.VERTICAL' | translate }}</div>
+    <mat-icon [svgIcon]="annotation.state.vertical ? 'arrow-expand-vertical' : 'arrow-expand-horizontal'"></mat-icon>
+  </div>
+
+  <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleRevere($event)">
+    <mat-icon [svgIcon]="annotation.state.reverse ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+    <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.REVERSE' | translate }}</div>
+    <mat-icon
+      [class.reverse-icon-rotate]="!annotation.state.vertical"
+      [svgIcon]="annotation.state.reverse ? 'sort-ascending' : 'sort-descending'"
+    ></mat-icon>
+  </div>
+</div>

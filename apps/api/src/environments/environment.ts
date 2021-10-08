@@ -38,7 +38,16 @@ const graphqlConfig: GqlModuleOptions = {
   },
   cors: {
     credentials: true,
-    origin: 'http://localhost:4200',
+    origin: [
+      'http://0.0.0.0:4200',
+      'http://0.0.0.0:4201',
+      'http://0.0.0.0:4201',
+      'http://0.0.0.0:8000',
+      'http://localhost:4200',
+      'http://localhost:4201',
+      'http://localhost:4201',
+      'http://localhost:8000',
+    ],
   },
 };
 
@@ -57,9 +66,9 @@ const i18nConfig: I18nConfig = {
 };
 
 export const environment = {
-  siteName: 'Avidtrader',
+  siteName: 'AvidCaster',
   siteUrl: 'http://localhost:4200',
-  siteSupportEmail: 'support@avidtrader.co',
+  siteSupportEmail: 'support@avidcaster.co',
   production: false,
   port: 4201,
   prefix: 'api',

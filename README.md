@@ -15,7 +15,7 @@ To create an open source dashboard from the ground-up. `Quality of Experience` i
 
 <img width="auto" src="https://raw.githubusercontent.com/neekware/fullerstack/main/libs/agx-assets/src/lib/images/misc/login.png">
 
-Screenshots: ([screenshots](FEATURES.md)) // Demo: ( [avidtrader.co](https://app.avidtrader.co/forex/100/USD/EUR) )
+Screenshots: ([screenshots](FEATURES.md)) // Demo: ( [avidcaster.co](https://app.avidcaster.co/forex/100/USD/EUR) )
 
 <br/>
 
@@ -132,7 +132,7 @@ cd fullerstack
 yarn install
 
 # Create a database (postgres) for the angular app
-createdb avidtrader
+createdb avidcaster
 
 # Copy environment variables and update
 cp env.example .env
@@ -147,7 +147,7 @@ yarn prisma:seed
 yarn start:api
 
 # Start the frontend (in terminal #2)
-yarn start:avidtrader
+yarn start:avidcaster
 
 # Visit frontend (on mac use open, on windows, just type it in)
 open http://localhost:4200
@@ -160,7 +160,7 @@ open http://localhost:4200
 
 ```bash
 # Webpack analyzer
-yarn nx build avidtrader --stats-json --prod && yarn stats
+yarn nx build avidcaster --stats-json --prod && yarn stats
 
 # Format changed files
 yarn format:all
@@ -206,18 +206,18 @@ X.Y.Z Version
 ```txt<br>--------------------------------------------------------------------------------
  Language             Files        Lines        Blank      Comment         Code
 --------------------------------------------------------------------------------
- TypeScript             386        21408         2415         3971        15022
- JSON                   176         5059            0            0         5059
- Markdown               104         2970          759            0         2211
- HTML                    33         1446          113            5         1328
- Sass                    55         1449          140           35         1274
- JavaScript              35          647           23           48          576
+ TypeScript             407        22907         2596         4190        16121
+ JSON                   182         5282            0            0         5282
+ Markdown               105         2983          762            0         2221
+ HTML                    38         1635          128            5         1502
+ Sass                    60         1655          174           35         1446
+ JavaScript              36          667           23           48          596
  CSS                      1           96            7            0           89
  Plain Text               5           94           10            0           84
  SQL                      2           88           17           16           55
  Toml                     1            3            0            2            1
 --------------------------------------------------------------------------------
- Total                  798        33260         3484         4077        25699
+ Total                  837        35410         3717         4296        27397
 --------------------------------------------------------------------------------
 ```
 
