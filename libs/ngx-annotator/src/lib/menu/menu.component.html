@@ -13,8 +13,15 @@
       <fullerstack-hide-menu></fullerstack-hide-menu>
     </div>
     <mat-divider class="mb1"></mat-divider>
-    <div style="font-weight: 600">
-      More Info ... <a href="https://github.com/AvidCaster/avidcaster/blob/main/README.md#features">(here)</a>
+
+    <div fxLayout="row" fxLayoutGap="20px">
+      <div fxLayout="row" fxLayoutGap="5px">
+        <mat-icon svgIcon="page-next-outline"></mat-icon>
+        <div class="more-link">More Info ...</div>
+      </div>
+      <a style="text-decoration: none" href="https://github.com/AvidCaster/avidcaster/blob/main/README.md#features">
+        <mat-icon class="clickable-menu-icon" svgIcon="link-variant"></mat-icon>
+      </a>
     </div>
   </mat-menu>
 
