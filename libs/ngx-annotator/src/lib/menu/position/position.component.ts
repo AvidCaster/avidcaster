@@ -33,28 +33,28 @@ export class MenuPositionComponent implements OnDestroy {
 
   corners: SupportedCorner[] = [
     {
-      position: 'top-right',
-      icon: 'select-drag',
-      class: 'flip-vertical',
-      label: _('COMMON.POSITION.TOP_RIGHT'),
-    },
-    {
       position: 'top-left',
       icon: 'select-drag',
       class: 'flip-vertical-horizontal',
       label: _('COMMON.POSITION.TOP_LEFT'),
     },
     {
-      position: 'bottom-right',
+      position: 'top-right',
       icon: 'select-drag',
-      class: '',
-      label: _('COMMON.POSITION.BOTTOM_RIGHT'),
+      class: 'flip-vertical',
+      label: _('COMMON.POSITION.TOP_RIGHT'),
     },
     {
       position: 'bottom-left',
       icon: 'select-drag',
-      class: 'flip-vertical',
+      class: 'flip-horizontal',
       label: _('COMMON.POSITION.BOTTOM_LEFT'),
+    },
+    {
+      position: 'bottom-right',
+      icon: 'select-drag',
+      class: '',
+      label: _('COMMON.POSITION.BOTTOM_RIGHT'),
     },
   ];
 
