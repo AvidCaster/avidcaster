@@ -5,7 +5,7 @@
 
 ## Description
 
-A project enabling online content creators with few web-based tools they really need.
+A project enabling online content creators with a few web-based tools they really need.
 
 ## Mission
 
@@ -14,18 +14,18 @@ To create an open source web application to bring `Quality of Experience` during
 ## Features
 
 - Annotation, Telestation (status: done - https://avidcaster.net/annotate/draw)
-  - Simplicity is the key
-  - Intuitive menu
-  - Mobile and PC based
+  - Simplicity with Intuitive menu
+  - Mobile or PC supported
   - Finger / Pen enabled
 - Teleprompter (status: in progress)
   - Upload your test and set the speed (manual and automatic)
   - Voice-enabled auto scrolling (based on mic input)
   - Flip feature - vertical and horizontally
-- Timer - count down (status: in progress)
-  - Setup a timer, and make it available via a web address to anywhere with internet access
-  - Control the timer remotely, but multiple people with control access
+- Timer - countdown (status: in progress)
+  - Setup a timer, and make it available via a web address to anyone with internet access
+  - Control the timer remotely, by multiple admins
   - Hurry-up feature, speed up the timer, so the speaker hurries up without any direct messages
+  - (e.g. Speed up the remaining 30 minutes by 5 minutes - clock will run 1/6th faster)
 - Lower 3rd (status: in progress)
   - Lower 3rd via web interface
   - Animations
