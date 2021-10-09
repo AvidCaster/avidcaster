@@ -18,7 +18,7 @@ To create an open source web application to bring `Quality of Experience` during
   - Mobile or PC supported
   - Finger / Pen enabled
 - Teleprompter (status: in progress)
-  - Upload your test and set the speed (manual and automatic)
+  - Upload your text and set the speed (manual and automatic)
   - Voice-enabled auto scrolling (based on mic input)
   - Flip feature - vertical and horizontally
 - Timer - countdown (status: in progress)
