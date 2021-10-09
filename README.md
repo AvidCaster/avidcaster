@@ -14,6 +14,10 @@ To create an open source web application to bring `Quality of Experience` during
 ## Features
 
 - Annotation, Telestation (status: done - https://avidcaster.net/annotate/draw)
+  - Simplicity is the key
+  - Intuitive menu
+  - Mobile and PC based
+  - Finger / Pen enabled
 - Teleprompter (status: in progress)
   - Upload your test and set the speed (manual and automatic)
   - Voice-enabled auto scrolling (based on mic input)
@@ -47,7 +51,7 @@ X.Y.Z Version
 --------------------------------------------------------------------------------
  TypeScript             407        22907         2596         4190        16121
  JSON                   183         5292            0            0         5292
- Markdown               105         2822          718            0         2104
+ Markdown               105         2826          718            0         2108
  HTML                    38         1635          128            5         1502
  Sass                    60         1655          174           35         1446
  JavaScript              36          667           23           48          596
@@ -56,7 +60,7 @@ X.Y.Z Version
  SQL                      2           88           17           16           55
  Toml                     1            3            0            2            1
 --------------------------------------------------------------------------------
- Total                  838        35259         3673         4296        27290
+ Total                  838        35263         3673         4296        27294
 --------------------------------------------------------------------------------
 ```
 
