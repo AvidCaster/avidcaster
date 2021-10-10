@@ -218,6 +218,7 @@ export class AnnotatorService implements OnDestroy {
   getCanvasAttributes(): LineAttributes {
     return {
       lineCap: this.state.lineCap,
+      lineJoin: this.state.lineJoin,
       lineWidth: this.state.lineWidth,
       strokeStyle: this.state.strokeStyle,
     };
@@ -231,6 +232,7 @@ export class AnnotatorService implements OnDestroy {
   setCanvasAttributes(ctx: CanvasRenderingContext2D, attr?: LineAttributes) {
     if (attr) {
       ctx.lineCap = attr.lineCap;
+      ctx.lineJoin = attr.lineJoin;
       ctx.lineWidth = attr.lineWidth;
       ctx.strokeStyle = attr.strokeStyle;
     } else {
