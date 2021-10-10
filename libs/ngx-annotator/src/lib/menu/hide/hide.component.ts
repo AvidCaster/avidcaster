@@ -32,37 +32,42 @@ export class HideMenuComponent implements OnDestroy {
 
   actionButtons: ActionButton[] = [
     {
-      type: 'trash',
+      type: 'showTrash',
       icon: 'trash-can-outline',
       label: _('COMMON.TRASH'),
     },
     {
-      type: 'undo',
+      type: 'showUndo',
       icon: 'undo',
       label: _('COMMON.UNDO'),
     },
     {
-      type: 'redo',
+      type: 'showRedo',
       icon: 'redo',
       label: _('COMMON.REDO'),
     },
     {
-      type: 'lineWidth',
+      type: 'showLineWidth',
       icon: 'format-line-weight',
       label: _('COMMON.LINE_WEIGHT'),
     },
     {
-      type: 'cursor',
+      type: 'showColorPicker',
+      icon: 'palette',
+      label: _('COMMON.COLOR_PICKER'),
+    },
+    {
+      type: 'showCursor',
       icon: 'cursor-default-click',
       label: _('COMMON.CURSOR'),
     },
     {
-      type: 'fullscreen',
+      type: 'showFullscreen',
       icon: 'arrow-expand-all',
       label: _('COMMON.FULLSCREEN'),
     },
     {
-      type: 'refresh',
+      type: 'showRefresh',
       icon: 'web-refresh',
       label: _('COMMON.REFRESH'),
     },
@@ -70,18 +75,15 @@ export class HideMenuComponent implements OnDestroy {
 
   constructor(readonly annotation: AnnotatorService) {}
 
-  toggleButtonVisibility(event: Event, buttonType: ButtonType) {
+  toggleShowButton(event: Event, buttonType: ButtonType) {
     event.stopPropagation();
     this.annotation.setState({
-      buttonVisibility: {
-        ...this.annotation.state.buttonVisibility,
-        [buttonType]: !this.annotation.state.buttonVisibility[buttonType],
-      },
+      [buttonType]: !this.annotation.state[buttonType],
     });
   }
 
   isButtonVisible(buttonType: ButtonType) {
-    return this.annotation.state.buttonVisibility[buttonType];
+    return this.annotation.state[buttonType];
   }
 
   ngOnDestroy() {

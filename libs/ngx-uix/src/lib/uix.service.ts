@@ -16,7 +16,7 @@ import {
 } from '@fullerstack/ngx-config';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { MaterialService } from '@fullerstack/ngx-material';
-import { cloneDeep as ldDeepClone, merge as ldMergeWith } from 'lodash-es';
+import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith } from 'lodash-es';
 import { BehaviorSubject, Subject, distinctUntilChanged } from 'rxjs';
 import * as fullscreen from 'screenfull';
 import { DeepReadonly } from 'ts-essentials';

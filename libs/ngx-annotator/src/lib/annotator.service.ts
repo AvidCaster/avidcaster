@@ -19,7 +19,7 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
 import { SystemService } from '@fullerstack/ngx-system';
-import { cloneDeep as ldDeepClone, merge as ldMergeWith } from 'lodash-es';
+import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
 import { EMPTY, Observable, Subject, filter, fromEvent, merge, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
@@ -84,14 +84,28 @@ export class AnnotatorService implements OnDestroy {
   }
 
   /**
-   * Initialize Layout state
+   * Sanitize state
+   * @param state state object or stringify json
+   * @returns state object
+   */
+  private sanitizeState(state: AnnotatorState | string): AnnotatorState {
+    let sanitized = sanitizeJsonStringOrObject<AnnotatorState>(state);
+    if (sanitized) {
+      const validKeys = Object.keys(defaultAnnotatorState());
+      sanitized = ldPick(sanitized, validKeys) as AnnotatorState;
+    }
+    sanitized = ldMergeWith(defaultAnnotatorState(), sanitized, (dest, src) =>
+      Array.isArray(dest) ? src : undefined
+    );
+    return sanitized;
+  }
+
+  /**
+   * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
     const storageState = localStorage.getItem(ANNOTATOR_STORAGE_KEY);
-    let state = sanitizeJsonStringOrObject<AnnotatorState>(storageState);
-    state = ldMergeWith(defaultAnnotatorState(), state, (dest, src) =>
-      Array.isArray(dest) ? src : undefined
-    );
+    const state = this.sanitizeState(storageState);
     this.store.setState(this.claimId, {
       ...state,
       appName: this.options.appName,
@@ -140,7 +154,8 @@ export class AnnotatorService implements OnDestroy {
       'storage',
       (event) => {
         if (event.key === ANNOTATOR_STORAGE_KEY) {
-          const state = sanitizeJsonStringOrObject<AnnotatorState>(event.newValue);
+          const storageState = sanitizeJsonStringOrObject<AnnotatorState>(event.newValue);
+          const state = this.sanitizeState(storageState);
           this.setState({ ...defaultAnnotatorState(), ...state });
         }
       },

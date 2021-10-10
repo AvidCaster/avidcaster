@@ -20,13 +20,14 @@ export interface AnnotatorConfig {
 }
 
 export type ButtonType =
-  | 'trash'
-  | 'undo'
-  | 'redo'
-  | 'lineWidth'
-  | 'cursor'
-  | 'fullscreen'
-  | 'refresh';
+  | 'showTrash'
+  | 'showUndo'
+  | 'showRedo'
+  | 'showLineWidth'
+  | 'showCursor'
+  | 'showFullscreen'
+  | 'showRefresh'
+  | 'showColorPicker';
 
 export type MenuPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
@@ -37,6 +38,9 @@ export interface LineAttributes {
   lineJoin?: CanvasLineJoin;
 }
 
+/**
+ * Annotation state model (keep flat)
+ */
 export interface AnnotatorState extends LineAttributes {
   signature: string;
   cursor: boolean;
@@ -44,15 +48,14 @@ export interface AnnotatorState extends LineAttributes {
   position: MenuPosition;
   vertical: boolean;
   reverse: boolean;
-  buttonVisibility: {
-    trash: boolean;
-    undo: boolean;
-    redo: boolean;
-    lineWidth: boolean;
-    cursor: boolean;
-    fullscreen: boolean;
-    refresh: boolean;
-  };
+  showTrash: boolean;
+  showUndo: boolean;
+  showRedo: boolean;
+  showLineWidth: boolean;
+  showCursor: boolean;
+  showFullscreen: boolean;
+  showRefresh: boolean;
+  showColorPicker: boolean;
 }
 
 export interface Point {
