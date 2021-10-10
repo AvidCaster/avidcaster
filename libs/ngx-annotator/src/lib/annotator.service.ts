@@ -274,6 +274,8 @@ export class AnnotatorService implements OnDestroy {
     const { visible, points } = line;
     if (visible && points.length) {
       const start = points[0];
+
+      this.setCanvasAttributes(ctx, line.attributes);
       ctx.beginPath();
 
       if (points.length < 3) {
