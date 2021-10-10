@@ -52,6 +52,11 @@ export class HideMenuComponent implements OnDestroy {
       label: _('COMMON.LINE_WEIGHT'),
     },
     {
+      type: 'showColorPicker',
+      icon: 'palette',
+      label: _('COMMON.COLOR_PICKER'),
+    },
+    {
       type: 'showCursor',
       icon: 'cursor-default-click',
       label: _('COMMON.CURSOR'),

@@ -1,28 +1,9 @@
-.material-icons.color-black {
-  color: #000000;
-}
-
 .text {
   font-size: 14px;
   font-weight: 500;
-  color: #000000;
 }
 
 .header {
   font-size: 16px;
   font-weight: 600;
-  color: #000000;
-}
-
-::ng-deep .mat-checkbox-checked .mat-checkbox-background {
-  background-color: black !important;
-}
-
-::ng-deep .mat-radio-button.mat-primary .mat-radio-inner-circle {
-  background-color: black !important;
-}
-
-::ng-deep.mat-radio-button.mat-primary.mat-radio-checked
-  .mat-radio-outer-circle {
-  border-color: black !important;
 }

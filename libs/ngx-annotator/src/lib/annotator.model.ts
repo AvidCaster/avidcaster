@@ -26,7 +26,8 @@ export type ButtonType =
   | 'showLineWidth'
   | 'showCursor'
   | 'showFullscreen'
-  | 'showRefresh';
+  | 'showRefresh'
+  | 'showColorPicker';
 
 export type MenuPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
@@ -54,6 +55,7 @@ export interface AnnotatorState extends LineAttributes {
   showCursor: boolean;
   showFullscreen: boolean;
   showRefresh: boolean;
+  showColorPicker: boolean;
 }
 
 export interface Point {
