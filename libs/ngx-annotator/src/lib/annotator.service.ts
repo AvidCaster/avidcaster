@@ -19,7 +19,7 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
 import { SystemService } from '@fullerstack/ngx-system';
-import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick } from 'lodash-es';
+import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
 import { EMPTY, Observable, Subject, filter, fromEvent, merge, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
@@ -91,7 +91,8 @@ export class AnnotatorService implements OnDestroy {
   private sanitizeState(state: AnnotatorState | string): AnnotatorState {
     let sanitized = sanitizeJsonStringOrObject<AnnotatorState>(state);
     if (sanitized) {
-      sanitized = pick(state, Object.keys(defaultAnnotatorState())) as AnnotatorState;
+      const validKeys = Object.keys(defaultAnnotatorState());
+      sanitized = ldPick(sanitized, validKeys) as AnnotatorState;
     }
     sanitized = ldMergeWith(defaultAnnotatorState(), sanitized, (dest, src) =>
       Array.isArray(dest) ? src : undefined
