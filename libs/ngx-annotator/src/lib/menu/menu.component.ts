@@ -31,6 +31,8 @@ export class MenuComponent implements OnDestroy {
   cursorIconState = 'back';
   isFullscreen = false;
 
+  lineWithValues: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   get topPosition(): string {
@@ -100,8 +102,8 @@ export class MenuComponent implements OnDestroy {
     this.annotation.redo();
   }
 
-  setLineWidth(event: MatSliderChange) {
-    this.annotation.setState({ lineWidth: event.value });
+  setLineWidth(lineWidth: number) {
+    this.annotation.setState({ lineWidth });
   }
 
   colorPicker(event: Event) {

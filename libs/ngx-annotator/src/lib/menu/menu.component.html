@@ -22,7 +22,7 @@
     </div>
     <mat-divider class="mb1"></mat-divider>
 
-    <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{ color: annotation.state.strokeStyle }">
+    <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{ color: annotation.state.strokeStyle }" (click)="$event.stopPropagation()">
       >
       <div fxLayout="row" fxLayoutGap="5px">
         <mat-icon svgIcon="page-next-outline"></mat-icon>
@@ -73,19 +73,24 @@
     <mat-icon class="clickable-menu-icon" svgIcon="format-line-weight"></mat-icon>
   </button>
   <mat-menu #lineWidthPicker="matMenu">
-    <mat-slider
-      color="primary"
-      thumbLabel
-      tickInterval=".1"
-      step=".5"
-      min="2"
-      max="10"
-      bubbles="true"
-      aria-label="units"
-      (change)="setLineWidth($event)"
-      [value]="annotation.state.lineWidth"
-    ></mat-slider>
-    <mat-divider class="slider-line-width" [ngStyle]="{ 'border-top': annotation.state.lineWidth * 1.4 + 'px solid black' }"></mat-divider>
+    <div fxLayout="column" fxLayoutGap="18px">
+      <div fxLayout="row" fxLayoutGap="18px" (click)="$event.stopPropagation()">
+        <div *ngFor="let lineWidth of lineWithValues" (click)="setLineWidth(lineWidth)">
+          <mat-icon
+            [ngStyle]="{ color: annotation.state.strokeStyle, width: lineWidth * 2 + 'px' }"
+            [svgIcon]="annotation.state.lineWidth === lineWidth ? 'checkbox-blank-circle' : 'checkbox-blank-circle-outline'"
+          ></mat-icon>
+        </div>
+      </div>
+      <div
+        [ngStyle]="{
+          borderRadius: '5px',
+          width: '100%',
+          'border-top': annotation.state.lineWidth * 1.4 + 'px solid',
+          color: annotation.state.strokeStyle
+        }"
+      ></div>
+    </div>
   </mat-menu>
 
   <button
