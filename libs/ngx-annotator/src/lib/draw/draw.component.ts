@@ -76,7 +76,11 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
     if (atLeastOneVisibleLineToUndo) {
       this.annotation.undoLastLine(this.lines);
       this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines.forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+      this.lines
+        .filter((line) => line.visible)
+        .forEach((line) => {
+          this.annotation.drawLineOnCanvas(line, this.ctx);
+        });
     }
   }
 
@@ -93,7 +97,9 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
     if (atLeastOneInvisibleLineToRedo) {
       this.annotation.redoLastLine(this.lines);
       this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines.forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+      this.lines
+        .filter((line) => line.visible)
+        .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
     }
   }
 
@@ -124,7 +130,9 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
         canvasEl.style.height = `${size.y}px`;
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
         this.annotation.setCanvasAttributes(this.ctx);
-        this.lines.forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+        this.lines
+          .filter((line) => line.visible)
+          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
       },
     });
   }
@@ -140,7 +148,9 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
               finalize(() => {
                 if (line.points.length) {
                   // abandon hidden lines "the undo(s)" on any further update
-                  this.lines = this.lines.filter((lineItem) => lineItem.visible).concat(line);
+                  this.lines = this.lines
+                    .filter((lineItem) => lineItem.visible)
+                    .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
                     this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
                   });
