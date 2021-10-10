@@ -7,7 +7,6 @@
  */
 
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
@@ -30,6 +29,8 @@ export class MenuComponent implements OnDestroy {
   redoIconState = 'back';
   cursorIconState = 'back';
   isFullscreen = false;
+
+  lineWithValues: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
@@ -100,8 +101,8 @@ export class MenuComponent implements OnDestroy {
     this.annotation.redo();
   }
 
-  setLineWidth(event: MatSliderChange) {
-    this.annotation.setState({ lineWidth: event.value });
+  setLineWidth(lineWidth: number) {
+    this.annotation.setState({ lineWidth });
   }
 
   colorPicker(event: Event) {
