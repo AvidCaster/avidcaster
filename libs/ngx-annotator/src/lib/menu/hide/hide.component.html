@@ -8,7 +8,7 @@
     fxLayout="row"
     fxLayoutAlign="space-between center"
     fxLayoutGap="3px"
-    (click)="toggleButtonVisibility($event, actionButton.type)"
+    (click)="toggleShowButton($event, actionButton.type)"
   >
     <mat-icon [svgIcon]="isButtonVisible(actionButton.type) ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
     <div fxFlex="auto" class="text">{{ actionButton.label | translate }}</div>

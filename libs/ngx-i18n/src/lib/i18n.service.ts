@@ -15,7 +15,7 @@ import {
 } from '@fullerstack/ngx-config';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { TranslateService } from '@ngx-translate/core';
-import { cloneDeep as ldDeepClone, merge as ldMergeWith } from 'lodash-es';
+import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith } from 'lodash-es';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DeepReadonly } from 'ts-essentials';

@@ -13,15 +13,13 @@ const DefaultAnnotatorState: AnnotatorState = {
   position: 'top-left',
   vertical: true,
   reverse: false,
-  buttonVisibility: {
-    trash: true,
-    undo: true,
-    redo: true,
-    lineWidth: true,
-    cursor: true,
-    fullscreen: true,
-    refresh: true,
-  },
+  showTrash: true,
+  showUndo: true,
+  showRedo: true,
+  showLineWidth: true,
+  showCursor: true,
+  showFullscreen: true,
+  showRefresh: true,
 };
 
 export const defaultAnnotatorState = (): AnnotatorState => {
