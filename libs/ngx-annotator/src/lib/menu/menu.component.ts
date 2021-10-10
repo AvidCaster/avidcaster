@@ -7,7 +7,6 @@
  */
 
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
