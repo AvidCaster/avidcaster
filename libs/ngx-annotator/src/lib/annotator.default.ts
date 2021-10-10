@@ -20,6 +20,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   showCursor: true,
   showFullscreen: true,
   showRefresh: true,
+  showColorPicker: true,
 };
 
 export const defaultAnnotatorState = (): AnnotatorState => {

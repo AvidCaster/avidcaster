@@ -104,6 +104,10 @@ export class MenuComponent implements OnDestroy {
     this.annotation.setState({ lineWidth: event.value });
   }
 
+  colorPicker(event: Event) {
+    this.annotation.setState({ strokeStyle: event.target['value'] });
+  }
+
   toggleFullscreen() {
     this.uix.toggleFullscreen();
     setTimeout(() => {

@@ -1,7 +1,15 @@
 <div
   (click)="$event.stopPropagation()"
   [fxLayout]="flexLayout"
-  [ngStyle]="{ 'z-index': 2, position: 'absolute', top: topPosition, bottom: bottomPosition, left: leftPosition, right: rightPosition }"
+  [ngStyle]="{
+    'z-index': 2,
+    position: 'absolute',
+    top: topPosition,
+    bottom: bottomPosition,
+    left: leftPosition,
+    right: rightPosition,
+    color: annotation.state.strokeStyle
+  }"
 >
   <button mat-icon-button class="quick-menu-button material-icons color-black" [matMenuTriggerFor]="buttonVisibility">
     <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.vertical ? 'dots-horizontal' : 'dots-vertical'"></mat-icon>
@@ -78,6 +86,17 @@
     ></mat-slider>
     <mat-divider class="slider-line-width" [ngStyle]="{ 'border-top': annotation.state.lineWidth * 1.4 + 'px solid black' }"></mat-divider>
   </mat-menu>
+
+  <button
+    *ngIf="annotation.state.showColorPicker"
+    mat-icon-button
+    type="color"
+    class="quick-menu-button material-icons color-black"
+    (click)="colorInput.click()"
+  >
+    <input #colorInput type="color" [value]="annotation.state.strokeStyle" hidden (change)="colorPicker($event)" />
+    <mat-icon class="clickable-menu-icon" svgIcon="palette"></mat-icon>
+  </button>
 
   <button
     *ngIf="annotation.state.showCursor"

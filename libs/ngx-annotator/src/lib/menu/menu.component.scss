@@ -12,10 +12,6 @@
   padding: 2px;
 }
 
-.material-icons.color-black {
-  color: #000000;
-}
-
 .mat-menu-content ng-tns-c248-1 {
   padding: 10px;
 }
@@ -25,10 +21,6 @@
   min-width: unset;
   max-width: unset;
   box-shadow: unset;
-}
-
-::ng-deep .mat-slider.mat-slider-horizontal .mat-slider-track-fill {
-  background-color: black;
 }
 
 mat-slider {
@@ -49,7 +41,6 @@ md-slider[md-discrete] .md-sign:after {
 .text {
   font-size: 14px;
   font-weight: 500;
-  color: #000000;
 }
 
 .more-link {
