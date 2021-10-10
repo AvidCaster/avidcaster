@@ -22,7 +22,8 @@
     </div>
     <mat-divider class="mb1"></mat-divider>
 
-    <div fxLayout="row" fxLayoutGap="20px">
+    <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{ color: annotation.state.strokeStyle }">
+      >
       <div fxLayout="row" fxLayoutGap="5px">
         <mat-icon svgIcon="page-next-outline"></mat-icon>
         <div class="more-link">More Info ...</div>
