@@ -95,7 +95,7 @@
     class="quick-menu-button material-icons color-black"
     (click)="colorInput.click()"
   >
-    <input #colorInput type="color" [value]="annotation.state.strokeStyle" hidden (change)="colorPicker($event)" />
+    <input #colorInput class="color-input" type="color" [value]="annotation.state.strokeStyle" (change)="colorPicker($event)" />
     <mat-icon class="clickable-menu-icon" svgIcon="palette"></mat-icon>
   </button>
 
