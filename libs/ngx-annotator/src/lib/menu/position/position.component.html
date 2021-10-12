@@ -1,30 +1,34 @@
 <div [ngStyle]="{ color: annotation.state.strokeStyle }">
   <div class="header">{{ 'COMMON.MENU_POSITION' | translate }}</div>
-  <mat-divider class="mb1" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
 
-  <div class="mb1">
-    <div fxLayout="column" fxLayoutGap="5px">
-      <div
-        *ngFor="let corner of corners"
-        class="selection-box"
-        fxLayout="row"
-        fxLayoutGap="8px"
-        fxLayoutAlign="space-between center"
-        (click)="setPosition($event, corner.position)"
-      >
-        <mat-icon [svgIcon]="isPosition(corner.position) ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
-        <div fxFlex="auto" class="text">{{ corner.label | translate }}</div>
-        <div>
-          <mat-icon [ngClass]="corner.class" [svgIcon]="corner.icon"></mat-icon>
-        </div>
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
+    <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="space-between center">
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'top-left')">
+        <mat-icon [svgIcon]="isPosition('top-left') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+        <mat-icon class="flip-horizontal" svgIcon="tab-unselected"></mat-icon>
+      </div>
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'top-right')">
+        <mat-icon svgIcon="tab-unselected"></mat-icon>
+        <mat-icon [svgIcon]="isPosition('top-right') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="space-between center">
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'bottom-left')">
+        <mat-icon [svgIcon]="isPosition('bottom-left') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+        <mat-icon class="flip-vertical-horizontal" svgIcon="tab-unselected"></mat-icon>
+      </div>
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'bottom-right')">
+        <mat-icon class="flip-vertical" svgIcon="tab-unselected"></mat-icon>
+        <mat-icon [svgIcon]="isPosition('bottom-right') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
       </div>
     </div>
   </div>
 
   <div class="header">{{ 'COMMON.MENU_ORIENTATION' | translate }}</div>
-  <mat-divider class="mb1" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
 
-  <div class="mb1" fxLayout="column" fxLayoutGap="5px">
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
     <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleVertical($event)">
       <mat-icon [svgIcon]="annotation.state.vertical ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
       <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.VERTICAL' | translate }}</div>

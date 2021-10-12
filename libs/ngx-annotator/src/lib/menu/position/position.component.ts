@@ -31,33 +31,6 @@ interface SupportedCorner {
 export class MenuPositionComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
-  corners: SupportedCorner[] = [
-    {
-      position: 'top-left',
-      icon: 'tab-unselected',
-      class: '',
-      label: _('COMMON.POSITION.TOP_LEFT'),
-    },
-    {
-      position: 'top-right',
-      icon: 'tab-unselected',
-      class: 'flip-horizontal',
-      label: _('COMMON.POSITION.TOP_RIGHT'),
-    },
-    {
-      position: 'bottom-left',
-      icon: 'tab-unselected',
-      class: 'flip-vertical-horizontal',
-      label: _('COMMON.POSITION.BOTTOM_LEFT'),
-    },
-    {
-      position: 'bottom-right',
-      icon: 'tab-unselected',
-      class: 'flip-vertical',
-      label: _('COMMON.POSITION.BOTTOM_RIGHT'),
-    },
-  ];
-
   constructor(readonly annotation: AnnotatorService) {}
 
   setPosition(event: Event, position: MenuPosition) {
