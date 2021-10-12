@@ -7,19 +7,11 @@
  */
 
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { Subject } from 'rxjs';
 
 import { MenuPosition } from '../../annotator.model';
 import { AnnotatorService } from '../../annotator.service';
-
-interface SupportedCorner {
-  position: MenuPosition;
-  icon: string;
-  class: string;
-  label: string;
-}
 
 @Component({
   selector: 'fullerstack-menu-position',
