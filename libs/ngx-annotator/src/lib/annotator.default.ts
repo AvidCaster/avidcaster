@@ -4,10 +4,11 @@ import { AnnotatorConfig, AnnotatorState, Line } from './annotator.model';
 
 const DefaultAnnotatorState: AnnotatorState = {
   signature: '',
+  backgroundColor: '#fafafa',
   lineCap: 'round',
   lineJoin: 'round',
   lineWidth: 3,
-  strokeStyle: '#000',
+  strokeStyle: '#000000',
   cursor: true,
   fullscreen: true,
   position: 'top-left',

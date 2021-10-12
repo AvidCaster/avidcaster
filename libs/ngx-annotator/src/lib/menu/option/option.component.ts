@@ -15,12 +15,12 @@ import { AnnotatorService } from '../../annotator.service';
 
 @Component({
   selector: 'fullerstack-menu-position',
-  templateUrl: './position.component.html',
-  styleUrls: ['./position.component.scss'],
+  templateUrl: './option.component.html',
+  styleUrls: ['./option.component.scss'],
   animations: [shakeAnimations.wiggleIt],
   encapsulation: ViewEncapsulation.Emulated,
 })
-export class MenuPositionComponent implements OnDestroy {
+export class MenuOptionComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   constructor(readonly annotation: AnnotatorService) {}

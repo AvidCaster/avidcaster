@@ -8,6 +8,7 @@
     bottom: bottomPosition,
     left: leftPosition,
     right: rightPosition,
+    background: annotation.state.backgroundColor,
     color: annotation.state.strokeStyle
   }"
 >
@@ -15,7 +16,7 @@
     <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.vertical ? 'dots-horizontal' : 'dots-vertical'"></mat-icon>
   </button>
 
-  <mat-menu #buttonVisibility="matMenu">
+  <mat-menu #buttonVisibility="matMenu" [ngStyle]="{ 'background-color': annotation.state.backgroundColor }">
     <div fxLayout="row" fxLayoutGap="18px">
       <fullerstack-menu-position></fullerstack-menu-position>
       <fullerstack-show-menu></fullerstack-show-menu>
