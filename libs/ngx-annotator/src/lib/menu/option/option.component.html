@@ -1,6 +1,6 @@
 <div [ngStyle]="{ color: annotation.state.strokeStyle }">
   <div class="header">{{ 'COMMON.MENU_POSITION' | translate }}</div>
-  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.strokeStyle }"></mat-divider>
 
   <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
     <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="space-between center">
@@ -26,7 +26,7 @@
   </div>
 
   <div class="header">{{ 'COMMON.MENU_ORIENTATION' | translate }}</div>
-  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.strokeStyle }"></mat-divider>
 
   <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
     <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleVertical($event)">
@@ -43,5 +43,16 @@
         [svgIcon]="annotation.state.reverse ? 'sort-ascending' : 'sort-descending'"
       ></mat-icon>
     </div>
+  </div>
+</div>
+
+<div class="header">{{ 'COMMON.COLORS' | translate }}</div>
+<mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.strokeStyle }"></mat-divider>
+
+<div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
+  <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleVertical($event)">
+    <mat-icon [svgIcon]="annotation.state.vertical ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+    <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.VERTICAL' | translate }}</div>
+    <mat-icon [svgIcon]="annotation.state.vertical ? 'arrow-expand-vertical' : 'arrow-expand-horizontal'"></mat-icon>
   </div>
 </div>

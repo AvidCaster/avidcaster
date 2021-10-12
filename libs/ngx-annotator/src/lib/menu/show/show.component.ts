@@ -54,7 +54,7 @@ export class ShowMenuComponent implements OnDestroy {
     {
       type: 'showColorPicker',
       icon: 'palette',
-      label: _('COMMON.COLOR_PICKER'),
+      label: _('COMMON.LINE_COLOR'),
     },
     {
       type: 'showCursor',
