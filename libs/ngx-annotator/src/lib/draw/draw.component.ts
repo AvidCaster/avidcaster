@@ -72,15 +72,17 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
   }
 
   doUndo() {
-    const atLeastOneVisibleLineToUndo = this.lines[0]?.visible;
-    if (atLeastOneVisibleLineToUndo) {
-      this.annotation.undoLastLine(this.lines);
-      this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines
-        .filter((line) => line.visible)
-        .forEach((line) => {
-          this.annotation.drawLineOnCanvas(line, this.ctx);
-        });
+    if (this.lines.length) {
+      const atLeastOneVisibleLineToUndo = this.lines[0]?.visible;
+      if (atLeastOneVisibleLineToUndo) {
+        this.annotation.undoLastLine(this.lines);
+        this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.lines
+          .filter((line) => line.visible)
+          .forEach((line) => {
+            this.annotation.drawLineOnCanvas(line, this.ctx);
+          });
+      }
     }
   }
 
@@ -93,13 +95,15 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
   }
 
   doRedo() {
-    const atLeastOneInvisibleLineToRedo = !this.lines[this.lines.length - 1].visible;
-    if (atLeastOneInvisibleLineToRedo) {
-      this.annotation.redoLastLine(this.lines);
-      this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines
-        .filter((line) => line.visible)
-        .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+    if (this.lines.length) {
+      const atLeastOneInvisibleLineToRedo = !this.lines[this.lines.length - 1].visible;
+      if (atLeastOneInvisibleLineToRedo) {
+        this.annotation.redoLastLine(this.lines);
+        this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.lines
+          .filter((line) => line.visible)
+          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+      }
     }
   }
 
