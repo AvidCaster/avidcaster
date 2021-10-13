@@ -8,7 +8,7 @@
     bottom: bottomPosition,
     left: leftPosition,
     right: rightPosition,
-    color: annotation.state.strokeStyle
+    color: annotation.state.menuColor
   }"
 >
   <button mat-icon-button class="quick-menu-button material-icons color-black" [matMenuTriggerFor]="buttonVisibility">
@@ -66,7 +66,7 @@
       <div fxLayout="row" fxLayoutGap="18px" (click)="$event.stopPropagation()">
         <div *ngFor="let lineWidth of lineWithValues" (click)="setLineWidth(lineWidth)">
           <mat-icon
-            [ngStyle]="{ color: annotation.state.strokeStyle, width: lineWidth * 2 + 'px' }"
+            [ngStyle]="{ width: lineWidth * 2 + 'px' }"
             [svgIcon]="annotation.state.lineWidth === lineWidth ? 'checkbox-blank-circle' : 'checkbox-blank-circle-outline'"
           ></mat-icon>
         </div>
@@ -76,7 +76,7 @@
           borderRadius: '5px',
           width: '100%',
           'border-top': annotation.state.lineWidth * 1.4 + 'px solid',
-          color: annotation.state.strokeStyle
+          color: annotation.state.menuColor
         }"
       ></div>
     </div>
@@ -89,7 +89,7 @@
     class="quick-menu-button material-icons color-black"
     (click)="colorInput.click()"
   >
-    <input #colorInput class="color-input" type="color" [value]="annotation.state.strokeStyle" (change)="colorPicker($event)" />
+    <input #colorInput class="color-input" type="color" [value]="annotation.state.menuColor" (change)="colorPicker($event)" />
     <mat-icon class="clickable-menu-icon" svgIcon="palette"></mat-icon>
   </button>
 

@@ -45,7 +45,8 @@ export interface LineAttributes {
  */
 export interface AnnotatorState extends LineAttributes {
   signature: string;
-  background: BackgroundColor;
+  backgroundColor: BackgroundColor;
+  menuColor: string;
   cursor: boolean;
   fullscreen: boolean;
   position: MenuPosition;

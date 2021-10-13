@@ -27,7 +27,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   ngOnInit() {
-    this.setMenuOverlayClass(this.annotation.state.background);
+    this.setMenuOverlayClass(this.annotation.state.backgroundColor);
   }
 
   setPosition(event: Event, position: MenuPosition) {
@@ -63,14 +63,14 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     const color = this.isBackgroundWhite() ? 'black' : 'white';
     this.annotation.setState({
       ...this.annotation.state,
-      background: color,
+      backgroundColor: color,
     });
 
     this.setMenuOverlayClass(color);
   }
 
   isBackgroundWhite() {
-    return this.annotation.state.background === 'white';
+    return this.annotation.state.backgroundColor === 'white';
   }
 
   setMenuOverlayClass(color: BackgroundColor) {

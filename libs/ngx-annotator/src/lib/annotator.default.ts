@@ -4,7 +4,8 @@ import { AnnotatorConfig, AnnotatorState, Line } from './annotator.model';
 
 const DefaultAnnotatorState: AnnotatorState = {
   signature: '',
-  background: 'black',
+  backgroundColor: 'black',
+  menuColor: '#05D1F5',
   lineCap: 'round',
   lineJoin: 'round',
   lineWidth: 3,
