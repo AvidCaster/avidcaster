@@ -57,16 +57,16 @@
     *ngIf="annotation.state.showLineWidth"
     mat-icon-button
     class="quick-menu-button material-icons"
-    [matMenuTriggerFor]="lineWidthPicker"
+    [matMenuTriggerFor]="lineWidthMenu"
   >
     <mat-icon class="clickable-menu-icon" svgIcon="format-line-weight"></mat-icon>
   </button>
-  <mat-menu #lineWidthPicker="matMenu">
+  <mat-menu #lineWidthMenu="matMenu">
     <div fxLayout="column" fxLayoutGap="18px">
       <div fxLayout="row" fxLayoutGap="18px" (click)="$event.stopPropagation()">
         <div *ngFor="let lineWidth of lineWithValues" (click)="setLineWidth(lineWidth)">
           <mat-icon
-            [ngStyle]="{ width: lineWidth * 2 + 'px' }"
+            [ngStyle]="{ color: annotation.state.menuColor, width: lineWidth * 2 + 'px' }"
             [svgIcon]="annotation.state.lineWidth === lineWidth ? 'checkbox-blank-circle' : 'checkbox-blank-circle-outline'"
           ></mat-icon>
         </div>
@@ -83,15 +83,32 @@
   </mat-menu>
 
   <button
-    *ngIf="annotation.state.showColorPicker"
+    *ngIf="annotation.state.showLineColor"
     mat-icon-button
-    type="color"
     class="quick-menu-button material-icons"
-    (click)="colorInput.click()"
+    [matMenuTriggerFor]="lineColorMenu"
   >
-    <input #colorInput class="color-input" type="color" [value]="annotation.state.menuColor" (change)="colorPicker($event)" />
     <mat-icon class="clickable-menu-icon" svgIcon="palette"></mat-icon>
   </button>
+  <mat-menu #lineColorMenu="matMenu">
+    <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="row" fxLayoutGap="10px" (click)="$event.stopPropagation()">
+        <div *ngFor="let lineColor of lineColorValues" (click)="setLineColor(lineColor)">
+          <mat-icon
+            [ngStyle]="{ color: lineColor }"
+            [svgIcon]="annotation.state.strokeStyle === lineColor ? 'checkbox-marked' : 'checkbox-marked-outline'"
+          ></mat-icon>
+        </div>
+      </div>
+      <div
+        [ngStyle]="{
+          borderRadius: '5px',
+          width: '100%',
+          'border-top': '5px solid' + annotation.state.strokeStyle
+        }"
+      ></div>
+    </div>
+  </mat-menu>
 
   <button
     *ngIf="annotation.state.showCursor"

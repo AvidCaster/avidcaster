@@ -19,10 +19,10 @@ const DefaultAnnotatorState: AnnotatorState = {
   showUndo: true,
   showRedo: true,
   showLineWidth: true,
+  showLineColor: true,
   showCursor: true,
   showFullscreen: true,
   showRefresh: true,
-  showColorPicker: true,
 };
 
 export const defaultAnnotatorState = (): AnnotatorState => {

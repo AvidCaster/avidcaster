@@ -56,10 +56,10 @@ export interface AnnotatorState extends LineAttributes {
   showUndo: boolean;
   showRedo: boolean;
   showLineWidth: boolean;
+  showLineColor: boolean;
   showCursor: boolean;
   showFullscreen: boolean;
   showRefresh: boolean;
-  showColorPicker: boolean;
 }
 
 export interface Point {
