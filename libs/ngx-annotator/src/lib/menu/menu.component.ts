@@ -30,7 +30,7 @@ export class MenuComponent implements OnDestroy {
   cursorIconState = 'back';
   isFullscreen = false;
 
-  lineWithValues: number[] = [1, 2, 3, 5, 7, 9];
+  lineWithValues: number[] = [2, 3, 4, 5, 6, 8];
 
   lineColorValues: string[] = [
     '#ffffff',
