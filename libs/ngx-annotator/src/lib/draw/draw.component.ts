@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, fromEvent } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
@@ -20,8 +20,8 @@ import { AnnotatorService } from '../annotator.service';
   templateUrl: './draw.component.html',
   styleUrls: ['./draw.component.scss'],
 })
-export class DrawComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvas') canvas: ElementRef | undefined;
+export class DrawComponent implements OnInit, OnDestroy {
+  @ViewChild('canvas', { static: true }) canvas: ElementRef | undefined;
   uniqId = uuidV4();
   private destroy$ = new Subject<boolean>();
   private canvasEl: HTMLCanvasElement | undefined | null;
@@ -36,7 +36,7 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
     this.uix.addClassToBody('annotation-canvas');
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.canvasEl = this.canvas?.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
     setTimeout(() => {
