@@ -31,6 +31,8 @@ export type ButtonType =
 
 export type MenuPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
+export type BackgroundColor = 'white' | 'black';
+
 export interface LineAttributes {
   strokeStyle?: string;
   lineWidth?: number;
@@ -43,7 +45,7 @@ export interface LineAttributes {
  */
 export interface AnnotatorState extends LineAttributes {
   signature: string;
-  backgroundColor: string;
+  background: BackgroundColor;
   cursor: boolean;
   fullscreen: boolean;
   position: MenuPosition;

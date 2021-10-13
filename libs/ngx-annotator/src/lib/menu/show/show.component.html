@@ -1,6 +1,6 @@
 <div [ngStyle]="{ color: annotation.state.strokeStyle }">
   <div class="header">{{ 'COMMON.SHOW_BUTTONS' | translate }}</div>
-  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid black' }"></mat-divider>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.strokeStyle }"></mat-divider>
 
   <div fxLayout="column" fxLayoutGap="1px">
     <div

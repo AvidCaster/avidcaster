@@ -57,3 +57,11 @@ fullerstack-draw {
   max-height: 100%;
   -webkit-overflow-scrolling: unset;
 }
+
+.menu-background-black .mat-menu-panel {
+  background: black;
+}
+
+.menu-background-white .mat-menu-panel {
+  background: white;
+}

@@ -6,11 +6,12 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
+import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
-import { MenuPosition } from '../../annotator.model';
+import { BackgroundColor, MenuPosition } from '../../annotator.model';
 import { AnnotatorService } from '../../annotator.service';
 
 @Component({
@@ -20,10 +21,14 @@ import { AnnotatorService } from '../../annotator.service';
   animations: [shakeAnimations.wiggleIt],
   encapsulation: ViewEncapsulation.Emulated,
 })
-export class MenuOptionComponent implements OnDestroy {
+export class MenuOptionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
-  constructor(readonly annotation: AnnotatorService) {}
+  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
+
+  ngOnInit() {
+    this.setMenuOverlayClass(this.annotation.state.background);
+  }
 
   setPosition(event: Event, position: MenuPosition) {
     event.stopPropagation();
@@ -51,6 +56,31 @@ export class MenuOptionComponent implements OnDestroy {
       ...this.annotation.state,
       reverse: !this.annotation.state.reverse,
     });
+  }
+
+  toggleColor(event: Event) {
+    event.stopPropagation();
+    const color = this.isBackgroundWhite() ? 'black' : 'white';
+    this.annotation.setState({
+      ...this.annotation.state,
+      background: color,
+    });
+
+    this.setMenuOverlayClass(color);
+  }
+
+  isBackgroundWhite() {
+    return this.annotation.state.background === 'white';
+  }
+
+  setMenuOverlayClass(color: BackgroundColor) {
+    if (color === 'black') {
+      this.uix.removeClassFromBody('menu-background-white');
+      this.uix.addClassToBody('menu-background-black');
+    } else {
+      this.uix.removeClassFromBody('menu-background-black');
+      this.uix.addClassToBody('menu-background-white');
+    }
   }
 
   ngOnDestroy() {
