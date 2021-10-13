@@ -58,7 +58,7 @@ export class MenuComponent implements OnDestroy {
     switch (this.annotation.state.position) {
       case 'bottom-left':
       case 'bottom-right':
-        return '2px';
+        return '4px';
       default:
         return 'unset';
     }
