@@ -1,9 +1,3 @@
-// ::ng-deep .mat-menu-content,
-// ::ng-deep .mat-menu-panel {
-//   background-color: red;
-//   color: white;
-// }
-
 .clickable-menu-icon:hover {
   cursor: pointer;
 }
@@ -18,16 +12,6 @@
   padding: 2px;
 }
 
-.color-input {
-  visibility: hidden;
-  max-width: 0px;
-  width: 0px;
-  margin-left: -7px;
-}
-.mat-menu-content ng-tns-c248-1 {
-  padding: 10px;
-}
-
 ::ng-deep .mat-menu-panel {
   padding: 15px;
   min-width: unset;
@@ -35,24 +19,7 @@
   box-shadow: unset;
 }
 
-mat-slider {
-  width: 100%;
-}
-
-md-slider[md-discrete] .md-sign,
-md-slider[md-discrete] .md-sign:after {
-  opacity: 1;
-  -webkit-transform: translate3d(0, 0, 0) scale(1);
-  transform: translate3d(0, 0, 0) scale(1);
-}
-
 .text {
   font-size: 14px;
-  font-weight: 500;
-}
-
-.more-link {
-  text-align: center;
-  margin-top: 3px !important;
   font-weight: 500;
 }

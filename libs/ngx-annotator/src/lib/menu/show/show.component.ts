@@ -47,14 +47,14 @@ export class ShowMenuComponent implements OnDestroy {
       label: _('COMMON.REDO'),
     },
     {
+      type: 'showLineColor',
+      icon: 'palette',
+      label: _('COMMON.LINE_COLOR'),
+    },
+    {
       type: 'showLineWidth',
       icon: 'format-line-weight',
       label: _('COMMON.LINE_WEIGHT'),
-    },
-    {
-      type: 'showColorPicker',
-      icon: 'palette',
-      label: _('COMMON.LINE_COLOR'),
     },
     {
       type: 'showCursor',
