@@ -24,11 +24,11 @@ export const AnnotatorColors: string[] = [
 const DefaultAnnotatorState: AnnotatorState = {
   signature: '',
   backgroundColor: '#000000',
-  menuColor: '#05D1F5',
+  menuColor: '#05d1f5',
   lineCap: 'round',
   lineJoin: 'round',
   lineWidth: 3,
-  strokeStyle: '#000',
+  strokeStyle: '#ffffff',
   cursor: true,
   fullscreen: true,
   position: 'top-left',
