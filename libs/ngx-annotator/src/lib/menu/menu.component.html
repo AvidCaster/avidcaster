@@ -8,36 +8,25 @@
     bottom: bottomPosition,
     left: leftPosition,
     right: rightPosition,
-    color: annotation.state.strokeStyle
+    color: annotation.state.menuColor
   }"
 >
-  <button mat-icon-button class="quick-menu-button material-icons color-black" [matMenuTriggerFor]="buttonVisibility">
+  <button mat-icon-button class="quick-menu-button material-icons" [matMenuTriggerFor]="buttonVisibility">
     <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.vertical ? 'dots-horizontal' : 'dots-vertical'"></mat-icon>
   </button>
 
   <mat-menu #buttonVisibility="matMenu">
     <div fxLayout="row" fxLayoutGap="18px">
       <fullerstack-menu-position></fullerstack-menu-position>
-      <fullerstack-hide-menu></fullerstack-hide-menu>
+      <fullerstack-show-menu></fullerstack-show-menu>
     </div>
-    <mat-divider class="mb1"></mat-divider>
-
-    <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{ color: annotation.state.strokeStyle }" (click)="$event.stopPropagation()">
-      >
-      <div fxLayout="row" fxLayoutGap="5px">
-        <mat-icon svgIcon="page-next-outline"></mat-icon>
-        <div class="more-link">More Info ...</div>
-      </div>
-      <a style="text-decoration: none" href="https://github.com/AvidCaster/avidcaster/blob/main/README.md#features">
-        <mat-icon class="clickable-menu-icon" svgIcon="link-variant"></mat-icon>
-      </a>
-    </div>
+    <mat-divider class="mb0_5"></mat-divider>
   </mat-menu>
 
   <button
     *ngIf="annotation.state.showTrash"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="trashIconState"
     (click)="trash()"
   >
@@ -47,7 +36,7 @@
   <button
     *ngIf="annotation.state.showUndo"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="undoIconState"
     (click)="undo()"
   >
@@ -57,7 +46,7 @@
   <button
     *ngIf="annotation.state.showRedo"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="redoIconState"
     (click)="redo()"
   >
@@ -65,19 +54,47 @@
   </button>
 
   <button
+    *ngIf="annotation.state.showLineColor"
+    mat-icon-button
+    class="quick-menu-button material-icons"
+    [matMenuTriggerFor]="lineColorMenu"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="palette"></mat-icon>
+  </button>
+  <mat-menu #lineColorMenu="matMenu">
+    <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="row" fxLayoutGap="10px" (click)="$event.stopPropagation()">
+        <div *ngFor="let lineColor of lineColorValues" (click)="setLineColor(lineColor)">
+          <mat-icon
+            [ngStyle]="{ color: lineColor }"
+            [svgIcon]="annotation.state.strokeStyle === lineColor ? 'checkbox-marked' : 'checkbox-marked-outline'"
+          ></mat-icon>
+        </div>
+      </div>
+      <div
+        [ngStyle]="{
+          borderRadius: '5px',
+          width: '100%',
+          'border-top': '5px solid' + annotation.state.strokeStyle
+        }"
+      ></div>
+    </div>
+  </mat-menu>
+
+  <button
     *ngIf="annotation.state.showLineWidth"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
-    [matMenuTriggerFor]="lineWidthPicker"
+    class="quick-menu-button material-icons"
+    [matMenuTriggerFor]="lineWidthMenu"
   >
     <mat-icon class="clickable-menu-icon" svgIcon="format-line-weight"></mat-icon>
   </button>
-  <mat-menu #lineWidthPicker="matMenu">
+  <mat-menu #lineWidthMenu="matMenu">
     <div fxLayout="column" fxLayoutGap="18px">
       <div fxLayout="row" fxLayoutGap="18px" (click)="$event.stopPropagation()">
         <div *ngFor="let lineWidth of lineWithValues" (click)="setLineWidth(lineWidth)">
           <mat-icon
-            [ngStyle]="{ color: annotation.state.strokeStyle, width: lineWidth * 2 + 'px' }"
+            [ngStyle]="{ color: annotation.state.menuColor, width: lineWidth * 2 + 'px' }"
             [svgIcon]="annotation.state.lineWidth === lineWidth ? 'checkbox-blank-circle' : 'checkbox-blank-circle-outline'"
           ></mat-icon>
         </div>
@@ -87,27 +104,16 @@
           borderRadius: '5px',
           width: '100%',
           'border-top': annotation.state.lineWidth * 1.4 + 'px solid',
-          color: annotation.state.strokeStyle
+          color: annotation.state.menuColor
         }"
       ></div>
     </div>
   </mat-menu>
 
   <button
-    *ngIf="annotation.state.showColorPicker"
-    mat-icon-button
-    type="color"
-    class="quick-menu-button material-icons color-black"
-    (click)="colorInput.click()"
-  >
-    <input #colorInput class="color-input" type="color" [value]="annotation.state.strokeStyle" (change)="colorPicker($event)" />
-    <mat-icon class="clickable-menu-icon" svgIcon="palette"></mat-icon>
-  </button>
-
-  <button
     *ngIf="annotation.state.showCursor"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="cursorIconState"
     (click)="toggleCursor()"
   >
@@ -117,21 +123,11 @@
     ></mat-icon>
   </button>
 
-  <button
-    *ngIf="annotation.state.showFullscreen"
-    mat-icon-button
-    class="quick-menu-button material-icons color-black"
-    (click)="toggleFullscreen()"
-  >
+  <button *ngIf="annotation.state.showFullscreen" mat-icon-button class="quick-menu-button material-icons" (click)="toggleFullscreen()">
     <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse-all' : 'arrow-expand-all'"></mat-icon>
   </button>
 
-  <button
-    *ngIf="annotation.state.showRefresh"
-    mat-icon-button
-    class="quick-menu-button material-icons color-black"
-    (click)="uix.refreshPage()"
-  >
+  <button *ngIf="annotation.state.showRefresh" mat-icon-button class="quick-menu-button material-icons" (click)="uix.refreshPage()">
     <mat-icon class="clickable-menu-icon" svgIcon="web-refresh"></mat-icon>
   </button>
 </div>

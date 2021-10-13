@@ -23,13 +23,15 @@ export type ButtonType =
   | 'showTrash'
   | 'showUndo'
   | 'showRedo'
+  | 'showLineColor'
   | 'showLineWidth'
   | 'showCursor'
   | 'showFullscreen'
-  | 'showRefresh'
-  | 'showColorPicker';
+  | 'showRefresh';
 
 export type MenuPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+
+export type BackgroundColor = '#000000' | '#ffffff';
 
 export interface LineAttributes {
   strokeStyle?: string;
@@ -43,6 +45,8 @@ export interface LineAttributes {
  */
 export interface AnnotatorState extends LineAttributes {
   signature: string;
+  backgroundColor: BackgroundColor;
+  menuColor: string;
   cursor: boolean;
   fullscreen: boolean;
   position: MenuPosition;
@@ -51,11 +55,11 @@ export interface AnnotatorState extends LineAttributes {
   showTrash: boolean;
   showUndo: boolean;
   showRedo: boolean;
+  showLineColor: boolean;
   showLineWidth: boolean;
   showCursor: boolean;
   showFullscreen: boolean;
   showRefresh: boolean;
-  showColorPicker: boolean;
 }
 
 export interface Point {

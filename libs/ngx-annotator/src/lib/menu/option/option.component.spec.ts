@@ -8,20 +8,20 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HideMenuComponent } from './hide.component';
+import { MenuOptionComponent } from './option.component';
 
-describe('HideMenuComponent', () => {
-  let component: HideMenuComponent;
-  let fixture: ComponentFixture<HideMenuComponent>;
+describe('MenuOptionComponent', () => {
+  let component: MenuOptionComponent;
+  let fixture: ComponentFixture<MenuOptionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HideMenuComponent],
+      declarations: [MenuOptionComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HideMenuComponent);
+    fixture = TestBed.createComponent(MenuOptionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

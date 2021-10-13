@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, fromEvent } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
@@ -20,8 +20,8 @@ import { AnnotatorService } from '../annotator.service';
   templateUrl: './draw.component.html',
   styleUrls: ['./draw.component.scss'],
 })
-export class DrawComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('canvas') canvas: ElementRef | undefined;
+export class DrawComponent implements OnInit, OnDestroy {
+  @ViewChild('canvas', { static: true }) canvas: ElementRef | undefined;
   uniqId = uuidV4();
   private destroy$ = new Subject<boolean>();
   private canvasEl: HTMLCanvasElement | undefined | null;
@@ -36,7 +36,7 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
     this.uix.addClassToBody('annotation-canvas');
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.canvasEl = this.canvas?.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
     setTimeout(() => {
@@ -72,15 +72,17 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
   }
 
   doUndo() {
-    const atLeastOneVisibleLineToUndo = this.lines[0]?.visible;
-    if (atLeastOneVisibleLineToUndo) {
-      this.annotation.undoLastLine(this.lines);
-      this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines
-        .filter((line) => line.visible)
-        .forEach((line) => {
-          this.annotation.drawLineOnCanvas(line, this.ctx);
-        });
+    if (this.lines.length) {
+      const atLeastOneVisibleLineToUndo = this.lines[0]?.visible;
+      if (atLeastOneVisibleLineToUndo) {
+        this.annotation.undoLastLine(this.lines);
+        this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.lines
+          .filter((line) => line.visible)
+          .forEach((line) => {
+            this.annotation.drawLineOnCanvas(line, this.ctx);
+          });
+      }
     }
   }
 
@@ -93,13 +95,15 @@ export class DrawComponent implements AfterViewInit, OnDestroy {
   }
 
   doRedo() {
-    const atLeastOneInvisibleLineToRedo = !this.lines[this.lines.length - 1].visible;
-    if (atLeastOneInvisibleLineToRedo) {
-      this.annotation.redoLastLine(this.lines);
-      this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines
-        .filter((line) => line.visible)
-        .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+    if (this.lines.length) {
+      const atLeastOneInvisibleLineToRedo = !this.lines[this.lines.length - 1].visible;
+      if (atLeastOneInvisibleLineToRedo) {
+        this.annotation.redoLastLine(this.lines);
+        this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.lines
+          .filter((line) => line.visible)
+          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+      }
     }
   }
 

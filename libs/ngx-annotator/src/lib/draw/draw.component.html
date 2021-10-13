@@ -1,6 +1,11 @@
 <canvas
   id="{{ uniqId }}"
-  [ngStyle]="{ border: 'non', 'z-index': 1, cursor: annotation.state.cursor ? 'default' : 'none' }"
+  [ngStyle]="{
+    border: 'non',
+    'z-index': 1,
+    cursor: annotation.state.cursor ? 'default' : 'none',
+    background: annotation.state.backgroundColor
+  }"
   #canvas
 ></canvas>
-<fullerstack-menu [ngStyle]="{ top: 0, right: 0 }"> </fullerstack-menu>
+<fullerstack-menu [ngStyle]="{ top: 0, right: 0, color: annotation.state.menuColor }"> </fullerstack-menu>

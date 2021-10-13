@@ -1,0 +1,90 @@
+<div [ngStyle]="{ color: annotation.state.menuColor }">
+  <div class="header">{{ 'COMMON.MENU_POSITION' | translate }}</div>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
+
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
+    <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="space-between center">
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'top-left')">
+        <mat-icon [svgIcon]="isPosition('top-left') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+        <mat-icon class="flip-horizontal" svgIcon="tab-unselected"></mat-icon>
+      </div>
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'top-right')">
+        <mat-icon svgIcon="tab-unselected"></mat-icon>
+        <mat-icon [svgIcon]="isPosition('top-right') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="space-between center">
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'bottom-left')">
+        <mat-icon [svgIcon]="isPosition('bottom-left') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+        <mat-icon class="flip-vertical-horizontal" svgIcon="tab-unselected"></mat-icon>
+      </div>
+      <div class="selection-box" fxLayout="row" (click)="setPosition($event, 'bottom-right')">
+        <mat-icon class="flip-vertical" svgIcon="tab-unselected"></mat-icon>
+        <mat-icon [svgIcon]="isPosition('bottom-right') ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="header">{{ 'COMMON.MENU_ORIENTATION' | translate }}</div>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
+
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
+    <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleVertical($event)">
+      <mat-icon [svgIcon]="annotation.state.vertical ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+      <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.VERTICAL' | translate }}</div>
+      <mat-icon [svgIcon]="annotation.state.vertical ? 'arrow-expand-vertical' : 'arrow-expand-horizontal'"></mat-icon>
+    </div>
+
+    <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleRevere($event)">
+      <mat-icon [svgIcon]="annotation.state.reverse ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+      <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.REVERSE' | translate }}</div>
+      <mat-icon
+        [class.reverse-icon-rotate]="!annotation.state.vertical"
+        [svgIcon]="annotation.state.reverse ? 'sort-ascending' : 'sort-descending'"
+      ></mat-icon>
+    </div>
+  </div>
+
+  <div class="header">{{ 'COMMON.COLORS' | translate }}</div>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
+
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
+    <div
+      class="selection-box"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      fxLayoutGap="3px"
+      (click)="toggleBackgroundColor($event)"
+    >
+      <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.BACKGROUND' | translate }}</div>
+      <mat-icon [ngStyle]="{ color: isBackgroundWhite() ? 'black' : 'white' }" svgIcon="checkbox-blank-circle"></mat-icon>
+    </div>
+  </div>
+
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px" (click)="$event.stopPropagation()">
+    <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" [matMenuTriggerFor]="menuColor">
+      <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.MENU' | translate }}</div>
+      <mat-icon svgIcon="palette"></mat-icon>
+    </div>
+  </div>
+
+  <mat-menu #menuColor="matMenu">
+    <div fxLayout="column" fxLayoutGap="5px" (click)="$event.stopPropagation()">
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div *ngFor="let menuColor of menuColorValues" (click)="setMenuColor(menuColor)">
+          <mat-icon
+            [ngStyle]="{ color: menuColor }"
+            [svgIcon]="annotation.state.menuColor === menuColor ? 'checkbox-marked' : 'checkbox-marked-outline'"
+          ></mat-icon>
+        </div>
+      </div>
+      <div
+        [ngStyle]="{
+          borderRadius: '5px',
+          width: '100%',
+          'border-top': '5px solid' + annotation.state.menuColor
+        }"
+      ></div>
+    </div>
+  </mat-menu>
+</div>
