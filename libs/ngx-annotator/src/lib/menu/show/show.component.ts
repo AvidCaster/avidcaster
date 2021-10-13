@@ -21,13 +21,13 @@ interface ActionButton {
 }
 
 @Component({
-  selector: 'fullerstack-hide-menu',
-  templateUrl: './hide.component.html',
-  styleUrls: ['./hide.component.scss'],
+  selector: 'fullerstack-show-menu',
+  templateUrl: './show.component.html',
+  styleUrls: ['./show.component.scss'],
   animations: [shakeAnimations.wiggleIt],
   encapsulation: ViewEncapsulation.Emulated,
 })
-export class HideMenuComponent implements OnDestroy {
+export class ShowMenuComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   actionButtons: ActionButton[] = [
@@ -47,14 +47,14 @@ export class HideMenuComponent implements OnDestroy {
       label: _('COMMON.REDO'),
     },
     {
+      type: 'showLineColor',
+      icon: 'palette',
+      label: _('COMMON.LINE_COLOR'),
+    },
+    {
       type: 'showLineWidth',
       icon: 'format-line-weight',
       label: _('COMMON.LINE_WEIGHT'),
-    },
-    {
-      type: 'showColorPicker',
-      icon: 'palette',
-      label: _('COMMON.COLOR_PICKER'),
     },
     {
       type: 'showCursor',

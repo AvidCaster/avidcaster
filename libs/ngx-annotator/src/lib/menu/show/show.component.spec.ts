@@ -8,20 +8,20 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuPositionComponent } from './position.component';
+import { ShowMenuComponent } from './show.component';
 
-describe('MenuPositionComponent', () => {
-  let component: MenuPositionComponent;
-  let fixture: ComponentFixture<MenuPositionComponent>;
+describe('ShowMenuComponent', () => {
+  let component: ShowMenuComponent;
+  let fixture: ComponentFixture<ShowMenuComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MenuPositionComponent],
+      declarations: [ShowMenuComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuPositionComponent);
+    fixture = TestBed.createComponent(ShowMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

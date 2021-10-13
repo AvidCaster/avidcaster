@@ -31,6 +31,16 @@ export class MenuComponent implements OnDestroy {
   isFullscreen = false;
 
   lineWithValues: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+  lineColorValues: string[] = [
+    '#ffffff',
+    '#ff0000',
+    '#00ff00',
+    '#0000ff',
+    '#ffff00',
+    '#00ffff',
+    '#ff00ff',
+    '#000000',
+  ];
 
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
@@ -48,7 +58,7 @@ export class MenuComponent implements OnDestroy {
     switch (this.annotation.state.position) {
       case 'bottom-left':
       case 'bottom-right':
-        return '2px';
+        return '4px';
       default:
         return 'unset';
     }
@@ -105,8 +115,8 @@ export class MenuComponent implements OnDestroy {
     this.annotation.setState({ lineWidth });
   }
 
-  colorPicker(event: Event) {
-    this.annotation.setState({ strokeStyle: event.target['value'] });
+  setLineColor(lineColor: string) {
+    this.annotation.setState({ strokeStyle: lineColor });
   }
 
   toggleFullscreen() {
