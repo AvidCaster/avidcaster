@@ -11,7 +11,7 @@
     color: annotation.state.menuColor
   }"
 >
-  <button mat-icon-button class="quick-menu-button material-icons color-black" [matMenuTriggerFor]="buttonVisibility">
+  <button mat-icon-button class="quick-menu-button material-icons" [matMenuTriggerFor]="buttonVisibility">
     <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.vertical ? 'dots-horizontal' : 'dots-vertical'"></mat-icon>
   </button>
 
@@ -26,7 +26,7 @@
   <button
     *ngIf="annotation.state.showTrash"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="trashIconState"
     (click)="trash()"
   >
@@ -36,7 +36,7 @@
   <button
     *ngIf="annotation.state.showUndo"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="undoIconState"
     (click)="undo()"
   >
@@ -46,7 +46,7 @@
   <button
     *ngIf="annotation.state.showRedo"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="redoIconState"
     (click)="redo()"
   >
@@ -56,7 +56,7 @@
   <button
     *ngIf="annotation.state.showLineWidth"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [matMenuTriggerFor]="lineWidthPicker"
   >
     <mat-icon class="clickable-menu-icon" svgIcon="format-line-weight"></mat-icon>
@@ -86,7 +86,7 @@
     *ngIf="annotation.state.showColorPicker"
     mat-icon-button
     type="color"
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     (click)="colorInput.click()"
   >
     <input #colorInput class="color-input" type="color" [value]="annotation.state.menuColor" (change)="colorPicker($event)" />
@@ -96,7 +96,7 @@
   <button
     *ngIf="annotation.state.showCursor"
     mat-icon-button
-    class="quick-menu-button material-icons color-black"
+    class="quick-menu-button material-icons"
     [@wiggleIt]="cursorIconState"
     (click)="toggleCursor()"
   >
@@ -106,21 +106,11 @@
     ></mat-icon>
   </button>
 
-  <button
-    *ngIf="annotation.state.showFullscreen"
-    mat-icon-button
-    class="quick-menu-button material-icons color-black"
-    (click)="toggleFullscreen()"
-  >
+  <button *ngIf="annotation.state.showFullscreen" mat-icon-button class="quick-menu-button material-icons" (click)="toggleFullscreen()">
     <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse-all' : 'arrow-expand-all'"></mat-icon>
   </button>
 
-  <button
-    *ngIf="annotation.state.showRefresh"
-    mat-icon-button
-    class="quick-menu-button material-icons color-black"
-    (click)="uix.refreshPage()"
-  >
+  <button *ngIf="annotation.state.showRefresh" mat-icon-button class="quick-menu-button material-icons" (click)="uix.refreshPage()">
     <mat-icon class="clickable-menu-icon" svgIcon="web-refresh"></mat-icon>
   </button>
 </div>
