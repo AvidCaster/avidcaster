@@ -63,7 +63,7 @@
   </button>
   <mat-menu #lineColorMenu="matMenu">
     <div fxLayout="column" fxLayoutGap="10px">
-      <div fxLayout="row" fxLayoutGap="10px" (click)="$event.stopPropagation()">
+      <div fxLayout="row" fxLayoutGap="10px">
         <div *ngFor="let lineColor of lineColorValues" (click)="setLineColor(lineColor)">
           <mat-icon
             [ngStyle]="{ color: lineColor }"
@@ -90,23 +90,21 @@
     <mat-icon class="clickable-menu-icon" svgIcon="format-line-weight"></mat-icon>
   </button>
   <mat-menu #lineWidthMenu="matMenu">
-    <div fxLayout="column" fxLayoutGap="18px">
-      <div fxLayout="row" fxLayoutGap="18px" (click)="$event.stopPropagation()">
-        <div *ngFor="let lineWidth of lineWithValues" (click)="setLineWidth(lineWidth)">
-          <mat-icon
-            [ngStyle]="{ color: annotation.state.menuColor, width: lineWidth * 2 + 'px' }"
-            [svgIcon]="annotation.state.lineWidth === lineWidth ? 'checkbox-blank-circle' : 'checkbox-blank-circle-outline'"
-          ></mat-icon>
-        </div>
+    <div fxLayout="column" fxLayoutGap="15px">
+      <div fxLayout="row" fxLayoutGap="5px" *ngFor="let lineWidth of lineWithValues" (click)="setLineWidth(lineWidth)">
+        <mat-icon
+          [ngStyle]="{ color: annotation.state.menuColor }"
+          [svgIcon]="annotation.state.lineWidth === lineWidth ? 'checkbox-marked' : 'checkbox-blank-outline'"
+        ></mat-icon>
+        <div
+          [ngStyle]="{
+            'border-radius': '1px',
+            'border-left': lineWidth * 1.2 + 'px solid',
+            color: annotation.state.menuColor,
+            background: annotation.state.menuColor
+          }"
+        ></div>
       </div>
-      <div
-        [ngStyle]="{
-          borderRadius: '5px',
-          width: '100%',
-          'border-top': annotation.state.lineWidth * 1.4 + 'px solid',
-          color: annotation.state.menuColor
-        }"
-      ></div>
     </div>
   </mat-menu>
 
