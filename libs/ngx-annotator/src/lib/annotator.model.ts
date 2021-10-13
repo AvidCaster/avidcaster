@@ -31,7 +31,7 @@ export type ButtonType =
 
 export type MenuPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
-export type BackgroundColor = 'white' | 'black';
+export type BackgroundColor = '#000000' | '#ffffff';
 
 export interface LineAttributes {
   strokeStyle?: string;

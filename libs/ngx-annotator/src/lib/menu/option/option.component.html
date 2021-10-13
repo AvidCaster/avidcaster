@@ -49,9 +49,42 @@
   <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
 
   <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
-    <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleColor($event)">
+    <div
+      class="selection-box"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      fxLayoutGap="3px"
+      (click)="toggleBackgroundColor($event)"
+    >
       <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.BACKGROUND' | translate }}</div>
       <mat-icon [ngStyle]="{ color: isBackgroundWhite() ? 'black' : 'white' }" svgIcon="checkbox-blank-circle"></mat-icon>
     </div>
   </div>
+
+  <div class="mb0_5" fxLayout="column" fxLayoutGap="5px" (click)="$event.stopPropagation()">
+    <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" [matMenuTriggerFor]="menuColor">
+      <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.MENU' | translate }}</div>
+      <mat-icon svgIcon="palette"></mat-icon>
+    </div>
+  </div>
+
+  <mat-menu #menuColor="matMenu">
+    <div fxLayout="column" fxLayoutGap="10px" (click)="$event.stopPropagation()">
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div *ngFor="let menuColor of menuColorValues" (click)="setMenuColor(menuColor)">
+          <mat-icon
+            [ngStyle]="{ color: menuColor }"
+            [svgIcon]="annotation.state.menuColor === menuColor ? 'checkbox-marked' : 'checkbox-marked-outline'"
+          ></mat-icon>
+        </div>
+      </div>
+      <div
+        [ngStyle]="{
+          borderRadius: '5px',
+          width: '100%',
+          'border-top': '5px solid' + annotation.state.menuColor
+        }"
+      ></div>
+    </div>
+  </mat-menu>
 </div>

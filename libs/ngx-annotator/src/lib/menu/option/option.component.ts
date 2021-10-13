@@ -11,6 +11,7 @@ import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
+import { AnnotatorColors } from '../../annotator.default';
 import { BackgroundColor, MenuPosition } from '../../annotator.model';
 import { AnnotatorService } from '../../annotator.service';
 
@@ -24,10 +25,19 @@ import { AnnotatorService } from '../../annotator.service';
 export class MenuOptionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
+  menuColorValues: string[] = AnnotatorColors;
+
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   ngOnInit() {
     this.setMenuOverlayClass(this.annotation.state.backgroundColor);
+    if (this.annotation.state.backgroundColor !== this.annotation.state.menuColor) {
+      const color = this.isBackgroundWhite() ? '#000000' : '#ffffff';
+      this.annotation.setState({
+        ...this.annotation.state,
+        backgroundColor: color,
+      });
+    }
   }
 
   setPosition(event: Event, position: MenuPosition) {
@@ -58,9 +68,9 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleColor(event: Event) {
+  toggleBackgroundColor(event: Event) {
     event.stopPropagation();
-    const color = this.isBackgroundWhite() ? 'black' : 'white';
+    const color = this.isBackgroundWhite() ? '#000000' : '#ffffff';
     this.annotation.setState({
       ...this.annotation.state,
       backgroundColor: color,
@@ -70,16 +80,22 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   }
 
   isBackgroundWhite() {
-    return this.annotation.state.backgroundColor === 'white';
+    return this.annotation.state.backgroundColor === '#ffffff';
   }
 
   setMenuOverlayClass(color: BackgroundColor) {
-    if (color === 'black') {
+    if (color === '#000000') {
       this.uix.removeClassFromBody('menu-background-white');
       this.uix.addClassToBody('menu-background-black');
     } else {
       this.uix.removeClassFromBody('menu-background-black');
       this.uix.addClassToBody('menu-background-white');
+    }
+  }
+
+  setMenuColor(menuColor: string) {
+    if (this.annotation.state.backgroundColor !== menuColor) {
+      this.annotation.setState({ menuColor });
     }
   }
 
