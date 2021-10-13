@@ -28,7 +28,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   lineCap: 'round',
   lineJoin: 'round',
   lineWidth: 3,
-  strokeStyle: '#000',
+  strokeStyle: '#ffffff',
   cursor: true,
   fullscreen: true,
   position: 'top-left',
