@@ -1,9 +1,30 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
 import { AnnotatorConfig, AnnotatorState, Line } from './annotator.model';
 
+export const AnnotatorColors: string[] = [
+  '#ffffff',
+  '#ff0000',
+  '#00ff00',
+  '#0000ff',
+  '#ffff00',
+  '#00ffff',
+  '#ff00ff',
+  '#000000',
+];
+
 const DefaultAnnotatorState: AnnotatorState = {
   signature: '',
+  backgroundColor: '#000000',
+  menuColor: '#05D1F5',
   lineCap: 'round',
   lineJoin: 'round',
   lineWidth: 3,
@@ -17,10 +38,10 @@ const DefaultAnnotatorState: AnnotatorState = {
   showUndo: true,
   showRedo: true,
   showLineWidth: true,
+  showLineColor: true,
   showCursor: true,
   showFullscreen: true,
   showRefresh: true,
-  showColorPicker: true,
 };
 
 export const defaultAnnotatorState = (): AnnotatorState => {
