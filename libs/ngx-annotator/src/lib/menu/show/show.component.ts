@@ -38,12 +38,12 @@ export class ShowMenuComponent implements OnDestroy {
     },
     {
       type: 'showUndo',
-      icon: 'undo',
+      icon: 'undo-variant',
       label: _('COMMON.UNDO'),
     },
     {
       type: 'showRedo',
-      icon: 'redo',
+      icon: 'redo-variant',
       label: _('COMMON.REDO'),
     },
     {
