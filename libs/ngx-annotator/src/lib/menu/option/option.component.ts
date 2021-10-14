@@ -33,6 +33,10 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     this.setMenuOverlayClass(this.annotation.state.backgroundColor);
   }
 
+  get lineColors() {
+    return this.menuColorValues.filter((color) => color !== this.annotation.state.backgroundColor);
+  }
+
   setPosition(event: Event, position: MenuPosition) {
     event.stopPropagation();
     this.annotation.setState({

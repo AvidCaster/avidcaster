@@ -68,7 +68,7 @@
         <div *ngFor="let lineColor of lineColors" (click)="setLineColor(lineColor)">
           <mat-icon
             [ngStyle]="{ color: lineColor }"
-            [svgIcon]="annotation.state.strokeStyle === lineColor ? 'checkbox-marked' : 'checkbox-marked-outline'"
+            [svgIcon]="annotation.state.strokeStyle === lineColor ? 'pencil-lock' : 'pencil'"
           ></mat-icon>
         </div>
       </div>
