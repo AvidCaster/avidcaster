@@ -11,14 +11,15 @@ import { cloneDeep as ldDeepClone } from 'lodash-es';
 import { AnnotatorConfig, AnnotatorState, Line } from './annotator.model';
 
 export const AnnotatorColors: string[] = [
-  '#ffffff',
-  '#ff0000',
-  '#00ff00',
-  '#0000ff',
-  '#ffff00',
-  '#00ffff',
-  '#ff00ff',
-  '#000000',
+  '#ffffff', // white
+  '#ffff00', // yellow
+  '#ffa500', // orange
+  '#dda0dd', // plum
+  '#00ff00', // green
+  '#00ffff', // cyan
+  '#ff0000', // red
+  '#0000ff', // blue
+  '#000000', // black
 ];
 
 const DefaultAnnotatorState: AnnotatorState = {

@@ -20,12 +20,9 @@ import { AnnotatorService } from '../../annotator.service';
   templateUrl: './option.component.html',
   styleUrls: ['./option.component.scss'],
   animations: [shakeAnimations.wiggleIt],
-  encapsulation: ViewEncapsulation.Emulated,
 })
 export class MenuOptionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
-
-  menuColorValues: string[] = AnnotatorColors;
 
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
@@ -33,8 +30,8 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     this.setMenuOverlayClass(this.annotation.state.backgroundColor);
   }
 
-  get lineColors() {
-    return this.menuColorValues.filter((color) => color !== this.annotation.state.backgroundColor);
+  get menuColorValues(): string[] {
+    return AnnotatorColors.filter((color) => color !== this.annotation.state.backgroundColor);
   }
 
   setPosition(event: Event, position: MenuPosition) {

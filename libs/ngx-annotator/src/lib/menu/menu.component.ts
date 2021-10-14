@@ -11,6 +11,7 @@ import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
+import { AnnotatorColors } from '../annotator.default';
 import { AnnotatorService } from '../annotator.service';
 
 @Component({
@@ -32,21 +33,10 @@ export class MenuComponent implements OnDestroy {
 
   lineWithValues: number[] = [2, 3, 4, 5, 6, 8];
 
-  lineColorValues: string[] = [
-    '#ffffff',
-    '#ff0000',
-    '#00ff00',
-    '#0000ff',
-    '#ffff00',
-    '#00ffff',
-    '#ff00ff',
-    '#000000',
-  ];
-
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
-  get lineColors() {
-    return this.lineColorValues.filter((color) => color !== this.annotation.state.backgroundColor);
+  get lineColorValues() {
+    return AnnotatorColors.filter((color) => color !== this.annotation.state.backgroundColor);
   }
 
   get topPosition(): string {

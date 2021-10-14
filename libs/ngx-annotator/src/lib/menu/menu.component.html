@@ -65,7 +65,7 @@
   <mat-menu #lineColorMenu="matMenu">
     <div fxLayout="column" fxLayoutGap="10px">
       <div fxLayout="row" fxLayoutGap="10px">
-        <div *ngFor="let lineColor of lineColors" (click)="setLineColor(lineColor)">
+        <div *ngFor="let lineColor of lineColorValues" (click)="setLineColor(lineColor)">
           <mat-icon
             [ngStyle]="{ color: lineColor }"
             [svgIcon]="annotation.state.strokeStyle === lineColor ? 'pencil-lock' : 'pencil'"

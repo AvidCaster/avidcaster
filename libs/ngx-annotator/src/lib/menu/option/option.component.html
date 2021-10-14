@@ -71,7 +71,7 @@
   <mat-menu #menuColor="matMenu">
     <div fxLayout="column" fxLayoutGap="5px" (click)="$event.stopPropagation()">
       <div fxLayout="row" fxLayoutGap="10px">
-        <div *ngFor="let menuColor of lineColors" (click)="setMenuColor(menuColor)">
+        <div *ngFor="let menuColor of menuColorValues" (click)="setMenuColor(menuColor)">
           <mat-icon
             [ngStyle]="{ color: menuColor }"
             [svgIcon]="annotation.state.menuColor === menuColor ? 'checkbox-marked' : 'checkbox-marked-outline'"
