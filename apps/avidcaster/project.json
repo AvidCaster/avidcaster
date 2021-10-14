@@ -34,6 +34,11 @@
             "output": "assets/i18n"
           },
           {
+            "glob": "**/*.js",
+            "input": "libs/ngx-annotator/src/lib/draw",
+            "output": "assets/scripts"
+          },
+          {
             "glob": "**/*.svg",
             "input": "node_modules/@mdi/angular-material",
             "output": "assets/fonts"

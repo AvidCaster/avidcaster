@@ -8,6 +8,7 @@
 
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
+import createWorker from 'offscreen-canvas/create-worker';
 import { Subject, fromEvent } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { v4 as uuidV4 } from 'uuid';
@@ -24,9 +25,10 @@ export class DrawComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvas: ElementRef | undefined;
   uniqId = uuidV4();
   private destroy$ = new Subject<boolean>();
-  private canvasEl: HTMLCanvasElement | undefined | null;
-  private ctx: CanvasRenderingContext2D | undefined | null;
+  private canvasWorker: HTMLCanvasElement | undefined | null;
   private lines: Line[] = [];
+
+  private worker;
 
   constructor(
     readonly zone: NgZone,
@@ -37,13 +39,23 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.canvasEl = this.canvas?.nativeElement;
-    this.ctx = this.canvasEl.getContext('2d');
+    this.worker = createWorker(
+      this.canvas?.nativeElement,
+      'assets/scripts/draw.worker.js',
+      (data) => {
+        console.log('worker data', data);
+      }
+    );
+
     setTimeout(() => {
-      this.annotation.setCanvasAttributes(this.ctx);
+      this.worker.post({ type: 'canvas', canvas: this.canvasWorker });
+      this.worker.post({
+        type: 'attributes',
+        attributes: this.annotation.getCanvasAttributes(),
+      });
     }, 100);
-    this.resizeCanvas(this.canvasEl);
-    this.captureEvents(this.canvasEl);
+    this.resizeCanvas();
+    this.captureEvents();
     this.trashSub();
     this.undoSub();
     this.redoSub();
@@ -60,7 +72,7 @@ export class DrawComponent implements OnInit, OnDestroy {
 
   doTrash() {
     this.lines = [];
-    this.annotation.resetCanvas(this.canvasEl, this.ctx);
+    this.resetCanvas();
   }
 
   private undoSub() {
@@ -76,11 +88,11 @@ export class DrawComponent implements OnInit, OnDestroy {
       const atLeastOneVisibleLineToUndo = this.lines[0]?.visible;
       if (atLeastOneVisibleLineToUndo) {
         this.annotation.undoLastLine(this.lines);
-        this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.resetCanvas();
         this.lines
           .filter((line) => line.visible)
           .forEach((line) => {
-            this.annotation.drawLineOnCanvas(line, this.ctx);
+            this.worker.post({ type: 'draw', line });
           });
       }
     }
@@ -99,10 +111,10 @@ export class DrawComponent implements OnInit, OnDestroy {
       const atLeastOneInvisibleLineToRedo = !this.lines[this.lines.length - 1].visible;
       if (atLeastOneInvisibleLineToRedo) {
         this.annotation.redoLastLine(this.lines);
-        this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.resetCanvas();
         this.lines
           .filter((line) => line.visible)
-          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+          .forEach((line) => this.worker.post({ type: 'draw', line }));
       }
     }
   }
@@ -115,33 +127,37 @@ export class DrawComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (state) => {
-          this.annotation.setCanvasAttributes(this.ctx, {
-            lineCap: state.lineCap,
-            lineJoin: state.lineJoin,
-            lineWidth: state.lineWidth,
-            strokeStyle: state.strokeStyle,
+          this.worker.post({
+            type: 'attributes',
+            attributes: {
+              lineCap: state.lineCap,
+              lineJoin: state.lineJoin,
+              lineWidth: state.lineWidth,
+              strokeStyle: state.strokeStyle,
+            },
           });
         },
       });
   }
 
-  private resizeCanvas(canvasEl: HTMLCanvasElement) {
+  private resizeCanvas() {
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
-        canvasEl.width = size.x;
-        canvasEl.height = size.y;
-        canvasEl.style.width = `${size.x}px`;
-        canvasEl.style.height = `${size.y}px`;
-        this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.annotation.setCanvasAttributes(this.ctx);
+        this.worker.post({ type: 'resize', size });
+        this.worker.post({ type: 'reset' });
+        this.worker.post({
+          type: 'attributes',
+          attributes: this.annotation.getCanvasAttributes(),
+        });
         this.lines
           .filter((line) => line.visible)
-          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+          .forEach((line) => this.worker.post({ type: 'draw', line }));
       },
     });
   }
 
-  private captureEvents(canvasEl: HTMLCanvasElement) {
+  private captureEvents() {
+    const canvasEl: HTMLCanvasElement = this.canvas?.nativeElement;
     let line: Line = this.annotation.cloneLine();
     this.zone.runOutsideAngular(() => {
       this.annotation
@@ -156,7 +172,7 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
+                    this.worker.post({ type: 'dot', line });
                   });
                   line = this.annotation.cloneLine();
                 }
@@ -186,16 +202,21 @@ export class DrawComponent implements OnInit, OnDestroy {
 
             if (line.points.length > 1) {
               this.zone.run(() => {
-                this.annotation.drawFromToOnCanvas(
-                  line.points[line.points.length - 2],
-                  line.points[line.points.length - 1],
-                  this.ctx
-                );
+                this.worker.post({ type: 'points', line });
               });
             }
           },
         });
     });
+  }
+
+  /**
+   * Resets the canvas
+   * @param canvasEl canvas element
+   * @param ctx canvas context
+   */
+  resetCanvas() {
+    this.worker.post({ type: 'reset' });
   }
 
   ngOnDestroy() {

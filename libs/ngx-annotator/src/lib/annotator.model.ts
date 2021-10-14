@@ -72,3 +72,20 @@ export interface Line {
   attributes: LineAttributes;
   visible?: boolean;
 }
+
+export type WorkerMessageType =
+  | 'canvas'
+  | 'line'
+  | 'dot'
+  | 'points'
+  | 'attribute'
+  | 'reset'
+  | 'resize';
+
+export interface WorkerMessage {
+  type: WorkerMessageType;
+  canvas?: any;
+  attributes?: LineAttributes;
+  line?: Line;
+  size?: { width: number; height: number };
+}
