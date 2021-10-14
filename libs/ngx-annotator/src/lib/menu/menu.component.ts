@@ -23,11 +23,11 @@ import { AnnotatorService } from '../annotator.service';
 export class MenuComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
-  optionsIconState = 'back';
-  trashIconState = 'back';
-  undoIconState = 'back';
-  redoIconState = 'back';
-  cursorIconState = 'back';
+  trashIconState = 1;
+  undoIconState = 1;
+  redoIconState = 1;
+  cursorIconState = 1;
+
   isFullscreen = false;
 
   lineWithValues: number[] = [2, 3, 4, 5, 6, 8];
@@ -96,23 +96,17 @@ export class MenuComponent implements OnDestroy {
   }
 
   trash() {
-    if (this.annotation.state.vertical) {
-      this.trashIconState = this.trashIconState === 'back' ? 'forth' : 'back';
-    }
+    this.trashIconState++;
     this.annotation.trash();
   }
 
   undo() {
-    if (this.annotation.state.vertical) {
-      this.undoIconState = this.undoIconState === 'back' ? 'forth' : 'back';
-    }
+    this.undoIconState++;
     this.annotation.undo();
   }
 
   redo() {
-    if (this.annotation.state.vertical) {
-      this.redoIconState = this.redoIconState === 'back' ? 'forth' : 'back';
-    }
+    this.redoIconState++;
     this.annotation.redo();
   }
 
@@ -132,9 +126,7 @@ export class MenuComponent implements OnDestroy {
   }
 
   toggleCursor() {
-    if (this.annotation.state.vertical) {
-      this.cursorIconState = this.cursorIconState === 'back' ? 'forth' : 'back';
-    }
+    this.cursorIconState++;
     this.annotation.setState({ cursor: !this.annotation.state.cursor });
   }
 
