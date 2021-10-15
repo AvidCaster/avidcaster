@@ -298,6 +298,7 @@ export class AnnotatorService implements OnDestroy {
         ctx.quadraticCurveTo(points[idx].x, points[idx].y, points[idx + 1].x, points[idx + 1].y);
       }
       ctx.stroke();
+      this.setCanvasAttributes(ctx);
     }
   }
 

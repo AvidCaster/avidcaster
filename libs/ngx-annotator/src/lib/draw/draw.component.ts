@@ -26,6 +26,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
+  private rect: DOMRect | undefined;
   private lines: Line[] = [];
 
   constructor(
@@ -126,6 +127,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   private resizeCanvas(canvasEl: HTMLCanvasElement) {
+    this.rect = canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
         canvasEl.width = size.x;
@@ -133,6 +135,7 @@ export class DrawComponent implements OnInit, OnDestroy {
         canvasEl.style.width = `${size.x}px`;
         canvasEl.style.height = `${size.y}px`;
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
+        this.rect = canvasEl.getBoundingClientRect();
         this.annotation.setCanvasAttributes(this.ctx);
         this.lines
           .filter((line) => line.visible)
@@ -170,17 +173,15 @@ export class DrawComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (event: MouseEvent | TouchEvent) => {
-            const rect = canvasEl.getBoundingClientRect();
-
             if (event instanceof MouseEvent) {
               line.points.push({
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top,
+                x: event.clientX - this.rect.left,
+                y: event.clientY - this.rect.top,
               });
             } else if (event instanceof TouchEvent) {
               line.points.push({
-                x: event.touches[0].clientX - rect.left,
-                y: event.touches[0].clientY - rect.top,
+                x: event.touches[0].clientX - this.rect.left,
+                y: event.touches[0].clientY - this.rect.top,
               });
             }
 
