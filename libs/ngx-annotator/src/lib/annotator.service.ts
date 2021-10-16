@@ -284,6 +284,7 @@ export class AnnotatorService implements OnDestroy {
     rect.setAttributeNS(null, 'x2', to.x.toString());
     rect.setAttributeNS(null, 'y2', to.y.toString());
     rect.setAttributeNS(null, 'stroke', attr.strokeStyle);
+    rect.setAttributeNS(null, 'stroke-linejoin', attr.lineJoin);
     rect.setAttributeNS(null, 'stroke-width', attr.lineWidth.toString());
     rect.setAttributeNS(null, 'fill-opacity', '0');
 

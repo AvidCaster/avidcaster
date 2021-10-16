@@ -9,7 +9,7 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, fromEvent } from 'rxjs';
-import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
@@ -160,6 +160,11 @@ export class DrawComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap(() => {
             return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
+              tap(() => {
+                if (!line) {
+                  line = this.annotation.cloneLine();
+                }
+              }),
               finalize(() => {
                 if (line.points.length) {
                   // abandon hidden lines "the undo(s)" on any further update
@@ -167,14 +172,14 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    // redo the line on canvas smooth and fast
+                    // draw the line on the background canvas
                     this.annotation.drawLineOnCanvas(line, this.ctx);
 
-                    // remove the line from the svg
+                    // remove the temporary line from the foreground svg
                     svgLines.forEach((svgLine) => svgLine.remove());
                     svgLines.length = 0;
                   });
-                  line = this.annotation.cloneLine();
+                  line = undefined;
                 }
               }),
               takeUntil(fromEvent(this.canvasEl, 'mouseup')),
@@ -200,12 +205,15 @@ export class DrawComponent implements OnInit, OnDestroy {
               };
             }
 
-            this.zone.run(() => {
-              const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
-              svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes));
-            });
-
-            this.annotation.addPoint(to, line);
+            // add the point to the line for the background canvas
+            const pointAdded = this.annotation.addPoint(to, line);
+            if (pointAdded) {
+              this.zone.run(() => {
+                const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
+                // draw a temp line live on the foreground svg
+                svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes));
+              });
+            }
           },
         });
     });
