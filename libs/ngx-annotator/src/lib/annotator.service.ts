@@ -271,7 +271,6 @@ export class AnnotatorService implements OnDestroy {
 
     const rect = <SVGLineElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg:line');
 
-    console.log(attr);
     rect.setAttributeNS(null, 'x1', from.x.toString());
     rect.setAttributeNS(null, 'y1', from.y.toString());
     rect.setAttributeNS(null, 'x2', to.x.toString());
@@ -279,7 +278,7 @@ export class AnnotatorService implements OnDestroy {
     rect.setAttributeNS(null, 'stroke', attr.strokeStyle);
     rect.setAttributeNS(null, 'stroke-width', attr.lineWidth.toString());
     rect.setAttributeNS(null, 'fill-opacity', '0');
-    console.log(rect);
+
     svgEl.appendChild(rect);
     return rect;
   }
