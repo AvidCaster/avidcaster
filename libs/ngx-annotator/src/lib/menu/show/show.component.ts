@@ -18,6 +18,7 @@ interface ActionButton {
   type: ButtonType;
   icon: string;
   label: string;
+  iconClass?: string;
 }
 
 @Component({
@@ -45,6 +46,12 @@ export class ShowMenuComponent implements OnDestroy {
       type: 'showRedo',
       icon: 'redo-variant',
       label: _('COMMON.REDO'),
+    },
+    {
+      type: 'showErase',
+      icon: 'lead-pencil',
+      iconClass: 'icon-rotate',
+      label: _('COMMON.ERASER'),
     },
     {
       type: 'showLineColor',

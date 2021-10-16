@@ -2,7 +2,7 @@
   <div class="header">{{ 'COMMON.SHOW_BUTTONS' | translate }}</div>
   <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
 
-  <div fxLayout="column" fxLayoutGap="1px">
+  <div fxLayout="column" fxLayoutGap="0px">
     <div
       *ngFor="let actionButton of actionButtons"
       class="selection-box"
@@ -14,7 +14,7 @@
       <mat-icon [svgIcon]="isButtonVisible(actionButton.type) ? 'eye-outline' : 'eye-off-outline'"></mat-icon>
       <div fxFlex="auto" class="text">{{ actionButton.label | translate }}</div>
       <div>
-        <mat-icon [svgIcon]="actionButton.icon"></mat-icon>
+        <mat-icon [class]="actionButton.iconClass" [svgIcon]="actionButton.icon"></mat-icon>
       </div>
     </div>
   </div>

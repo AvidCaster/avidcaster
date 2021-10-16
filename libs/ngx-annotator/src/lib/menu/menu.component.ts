@@ -7,7 +7,7 @@
  */
 
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { shakeAnimations } from '@fullerstack/ngx-shared';
+import { rotationAnimations, shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
@@ -18,7 +18,7 @@ import { AnnotatorService } from '../annotator.service';
   selector: 'fullerstack-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  animations: [shakeAnimations.wiggleIt],
+  animations: [shakeAnimations.wiggleIt, rotationAnimations.rotate180],
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class MenuComponent implements OnDestroy {
@@ -27,6 +27,7 @@ export class MenuComponent implements OnDestroy {
   trashIconState = 1;
   undoIconState = 1;
   redoIconState = 1;
+  eraserIconState = 'back';
   cursorIconState = 1;
 
   isFullscreen = false;
@@ -98,6 +99,11 @@ export class MenuComponent implements OnDestroy {
   redo() {
     this.redoIconState++;
     this.annotation.redo();
+  }
+
+  toggleErase() {
+    this.eraserIconState = this.eraserIconState === 'back' ? 'forth' : 'back';
+    this.annotation.setState({ erase: !this.annotation.state.erase });
   }
 
   setLineWidth(lineWidth: number) {

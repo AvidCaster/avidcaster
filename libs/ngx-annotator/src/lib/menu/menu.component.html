@@ -53,6 +53,16 @@
   </button>
 
   <button
+    *ngIf="annotation.state.showEraser"
+    mat-icon-button
+    class="quick-menu-button material-icons"
+    [@rotate180]="eraserIconState"
+    (click)="toggleErase()"
+  >
+    <mat-icon class="clickable-menu-icon" svgIcon="lead-pencil"></mat-icon>
+  </button>
+
+  <button
     *ngIf="annotation.state.showLineColor"
     mat-icon-button
     class="quick-menu-button material-icons"
@@ -65,7 +75,7 @@
       <div fxLayout="row" fxLayoutGap="10px">
         <div *ngFor="let lineColor of lineColorValues" (click)="setLineColor(lineColor)">
           <mat-icon
-            [ngStyle]="{ color: lineColor }"
+            [ngStyle]="{ color: lineColor, transform: 'scale(1.2)' }"
             [svgIcon]="annotation.state.strokeStyle === lineColor ? 'pencil-lock' : 'pencil'"
           ></mat-icon>
         </div>

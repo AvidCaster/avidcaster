@@ -23,6 +23,7 @@ export type ButtonType =
   | 'showTrash'
   | 'showUndo'
   | 'showRedo'
+  | 'showErase'
   | 'showLineColor'
   | 'showLineWidth'
   | 'showCursor'
@@ -52,9 +53,11 @@ export interface AnnotatorState extends LineAttributes {
   position: MenuPosition;
   vertical: boolean;
   reverse: boolean;
+  erase: boolean;
   showTrash: boolean;
   showUndo: boolean;
   showRedo: boolean;
+  showEraser: boolean;
   showLineColor: boolean;
   showLineWidth: boolean;
   showCursor: boolean;
