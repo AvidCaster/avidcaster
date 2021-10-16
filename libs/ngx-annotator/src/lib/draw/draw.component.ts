@@ -189,22 +189,11 @@ export class DrawComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (event: MouseEvent | TouchEvent) => {
-            let to: Point = { x: 0, y: 0 };
-
-            if (event instanceof MouseEvent) {
-              to = {
-                x: event.clientX - this.rect.left,
-                y: event.clientY - this.rect.top,
-              };
-            } else if (event instanceof TouchEvent) {
-              to = {
-                x: event.touches[0].clientX - this.rect.left,
-                y: event.touches[0].clientY - this.rect.top,
-              };
-            }
+            const to: Point = this.annotation.getEventPoint(event, this.rect);
 
             // add the point to the line for the background canvas
             const pointAdded = this.annotation.addPoint(to, line);
+
             if (pointAdded) {
               this.zone.run(() => {
                 const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;

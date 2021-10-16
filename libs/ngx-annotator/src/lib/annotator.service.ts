@@ -414,6 +414,30 @@ export class AnnotatorService implements OnDestroy {
     ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
   }
 
+  /**
+   * Returns coordinates of the mouse relative to the canvas
+   * @param event event - mouse or touch event
+   * @param rect rect - canvas element
+   * @returns point - {x, y}
+   */
+  getEventPoint(event: MouseEvent | TouchEvent, rect: DOMRect): Point {
+    let point: Point = { x: 0, y: 0 };
+
+    if (event instanceof MouseEvent) {
+      point = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      };
+    } else if (event instanceof TouchEvent) {
+      point = {
+        x: event.touches[0].clientX - rect.left,
+        y: event.touches[0].clientY - rect.top,
+      };
+    }
+
+    return point;
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
