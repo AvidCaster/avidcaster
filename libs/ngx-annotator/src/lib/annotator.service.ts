@@ -206,8 +206,8 @@ export class AnnotatorService implements OnDestroy {
       attributes: {
         lineCap: this.state.lineCap,
         lineJoin: this.state.lineJoin,
-        lineWidth: this.state.lineWidth,
-        strokeStyle: this.state.strokeStyle,
+        lineWidth: this.state.erase ? this.state.lineWidth + 2 : this.state.lineWidth,
+        strokeStyle: this.state.erase ? this.state.backgroundColor : this.state.strokeStyle,
       },
     }) as Line;
   }
@@ -220,8 +220,8 @@ export class AnnotatorService implements OnDestroy {
     return {
       lineCap: this.state.lineCap,
       lineJoin: this.state.lineJoin,
-      lineWidth: this.state.lineWidth,
-      strokeStyle: this.state.strokeStyle,
+      lineWidth: this.state.erase ? this.state.lineWidth + 2 : this.state.lineWidth,
+      strokeStyle: this.state.erase ? this.state.backgroundColor : this.state.strokeStyle,
     };
   }
 

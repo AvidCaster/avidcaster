@@ -34,7 +34,11 @@ export class MenuComponent implements OnDestroy {
 
   lineWithValues: number[] = [2, 3, 4, 5, 6, 8];
 
-  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
+  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {
+    if (this.annotation.state.erase) {
+      this.eraserIconState = 'forth';
+    }
+  }
 
   get lineColorValues() {
     return AnnotatorColors.filter((color) => color !== this.annotation.state.backgroundColor);
