@@ -9,10 +9,9 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, fromEvent } from 'rxjs';
-import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
-import { v4 as uuidV4 } from 'uuid';
+import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { Line } from '../annotator.model';
+import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
 
 @Component({
@@ -21,13 +20,15 @@ import { AnnotatorService } from '../annotator.service';
   styleUrls: ['./draw.component.scss'],
 })
 export class DrawComponent implements OnInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) canvas: ElementRef | undefined;
-  uniqId = uuidV4();
+  @ViewChild('annotationCanvas', { static: true }) canvas: ElementRef | undefined;
+  @ViewChild('annotationSvg', { static: true }) svg: ElementRef | undefined;
   private destroy$ = new Subject<boolean>();
+  private svgEl: HTMLElement | undefined | null;
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
   private rect: DOMRect | undefined;
   private lines: Line[] = [];
+  private screenSize: Point = { x: 0, y: 0 };
 
   constructor(
     readonly zone: NgZone,
@@ -38,13 +39,14 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.svgEl = this.svg?.nativeElement;
     this.canvasEl = this.canvas?.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
     setTimeout(() => {
       this.annotation.setCanvasAttributes(this.ctx);
     }, 100);
-    this.resizeCanvas(this.canvasEl);
-    this.captureEvents(this.canvasEl);
+    this.resizeCanvas();
+    this.captureEvents();
     this.trashSub();
     this.undoSub();
     this.redoSub();
@@ -126,16 +128,19 @@ export class DrawComponent implements OnInit, OnDestroy {
       });
   }
 
-  private resizeCanvas(canvasEl: HTMLCanvasElement) {
-    this.rect = canvasEl.getBoundingClientRect();
+  private resizeCanvas() {
+    this.rect = this.canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
-        canvasEl.width = size.x;
-        canvasEl.height = size.y;
-        canvasEl.style.width = `${size.x}px`;
-        canvasEl.style.height = `${size.y}px`;
+        this.screenSize = size;
+        this.canvasEl.width = size.x;
+        this.canvasEl.height = size.y;
+        this.canvasEl.style.width = `${size.x}px`;
+        this.canvasEl.style.height = `${size.y}px`;
+        this.svgEl.setAttribute('width', `${size.x}px`);
+        this.svgEl.setAttribute('height', `${size.y}px`);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.rect = canvasEl.getBoundingClientRect();
+        this.rect = this.canvasEl.getBoundingClientRect();
         this.annotation.setCanvasAttributes(this.ctx);
         this.lines
           .filter((line) => line.visible)
@@ -144,14 +149,20 @@ export class DrawComponent implements OnInit, OnDestroy {
     });
   }
 
-  private captureEvents(canvasEl: HTMLCanvasElement) {
+  private captureEvents() {
+    const svgLines: SVGLineElement[] = [];
     let line: Line = this.annotation.cloneLine();
     this.zone.runOutsideAngular(() => {
       this.annotation
-        .fromEvents(canvasEl, ['mousedown', 'touchstart'])
+        .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
         .pipe(
           switchMap(() => {
-            return this.annotation.fromEvents(canvasEl, ['mousemove', 'touchmove']).pipe(
+            return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
+              tap(() => {
+                if (!line) {
+                  line = this.annotation.cloneLine();
+                }
+              }),
               finalize(() => {
                 if (line.points.length) {
                   // abandon hidden lines "the undo(s)" on any further update
@@ -159,39 +170,46 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
+                    // draw the line on the background canvas
+                    this.annotation.drawLineOnCanvas(line, this.ctx);
+                    line = undefined;
+
+                    // remove the temporary line from the foreground svg
+                    svgLines.forEach((svgLine) => svgLine.remove());
+                    svgLines.length = 0;
                   });
-                  line = this.annotation.cloneLine();
                 }
               }),
-              takeUntil(fromEvent(canvasEl, 'mouseup')),
-              takeUntil(fromEvent(canvasEl, 'mouseleave')),
-              takeUntil(fromEvent(canvasEl, 'touchend'))
+              takeUntil(fromEvent(this.canvasEl, 'mouseup')),
+              takeUntil(fromEvent(this.canvasEl, 'mouseleave')),
+              takeUntil(fromEvent(this.canvasEl, 'touchend'))
             );
           }),
           takeUntil(this.destroy$)
         )
         .subscribe({
           next: (event: MouseEvent | TouchEvent) => {
+            let to: Point = { x: 0, y: 0 };
+
             if (event instanceof MouseEvent) {
-              line.points.push({
+              to = {
                 x: event.clientX - this.rect.left,
                 y: event.clientY - this.rect.top,
-              });
+              };
             } else if (event instanceof TouchEvent) {
-              line.points.push({
+              to = {
                 x: event.touches[0].clientX - this.rect.left,
                 y: event.touches[0].clientY - this.rect.top,
-              });
+              };
             }
 
-            if (line.points.length > 1) {
+            // add the point to the line for the background canvas
+            const pointAdded = this.annotation.addPoint(to, line);
+            if (pointAdded) {
               this.zone.run(() => {
-                this.annotation.drawFromToOnCanvas(
-                  line.points[line.points.length - 2],
-                  line.points[line.points.length - 1],
-                  this.ctx
-                );
+                const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
+                // draw a temp line live on the foreground svg
+                svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes));
               });
             }
           },

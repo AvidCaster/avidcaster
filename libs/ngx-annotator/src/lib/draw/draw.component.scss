@@ -1,12 +1,30 @@
-.canvas {
+:host {
+  position: relative;
+}
+
+#draw-svg {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0 solid;
+  border: 0 solid;
   z-index: 1;
-  display: block;
-  border: 0;
+}
+
+#draw-canvas {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0 solid;
+  z-index: 2;
+  background: transparent !important;
 }
 
 .menu {
-  z-index: 2;
+  z-index: 3;
   position: relative;
 }
 

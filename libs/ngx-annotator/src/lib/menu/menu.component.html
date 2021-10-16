@@ -2,15 +2,13 @@
   (click)="$event.stopPropagation()"
   [fxLayout]="flexLayout"
   [ngStyle]="{
-    'z-index': 2,
-    position: 'absolute',
     top: topPosition,
     bottom: bottomPosition,
     left: leftPosition,
     right: rightPosition,
     color: annotation.state.menuColor
   }"
-  style="overflow: hidden"
+  style="overflow: hidden; z-index: 3; position: absolute"
 >
   <button mat-icon-button class="quick-menu-button material-icons" [matMenuTriggerFor]="buttonVisibility">
     <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.vertical ? 'dots-horizontal' : 'dots-vertical'"></mat-icon>

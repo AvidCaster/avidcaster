@@ -1,11 +1,3 @@
-<canvas
-  id="{{ uniqId }}"
-  [ngStyle]="{
-    border: 'non',
-    'z-index': 1,
-    cursor: annotation.state.cursor ? 'default' : 'none',
-    background: annotation.state.backgroundColor
-  }"
-  #canvas
-></canvas>
+<svg id="draw-svg" [ngStyle]="{ background: annotation.state.backgroundColor }" #annotationSvg></svg>
+<canvas id="draw-canvas" [ngStyle]="{ cursor: annotation.state.cursor ? 'default' : 'none' }" #annotationCanvas></canvas>
 <fullerstack-menu [ngStyle]="{ top: 0, right: 0, color: annotation.state.menuColor }"> </fullerstack-menu>

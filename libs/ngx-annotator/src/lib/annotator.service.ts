@@ -188,7 +188,7 @@ export class AnnotatorService implements OnDestroy {
    * @param eventNames event names
    * @returns observable of events
    */
-  fromEvents(canvasEl: HTMLCanvasElement, eventNames: string[]): Observable<Event> {
+  fromEvents(canvasEl: HTMLElement, eventNames: string[]): Observable<Event> {
     return eventNames.reduce(
       (prev, name) => merge(prev, fromEvent(canvasEl, name, { passive: true })),
       EMPTY
@@ -251,7 +251,6 @@ export class AnnotatorService implements OnDestroy {
   drawDotOnCanvas(dot: Point, ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.moveTo(dot.x, dot.y);
-    ctx.closePath();
     ctx.stroke();
   }
 
@@ -264,8 +263,33 @@ export class AnnotatorService implements OnDestroy {
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
-    ctx.closePath();
     ctx.stroke();
+  }
+
+  /**
+   * Creates a svg element path
+   * @param from coordinates of the start point
+   * @param to coordinates of the end point
+   * @param svgEl svg element
+   * @param attr svg attributes
+   * @returns svg path element
+   */
+  drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr?: LineAttributes): SVGLineElement {
+    attr = attr || this.getCanvasAttributes();
+
+    const rect = <SVGLineElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg:line');
+
+    rect.setAttributeNS(null, 'x1', from.x.toString());
+    rect.setAttributeNS(null, 'y1', from.y.toString());
+    rect.setAttributeNS(null, 'x2', to.x.toString());
+    rect.setAttributeNS(null, 'y2', to.y.toString());
+    rect.setAttributeNS(null, 'stroke', attr.strokeStyle);
+    rect.setAttributeNS(null, 'stroke-linejoin', attr.lineJoin);
+    rect.setAttributeNS(null, 'stroke-width', attr.lineWidth.toString());
+    rect.setAttributeNS(null, 'fill-opacity', '0');
+
+    svgEl.appendChild(rect);
+    return rect;
   }
 
   /**
@@ -337,6 +361,48 @@ export class AnnotatorService implements OnDestroy {
         return;
       }
     }
+  }
+
+  /**
+   * Given a line, it adds the points of the line
+   * @param point - {x, y}
+   * @returns true if the point was indeed added
+   */
+  addPoint(point: Point, line: Line): boolean {
+    const next = this.roundPoint(point);
+
+    if (line.points.length > 0) {
+      const prev = line.points[line.points.length - 1];
+      if (this.skipPoint(prev, next)) {
+        // add point only if point is not to close to previous point
+        return false;
+      }
+    }
+
+    line.points.push(next);
+
+    return !this.skipPoint(line.points[0], next);
+  }
+
+  /**
+   * If the point is too close to the previous point, it is not added
+   * @param point - {x, y}
+   * @returns true if the point is too close to the last point
+   */
+  skipPoint(prev: Point, next: Point): boolean {
+    return Math.abs(next.x - prev.x) < 1 && Math.abs(next.y - prev.y) < 1;
+  }
+
+  /**
+   * Rounds a point to the nearest integer
+   * @param point - {x, y}
+   * @returns rounded point
+   */
+  roundPoint(point: Point): Point {
+    return {
+      x: Math.round(10 * point.x) / 10,
+      y: Math.round(10 * point.y) / 10,
+    };
   }
 
   /**
