@@ -165,8 +165,13 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
+                    // this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
+
+                    // redo the line on canvas smooth and fast
                     this.annotation.drawLineOnCanvas(line, this.ctx);
+
+                    // remove the line from the svg
+                    svgLines.forEach((svgLine) => svgLine.remove());
                   });
                   line = this.annotation.cloneLine();
                 }
@@ -180,70 +185,31 @@ export class DrawComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (event: MouseEvent | TouchEvent) => {
-            let pointAdded = false;
+            let to: Point = { x: 0, y: 0 };
+
             if (event instanceof MouseEvent) {
-              pointAdded = this.addPoint(
-                {
-                  x: event.clientX - this.rect.left,
-                  y: event.clientY - this.rect.top,
-                },
-                line
-              );
+              to = {
+                x: event.clientX - this.rect.left,
+                y: event.clientY - this.rect.top,
+              };
             } else if (event instanceof TouchEvent) {
-              pointAdded = this.addPoint(
-                {
-                  x: event.touches[0].clientX - this.rect.left,
-                  y: event.touches[0].clientY - this.rect.top,
-                },
-                line
-              );
+              to = {
+                x: event.touches[0].clientX - this.rect.left,
+                y: event.touches[0].clientY - this.rect.top,
+              };
             }
 
-            if (pointAdded && line.points.length > 1) {
+            this.annotation.addPoint(to, line);
+
+            if (line.points.length > 1) {
               this.zone.run(() => {
-                svgLines.push(
-                  this.annotation.drawLineOnSVG(
-                    line.points[line.points.length - 2],
-                    line.points[line.points.length - 1],
-                    this.svgEl
-                  )
-                );
+                const from = line.points[line.points.length - 2];
+                svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl));
               });
             }
           },
         });
     });
-  }
-
-  /**
-   * @param point - {x, y}
-   * @returns true if the point was indeed added
-   */
-  addPoint(point: Point, line: Line): boolean {
-    const next = this.roundPoint(point);
-
-    if (line.points.length > 0) {
-      const prev = line.points[line.points.length - 1];
-      if (this.skipPoint(prev, next)) {
-        // add point only if point is not to close to previous point
-        return false;
-      }
-    }
-
-    line.points.push(next);
-
-    return !this.skipPoint(line.points[0], next);
-  }
-
-  skipPoint(prev: Point, next: Point): boolean {
-    return Math.abs(next.x - prev.x) < 1 && Math.abs(next.y - prev.y) < 1;
-  }
-
-  roundPoint(point: Point): Point {
-    return {
-      x: Math.round(10 * point.x) / 10,
-      y: Math.round(10 * point.y) / 10,
-    };
   }
 
   ngOnDestroy() {

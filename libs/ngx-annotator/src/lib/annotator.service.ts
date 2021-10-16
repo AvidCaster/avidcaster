@@ -355,6 +355,37 @@ export class AnnotatorService implements OnDestroy {
   }
 
   /**
+   * @param point - {x, y}
+   * @returns true if the point was indeed added
+   */
+  addPoint(point: Point, line: Line): boolean {
+    const next = this.roundPoint(point);
+
+    if (line.points.length > 0) {
+      const prev = line.points[line.points.length - 1];
+      if (this.skipPoint(prev, next)) {
+        // add point only if point is not to close to previous point
+        return false;
+      }
+    }
+
+    line.points.push(next);
+
+    return !this.skipPoint(line.points[0], next);
+  }
+
+  skipPoint(prev: Point, next: Point): boolean {
+    return Math.abs(next.x - prev.x) < 1 && Math.abs(next.y - prev.y) < 1;
+  }
+
+  roundPoint(point: Point): Point {
+    return {
+      x: Math.round(10 * point.x) / 10,
+      y: Math.round(10 * point.y) / 10,
+    };
+  }
+
+  /**
    * Resets the canvas
    * @param canvasEl canvas element
    * @param ctx canvas context
