@@ -159,8 +159,10 @@ export class DrawComponent implements OnInit, OnDestroy {
           switchMap(() => {
             return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
               tap(() => {
-                if (!line) {
-                  line = this.annotation.cloneLine();
+                if (this.annotation.state.performance) {
+                  if (!line) {
+                    line = this.annotation.cloneLine();
+                  }
                 }
               }),
               finalize(() => {
@@ -170,13 +172,18 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    // draw the line on the background canvas
-                    this.annotation.drawLineOnCanvas(line, this.ctx);
-                    line = undefined;
+                    if (this.annotation.state.performance) {
+                      // draw the line on the background canvas
+                      this.annotation.drawLineOnCanvas(line, this.ctx);
+                      line = undefined;
 
-                    // remove the temporary line from the foreground svg
-                    svgLines.forEach((svgLine) => svgLine.remove());
-                    svgLines.length = 0;
+                      // remove the temporary line from the foreground svg
+                      svgLines.forEach((svgLine) => svgLine.remove());
+                      svgLines.length = 0;
+                    } else {
+                      this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
+                      line = this.annotation.cloneLine();
+                    }
                   });
                 }
               }),
@@ -189,27 +196,27 @@ export class DrawComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (event: MouseEvent | TouchEvent) => {
-            let to: Point = { x: 0, y: 0 };
-
-            if (event instanceof MouseEvent) {
-              to = {
-                x: event.clientX - this.rect.left,
-                y: event.clientY - this.rect.top,
-              };
-            } else if (event instanceof TouchEvent) {
-              to = {
-                x: event.touches[0].clientX - this.rect.left,
-                y: event.touches[0].clientY - this.rect.top,
-              };
-            }
+            const to: Point = this.annotation.getEventPoint(event, this.rect);
 
             // add the point to the line for the background canvas
             const pointAdded = this.annotation.addPoint(to, line);
+
             if (pointAdded) {
               this.zone.run(() => {
                 const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
-                // draw a temp line live on the foreground svg
-                svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes));
+
+                if (this.annotation.state.performance) {
+                  // draw a temp line live on the foreground svg
+                  const svgLine = this.annotation.drawLineOnSVG(
+                    from,
+                    to,
+                    this.svgEl,
+                    line.attributes
+                  );
+                  svgLines.push(svgLine);
+                } else {
+                  this.annotation.drawFromToOnCanvas(from, to, this.ctx);
+                }
               });
             }
           },

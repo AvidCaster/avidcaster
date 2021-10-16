@@ -28,6 +28,7 @@ export class MenuComponent implements OnDestroy {
   undoIconState = 1;
   redoIconState = 1;
   cursorIconState = 1;
+  perfIconState = 1;
 
   isFullscreen = false;
 
@@ -118,6 +119,11 @@ export class MenuComponent implements OnDestroy {
   toggleCursor() {
     this.cursorIconState++;
     this.annotation.setState({ cursor: !this.annotation.state.cursor });
+  }
+
+  togglePerf() {
+    this.perfIconState++;
+    this.annotation.setState({ performance: !this.annotation.state.performance });
   }
 
   ngOnDestroy() {

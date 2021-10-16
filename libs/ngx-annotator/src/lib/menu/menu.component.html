@@ -127,4 +127,14 @@
   <button *ngIf="annotation.state.showRefresh" mat-icon-button class="quick-menu-button material-icons" (click)="uix.refreshPage()">
     <mat-icon class="clickable-menu-icon" svgIcon="web-refresh"></mat-icon>
   </button>
+
+  <button
+    *ngIf="annotation.state.showPerformance"
+    mat-icon-button
+    class="quick-menu-button material-icons"
+    [@wiggleIt]="perfIconState"
+    (click)="togglePerf()"
+  >
+    <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.performance ? 'fire' : 'fire-alert'"></mat-icon>
+  </button>
 </div>
