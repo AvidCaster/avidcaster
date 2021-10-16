@@ -201,11 +201,6 @@ export class DrawComponent implements OnInit, OnDestroy {
 
             if (pointAdded && line.points.length > 1) {
               this.zone.run(() => {
-                // this.annotation.drawFromToOnCanvas(
-                //   line.points[line.points.length - 2],
-                //   line.points[line.points.length - 1],
-                //   this.ctx
-                // );
                 svgLines.push(
                   this.annotation.drawLineOnSVG(
                     line.points[line.points.length - 2],
