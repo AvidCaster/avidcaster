@@ -251,6 +251,7 @@ export class AnnotatorService implements OnDestroy {
   drawDotOnCanvas(dot: Point, ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.moveTo(dot.x, dot.y);
+    ctx.closePath();
     ctx.stroke();
   }
 
@@ -264,6 +265,7 @@ export class AnnotatorService implements OnDestroy {
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
     ctx.stroke();
+    ctx.closePath();
   }
 
   /**

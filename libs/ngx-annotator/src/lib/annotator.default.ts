@@ -35,6 +35,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   position: 'top-left',
   vertical: true,
   reverse: false,
+  performance: false,
   showTrash: true,
   showUndo: true,
   showRedo: true,
@@ -43,6 +44,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   showCursor: true,
   showFullscreen: true,
   showRefresh: true,
+  showPerformance: false,
 };
 
 export const defaultAnnotatorState = (): AnnotatorState => {

@@ -71,6 +71,11 @@ export class ShowMenuComponent implements OnDestroy {
       icon: 'web-refresh',
       label: _('COMMON.REFRESH'),
     },
+    {
+      type: 'showPerformance',
+      icon: 'fire',
+      label: _('COMMON.PERFORMANCE'),
+    },
   ];
 
   constructor(readonly annotation: AnnotatorService) {}
