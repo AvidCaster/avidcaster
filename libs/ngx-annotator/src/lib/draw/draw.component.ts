@@ -12,7 +12,7 @@ import { Subject, fromEvent } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { v4 as uuidV4 } from 'uuid';
 
-import { Line } from '../annotator.model';
+import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
 
 @Component({
@@ -173,19 +173,26 @@ export class DrawComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (event: MouseEvent | TouchEvent) => {
+            let pointAdded = false;
             if (event instanceof MouseEvent) {
-              line.points.push({
-                x: event.clientX - this.rect.left,
-                y: event.clientY - this.rect.top,
-              });
+              pointAdded = this.addPoint(
+                {
+                  x: event.clientX - this.rect.left,
+                  y: event.clientY - this.rect.top,
+                },
+                line
+              );
             } else if (event instanceof TouchEvent) {
-              line.points.push({
-                x: event.touches[0].clientX - this.rect.left,
-                y: event.touches[0].clientY - this.rect.top,
-              });
+              pointAdded = this.addPoint(
+                {
+                  x: event.touches[0].clientX - this.rect.left,
+                  y: event.touches[0].clientY - this.rect.top,
+                },
+                line
+              );
             }
 
-            if (line.points.length > 1) {
+            if (pointAdded && line.points.length > 1) {
               this.zone.run(() => {
                 this.annotation.drawFromToOnCanvas(
                   line.points[line.points.length - 2],
@@ -197,6 +204,37 @@ export class DrawComponent implements OnInit, OnDestroy {
           },
         });
     });
+  }
+
+  /**
+   * @param point - {x, y}
+   * @returns true if the point was indeed added
+   */
+  addPoint(point: Point, line: Line): boolean {
+    const next = this.roundPoint(point);
+
+    if (line.points.length > 0) {
+      const prev = line.points[line.points.length - 1];
+      if (this.skipPoint(prev, next)) {
+        // add point only if point is not to close to previous point
+        return false;
+      }
+    }
+
+    line.points.push(next);
+
+    return !this.skipPoint(line.points[0], next);
+  }
+
+  skipPoint(prev: Point, next: Point): boolean {
+    return Math.abs(next.x - prev.x) < 1 && Math.abs(next.y - prev.y) < 1;
+  }
+
+  roundPoint(point: Point): Point {
+    return {
+      x: Math.round(10 * point.x) / 10,
+      y: Math.round(10 * point.y) / 10,
+    };
   }
 
   ngOnDestroy() {
