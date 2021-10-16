@@ -45,8 +45,8 @@ export class DrawComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.annotation.setCanvasAttributes(this.ctx);
     }, 100);
-    this.resizeCanvas(this.canvasEl);
-    this.captureEvents(this.canvasEl);
+    this.resizeCanvas();
+    this.captureEvents();
     this.trashSub();
     this.undoSub();
     this.redoSub();
@@ -128,19 +128,19 @@ export class DrawComponent implements OnInit, OnDestroy {
       });
   }
 
-  private resizeCanvas(canvasEl: HTMLCanvasElement) {
-    this.rect = canvasEl.getBoundingClientRect();
+  private resizeCanvas() {
+    this.rect = this.canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
         this.screenSize = size;
-        canvasEl.width = size.x;
-        canvasEl.height = size.y;
-        canvasEl.style.width = `${size.x}px`;
-        canvasEl.style.height = `${size.y}px`;
+        this.canvasEl.width = size.x;
+        this.canvasEl.height = size.y;
+        this.canvasEl.style.width = `${size.x}px`;
+        this.canvasEl.style.height = `${size.y}px`;
         this.svgEl.setAttribute('width', `${size.x}px`);
         this.svgEl.setAttribute('height', `${size.y}px`);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.rect = canvasEl.getBoundingClientRect();
+        this.rect = this.canvasEl.getBoundingClientRect();
         this.annotation.setCanvasAttributes(this.ctx);
         this.lines
           .filter((line) => line.visible)
@@ -149,14 +149,15 @@ export class DrawComponent implements OnInit, OnDestroy {
     });
   }
 
-  private captureEvents(canvasEl: HTMLCanvasElement) {
+  private captureEvents() {
+    const svgLines: SVGLineElement[] = [];
     let line: Line = this.annotation.cloneLine();
     this.zone.runOutsideAngular(() => {
       this.annotation
-        .fromEvents(canvasEl, ['mousedown', 'touchstart'])
+        .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
         .pipe(
           switchMap(() => {
-            return this.annotation.fromEvents(canvasEl, ['mousemove', 'touchmove']).pipe(
+            return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
               finalize(() => {
                 if (line.points.length) {
                   // abandon hidden lines "the undo(s)" on any further update
@@ -165,13 +166,14 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
                     this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
+                    this.annotation.drawLineOnCanvas(line, this.ctx);
                   });
                   line = this.annotation.cloneLine();
                 }
               }),
-              takeUntil(fromEvent(canvasEl, 'mouseup')),
-              takeUntil(fromEvent(canvasEl, 'mouseleave')),
-              takeUntil(fromEvent(canvasEl, 'touchend'))
+              takeUntil(fromEvent(this.canvasEl, 'mouseup')),
+              takeUntil(fromEvent(this.canvasEl, 'mouseleave')),
+              takeUntil(fromEvent(this.canvasEl, 'touchend'))
             );
           }),
           takeUntil(this.destroy$)
@@ -199,10 +201,17 @@ export class DrawComponent implements OnInit, OnDestroy {
 
             if (pointAdded && line.points.length > 1) {
               this.zone.run(() => {
-                this.annotation.drawFromToOnCanvas(
-                  line.points[line.points.length - 2],
-                  line.points[line.points.length - 1],
-                  this.ctx
+                // this.annotation.drawFromToOnCanvas(
+                //   line.points[line.points.length - 2],
+                //   line.points[line.points.length - 1],
+                //   this.ctx
+                // );
+                svgLines.push(
+                  this.annotation.drawLineOnSVG(
+                    line.points[line.points.length - 2],
+                    line.points[line.points.length - 1],
+                    this.svgEl
+                  )
                 );
               });
             }

@@ -1,3 +1,16 @@
+:host {
+  position: relative;
+}
+
+#annotation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+}
+
 .menu {
   z-index: 3;
   position: relative;

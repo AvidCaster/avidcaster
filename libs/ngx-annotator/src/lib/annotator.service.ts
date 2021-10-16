@@ -188,7 +188,7 @@ export class AnnotatorService implements OnDestroy {
    * @param eventNames event names
    * @returns observable of events
    */
-  fromEvents(canvasEl: HTMLCanvasElement, eventNames: string[]): Observable<Event> {
+  fromEvents(canvasEl: HTMLElement, eventNames: string[]): Observable<Event> {
     return eventNames.reduce(
       (prev, name) => merge(prev, fromEvent(canvasEl, name, { passive: true })),
       EMPTY
@@ -264,6 +264,24 @@ export class AnnotatorService implements OnDestroy {
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
     ctx.stroke();
+  }
+
+  drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr?: LineAttributes): SVGLineElement {
+    attr = attr || this.getCanvasAttributes();
+
+    const rect = <SVGLineElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg:line');
+
+    console.log(attr);
+    rect.setAttributeNS(null, 'x1', from.x.toString());
+    rect.setAttributeNS(null, 'y1', from.y.toString());
+    rect.setAttributeNS(null, 'x2', to.x.toString());
+    rect.setAttributeNS(null, 'y2', to.y.toString());
+    rect.setAttributeNS(null, 'stroke', attr.strokeStyle);
+    rect.setAttributeNS(null, 'stroke-width', attr.lineWidth.toString());
+    rect.setAttributeNS(null, 'fill-opacity', '0');
+    console.log(rect);
+    svgEl.appendChild(rect);
+    return rect;
   }
 
   /**

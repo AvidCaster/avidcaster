@@ -1,11 +1,10 @@
-<canvas
-  id="annotation-canvas"
+<svg
+  id="annotation-svg"
+  width="100%"
+  height="100%"
   style="border: 0 solid; z-index: 1"
-  [ngStyle]="{
-    cursor: annotation.state.cursor ? 'default' : 'none',
-    background: annotation.state.backgroundColor
-  }"
-  #annotationCanvas
-></canvas>
-<svg id="annotation-svg" width="100%" height="100%" style="border: 0 solid; z-index: 2; background: transparent" #annotationSvg></svg>
+  [ngStyle]="{ background: annotation.state.backgroundColor }"
+  #annotationSvg
+></svg>
+<canvas id="annotation-canvas" [ngStyle]="{ cursor: annotation.state.cursor ? 'default' : 'none' }" #annotationCanvas></canvas>
 <fullerstack-menu [ngStyle]="{ top: 0, right: 0, color: annotation.state.menuColor }"> </fullerstack-menu>
