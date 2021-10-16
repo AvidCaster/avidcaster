@@ -174,12 +174,12 @@ export class DrawComponent implements OnInit, OnDestroy {
                   this.zone.run(() => {
                     // draw the line on the background canvas
                     this.annotation.drawLineOnCanvas(line, this.ctx);
+                    line = undefined;
 
                     // remove the temporary line from the foreground svg
                     svgLines.forEach((svgLine) => svgLine.remove());
                     svgLines.length = 0;
                   });
-                  line = undefined;
                 }
               }),
               takeUntil(fromEvent(this.canvasEl, 'mouseup')),
