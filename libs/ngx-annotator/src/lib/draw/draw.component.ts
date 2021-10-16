@@ -10,7 +10,6 @@ import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@an
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, fromEvent } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil } from 'rxjs/operators';
-import { v4 as uuidV4 } from 'uuid';
 
 import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
@@ -21,13 +20,15 @@ import { AnnotatorService } from '../annotator.service';
   styleUrls: ['./draw.component.scss'],
 })
 export class DrawComponent implements OnInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) canvas: ElementRef | undefined;
-  uniqId = uuidV4();
+  @ViewChild('annotationCanvas', { static: true }) canvas: ElementRef | undefined;
+  @ViewChild('annotationSvg', { static: true }) svg: ElementRef | undefined;
   private destroy$ = new Subject<boolean>();
+  private svgEl: HTMLElement | undefined | null;
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
   private rect: DOMRect | undefined;
   private lines: Line[] = [];
+  private screenSize: Point = { x: 0, y: 0 };
 
   constructor(
     readonly zone: NgZone,
@@ -38,6 +39,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.svgEl = this.svg?.nativeElement;
     this.canvasEl = this.canvas?.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
     setTimeout(() => {
@@ -130,10 +132,13 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.rect = canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
+        this.screenSize = size;
         canvasEl.width = size.x;
         canvasEl.height = size.y;
         canvasEl.style.width = `${size.x}px`;
         canvasEl.style.height = `${size.y}px`;
+        this.svgEl.setAttribute('width', `${size.x}px`);
+        this.svgEl.setAttribute('height', `${size.y}px`);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
         this.rect = canvasEl.getBoundingClientRect();
         this.annotation.setCanvasAttributes(this.ctx);
