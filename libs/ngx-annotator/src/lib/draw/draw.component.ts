@@ -118,6 +118,8 @@ export class DrawComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (state) => {
+          state.fullscreen ? this.uix.isFullscreen() : !this.uix.isFullscreen();
+
           this.annotation.setCanvasAttributes(this.ctx, {
             lineCap: state.lineCap,
             lineJoin: state.lineJoin,
@@ -170,6 +172,7 @@ export class DrawComponent implements OnInit, OnDestroy {
 
                     // remove the line from the svg
                     svgLines.forEach((svgLine) => svgLine.remove());
+                    svgLines.length = 0;
                   });
                   line = this.annotation.cloneLine();
                 }
@@ -197,14 +200,12 @@ export class DrawComponent implements OnInit, OnDestroy {
               };
             }
 
-            this.annotation.addPoint(to, line);
+            this.zone.run(() => {
+              const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
+              svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes));
+            });
 
-            if (line.points.length > 1) {
-              this.zone.run(() => {
-                const from = line.points[line.points.length - 2];
-                svgLines.push(this.annotation.drawLineOnSVG(from, to, this.svgEl));
-              });
-            }
+            this.annotation.addPoint(to, line);
           },
         });
     });
