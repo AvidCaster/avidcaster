@@ -165,8 +165,6 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    // this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
-
                     // redo the line on canvas smooth and fast
                     this.annotation.drawLineOnCanvas(line, this.ctx);
 

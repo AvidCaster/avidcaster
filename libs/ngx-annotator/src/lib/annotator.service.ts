@@ -266,6 +266,14 @@ export class AnnotatorService implements OnDestroy {
     ctx.stroke();
   }
 
+  /**
+   * Creates a svg element path
+   * @param from coordinates of the start point
+   * @param to coordinates of the end point
+   * @param svgEl svg element
+   * @param attr svg attributes
+   * @returns svg path element
+   */
   drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr?: LineAttributes): SVGLineElement {
     attr = attr || this.getCanvasAttributes();
 
@@ -355,6 +363,7 @@ export class AnnotatorService implements OnDestroy {
   }
 
   /**
+   * Given a line, it adds the points of the line
    * @param point - {x, y}
    * @returns true if the point was indeed added
    */
@@ -374,10 +383,20 @@ export class AnnotatorService implements OnDestroy {
     return !this.skipPoint(line.points[0], next);
   }
 
+  /**
+   * If the point is too close to the previous point, it is not added
+   * @param point - {x, y}
+   * @returns true if the point is too close to the last point
+   */
   skipPoint(prev: Point, next: Point): boolean {
     return Math.abs(next.x - prev.x) < 1 && Math.abs(next.y - prev.y) < 1;
   }
 
+  /**
+   * Rounds a point to the nearest integer
+   * @param point - {x, y}
+   * @returns rounded point
+   */
   roundPoint(point: Point): Point {
     return {
       x: Math.round(10 * point.x) / 10,
