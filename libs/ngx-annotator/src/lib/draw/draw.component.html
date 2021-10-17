@@ -1,3 +1,10 @@
-<svg id="draw-svg" [ngStyle]="{ background: annotation.state.backgroundColor }" #annotationSvg></svg>
-<canvas id="draw-canvas" [ngStyle]="{ cursor: annotation.state.cursor ? 'default' : 'none' }" #annotationCanvas></canvas>
-<fullerstack-menu [ngStyle]="{ top: 0, right: 0, color: annotation.state.menuColor }"> </fullerstack-menu>
+<fullerstack-menu class="menu" [ngStyle]="{ top: 0, right: 0, color: annotation.state.menuColor }"> </fullerstack-menu>
+<div id="draw-board">
+  <canvas
+    id="draw-canvas"
+    class="draw-box"
+    [ngStyle]="{ background: annotation.state.backgroundColor, cursor: annotation.state.cursor ? 'default' : 'none' }"
+    #annotationCanvas
+  ></canvas>
+  <svg id="draw-svg" class="draw-box" #annotationSvg></svg>
+</div>
