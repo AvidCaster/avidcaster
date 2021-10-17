@@ -27,8 +27,8 @@ export class DrawComponent implements OnInit, OnDestroy {
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
   private rect: DOMRect | undefined;
+  private trashedLines: Line[] = [];
   private lines: Line[] = [];
-  private screenSize: Point = { x: 0, y: 0 };
 
   constructor(
     readonly zone: NgZone,
@@ -62,6 +62,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   doTrash() {
+    this.trashedLines = this.lines;
     this.lines = [];
     this.annotation.resetCanvas(this.canvasEl, this.ctx);
   }
@@ -86,6 +87,15 @@ export class DrawComponent implements OnInit, OnDestroy {
             this.annotation.drawLineOnCanvas(line, this.ctx);
           });
       }
+    } else if (this.trashedLines.length) {
+      this.lines = this.trashedLines;
+      this.trashedLines = [];
+      this.annotation.resetCanvas(this.canvasEl, this.ctx);
+      this.lines
+        .filter((line) => line.visible)
+        .forEach((line) => {
+          this.annotation.drawLineOnCanvas(line, this.ctx);
+        });
     }
   }
 
@@ -127,7 +137,6 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.rect = this.canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
-        this.screenSize = size;
         this.canvasEl.width = size.x;
         this.canvasEl.height = size.y;
         this.canvasEl.style.width = `${size.x}px`;
