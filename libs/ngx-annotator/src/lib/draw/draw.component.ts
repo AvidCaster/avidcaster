@@ -6,10 +6,17 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, fromEvent } from 'rxjs';
-import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
@@ -18,6 +25,7 @@ import { AnnotatorService } from '../annotator.service';
   selector: 'fullerstack-draw',
   templateUrl: './draw.component.html',
   styleUrls: ['./draw.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawComponent implements OnInit, OnDestroy {
   @ViewChild('annotationCanvas', { static: true }) canvas: ElementRef | undefined;
@@ -30,11 +38,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private trashedLines: Line[] = [];
   private lines: Line[] = [];
 
-  constructor(
-    readonly zone: NgZone,
-    readonly uix: UixService,
-    readonly annotation: AnnotatorService
-  ) {
+  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {
     this.uix.addClassToBody('annotation-canvas');
   }
 
@@ -155,63 +159,54 @@ export class DrawComponent implements OnInit, OnDestroy {
   private captureEvents() {
     const svgLines: SVGLineElement[] = [];
     let line: Line = this.annotation.cloneLine();
-    this.zone.runOutsideAngular(() => {
-      this.annotation
-        .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
-        .pipe(
-          switchMap(() => {
-            return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
-              tap(() => {
-                if (!line) {
-                  line = this.annotation.cloneLine();
-                }
-              }),
-              finalize(() => {
-                if (line.points.length) {
-                  // abandon hidden lines "the undo(s)" on any further update
-                  this.lines = this.lines.filter((lineItem) => lineItem.visible).concat(line);
-                  this.zone.run(() => {
-                    // draw the line on the background canvas
-                    this.annotation.drawLineOnCanvas(line, this.ctx);
-                    line = undefined;
+    this.annotation
+      .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
+      .pipe(
+        switchMap(() => {
+          return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
+            debounceTime(10),
+            tap(() => {
+              if (!line) {
+                line = this.annotation.cloneLine();
+              }
+            }),
+            finalize(() => {
+              if (line.points.length) {
+                // abandon hidden lines "the undo(s)" on any further update
+                this.lines = this.lines.filter((lineItem) => lineItem.visible).concat(line);
 
-                    // remove the temporary line from the foreground svg
-                    svgLines.forEach((svgLine) => svgLine.remove());
-                    svgLines.length = 0;
-                  });
-                }
-              }),
-              takeUntil(fromEvent(this.canvasEl, 'mouseup')),
-              takeUntil(fromEvent(this.canvasEl, 'mouseleave')),
-              takeUntil(fromEvent(this.canvasEl, 'touchend'))
-            );
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe({
-          next: (event: MouseEvent | TouchEvent) => {
-            const to: Point = this.annotation.getEventPoint(event, this.rect);
+                // draw the line on the background canvas
+                this.annotation.drawLineOnCanvas(line, this.ctx);
+                line = undefined;
 
-            // add the point to the line for the background canvas
-            const pointAdded = this.annotation.addPoint(to, line);
+                // remove the temporary line from the foreground svg
+                svgLines.forEach((svgLine) => svgLine.remove());
+                svgLines.length = 0;
+              }
+            }),
+            takeUntil(fromEvent(this.canvasEl, 'mouseup')),
+            takeUntil(fromEvent(this.canvasEl, 'mouseleave')),
+            takeUntil(fromEvent(this.canvasEl, 'touchend'))
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (event: MouseEvent | TouchEvent) => {
+          const to: Point = this.annotation.getEventPoint(event, this.rect);
 
-            if (pointAdded) {
-              this.zone.run(() => {
-                const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
+          // add the point to the line for the background canvas
+          const pointAdded = this.annotation.addPoint(to, line);
 
-                // draw a temp line live on the foreground svg
-                const svgLine = this.annotation.drawLineOnSVG(
-                  from,
-                  to,
-                  this.svgEl,
-                  line.attributes
-                );
-                svgLines.push(svgLine);
-              });
-            }
-          },
-        });
-    });
+          if (pointAdded) {
+            const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
+
+            // draw a temp line live on the foreground svg
+            const svgLine = this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes);
+            svgLines.push(svgLine);
+          }
+        },
+      });
   }
 
   get eraserCursorClass(): string {
