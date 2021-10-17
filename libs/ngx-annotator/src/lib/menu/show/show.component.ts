@@ -17,6 +17,7 @@ import { AnnotatorService } from '../../annotator.service';
 interface ActionButton {
   type: ButtonType;
   icon: string;
+  iconClass?: string;
   label: string;
 }
 
@@ -59,6 +60,7 @@ export class ShowMenuComponent implements OnDestroy {
     {
       type: 'showEraser',
       icon: 'lead-pencil',
+      iconClass: 'icon-rotate',
       label: _('COMMON.ERASER'),
     },
     {

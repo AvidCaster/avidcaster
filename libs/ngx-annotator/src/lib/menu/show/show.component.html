@@ -14,7 +14,7 @@
       <mat-icon [svgIcon]="isButtonVisible(actionButton.type) ? 'eye-outline' : 'eye-off-outline'"></mat-icon>
       <div fxFlex="auto" class="text">{{ actionButton.label | translate }}</div>
       <div>
-        <mat-icon [svgIcon]="actionButton.icon"></mat-icon>
+        <mat-icon [class]="actionButton.iconClass" [svgIcon]="actionButton.icon"></mat-icon>
       </div>
     </div>
   </div>
