@@ -42,10 +42,10 @@ export class AnnotatorService implements OnDestroy {
   stateSub$: Observable<AnnotatorState>;
   private undoObs$ = new Subject<void>();
   private redoObs$ = new Subject<void>();
-  private rashObs$ = new Subject<void>();
+  private trashObs$ = new Subject<void>();
   undo$ = this.undoObs$.asObservable();
   redo$ = this.redoObs$.asObservable();
-  trash$ = this.rashObs$.asObservable();
+  trash$ = this.trashObs$.asObservable();
   private destroy$ = new Subject<boolean>();
   private lastUrl: string;
 
@@ -180,7 +180,7 @@ export class AnnotatorService implements OnDestroy {
   }
 
   trash() {
-    this.rashObs$.next();
+    this.trashObs$.next();
   }
 
   /**
@@ -437,6 +437,10 @@ export class AnnotatorService implements OnDestroy {
     }
 
     return point;
+  }
+
+  isBackgroundWhite() {
+    return this.state.bgColor === '#ffffff';
   }
 
   ngOnDestroy() {

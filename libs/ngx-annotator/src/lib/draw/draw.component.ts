@@ -205,6 +205,17 @@ export class DrawComponent implements OnInit, OnDestroy {
     });
   }
 
+  get eraserCursorClass(): string {
+    if (this.annotation.state.eraser) {
+      if (this.annotation.isBackgroundWhite()) {
+        return 'cursor-eraser-black';
+      } else {
+        return 'cursor-eraser-white';
+      }
+    }
+    return '';
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();

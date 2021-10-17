@@ -57,7 +57,7 @@
       (click)="toggleBackgroundColor($event)"
     >
       <div fxFlex="auto" class="text">{{ 'COMMON.POSITION.BACKGROUND' | translate }}</div>
-      <mat-icon [ngStyle]="{ color: isBackgroundWhite() ? 'black' : 'white' }" svgIcon="checkbox-blank-circle"></mat-icon>
+      <mat-icon [ngStyle]="{ color: annotation.isBackgroundWhite() ? 'black' : 'white' }" svgIcon="checkbox-blank-circle"></mat-icon>
     </div>
   </div>
 

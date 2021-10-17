@@ -64,15 +64,11 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
 
   toggleBackgroundColor(event: Event) {
     event.stopPropagation();
-    const bgColor = this.isBackgroundWhite() ? '#000000' : '#ffffff';
+    const bgColor = this.annotation.isBackgroundWhite() ? '#000000' : '#ffffff';
     if (this.annotation.state.menuColor !== bgColor) {
       this.annotation.setState({ ...this.annotation.state, bgColor });
       this.setMenuOverlayClass(bgColor);
     }
-  }
-
-  isBackgroundWhite() {
-    return this.annotation.state.bgColor === '#ffffff';
   }
 
   setMenuOverlayClass(color: BackgroundColor) {

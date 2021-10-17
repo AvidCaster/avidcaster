@@ -88,6 +88,10 @@ export class MenuComponent implements OnDestroy {
   trash() {
     this.trashIconState++;
     this.annotation.trash();
+    if (this.annotation.state.eraser) {
+      this.annotation.setState({ eraser: false });
+      this.eraserIconState = 'back';
+    }
   }
 
   undo() {

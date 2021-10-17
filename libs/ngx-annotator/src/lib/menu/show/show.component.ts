@@ -59,7 +59,7 @@ export class ShowMenuComponent implements OnDestroy {
     },
     {
       type: 'showEraser',
-      icon: 'lead-pencil',
+      icon: 'eraser',
       iconClass: 'icon-rotate',
       label: _('COMMON.ERASER'),
     },

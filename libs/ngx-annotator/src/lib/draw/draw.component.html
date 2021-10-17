@@ -3,6 +3,7 @@
   <canvas
     id="draw-canvas"
     class="draw-box"
+    [ngClass]="eraserCursorClass"
     [ngStyle]="{ background: annotation.state.bgColor, cursor: annotation.state.cursor ? 'default' : 'none' }"
     #annotationCanvas
   ></canvas>
