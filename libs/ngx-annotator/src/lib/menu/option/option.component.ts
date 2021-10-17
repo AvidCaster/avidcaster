@@ -27,11 +27,11 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   ngOnInit() {
-    this.setMenuOverlayClass(this.annotation.state.backgroundColor);
+    this.setMenuOverlayClass(this.annotation.state.fillStyle);
   }
 
   get menuColorValues(): string[] {
-    return AnnotatorColors.filter((color) => color !== this.annotation.state.backgroundColor);
+    return AnnotatorColors.filter((color) => color !== this.annotation.state.fillStyle);
   }
 
   setPosition(event: Event, position: MenuPosition) {
@@ -68,7 +68,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     if (this.annotation.state.menuColor !== backgroundColor) {
       this.annotation.setState({
         ...this.annotation.state,
-        backgroundColor,
+        fillStyle: backgroundColor,
       });
 
       this.setMenuOverlayClass(backgroundColor);
@@ -76,7 +76,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   }
 
   isBackgroundWhite() {
-    return this.annotation.state.backgroundColor === '#ffffff';
+    return this.annotation.state.fillStyle === '#ffffff';
   }
 
   setMenuOverlayClass(color: BackgroundColor) {
@@ -90,7 +90,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   }
 
   setMenuColor(menuColor: string) {
-    if (this.annotation.state.backgroundColor !== menuColor) {
+    if (this.annotation.state.fillStyle !== menuColor) {
       this.annotation.setState({ menuColor });
     }
   }

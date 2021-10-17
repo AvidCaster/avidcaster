@@ -205,9 +205,11 @@ export class AnnotatorService implements OnDestroy {
       ...(initial || defaultLine()),
       attributes: {
         lineCap: this.state.lineCap,
+        lineJoin: this.state.lineJoin,
         lineWidth: this.state.lineWidth,
         strokeStyle: this.state.strokeStyle,
       },
+      eraser: this.state.eraser,
     }) as Line;
   }
 
@@ -221,6 +223,7 @@ export class AnnotatorService implements OnDestroy {
       lineJoin: this.state.lineJoin,
       lineWidth: this.state.lineWidth,
       strokeStyle: this.state.strokeStyle,
+      fillStyle: this.state.fillStyle,
     };
   }
 
@@ -229,17 +232,12 @@ export class AnnotatorService implements OnDestroy {
    * @param attr canvas context attributes
    * @param ctx canvas context
    */
-  setCanvasAttributes(ctx: CanvasRenderingContext2D, attr?: LineAttributes) {
+  setCanvasAttributes(ctx: CanvasRenderingContext2D, attr: Partial<AnnotatorState>) {
     if (attr) {
       ctx.lineCap = attr.lineCap;
       ctx.lineJoin = attr.lineJoin;
       ctx.lineWidth = attr.lineWidth;
       ctx.strokeStyle = attr.strokeStyle;
-    } else {
-      ctx.lineCap = this.state.lineCap;
-      ctx.lineJoin = this.state.lineJoin;
-      ctx.lineWidth = this.state.lineWidth;
-      ctx.strokeStyle = this.state.strokeStyle;
     }
   }
 
@@ -303,7 +301,9 @@ export class AnnotatorService implements OnDestroy {
     if (visible && points.length) {
       const start = points[0];
 
+      const origAttr = this.getCanvasAttributes();
       this.setCanvasAttributes(ctx, line.attributes);
+
       ctx.beginPath();
 
       if (points.length < 3) {
@@ -324,7 +324,8 @@ export class AnnotatorService implements OnDestroy {
         ctx.quadraticCurveTo(points[idx].x, points[idx].y, points[idx + 1].x, points[idx + 1].y);
       }
       ctx.stroke();
-      this.setCanvasAttributes(ctx);
+
+      this.setCanvasAttributes(ctx, origAttr);
     }
   }
 

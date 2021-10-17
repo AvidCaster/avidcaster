@@ -24,12 +24,12 @@ export const AnnotatorColors: string[] = [
 
 const DefaultAnnotatorState: AnnotatorState = {
   signature: '',
-  backgroundColor: '#000000',
-  menuColor: '#00ffff',
   lineCap: 'round',
   lineJoin: 'round',
   lineWidth: 3,
   strokeStyle: '#00ffff',
+  fillStyle: '#000000',
+  menuColor: '#00ffff',
   cursor: true,
   fullscreen: true,
   position: 'top-left',
@@ -68,8 +68,10 @@ const DefaultLine: Line = {
     lineCap: DefaultAnnotatorState.lineCap,
     lineWidth: DefaultAnnotatorState.lineWidth,
     strokeStyle: DefaultAnnotatorState.strokeStyle,
+    fillStyle: DefaultAnnotatorState.fillStyle,
   },
   visible: true,
+  eraser: false,
 };
 
 export const defaultLine = (): Line => {

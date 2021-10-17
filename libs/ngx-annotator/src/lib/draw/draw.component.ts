@@ -43,7 +43,7 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.canvasEl = this.canvas?.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
     setTimeout(() => {
-      this.annotation.setCanvasAttributes(this.ctx);
+      this.annotation.setCanvasAttributes(this.ctx, this.annotation.state);
     }, 100);
     this.resizeCanvas();
     this.captureEvents();
@@ -118,12 +118,7 @@ export class DrawComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (state) => {
-          this.annotation.setCanvasAttributes(this.ctx, {
-            lineCap: state.lineCap,
-            lineJoin: state.lineJoin,
-            lineWidth: state.lineWidth,
-            strokeStyle: state.strokeStyle,
-          });
+          this.annotation.setCanvasAttributes(this.ctx, state);
         },
       });
   }
@@ -141,7 +136,6 @@ export class DrawComponent implements OnInit, OnDestroy {
         this.svgEl.setAttribute('height', `${size.y}px`);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
         this.rect = this.canvasEl.getBoundingClientRect();
-        this.annotation.setCanvasAttributes(this.ctx);
         this.lines
           .filter((line) => line.visible)
           .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
