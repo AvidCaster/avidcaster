@@ -28,7 +28,6 @@ export class DrawComponent implements OnInit, OnDestroy {
   private ctx: CanvasRenderingContext2D | undefined | null;
   private rect: DOMRect | undefined;
   private lines: Line[] = [];
-  private screenSize: Point = { x: 0, y: 0 };
 
   constructor(
     readonly zone: NgZone,
@@ -127,7 +126,6 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.rect = this.canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
-        this.screenSize = size;
         this.canvasEl.width = size.x;
         this.canvasEl.height = size.y;
         this.canvasEl.style.width = `${size.x}px`;
