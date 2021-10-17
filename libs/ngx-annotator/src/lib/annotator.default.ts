@@ -66,6 +66,7 @@ const DefaultLine: Line = {
   points: [],
   attributes: {
     lineCap: DefaultAnnotatorState.lineCap,
+    lineJoin: DefaultAnnotatorState.lineJoin,
     lineWidth: DefaultAnnotatorState.lineWidth,
     strokeStyle: DefaultAnnotatorState.strokeStyle,
   },
