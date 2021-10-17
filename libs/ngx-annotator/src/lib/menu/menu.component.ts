@@ -6,8 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { shakeAnimations } from '@fullerstack/ngx-shared';
+import { Component, OnDestroy } from '@angular/core';
+import { rotationAnimations, shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
@@ -18,8 +18,7 @@ import { AnnotatorService } from '../annotator.service';
   selector: 'fullerstack-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  animations: [shakeAnimations.wiggleIt],
-  encapsulation: ViewEncapsulation.Emulated,
+  animations: [shakeAnimations.wiggleIt, rotationAnimations.rotate180],
 })
 export class MenuComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -28,7 +27,7 @@ export class MenuComponent implements OnDestroy {
   undoIconState = 1;
   redoIconState = 1;
   cursorIconState = 1;
-  perfIconState = 1;
+  eraserIconState = 'back';
 
   isFullscreen = false;
 
@@ -37,7 +36,7 @@ export class MenuComponent implements OnDestroy {
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   get lineColorValues() {
-    return AnnotatorColors.filter((color) => color !== this.annotation.state.backgroundColor);
+    return AnnotatorColors.filter((color) => color !== this.annotation.state.bgColor);
   }
 
   get topPosition(): string {
@@ -89,6 +88,10 @@ export class MenuComponent implements OnDestroy {
   trash() {
     this.trashIconState++;
     this.annotation.trash();
+    if (this.annotation.state.eraser) {
+      this.annotation.setState({ eraser: false });
+      this.eraserIconState = 'back';
+    }
   }
 
   undo() {
@@ -109,6 +112,11 @@ export class MenuComponent implements OnDestroy {
     this.annotation.setState({ strokeStyle: lineColor });
   }
 
+  toggleErase() {
+    this.eraserIconState = this.eraserIconState === 'back' ? 'forth' : 'back';
+    this.annotation.setState({ eraser: !this.annotation.state.eraser });
+  }
+
   toggleFullscreen() {
     this.uix.toggleFullscreen();
     setTimeout(() => {
@@ -119,11 +127,6 @@ export class MenuComponent implements OnDestroy {
   toggleCursor() {
     this.cursorIconState++;
     this.annotation.setState({ cursor: !this.annotation.state.cursor });
-  }
-
-  togglePerf() {
-    this.perfIconState++;
-    this.annotation.setState({ performance: !this.annotation.state.performance });
   }
 
   ngOnDestroy() {

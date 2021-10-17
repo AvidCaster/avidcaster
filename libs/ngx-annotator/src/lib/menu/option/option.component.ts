@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
@@ -27,11 +27,11 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   ngOnInit() {
-    this.setMenuOverlayClass(this.annotation.state.backgroundColor);
+    this.setMenuOverlayClass(this.annotation.state.bgColor);
   }
 
   get menuColorValues(): string[] {
-    return AnnotatorColors.filter((color) => color !== this.annotation.state.backgroundColor);
+    return AnnotatorColors.filter((color) => color !== this.annotation.state.bgColor);
   }
 
   setPosition(event: Event, position: MenuPosition) {
@@ -64,19 +64,11 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
 
   toggleBackgroundColor(event: Event) {
     event.stopPropagation();
-    const backgroundColor = this.isBackgroundWhite() ? '#000000' : '#ffffff';
-    if (this.annotation.state.menuColor !== backgroundColor) {
-      this.annotation.setState({
-        ...this.annotation.state,
-        backgroundColor,
-      });
-
-      this.setMenuOverlayClass(backgroundColor);
+    const bgColor = this.annotation.isBackgroundWhite() ? '#000000' : '#ffffff';
+    if (this.annotation.state.menuColor !== bgColor) {
+      this.annotation.setState({ ...this.annotation.state, bgColor });
+      this.setMenuOverlayClass(bgColor);
     }
-  }
-
-  isBackgroundWhite() {
-    return this.annotation.state.backgroundColor === '#ffffff';
   }
 
   setMenuOverlayClass(color: BackgroundColor) {
@@ -90,7 +82,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   }
 
   setMenuColor(menuColor: string) {
-    if (this.annotation.state.backgroundColor !== menuColor) {
+    if (this.annotation.state.bgColor !== menuColor) {
       this.annotation.setState({ menuColor });
     }
   }

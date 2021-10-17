@@ -42,10 +42,10 @@ export class AnnotatorService implements OnDestroy {
   stateSub$: Observable<AnnotatorState>;
   private undoObs$ = new Subject<void>();
   private redoObs$ = new Subject<void>();
-  private rashObs$ = new Subject<void>();
+  private trashObs$ = new Subject<void>();
   undo$ = this.undoObs$.asObservable();
   redo$ = this.redoObs$.asObservable();
-  trash$ = this.rashObs$.asObservable();
+  trash$ = this.trashObs$.asObservable();
   private destroy$ = new Subject<boolean>();
   private lastUrl: string;
 
@@ -109,6 +109,7 @@ export class AnnotatorService implements OnDestroy {
     this.store.setState(this.claimId, {
       ...state,
       appName: this.options.appName,
+      eraser: false,
     });
   }
 
@@ -179,7 +180,7 @@ export class AnnotatorService implements OnDestroy {
   }
 
   trash() {
-    this.rashObs$.next();
+    this.trashObs$.next();
   }
 
   /**
@@ -205,9 +206,11 @@ export class AnnotatorService implements OnDestroy {
       ...(initial || defaultLine()),
       attributes: {
         lineCap: this.state.lineCap,
-        lineWidth: this.state.lineWidth,
-        strokeStyle: this.state.strokeStyle,
+        lineJoin: this.state.lineJoin,
+        lineWidth: this.state.eraser ? this.state.lineWidth + 5 : this.state.lineWidth,
+        strokeStyle: this.state.eraser ? this.state.bgColor : this.state.strokeStyle,
       },
+      eraser: this.state.eraser,
     }) as Line;
   }
 
@@ -229,17 +232,12 @@ export class AnnotatorService implements OnDestroy {
    * @param attr canvas context attributes
    * @param ctx canvas context
    */
-  setCanvasAttributes(ctx: CanvasRenderingContext2D, attr?: LineAttributes) {
+  setCanvasAttributes(ctx: CanvasRenderingContext2D, attr: Partial<AnnotatorState>) {
     if (attr) {
       ctx.lineCap = attr.lineCap;
       ctx.lineJoin = attr.lineJoin;
       ctx.lineWidth = attr.lineWidth;
       ctx.strokeStyle = attr.strokeStyle;
-    } else {
-      ctx.lineCap = this.state.lineCap;
-      ctx.lineJoin = this.state.lineJoin;
-      ctx.lineWidth = this.state.lineWidth;
-      ctx.strokeStyle = this.state.strokeStyle;
     }
   }
 
@@ -276,9 +274,7 @@ export class AnnotatorService implements OnDestroy {
    * @param attr svg attributes
    * @returns svg path element
    */
-  drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr?: LineAttributes): SVGLineElement {
-    attr = attr || this.getCanvasAttributes();
-
+  drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr: LineAttributes): SVGLineElement {
     const rect = <SVGLineElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg:line');
 
     rect.setAttributeNS(null, 'x1', from.x.toString());
@@ -303,7 +299,9 @@ export class AnnotatorService implements OnDestroy {
     if (visible && points.length) {
       const start = points[0];
 
+      const origAttr = this.getCanvasAttributes();
       this.setCanvasAttributes(ctx, line.attributes);
+
       ctx.beginPath();
 
       if (points.length < 3) {
@@ -324,7 +322,8 @@ export class AnnotatorService implements OnDestroy {
         ctx.quadraticCurveTo(points[idx].x, points[idx].y, points[idx + 1].x, points[idx + 1].y);
       }
       ctx.stroke();
-      this.setCanvasAttributes(ctx);
+
+      this.setCanvasAttributes(ctx, origAttr);
     }
   }
 
@@ -438,6 +437,10 @@ export class AnnotatorService implements OnDestroy {
     }
 
     return point;
+  }
+
+  isBackgroundWhite() {
+    return this.state.bgColor === '#ffffff';
   }
 
   ngOnDestroy() {

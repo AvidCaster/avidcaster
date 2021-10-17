@@ -17,6 +17,7 @@ import { AnnotatorService } from '../../annotator.service';
 interface ActionButton {
   type: ButtonType;
   icon: string;
+  iconClass?: string;
   label: string;
 }
 
@@ -57,6 +58,12 @@ export class ShowMenuComponent implements OnDestroy {
       label: _('COMMON.LINE_WEIGHT'),
     },
     {
+      type: 'showEraser',
+      icon: 'eraser',
+      iconClass: 'icon-rotate',
+      label: _('COMMON.ERASER'),
+    },
+    {
       type: 'showCursor',
       icon: 'cursor-default-click',
       label: _('COMMON.CURSOR'),
@@ -70,11 +77,6 @@ export class ShowMenuComponent implements OnDestroy {
       type: 'showRefresh',
       icon: 'web-refresh',
       label: _('COMMON.REFRESH'),
-    },
-    {
-      type: 'showPerformance',
-      icon: 'fire',
-      label: _('COMMON.PERFORMANCE'),
     },
   ];
 
