@@ -160,9 +160,7 @@ export class DrawComponent implements OnInit, OnDestroy {
               finalize(() => {
                 if (line.points.length) {
                   // abandon hidden lines "the undo(s)" on any further update
-                  this.lines = this.lines
-                    .filter((lineItem) => lineItem.visible)
-                    .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
+                  this.lines = this.lines.filter((lineItem) => lineItem.visible).concat(line);
                   this.zone.run(() => {
                     // draw the line on the background canvas
                     this.annotation.drawLineOnCanvas(line, this.ctx);

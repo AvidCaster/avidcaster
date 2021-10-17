@@ -109,6 +109,7 @@ export class AnnotatorService implements OnDestroy {
     this.store.setState(this.claimId, {
       ...state,
       appName: this.options.appName,
+      eraser: false,
     });
   }
 
@@ -206,8 +207,8 @@ export class AnnotatorService implements OnDestroy {
       attributes: {
         lineCap: this.state.lineCap,
         lineJoin: this.state.lineJoin,
-        lineWidth: this.state.lineWidth,
-        strokeStyle: this.state.strokeStyle,
+        lineWidth: this.state.eraser ? this.state.lineWidth + 5 : this.state.lineWidth,
+        strokeStyle: this.state.eraser ? this.state.bgColor : this.state.strokeStyle,
       },
       eraser: this.state.eraser,
     }) as Line;
@@ -273,9 +274,7 @@ export class AnnotatorService implements OnDestroy {
    * @param attr svg attributes
    * @returns svg path element
    */
-  drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr?: LineAttributes): SVGLineElement {
-    attr = attr || this.getCanvasAttributes();
-
+  drawLineOnSVG(from: Point, to: Point, svgEl: HTMLElement, attr: LineAttributes): SVGLineElement {
     const rect = <SVGLineElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg:line');
 
     rect.setAttributeNS(null, 'x1', from.x.toString());
