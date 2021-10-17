@@ -32,6 +32,8 @@
     <mat-icon class="clickable-menu-icon" svgIcon="trash-can-outline"></mat-icon>
   </button>
 
+  <div *ngIf="annotation.state.showTrash" class="trash-protection" [ngStyle]="{ 'border-color': annotation.state.menuColor }"></div>
+
   <button
     *ngIf="annotation.state.showUndo"
     mat-icon-button

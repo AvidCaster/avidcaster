@@ -18,3 +18,12 @@
   font-size: 14px;
   font-weight: 500;
 }
+
+.trash-protection {
+  margin: 8px auto;
+  border-top: 1px solid;
+  width: 50%;
+}
+.trash-protection:hover {
+  cursor: none;
+}
