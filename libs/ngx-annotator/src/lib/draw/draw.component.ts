@@ -27,6 +27,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
   private rect: DOMRect | undefined;
+  private trashedLines: Line[] = [];
   private lines: Line[] = [];
 
   constructor(
@@ -61,6 +62,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   doTrash() {
+    this.trashedLines = this.lines;
     this.lines = [];
     this.annotation.resetCanvas(this.canvasEl, this.ctx);
   }
@@ -85,6 +87,15 @@ export class DrawComponent implements OnInit, OnDestroy {
             this.annotation.drawLineOnCanvas(line, this.ctx);
           });
       }
+    } else if (this.trashedLines.length) {
+      this.lines = this.trashedLines;
+      this.trashedLines = [];
+      this.annotation.resetCanvas(this.canvasEl, this.ctx);
+      this.lines
+        .filter((line) => line.visible)
+        .forEach((line) => {
+          this.annotation.drawLineOnCanvas(line, this.ctx);
+        });
     }
   }
 
