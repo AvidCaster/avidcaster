@@ -25,10 +25,10 @@ export type ButtonType =
   | 'showRedo'
   | 'showLineColor'
   | 'showLineWidth'
+  | 'showEraser'
   | 'showCursor'
   | 'showFullscreen'
-  | 'showRefresh'
-  | 'showPerformance';
+  | 'showRefresh';
 
 export type MenuPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
@@ -53,16 +53,16 @@ export interface AnnotatorState extends LineAttributes {
   position: MenuPosition;
   vertical: boolean;
   reverse: boolean;
-  performance: boolean;
+  eraser: boolean;
   showTrash: boolean;
   showUndo: boolean;
   showRedo: boolean;
   showLineColor: boolean;
   showLineWidth: boolean;
+  showEraser: boolean;
   showCursor: boolean;
   showFullscreen: boolean;
   showRefresh: boolean;
-  showPerformance: boolean;
 }
 
 export interface Point {

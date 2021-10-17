@@ -57,6 +57,11 @@ export class ShowMenuComponent implements OnDestroy {
       label: _('COMMON.LINE_WEIGHT'),
     },
     {
+      type: 'showEraser',
+      icon: 'lead-pencil',
+      label: _('COMMON.ERASER'),
+    },
+    {
       type: 'showCursor',
       icon: 'cursor-default-click',
       label: _('COMMON.CURSOR'),
@@ -70,11 +75,6 @@ export class ShowMenuComponent implements OnDestroy {
       type: 'showRefresh',
       icon: 'web-refresh',
       label: _('COMMON.REFRESH'),
-    },
-    {
-      type: 'showPerformance',
-      icon: 'fire',
-      label: _('COMMON.PERFORMANCE'),
     },
   ];
 

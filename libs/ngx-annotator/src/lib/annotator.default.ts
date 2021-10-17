@@ -35,16 +35,16 @@ const DefaultAnnotatorState: AnnotatorState = {
   position: 'top-left',
   vertical: true,
   reverse: false,
-  performance: false,
+  eraser: false,
   showTrash: true,
   showUndo: true,
   showRedo: true,
   showLineWidth: true,
   showLineColor: true,
+  showEraser: true,
   showCursor: true,
   showFullscreen: true,
   showRefresh: true,
-  showPerformance: false,
 };
 
 export const defaultAnnotatorState = (): AnnotatorState => {

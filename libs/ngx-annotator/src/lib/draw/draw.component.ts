@@ -159,10 +159,8 @@ export class DrawComponent implements OnInit, OnDestroy {
           switchMap(() => {
             return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
               tap(() => {
-                if (this.annotation.state.performance) {
-                  if (!line) {
-                    line = this.annotation.cloneLine();
-                  }
+                if (!line) {
+                  line = this.annotation.cloneLine();
                 }
               }),
               finalize(() => {
@@ -172,18 +170,13 @@ export class DrawComponent implements OnInit, OnDestroy {
                     .filter((lineItem) => lineItem.visible)
                     .concat({ ...line, attributes: this.annotation.getCanvasAttributes() });
                   this.zone.run(() => {
-                    if (this.annotation.state.performance) {
-                      // draw the line on the background canvas
-                      this.annotation.drawLineOnCanvas(line, this.ctx);
-                      line = undefined;
+                    // draw the line on the background canvas
+                    this.annotation.drawLineOnCanvas(line, this.ctx);
+                    line = undefined;
 
-                      // remove the temporary line from the foreground svg
-                      svgLines.forEach((svgLine) => svgLine.remove());
-                      svgLines.length = 0;
-                    } else {
-                      this.annotation.drawDotOnCanvas(line.points[0], this.ctx);
-                      line = this.annotation.cloneLine();
-                    }
+                    // remove the temporary line from the foreground svg
+                    svgLines.forEach((svgLine) => svgLine.remove());
+                    svgLines.length = 0;
                   });
                 }
               }),
@@ -205,18 +198,14 @@ export class DrawComponent implements OnInit, OnDestroy {
               this.zone.run(() => {
                 const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
 
-                if (this.annotation.state.performance) {
-                  // draw a temp line live on the foreground svg
-                  const svgLine = this.annotation.drawLineOnSVG(
-                    from,
-                    to,
-                    this.svgEl,
-                    line.attributes
-                  );
-                  svgLines.push(svgLine);
-                } else {
-                  this.annotation.drawFromToOnCanvas(from, to, this.ctx);
-                }
+                // draw a temp line live on the foreground svg
+                const svgLine = this.annotation.drawLineOnSVG(
+                  from,
+                  to,
+                  this.svgEl,
+                  line.attributes
+                );
+                svgLines.push(svgLine);
               });
             }
           },
