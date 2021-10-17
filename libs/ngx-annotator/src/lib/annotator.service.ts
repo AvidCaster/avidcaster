@@ -223,7 +223,6 @@ export class AnnotatorService implements OnDestroy {
       lineJoin: this.state.lineJoin,
       lineWidth: this.state.lineWidth,
       strokeStyle: this.state.strokeStyle,
-      fillStyle: this.state.fillStyle,
     };
   }
 

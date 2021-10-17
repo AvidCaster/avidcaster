@@ -39,7 +39,6 @@ export interface LineAttributes {
   lineWidth?: number;
   lineCap?: CanvasLineCap;
   lineJoin?: CanvasLineJoin;
-  fillStyle?: BackgroundColor;
 }
 
 /**
@@ -47,6 +46,7 @@ export interface LineAttributes {
  */
 export interface AnnotatorState extends LineAttributes {
   signature: string;
+  bgColor: BackgroundColor;
   menuColor: string;
   cursor: boolean;
   fullscreen: boolean;

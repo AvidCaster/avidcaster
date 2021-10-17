@@ -36,7 +36,7 @@ export class MenuComponent implements OnDestroy {
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   get lineColorValues() {
-    return AnnotatorColors.filter((color) => color !== this.annotation.state.fillStyle);
+    return AnnotatorColors.filter((color) => color !== this.annotation.state.bgColor);
   }
 
   get topPosition(): string {
