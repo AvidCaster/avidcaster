@@ -8,13 +8,13 @@
   </head>
   <body>
     <h2>Live Stream</h2>
-    <video id="video" width="800" controls></video>
+    <video id="video" width="800" autoplay controls></video>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <!-- Or if you want a more recent alpha version -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/hls.js@alpha"></script> -->
     <script>
       var video = document.getElementById("video");
-      var videoSrc = "/live/rpi_1080/index.m3u8";
+      var videoSrc = "http://10.10.10.8:8080/live/rpi_480/index.m3u8";
       if (Hls.isSupported()) {
         var hls = new Hls();
         hls.loadSource(videoSrc);
