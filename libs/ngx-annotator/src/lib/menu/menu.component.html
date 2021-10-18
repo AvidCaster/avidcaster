@@ -114,7 +114,7 @@
     [@rotate180]="eraserIconState"
     (click)="toggleErase()"
   >
-    <mat-icon class="clickable-menu-icon" svgIcon="eraser"></mat-icon>
+    <mat-icon class="clickable-menu-icon" [svgIcon]="annotation.state.eraser ? 'lead-pencil' : 'eraser'"></mat-icon>
   </button>
 
   <button

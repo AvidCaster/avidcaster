@@ -207,7 +207,7 @@ export class AnnotatorService implements OnDestroy {
       attributes: {
         lineCap: this.state.lineCap,
         lineJoin: this.state.lineJoin,
-        lineWidth: this.state.eraser ? this.state.lineWidth + 5 : this.state.lineWidth,
+        lineWidth: this.state.eraser ? this.state.lineWidth + 10 : this.state.lineWidth,
         strokeStyle: this.state.eraser ? this.state.bgColor : this.state.strokeStyle,
       },
       eraser: this.state.eraser,

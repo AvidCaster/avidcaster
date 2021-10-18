@@ -66,8 +66,10 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   doTrash() {
-    this.trashedLines = this.lines;
-    this.lines = [];
+    if (this.lines.length) {
+      this.trashedLines = this.lines;
+      this.lines = [];
+    }
     this.annotation.resetCanvas(this.canvasEl, this.ctx);
   }
 

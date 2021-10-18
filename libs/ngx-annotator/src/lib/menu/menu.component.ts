@@ -27,7 +27,7 @@ export class MenuComponent implements OnDestroy {
   undoIconState = 1;
   redoIconState = 1;
   cursorIconState = 1;
-  eraserIconState = 'back';
+  eraserIconState = 'forth';
 
   isFullscreen = false;
 
@@ -89,8 +89,7 @@ export class MenuComponent implements OnDestroy {
     this.trashIconState++;
     this.annotation.trash();
     if (this.annotation.state.eraser) {
-      this.annotation.setState({ eraser: false });
-      this.eraserIconState = 'back';
+      this.toggleErase();
     }
   }
 
@@ -110,6 +109,9 @@ export class MenuComponent implements OnDestroy {
 
   setLineColor(lineColor: string) {
     this.annotation.setState({ strokeStyle: lineColor });
+    if (this.annotation.state.eraser) {
+      this.toggleErase();
+    }
   }
 
   toggleErase() {
