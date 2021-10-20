@@ -205,12 +205,7 @@ export class DrawComponent implements OnInit, OnDestroy {
       .fromEvents(this.svgEl, ['mousedown', 'touchstart'])
       .pipe(
         switchMap(() => {
-<<<<<<< HEAD
-          return this.annotation.fromEvents(this.svgEl, ['mousemove', 'touchmove']).pipe(
-            debounceTime(10),
-=======
           return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
->>>>>>> sandbox
             tap(() => {
               if (!line) {
                 line = this.annotation.cloneLine();
