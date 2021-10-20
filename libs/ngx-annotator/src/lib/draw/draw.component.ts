@@ -78,11 +78,11 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.hls = new Hls({ startLevel: 2, capLevelToPlayerSize: true });
     this.hls.attachMedia(this.videoEl);
     this.hls.loadSource(src);
-    this.hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-      this.videoEl.volume = 100;
-      this.videoEl.muted = false;
-      this.videoEl.play();
-    });
+    // this.hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+    //   this.videoEl.volume = 100;
+    //   this.videoEl.muted = false;
+    //   this.videoEl.play();
+    // });
   }
 
   private trashSub() {
