@@ -173,21 +173,13 @@ export class DrawComponent implements OnInit, OnDestroy {
       next: (size) => {
         this.canvasEl.width = size.x;
         this.canvasEl.height = size.y;
-        this.canvasEl.style.width = `${size.x}px`;
-        this.canvasEl.style.height = `${size.y}px`;
+
+        this.canvasEl.setAttribute('width', `${size.x}px`);
+        this.canvasEl.setAttribute('height', `${size.y}px`);
         this.svgEl.setAttribute('width', `${size.x}px`);
         this.svgEl.setAttribute('height', `${size.y}px`);
         this.videoEl.setAttribute('width', `${size.x}px`);
         this.videoEl.setAttribute('height', `${size.y}px`);
-
-        // this.svgEl.setAttribute('width', `400px`);
-        // this.svgEl.setAttribute('height', `200px`);
-        // this.canvasEl.width = 500;
-        // this.canvasEl.height = 300;
-        // this.canvasEl.style.width = `500px`;
-        // this.canvasEl.style.height = `300px`;
-        // this.videoEl.setAttribute('width', `600px`);
-        // this.videoEl.setAttribute('height', `400px`);
 
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
         this.rect = this.canvasEl.getBoundingClientRect();
@@ -204,8 +196,13 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.annotation
       .fromEvents(this.svgEl, ['mousedown', 'touchstart'])
       .pipe(
+        tap(() => {
+          if (this.videoEl.paused) {
+            this.videoEl.play();
+          }
+        }),
         switchMap(() => {
-          return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
+          return this.annotation.fromEvents(this.svgEl, ['mousemove', 'touchmove']).pipe(
             tap(() => {
               if (!line) {
                 line = this.annotation.cloneLine();
