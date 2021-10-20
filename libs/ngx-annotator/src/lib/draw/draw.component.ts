@@ -17,7 +17,7 @@ import {
 import { UixService } from '@fullerstack/ngx-uix';
 import Hls from 'hls.js';
 import { Subject, fromEvent } from 'rxjs';
-import { debounceTime, filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
@@ -205,8 +205,12 @@ export class DrawComponent implements OnInit, OnDestroy {
       .fromEvents(this.svgEl, ['mousedown', 'touchstart'])
       .pipe(
         switchMap(() => {
+<<<<<<< HEAD
           return this.annotation.fromEvents(this.svgEl, ['mousemove', 'touchmove']).pipe(
             debounceTime(10),
+=======
+          return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
+>>>>>>> sandbox
             tap(() => {
               if (!line) {
                 line = this.annotation.cloneLine();
