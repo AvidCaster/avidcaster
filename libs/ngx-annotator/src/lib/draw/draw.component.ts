@@ -79,7 +79,9 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.hls.attachMedia(this.videoEl);
     this.hls.loadSource(src);
     this.hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-      // this.videoEl.muted = true;
+      this.videoEl.volume = 100;
+      this.videoEl.muted = false;
+      this.videoEl.play();
     });
   }
 
@@ -205,8 +207,7 @@ export class DrawComponent implements OnInit, OnDestroy {
         switchMap(() => {
           return this.annotation.fromEvents(this.svgEl, ['mousemove', 'touchmove']).pipe(
             debounceTime(10),
-            tap((event) => {
-              console.log(event);
+            tap(() => {
               if (!line) {
                 line = this.annotation.cloneLine();
               }
