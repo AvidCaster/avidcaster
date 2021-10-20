@@ -15,6 +15,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
+import Hls from 'hls.js';
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
@@ -28,21 +29,32 @@ import { AnnotatorService } from '../annotator.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawComponent implements OnInit, OnDestroy {
+  @ViewChild('annotationVideo', { static: true }) video: ElementRef | undefined;
   @ViewChild('annotationCanvas', { static: true }) canvas: ElementRef | undefined;
   @ViewChild('annotationSvg', { static: true }) svg: ElementRef | undefined;
   private destroy$ = new Subject<boolean>();
+  private videoEl: HTMLMediaElement | undefined | null;
   private svgEl: HTMLElement | undefined | null;
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
   private rect: DOMRect | undefined;
   private trashedLines: Line[] = [];
   private lines: Line[] = [];
+  private hls: Hls | undefined;
 
-  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {
+  constructor(
+    readonly hostElement: ElementRef,
+    readonly uix: UixService,
+    readonly annotation: AnnotatorService
+  ) {
     this.uix.addClassToBody('annotation-canvas');
+    if (!Hls.isSupported()) {
+      throw Error('HLS.js is not supported');
+    }
   }
 
   ngOnInit() {
+    this.videoEl = this.video?.nativeElement;
     this.svgEl = this.svg?.nativeElement;
     this.canvasEl = this.canvas?.nativeElement;
     this.ctx = this.canvasEl.getContext('2d');
@@ -55,6 +67,20 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.undoSub();
     this.redoSub();
     this.stateSub();
+    this.establishHlsStream();
+  }
+
+  private establishHlsStream(): void {
+    const src = 'https://rcavlive.akamaized.net/hls/live/664045/cancbvt/master_1800.m3u8';
+    if (this.hls) {
+      this.hls.destroy();
+    }
+    this.hls = new Hls({ startLevel: 2, capLevelToPlayerSize: true });
+    this.hls.attachMedia(this.videoEl);
+    this.hls.loadSource(src);
+    this.hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+      // this.videoEl.muted = true;
+    });
   }
 
   private trashSub() {
@@ -149,6 +175,18 @@ export class DrawComponent implements OnInit, OnDestroy {
         this.canvasEl.style.height = `${size.y}px`;
         this.svgEl.setAttribute('width', `${size.x}px`);
         this.svgEl.setAttribute('height', `${size.y}px`);
+        this.videoEl.setAttribute('width', `${size.x}px`);
+        this.videoEl.setAttribute('height', `${size.y}px`);
+
+        // this.svgEl.setAttribute('width', `400px`);
+        // this.svgEl.setAttribute('height', `200px`);
+        // this.canvasEl.width = 500;
+        // this.canvasEl.height = 300;
+        // this.canvasEl.style.width = `500px`;
+        // this.canvasEl.style.height = `300px`;
+        // this.videoEl.setAttribute('width', `600px`);
+        // this.videoEl.setAttribute('height', `400px`);
+
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
         this.rect = this.canvasEl.getBoundingClientRect();
         this.lines
@@ -162,12 +200,13 @@ export class DrawComponent implements OnInit, OnDestroy {
     const svgLines: SVGLineElement[] = [];
     let line: Line = this.annotation.cloneLine();
     this.annotation
-      .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
+      .fromEvents(this.svgEl, ['mousedown', 'touchstart'])
       .pipe(
         switchMap(() => {
-          return this.annotation.fromEvents(this.canvasEl, ['mousemove', 'touchmove']).pipe(
+          return this.annotation.fromEvents(this.svgEl, ['mousemove', 'touchmove']).pipe(
             debounceTime(10),
-            tap(() => {
+            tap((event) => {
+              console.log(event);
               if (!line) {
                 line = this.annotation.cloneLine();
               }
@@ -186,9 +225,9 @@ export class DrawComponent implements OnInit, OnDestroy {
                 svgLines.length = 0;
               }
             }),
-            takeUntil(fromEvent(this.canvasEl, 'mouseup')),
-            takeUntil(fromEvent(this.canvasEl, 'mouseleave')),
-            takeUntil(fromEvent(this.canvasEl, 'touchend'))
+            takeUntil(fromEvent(this.svgEl, 'mouseup')),
+            takeUntil(fromEvent(this.svgEl, 'mouseleave')),
+            takeUntil(fromEvent(this.svgEl, 'touchend'))
           );
         }),
         takeUntil(this.destroy$)

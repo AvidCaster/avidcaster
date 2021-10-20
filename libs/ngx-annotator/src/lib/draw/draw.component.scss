@@ -7,28 +7,38 @@
   margin: 0px;
   padding: 0px;
   display: block;
+  overflow: hidden;
 }
 
 #draw-canvas {
   z-index: 1;
+  top: 0;
+  left: 0;
   margin: 0px;
   padding: 0px;
   cursor: none;
-  touch-action: none;
-  background-repeat: repeat;
+  position: fixed;
+  display: block;
+  overflow: hidden;
 }
 
 #draw-svg {
   z-index: 2;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  pointer-events: none;
+  margin: 0px;
+  padding: 0px;
+  display: block;
+  overflow: hidden;
 }
 
-.menu {
-  z-index: 3;
-}
+// .draw-menu {
+//   z-index: 3;
+//   display: block;
+//   overflow: hidden;
+//   position: absolute;
+// }
 
 .cursor-eraser-white {
   cursor: url(/assets/images/svg/custom/eraser-white.png) 10 10, move !important;
