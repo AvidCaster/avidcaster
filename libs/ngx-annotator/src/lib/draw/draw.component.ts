@@ -29,10 +29,12 @@ import { AnnotatorService } from '../annotator.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawComponent implements OnInit, OnDestroy {
+  @ViewChild('annotationCastable', { static: true }) castable: ElementRef | undefined;
   @ViewChild('annotationVideo', { static: true }) video: ElementRef | undefined;
   @ViewChild('annotationCanvas', { static: true }) canvas: ElementRef | undefined;
   @ViewChild('annotationSvg', { static: true }) svg: ElementRef | undefined;
   private destroy$ = new Subject<boolean>();
+  private castableEl: HTMLMediaElement | undefined | null;
   private videoEl: HTMLMediaElement | undefined | null;
   private svgEl: HTMLElement | undefined | null;
   private canvasEl: HTMLCanvasElement | undefined | null;
@@ -54,6 +56,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.castableEl = this.castable?.nativeElement;
     this.videoEl = this.video?.nativeElement;
     this.svgEl = this.svg?.nativeElement;
     this.canvasEl = this.canvas?.nativeElement;
@@ -71,7 +74,9 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   private establishHlsStream(): void {
-    const src = 'https://rcavlive.akamaized.net/hls/live/664045/cancbvt/master_1800.m3u8';
+    let src = '';
+    src = 'https://rcavlive.akamaized.net/hls/live/664045/cancbvt/master_1800.m3u8';
+    src = 'https://adultswim-vodlive.cdn.turner.com/live/rick-and-morty/stream.m3u8';
     if (this.hls) {
       this.hls.destroy();
     }
@@ -177,6 +182,8 @@ export class DrawComponent implements OnInit, OnDestroy {
         this.svgEl.setAttribute('height', `${size.y}px`);
         this.videoEl.setAttribute('width', `${size.x}px`);
         this.videoEl.setAttribute('height', `${size.y}px`);
+        this.castableEl.setAttribute('width', `${size.x}px`);
+        this.castableEl.setAttribute('height', `${size.y}px`);
 
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
         this.rect = this.canvasEl.getBoundingClientRect();

@@ -38,6 +38,11 @@
   overflow: hidden;
 }
 
+#castable {
+  margin-top: -100% !important;
+  margin-left: -100% !important;
+}
+
 .cursor-eraser-white {
   cursor: url(/assets/images/svg/custom/eraser-white.png) 10 10, move !important;
 }
