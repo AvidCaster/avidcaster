@@ -71,6 +71,14 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.redoSub();
     this.stateSub();
     this.establishHlsStream();
+    this.captureCanvasStream();
+  }
+
+  private captureCanvasStream() {
+    // Optional frames per second argument.
+    const stream = (this.canvasEl as any).captureStream(30);
+    // Set the source of the <video> element to be the stream from the <canvas>.
+    this.castableEl.srcObject = stream;
   }
 
   private establishHlsStream(): void {
