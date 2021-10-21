@@ -171,9 +171,6 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.rect = this.canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
-        this.canvasEl.width = size.x;
-        this.canvasEl.height = size.y;
-
         this.canvasEl.setAttribute('width', `${size.x}px`);
         this.canvasEl.setAttribute('height', `${size.y}px`);
         this.svgEl.setAttribute('width', `${size.x}px`);
