@@ -2,6 +2,11 @@
   position: relative;
 }
 
+#draw-menu {
+  top: 0;
+  left: 0;
+}
+
 #draw-board {
   position: relative;
   margin: 0px;
@@ -32,13 +37,6 @@
   display: block;
   overflow: hidden;
 }
-
-// .draw-menu {
-//   z-index: 3;
-//   display: block;
-//   overflow: hidden;
-//   position: absolute;
-// }
 
 .cursor-eraser-white {
   cursor: url(/assets/images/svg/custom/eraser-white.png) 10 10, move !important;

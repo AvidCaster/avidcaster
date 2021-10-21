@@ -1,4 +1,4 @@
-<fullerstack-menu class="draw-menu" [ngStyle]="{ top: 0, right: 0, color: annotation.state.menuColor }"> </fullerstack-menu>
+<fullerstack-menu class="draw-menu" [ngStyle]="{ color: annotation.state.menuColor }"> </fullerstack-menu>
 <div id="draw-board" [ngStyle]="{ background: annotation.state.bgColor, cursor: annotation.state.cursor ? 'default' : 'none' }">
   <video #annotationVideo id="video" autoplay></video>
   <canvas id="draw-canvas" class="draw-box" [ngClass]="eraserCursorClass" #annotationCanvas></canvas>
