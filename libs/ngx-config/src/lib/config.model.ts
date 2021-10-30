@@ -16,9 +16,12 @@ export enum HttpMethod {
   POST = 'POST',
 }
 
+export type platform = 'web' | 'electron';
 export interface EnvironmentConfig {
   // true for production build
   production: boolean;
+  // platform
+  platform?: platform;
   // application release version
   version?: string;
   // application name

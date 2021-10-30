@@ -74,8 +74,9 @@
     "build:azure": "yarn install && yarn nx build avidcaster --prod",
     "<--------- [ build electron ] ------->": "electron",
     "electron": "./node_modules/.bin/electron",
-    "electron:build": "yarn build --prod --baseHref=./",
-    "electron:load": "yarn electron ."
+    "nx:el": "node ./node_modules/@nrwl/cli/bin/nx.js",
+    "build:el": "yarn build --configuration=electron --baseHref=./ ",
+    "load:el": "yarn electron ."
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"

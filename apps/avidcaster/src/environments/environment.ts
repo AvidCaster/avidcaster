@@ -8,7 +8,7 @@
 
 import { AnnotatorConfig } from '@fullerstack/ngx-annotator';
 import { AuthConfig } from '@fullerstack/ngx-auth';
-import { CachifyConfig } from '@fullerstack/ngx-cachify';
+// import { CachifyConfig } from '@fullerstack/ngx-cachify';
 import { ApplicationConfig } from '@fullerstack/ngx-config';
 import { GqlConfig } from '@fullerstack/ngx-gql';
 import { GTagConfig } from '@fullerstack/ngx-gtag';
@@ -108,9 +108,9 @@ const store: StoreConfig = {
   immutable: true,
 } as const;
 
-const cachify: CachifyConfig = {
-  ttl: 30, // 30 seconds
-} as const;
+// const cachify: CachifyConfig = {
+//   ttl: 30, // 30 seconds
+// } as const;
 
 const layout: LayoutConfig = {
   logState: true,
@@ -123,6 +123,7 @@ const annotator: AnnotatorConfig = {
 export const environment: Readonly<ApplicationConfig> = {
   version: '0.0.1',
   production: false,
+  platform: 'web',
   appName: 'AvidCaster-Dev',
   logger,
   i18n,
@@ -131,7 +132,7 @@ export const environment: Readonly<ApplicationConfig> = {
   auth,
   user,
   store,
-  cachify,
+  // cachify,
   layout,
   annotator,
 };
