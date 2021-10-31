@@ -159,7 +159,6 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   private captureEvents() {
-    const svgLines: SVGLineElement[] = [];
     let line: Line = this.annotation.cloneLine();
     this.annotation
       .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
@@ -178,11 +177,10 @@ export class DrawComponent implements OnInit, OnDestroy {
 
                 // draw the line on the background canvas
                 this.annotation.drawLineOnCanvas(line, this.ctx);
-                line = undefined;
 
                 // remove the temporary line from the foreground svg
-                svgLines.forEach((svgLine) => svgLine.remove());
-                svgLines.length = 0;
+                this.svgEl.innerHTML = '';
+                line = undefined;
               }
             }),
             takeUntil(fromEvent(this.canvasEl, 'mouseup')),
@@ -203,8 +201,7 @@ export class DrawComponent implements OnInit, OnDestroy {
             const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
 
             // draw a temp line live on the foreground svg
-            const svgLine = this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes);
-            svgLines.push(svgLine);
+            this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes);
           }
         },
       });
