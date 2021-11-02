@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, Menu, BrowserWindow } = require('electron');
 
 let win;
 const createWindow = () => {
@@ -7,13 +7,14 @@ const createWindow = () => {
     width: 800,
     height: 600,
     backgroundColor: '#000000',
+    autoHideMenuBar: true,
     icon: `file://${__dirname}/dist/apps/avidcaster/assets/images/logos/logo.png`,
   });
 
   win.loadURL(`file://${__dirname}/dist/apps/avidcaster/index.html`);
 
   // Uncomment the DevTools below during development (debugging)
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Event when the window is closed.
   win.on('closed', function () {
@@ -21,8 +22,29 @@ const createWindow = () => {
   });
 };
 
+function setMainMenu() {
+  const template = [
+    {
+      label: 'PenCast',
+      submenu: [
+        {
+          label: 'About PenCast',
+          accelerator: 'Shift+CmdOrCtrl+H',
+          click() {
+            // console.log('Oh, hi there!');
+          },
+        },
+      ],
+    },
+  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
 // Create window on electron initialization
-app.on('ready', createWindow);
+app.on('ready', () => {
+  setMainMenu();
+  createWindow();
+});
 
 app.on('activate', function () {
   // macOS specific close process
