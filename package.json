@@ -12,6 +12,7 @@
   },
   "homepage": "https://github.com/neekware/fullerstack.git",
   "scripts": {
+    "start:host": "ng serve avidcaster --port 80 --disable-host-check",
     "ts-node": "./node_modules/.bin/ts-node -P ./tools/tsconfig.tools.json",
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main && yarn prisma:generate && husky install",
