@@ -33,7 +33,7 @@ export const AppRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'annotate/draw',
+    redirectTo: 'home',
   },
   {
     path: 'home',

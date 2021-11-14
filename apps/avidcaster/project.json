@@ -71,6 +71,15 @@
           ],
           "outputHashing": "all"
         },
+        "electron": {
+          "fileReplacements": [
+            {
+              "replace": "apps/avidcaster/src/environments/environment.ts",
+              "with": "apps/avidcaster/src/environments/environment.electron.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
         "development": {
           "buildOptimizer": false,
           "optimization": false,
@@ -92,6 +101,10 @@
         "ci": {
           "browserTarget": "avidcaster:build:production",
           "proxyConfig": "apps/avidcaster/proxy/proxy.ci.json"
+        },
+        "electron": {
+          "browserTarget": "avidcaster:build:production",
+          "proxyConfig": "apps/avidcaster/proxy/proxy.electron.json"
         },
         "development": {
           "browserTarget": "avidcaster:build:development"

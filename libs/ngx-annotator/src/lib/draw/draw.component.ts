@@ -34,7 +34,6 @@ export class DrawComponent implements OnInit, OnDestroy {
   private svgEl: HTMLElement | undefined | null;
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
-  private rect: DOMRect | undefined;
   private trashedLines: Line[] = [];
   private lines: Line[] = [];
 
@@ -140,7 +139,6 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   private resizeCanvas() {
-    this.rect = this.canvasEl.getBoundingClientRect();
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (size) => {
         this.canvasEl.width = size.x;
@@ -150,7 +148,6 @@ export class DrawComponent implements OnInit, OnDestroy {
         this.svgEl.setAttribute('width', `${size.x}px`);
         this.svgEl.setAttribute('height', `${size.y}px`);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.rect = this.canvasEl.getBoundingClientRect();
         this.lines
           .filter((line) => line.visible)
           .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
@@ -159,7 +156,6 @@ export class DrawComponent implements OnInit, OnDestroy {
   }
 
   private captureEvents() {
-    const svgLines: SVGLineElement[] = [];
     let line: Line = this.annotation.cloneLine();
     this.annotation
       .fromEvents(this.canvasEl, ['mousedown', 'touchstart'])
@@ -178,11 +174,10 @@ export class DrawComponent implements OnInit, OnDestroy {
 
                 // draw the line on the background canvas
                 this.annotation.drawLineOnCanvas(line, this.ctx);
-                line = undefined;
 
                 // remove the temporary line from the foreground svg
-                svgLines.forEach((svgLine) => svgLine.remove());
-                svgLines.length = 0;
+                this.svgEl.innerHTML = '';
+                line = undefined;
               }
             }),
             takeUntil(fromEvent(this.canvasEl, 'mouseup')),
@@ -194,7 +189,7 @@ export class DrawComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (event: MouseEvent | TouchEvent) => {
-          const to: Point = this.annotation.getEventPoint(event, this.rect);
+          const to: Point = this.annotation.getEventPoint(event);
 
           // add the point to the line for the background canvas
           const pointAdded = this.annotation.addPoint(to, line);
@@ -203,8 +198,7 @@ export class DrawComponent implements OnInit, OnDestroy {
             const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
 
             // draw a temp line live on the foreground svg
-            const svgLine = this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes);
-            svgLines.push(svgLine);
+            this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes);
           }
         },
       });

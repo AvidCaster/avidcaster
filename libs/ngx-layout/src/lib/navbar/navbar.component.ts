@@ -95,9 +95,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.layout.handset$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         if (state.matches) {
-          this.brandImage = '/assets/images/logos/brand-small.png';
+          this.brandImage = './assets/images/logos/brand-small.png';
         } else {
-          this.brandImage = '/assets/images/logos/brand-large.png';
+          this.brandImage = './assets/images/logos/brand-large.png';
         }
       },
     });
