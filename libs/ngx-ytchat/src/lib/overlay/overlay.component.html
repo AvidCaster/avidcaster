@@ -1,8 +1,13 @@
 <div id="yt-overlay-box">
-  <div fxLayout="row">
-    <div class="yt-author-img"><img src="{{ data?.authorImg }}" /></div>
+  <div class="yt-inner-box" fxLayout="row">
+    <div class="yt-image-fields" fxLayout="column">
+      <div class="yt-author-img"><img src="{{ data?.authorImg }}" /></div>
+    </div>
     <div class="yt-text-fields" fxLayout="column">
-      <div class="yt-author">{{ data?.authorName }}</div>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="yt-author">{{ data?.authorName }}</div>
+        <div *ngIf="data?.donation" class="yt-superchat">SuperChat ( {{ data?.donation }} )</div>
+      </div>
       <div class="yt-message">{{ data?.message }}</div>
     </div>
   </div>

@@ -14,6 +14,7 @@ export class OverlayComponent implements OnInit {
   ngOnInit(): void {
     console.log('OverlayComponent.ngOnInit()');
     this.data = {
+      donation: '$100.00',
       authorName: 'Val Neekman',
       authorImg:
         'https://yt4.ggpht.com/ytc/AKedOLQ2gO2AW6gYdlKXgOYlyFy3kzWtgTlCddjO8T24Ng=s128-c-k-c0x00ffffff-no-rj',
