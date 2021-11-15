@@ -1,0 +1,23 @@
+{
+  "projectType": "library",
+  "root": "libs/ngx-ytchat",
+  "sourceRoot": "libs/ngx-ytchat/src",
+  "prefix": "fullerstack",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ngx-ytchat"],
+      "options": {
+        "jestConfig": "libs/ngx-ytchat/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/ngx-ytchat/src/**/*.ts", "libs/ngx-ytchat/src/**/*.html"]
+      }
+    }
+  },
+  "tags": ["lib:libs/ngx-ytchat", "scope:ngx-feature"]
+}

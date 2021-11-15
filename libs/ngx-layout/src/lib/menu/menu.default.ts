@@ -115,6 +115,13 @@ export const layoutMenuTree: MenuItem[] = [
     headless: true,
   },
   {
+    name: _('COMMON.YOUTUBE_CHAT'),
+    icon: 'chat',
+    link: '/ytchat/overlay',
+    fullscreen: true,
+    headless: true,
+  },
+  {
     name: _('COMMON.YOUTUBE'),
     icon: 'youtube',
     link: 'https://youtube.com',
