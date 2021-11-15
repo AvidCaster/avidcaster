@@ -14,6 +14,7 @@ $('body')
   .on('click', clickable.join(','), function () {
     // Skip deleted messages
     if ($(this)[0].hasAttribute('is-deleted')) {
+      $(this).addClass('avidcaster-deleted');
       return;
     }
 
@@ -29,7 +30,7 @@ $('body')
     data.authorName = clicked.find('#author-name').text();
 
     // Get author avatar image
-    data.authorImg = clicked.find('#img').attr('src').replace('32', '128');
+    data.authorImg = clicked.find('#img').attr('src').replace('s32', 's128');
 
     // Clean up the message and extract it as html
     clicked.find('#message').children().not('img').remove();

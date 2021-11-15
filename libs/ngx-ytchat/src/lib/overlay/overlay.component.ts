@@ -29,7 +29,13 @@ export class OverlayComponent implements OnInit {
   }
 
   setData(data: YtChatMessage) {
-    this.data = { ...data, message: data.message.replace(/\s\s+/g, ' ') };
+    if (data.authorName.length && data.message.length) {
+      this.data = {
+        ...data,
+        message: data.message.replace(/\s\s+/g, ' '),
+        authorImg: data.authorImg || './assets/images/misc/avatar-default.png',
+      };
+    }
   }
 
   clearMessage() {
