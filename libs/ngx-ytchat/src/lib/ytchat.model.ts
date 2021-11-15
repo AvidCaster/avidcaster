@@ -6,8 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-export const YTCHAT_STORAGE_KEY = 'chat';
-export const YTCHAT_URL = '/chat';
+export const YTCHAT_STORAGE_KEY = 'ytchat';
+export const YTCHAT_URL = '/ytchat';
 
 /**
  * Layout config declaration

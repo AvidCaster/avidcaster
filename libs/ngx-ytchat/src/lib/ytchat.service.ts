@@ -10,10 +10,8 @@ import { Subject, filter, takeUntil } from 'rxjs';
 
 import { YTCHAT_URL } from './ytchat.model';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class YtchatService {
+@Injectable()
+export class YtChatService {
   private destroy$ = new Subject<boolean>();
   private lastUrl: string;
 
