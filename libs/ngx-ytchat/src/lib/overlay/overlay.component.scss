@@ -41,6 +41,16 @@
   font-weight: bold;
 }
 
+.yt-author-img {
+  width: fit-content;
+}
+
+.yt-author-img img {
+  background: #ffa500;
+  border-radius: 50%;
+  border: 5px solid #ffa500;
+}
+
 .yt-message {
   background: #222;
   font-size: 1.8rem;
@@ -56,16 +66,6 @@
   width: 36px;
   text-align: center;
   vertical-align: middle;
-}
-
-.yt-author-img {
-  width: fit-content;
-}
-
-.yt-author-img img {
-  width: fit-content;
-  border-radius: 50%;
-  border: 5px solid #ffa500;
 }
 
 .yt-image-fields {
