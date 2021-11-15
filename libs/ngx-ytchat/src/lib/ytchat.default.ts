@@ -2,7 +2,7 @@ import { cloneDeep as ldDeepClone } from 'lodash-es';
 
 import { YtChatMessage } from './ytchat.model';
 
-export const MAX_CHAT_MESSAGES_LENGTH = 180;
+export const MAX_CHAT_MESSAGES_LENGTH = 40;
 
 export const defaultYtChatMessage = (): YtChatMessage => {
   return ldDeepClone({

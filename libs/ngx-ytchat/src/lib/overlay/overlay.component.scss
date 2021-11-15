@@ -1,11 +1,13 @@
 #yt-overlay-box {
   width: 100%;
   height: 100%;
+  min-width: 100vw;
   min-height: 100vh;
   background: #000;
   color: #fff;
   overflow: hidden;
   padding: 50px 40px;
+  font-family: Helvetica, Geneva, Verdana, Arial, sans-serif;
 }
 
 .yt-control {
@@ -15,13 +17,12 @@
 
 .yt-overlay {
   position: fixed;
-  width: 94%;
+  width: 85vw;
   bottom: 40px;
 }
 
 .yt-author {
-  width: fit-content;
-  background: #ffa500;
+  background: #5a4211;
   font-size: 2rem;
   padding: 10px;
   border-radius: 15px;
@@ -29,26 +30,15 @@
   margin-top: -1px;
   font-weight: bold;
   padding-left: 77px;
-}
-
-.yt-superchat {
-  width: fit-content;
-  background: #826228;
-  font-size: 2rem;
-  padding: 10px;
-  border-radius: 15px;
-  margin-top: 3px;
-  font-weight: bold;
-}
-
-.yt-author-img {
-  width: fit-content;
+  overflow: hidden;
+  background: linear-gradient(to right, #bf953f, #ede599, #b38728);
+  color: #5a4211;
 }
 
 .yt-author-img img {
-  background: #ffa500;
+  background: #b38728;
   border-radius: 50%;
-  border: 5px solid #ffa500;
+  border: 5px solid #b38728;
 }
 
 .yt-message {
@@ -60,6 +50,8 @@
   margin-top: 4px;
   border-radius: 15px;
   min-height: 74px;
+  width: 83vw;
+  max-width: 83vw !important;
 }
 
 ::ng-deep .yt-emoji-img {
@@ -84,6 +76,57 @@
   vertical-align: middle;
 }
 
+.yt-superchat {
+  display: block;
+  text-align: center;
+  z-index: 15;
+  min-width: 128px;
+  border-radius: 10px;
+  padding: 30px 5px 0;
+  overflow: hidden;
+  background: linear-gradient(to right, #413f3d, #ede599, #b38728);
+  color: #5a4211;
+  transform: rotate(-0deg) translateX(-50%);
+  font-weight: bolder;
+  font-size: 1.5rem;
+  margin-left: 64px;
+}
+
+.yt-superchat::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.23);
+  border-radius: 10px 10px 0 0;
+  padding: 5px 0 0;
+  display: block;
+  content: 'SUPERCHAT';
+  color: #fff;
+}
+
+.yt-superchat::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 0;
+  height: 200%;
+  width: 1px;
+  background-color: #fff;
+  box-shadow: 0 0 20px 20px #fff;
+  opacity: 0.7;
+  transform: rotate(9deg) translate3D(250px, 0, 0);
+  animation: superchat 2s ease-in-out infinite;
+}
+
+@keyframes superchat {
+  from {
+    transform: rotate(9deg) translate3D(-250px, 0, 0);
+  }
+}
+
 [dir='rtl'] {
   .yt-author {
     margin-right: -79px;
@@ -94,5 +137,9 @@
     margin-right: -74px;
     padding-right: 74px;
     width: 93%;
+  }
+
+  .yt-superchat {
+    margin-right: 64px;
   }
 }
