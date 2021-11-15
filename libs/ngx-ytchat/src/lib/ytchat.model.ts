@@ -12,9 +12,16 @@ export const YTCHAT_URL = '/ytchat';
 /**
  * Layout config declaration
  */
-export interface YtchatConfig {
+export interface YtChatConfig {
   logState?: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [id: string]: any;
+}
+
+export interface YtChatMessage {
+  donation?: string;
+  authorName?: string;
+  authorImg?: string;
+  message?: string;
 }

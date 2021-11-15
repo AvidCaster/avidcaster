@@ -84,6 +84,17 @@
                 ]
               },
               {
+                "sourceTag": "scope:ngx-feature",
+                "onlyDependOnLibsWithTags": [
+                  "scope:agx-data",
+                  "scope:agx-util",
+                  "scope:ngx-data",
+                  "scope:ngx-util",
+                  "scope:ngx-shared",
+                  "scope:ngx-ui"
+                ]
+              },
+              {
                 "sourceTag": "scope:nsx-data",
                 "onlyDependOnLibsWithTags": ["scope:agx-data", "scope:agx-util", "scope:nsx-data"]
               },

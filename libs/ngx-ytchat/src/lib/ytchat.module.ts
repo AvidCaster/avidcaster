@@ -20,12 +20,12 @@ import { YtChatService } from './ytchat.service';
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
     RouterModule.forChild(ytChatRoutes),
+    MaterialModule,
     SharedModule,
     I18nModule.forChild(),
   ],
-  exports: [OverlayComponent],
+  exports: [OverlayComponent, MaterialModule],
   declarations: [OverlayComponent],
   providers: [YtChatService],
 })
