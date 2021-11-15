@@ -19,7 +19,7 @@ export class OverlayComponent implements OnInit {
       authorImg:
         'https://yt4.ggpht.com/ytc/AKedOLQ2gO2AW6gYdlKXgOYlyFy3kzWtgTlCddjO8T24Ng=s128-c-k-c0x00ffffff-no-rj',
       message:
-        'Hello there, I am wondering if you can show me where to buy stuff, and how it goes if that happens!',
+        'Hello there, I am wondering if you can show me where to buy stuff, and how it goes if that happens! Hello there, I am wondering if you can show me where to buy stuff, and how it goes if that happens! Hello there, I am wondering if you can show me where to buy stuff, and how it goes if that happens!',
     };
 
     window.addEventListener(
