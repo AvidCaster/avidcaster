@@ -1,4 +1,4 @@
-<div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px">
+<div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="i18n.direction">
   <section class="yt-control">
     <div class="">
       <button mat-raised-button color="warn" (click)="clearMessage()">Clear Message</button>
@@ -15,7 +15,7 @@
           <div class="yt-author">{{ data?.authorName }}</div>
           <div *ngIf="data?.donation" class="yt-superchat">SuperChat ( {{ data?.donation }} )</div>
         </div>
-        <div class="yt-message">{{ data?.message | slice: 0:200 }} <span *ngIf="data?.message?.length > 200"> ...</span></div>
+        <div class="yt-message">{{ data?.message | slice: 0:maxLength }} <span *ngIf="data?.message?.length > 200"> ...</span></div>
       </div>
     </div>
   </section>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { I18nService } from '@fullerstack/ngx-i18n';
 
-import { defaultYtChatMessage } from '../ytchat.default';
+import { MAX_CHAT_MESSAGES_LENGTH, defaultYtChatMessage } from '../ytchat.default';
 import { YtChatMessage } from '../ytchat.model';
 import { YtChatService } from '../ytchat.service';
 
@@ -10,9 +11,10 @@ import { YtChatService } from '../ytchat.service';
   styleUrls: ['./overlay.component.scss'],
 })
 export class OverlayComponent implements OnInit {
+  maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data = defaultYtChatMessage();
 
-  constructor(readonly ytchatService: YtChatService) {}
+  constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
   ngOnInit(): void {
     window.addEventListener(

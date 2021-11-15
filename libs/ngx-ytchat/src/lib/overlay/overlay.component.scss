@@ -8,8 +8,15 @@
   padding: 50px 40px;
 }
 
+.yt-control {
+  position: fixed;
+  top: 0;
+}
+
 .yt-overlay {
+  position: fixed;
   width: 94%;
+  bottom: 40px;
 }
 
 .yt-author {
@@ -36,12 +43,13 @@
 
 .yt-message {
   background: #222;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   padding: 20px;
   margin-left: -74px;
   padding-left: 74px;
   margin-top: 4px;
   border-radius: 15px;
+  min-height: 74px;
 }
 
 ::ng-deep .yt-emoji-img {
@@ -74,4 +82,17 @@
   height: 27px;
   margin: -1px 2px 1px;
   vertical-align: middle;
+}
+
+[dir='rtl'] {
+  .yt-author {
+    margin-right: -79px;
+    padding-right: 77px;
+  }
+
+  .yt-message {
+    margin-right: -74px;
+    padding-right: 74px;
+    width: 93%;
+  }
 }
