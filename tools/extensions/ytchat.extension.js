@@ -30,7 +30,7 @@ $('body')
     data.authorName = clicked.find('#author-name').text();
 
     // Get author avatar image
-    data.authorImg = clicked.find('#img').attr('src').replace('s32', 's128');
+    data.authorImg = clicked.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
 
     // Clean up the message and extract it as html
     clicked.find('#message').children().not('img').remove();
