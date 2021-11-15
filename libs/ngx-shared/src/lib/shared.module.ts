@@ -22,6 +22,7 @@ import { DebounceClickDirective } from './directive/debounce-click/debounce-clic
 import { FormErrorDirective } from './directive/form-error/form-error-directive';
 import { InputFocusDirective } from './directive/input-focus/input-focus.directive';
 import { TmpLetDirective } from './directive/tmp-let/tmp-let.directive';
+import { Html2TextPipe } from './pipes/html2text.pipe';
 import { ProgressService } from './service/progress/progress.service';
 import { ValidationService } from './service/validation/validation.service';
 
@@ -38,6 +39,7 @@ import { ValidationService } from './service/validation/validation.service';
     TmpLetDirective,
     DebounceClickDirective,
     InputFocusDirective,
+    Html2TextPipe,
   ],
   exports: [
     AlertComponent,
@@ -50,6 +52,7 @@ import { ValidationService } from './service/validation/validation.service';
     TmpLetDirective,
     DebounceClickDirective,
     InputFocusDirective,
+    Html2TextPipe,
   ],
   providers: [ValidationService, ProgressService],
 })
