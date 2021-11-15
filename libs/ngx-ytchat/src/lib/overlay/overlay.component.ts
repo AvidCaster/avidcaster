@@ -33,4 +33,8 @@ export class OverlayComponent implements OnInit {
       false
     );
   }
+
+  clearMessage() {
+    this.data = {};
+  }
 }
