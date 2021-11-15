@@ -15,8 +15,8 @@
           <div class="yt-author">{{ data?.authorName }}</div>
           <div *ngIf="data?.donation" class="yt-superchat">SuperChat ( {{ data?.donation }} )</div>
         </div>
-        <!-- <div class="yt-message">{{ data?.message | slice: 0:200 }} <span *ngIf="data?.message?.length > 200"> ...</span></div> -->
-        <div class="yt-message" [innerHTML]="data?.message"></div>
+        <div class="yt-message">{{ data?.message | slice: 0:200 }} <span *ngIf="data?.message?.length > 200"> ...</span></div>
+        <!-- <div class="yt-message" [innerHTML]="data?.message"></div> -->
       </div>
     </div>
   </section>

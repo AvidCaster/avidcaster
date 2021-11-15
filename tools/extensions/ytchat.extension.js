@@ -32,8 +32,13 @@ $('body')
     data.authorImg = clicked.find('#img').attr('src').replace('32', '128');
 
     // Clean up the message and extract it as html
-    clicked.find('#message #tooltip.hidden').remove();
-    clicked.find('#message img').removeClass().addClass('yt-emoji-img');
+    clicked.find('#message').children().not('img').remove();
+    clicked.find('#message img').each(function () {
+      var emojiName = $(this)[0].getAttribute('alt');
+      if (emojiName) {
+        $(this)[0].replaceWith(' ' + emojiName + ' ');
+      }
+    });
     data.message = clicked.find('#message').html();
 
     // Get the donation
