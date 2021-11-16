@@ -15,7 +15,7 @@
         <div fxLayout="row" fxLayoutGap="10px">
           <div class="yt-author">{{ data?.authorName }}</div>
         </div>
-        <div class="yt-message">{{ data?.message | slice: 0:maxLength }} <span *ngIf="data?.message?.length > 200"> ...</span></div>
+        <div class="yt-message" [innerHtml]="data?.message.html"></div>
       </div>
     </div>
   </section>

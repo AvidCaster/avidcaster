@@ -19,7 +19,7 @@ $('body')
     }
 
     // Mark this comment as shown
-    $(this).addClass('shown-comment');
+    $(this).addClass('avidcaster-dispatched');
     var clicked = $(this).clone();
 
     //  Properties to send to remote window:
@@ -33,19 +33,17 @@ $('body')
     data.authorImg = clicked.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
 
     // Clean up the message and extract it as html
+    clicked.find('#message hidden').remove();
     clicked.find('#message').children().not('img').remove();
-    clicked.find('#message img').each(function () {
-      var emojiName = $(this)[0].getAttribute('alt');
-      if (emojiName) {
-        $(this)[0].replaceWith(' ' + emojiName + ' ');
-      }
-    });
-    data.message = clicked.find('#message').html();
+    data.message = {
+      html: clicked.find('#message').html(),
+      length: clicked.find('#message').text().length + clicked.find('#message').children().length,
+    };
 
     // Get the donation
     data.donation = (
       clicked.find('#purchase-amount') || clicked.find('#purchase-amount-chip')
-    ).html();
+    ).text();
 
     // post the data to the remote window
     document.getElementById('avidcaster-iframe').contentWindow.postMessage(data, '*');

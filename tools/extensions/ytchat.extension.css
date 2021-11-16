@@ -6,13 +6,13 @@ yt-live-chat-text-message-renderer:hover {
   cursor: pointer;
 }
 
-yt-live-chat-text-message-renderer.shown-comment {
+yt-live-chat-text-message-renderer.avidcaster-dispatched {
   background-color: #555555 !important;
   opacity: 0.4;
 }
 
-.shown-comment:hover {
-  opacity: 0.5;
+.avidcaster-dispatched:hover {
+  opacity: 0.6;
 }
 
 yt-live-chat-text-message-renderer.avidcaster-deleted {

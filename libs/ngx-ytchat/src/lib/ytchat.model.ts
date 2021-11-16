@@ -23,5 +23,8 @@ export interface YtChatMessage {
   donation?: string;
   authorName?: string;
   authorImg?: string;
-  message?: string;
+  message?: {
+    html: string;
+    length: number;
+  };
 }

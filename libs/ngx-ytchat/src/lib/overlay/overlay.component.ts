@@ -29,10 +29,10 @@ export class OverlayComponent implements OnInit {
   }
 
   setData(data: YtChatMessage) {
-    if (data.authorName.length && data.message.length) {
+    if (data?.authorName.length && data?.message?.length) {
       this.data = {
         ...data,
-        message: data.message.replace(/\s\s+/g, ' '),
+        message: data.message,
         authorImg: data.authorImg || './assets/images/misc/avatar-default.png',
       };
     }
