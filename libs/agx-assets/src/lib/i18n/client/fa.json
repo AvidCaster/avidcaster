@@ -10,7 +10,6 @@
   "APP.DESCRIPTION.LANGUAGE_CHANGE": "تغییر زبان پروفایل",
   "APP.DESCRIPTION.LOGIN": "ورود به حساب کاربری",
   "APP.DESCRIPTION.NOT_FOUND": "خطای 404 یافت نشد",
-  "APP.DESCRIPTION.CHAT_OVERLAY": "چت روکش",
   "APP.DESCRIPTION.PASSWORD_CHANGE": "تغییر رمز عبور",
   "APP.DESCRIPTION.PASSWORD_RENEW": "رمز عبور تجدید",
   "APP.DESCRIPTION.PASSWORD_RESET_REQUEST": "درخواست تنظیم مجدد رمز عبور حساب",
@@ -22,6 +21,9 @@
   "APP.SIGNUP": "ثبت نام",
   "APP.SUB_HEADLINE": "آهنگ - تجزیه و تحلیل - قانون - سود",
   "BAD_USER_INPUT": "ورودی کاربر نامعتبر",
+  "CHAT.DEFAULT_MESSAGE": "این یک چت نمونه با 😘 و ایموجی است تا ما می توانیم روکش پیام را آزمایش کنیم",
+  "CHAT.OVERLAY": "چت روکش",
+  "CHAT.OVERLAY_DESC": "روکش چت برای یوتیوب و پایین تر 3rd",
   "COMMON.ABOUT": "در باره",
   "COMMON.ACCOUNT": "حساب",
   "COMMON.ACCOUNT.EMAIL": "حساب ایمیل",
@@ -104,7 +106,6 @@
   "COMMON.NOTIFICATIONS": "اطلاعیه",
   "COMMON.NOT_FOUND": "پیدا نشد",
   "COMMON.OPTIONS": "گزینه ها",
-  "COMMON.CHAT_OVERLAY": "",
   "COMMON.PASSWORD": "کلمه عبور",
   "COMMON.PASSWORD.CHOOSE_NEW": "گذرواژه جدید را انتخاب کنید",
   "COMMON.PASSWORD.RENEW": "رمز عبور جدید",
@@ -162,7 +163,6 @@
   "COMMON.YAHOO_FINANCE": "یاهو مسکن",
   "COMMON.YES": "بله",
   "COMMON.YOUTUBE": "یوتیوب",
-  "COMMON.YOUTUBE_CHAT": "YT چت روکش",
   "CONFIRM.ACCOUNT_EMAIL": "لطفا ایمیل حساب خود را تأیید کنید",
   "CONFIRM.ACCOUNT_PASSWORD": "رمز عبور حساب",
   "CONFIRM.CURRENT_PASSWORD": "رمز عبور فعلی خود را تأیید کنید",

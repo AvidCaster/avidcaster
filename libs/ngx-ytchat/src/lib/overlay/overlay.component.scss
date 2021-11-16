@@ -34,7 +34,8 @@
   font-weight: bolder;
   padding-left: 109px;
   overflow: hidden;
-  color: #222 !important;
+  color: #222222 !important;
+  display: inline-block;
 }
 
 .yt-author-img img {
@@ -45,6 +46,10 @@
 
 .yt-donation {
   font-weight: bolder;
+}
+
+.yt-donation span {
+  margin-left: 10px;
 }
 
 .yt-message {
@@ -86,8 +91,8 @@
 
 [dir='rtl'] {
   .yt-author {
-    margin-right: -79px;
-    padding-right: 77px;
+    margin-right: -98px;
+    padding-right: 96px;
   }
 
   .yt-message {
@@ -96,7 +101,7 @@
     width: 93%;
   }
 
-  .yt-superchat {
-    margin-right: 64px;
+  .yt-donation span {
+    margin-right: 10px;
   }
 }

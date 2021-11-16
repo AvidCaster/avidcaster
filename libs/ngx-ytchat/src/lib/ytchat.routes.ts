@@ -19,8 +19,8 @@ export const ytChatRoutes: Routes = [
         path: '',
         component: OverlayComponent,
         data: {
-          title: _('COMMON.CHAT_OVERLAY'),
-          description: _('APP.DESCRIPTION.CHAT_OVERLAY'),
+          title: _('CHAT.OVERLAY'),
+          description: _('CHAT.OVERLAY_DESC'),
         },
       },
     ],

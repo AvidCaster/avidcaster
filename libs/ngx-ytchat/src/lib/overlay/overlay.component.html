@@ -15,12 +15,12 @@
       </div>
       <div class="yt-text-fields" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="10px">
-          <div class="yt-author">
-            {{ data?.authorName }}
-            <span class="yt-donation">
-              <span *ngIf="data?.donation">🌺</span>
-              {{ data?.donation }}
-              <span *ngIf="data?.donation">🌺</span>
+          <div fxLayout="row" class="yt-author">
+            <span>{{ data?.authorName }}</span>
+            <span *ngIf="data?.donation" class="yt-donation">
+              <span>🌺</span>
+              <span>{{ data?.donation }}</span>
+              <span>🌺</span>
             </span>
           </div>
         </div>
