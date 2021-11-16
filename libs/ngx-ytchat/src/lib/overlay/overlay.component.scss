@@ -22,23 +22,22 @@
 }
 
 .yt-author {
-  background: #5a4211;
+  background: #ffa500;
   font-size: 2rem;
   padding: 10px;
   border-radius: 15px;
   margin-left: -79px;
   margin-top: -1px;
   font-weight: bold;
-  padding-left: 77px;
+  padding-left: 87px;
   overflow: hidden;
-  background: linear-gradient(to right, #bf953f, #ede599, #b38728);
-  color: #5a4211;
+  color: #000;
 }
 
 .yt-author-img img {
-  background: #b38728;
+  background: #ffa500;
   border-radius: 50%;
-  border: 5px solid #b38728;
+  border: 5px solid #ffa500;
 }
 
 .yt-message {
@@ -46,7 +45,7 @@
   font-size: 1.8rem;
   padding: 20px;
   margin-left: -74px;
-  padding-left: 74px;
+  padding-left: 84px;
   margin-top: 4px;
   border-radius: 15px;
   min-height: 74px;
@@ -81,15 +80,17 @@
   text-align: center;
   z-index: 15;
   min-width: 128px;
-  border-radius: 10px;
+  border-radius: 14px;
   padding: 30px 5px 0;
   overflow: hidden;
   background: linear-gradient(to right, #413f3d, #ede599, #b38728);
   color: #5a4211;
-  transform: rotate(-0deg) translateX(-50%);
+  transform: rotate(0deg) translateX(-50%);
   font-weight: bolder;
   font-size: 1.5rem;
-  margin-left: 64px;
+  margin-left: 70px;
+  position: absolute;
+  margin-top: -26px;
 }
 
 .yt-superchat::before {
