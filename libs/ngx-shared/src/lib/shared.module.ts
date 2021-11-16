@@ -53,6 +53,7 @@ import { ValidationService } from './service/validation/validation.service';
     DebounceClickDirective,
     InputFocusDirective,
     Html2TextPipe,
+    I18nModule,
   ],
   providers: [ValidationService, ProgressService],
 })

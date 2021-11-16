@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
+import { take } from 'rxjs';
 
 import { MAX_CHAT_MESSAGES_LENGTH, defaultYtChatMessage } from '../ytchat.default';
 import { YtChatMessage } from '../ytchat.model';
@@ -20,6 +21,7 @@ export class OverlayComponent implements OnInit {
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
   ngOnInit(): void {
+    this.setData(defaultYtChatMessage());
     window.addEventListener(
       'message',
       (event) => {
@@ -34,11 +36,16 @@ export class OverlayComponent implements OnInit {
   setData(data: YtChatMessage) {
     if (data?.authorName.length && data?.message?.length) {
       this.slideInState++;
-      this.data = {
-        ...data,
-        message: data.message,
-        authorImg: data.authorImg || './assets/images/misc/avatar-default.png',
-      };
+      this.i18n.translate
+        .get(data?.message.html)
+        .pipe(take(1))
+        .subscribe((html: string) => {
+          this.data = {
+            ...data,
+            message: { ...data.message, html },
+            authorImg: data.authorImg || './assets/images/misc/avatar-default.png',
+          };
+        });
     }
   }
 
