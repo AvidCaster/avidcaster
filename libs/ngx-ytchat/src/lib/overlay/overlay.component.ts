@@ -13,6 +13,7 @@ import { YtChatService } from '../ytchat.service';
 export class OverlayComponent implements OnInit {
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data = defaultYtChatMessage();
+  isShown = true;
 
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
@@ -30,6 +31,7 @@ export class OverlayComponent implements OnInit {
 
   setData(data: YtChatMessage) {
     if (data?.authorName.length && data?.message?.length) {
+      this.isShown = false;
       this.data = {
         ...data,
         message: data.message,

@@ -5,15 +5,22 @@
     </div>
   </section>
   <mat-divider class="mb2" [ngStyle]="{ 'border-top': '2px solid', 'border-color': '#ccc' }"></mat-divider>
-  <section *ngIf="data?.authorName" class="yt-overlay">
+  <section *ngIf="data?.authorName" class="yt-overlay yt-chat" [class.shown]="isShown">
     <div class="yt-inner-box" fxLayout="row">
       <div class="yt-image-fields" fxLayout="column">
         <div class="yt-author-img"><img width="128" height="128" src="{{ data?.authorImg }}" /></div>
-        <div *ngIf="data?.donation" class="yt-superchat">{{ data?.donation }}</div>
+        <!-- <div *ngIf="data?.donation" class="yt-superchat">{{ data?.donation }}</div> -->
       </div>
       <div class="yt-text-fields" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="10px">
-          <div class="yt-author">{{ data?.authorName }}</div>
+          <div class="yt-author">
+            {{ data?.authorName }}
+            <span class="yt-donation">
+              <span *ngIf="data?.donation">🎉</span>
+              {{ data?.donation }}
+              <span *ngIf="data?.donation">🎉</span>
+            </span>
+          </div>
         </div>
         <div class="yt-message" [innerHtml]="data?.message.html"></div>
       </div>
