@@ -35,6 +35,8 @@ $('body')
     // Clean up the message and extract it as html
     clicked.find('#message hidden').remove();
     clicked.find('#message').children().not('img').remove();
+    clicked.find('#message').children().removeClass();
+
     data.message = {
       html: clicked.find('#message').html(),
       length: clicked.find('#message').text().length + clicked.find('#message').children().length,
