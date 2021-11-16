@@ -6,7 +6,7 @@ var clickable = [
 ];
 
 $('yt-live-chat-app').append(
-  '<iframe id="avidcaster-iframe" src="https://embed.net:80/ytchat/overlay"></iframe>'
+  '<iframe id="avidcaster-iframe" src="https://avidcaster.net/ytchat/overlay"></iframe>'
 );
 
 $('body')
