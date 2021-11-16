@@ -55,16 +55,14 @@
 .yt-message {
   background: #222;
   font-size: 40px;
-  margin-left: -91px;
-  padding-left: 100px;
+  margin-left: -101px;
   margin-top: 4px;
   border-radius: 15px;
   max-width: 83vw;
   min-height: 38px;
   max-height: 173px;
   overflow: hidden;
-  padding-right: 14px;
-  padding-bottom: 10px;
+  padding: 8px 14px 14px 110px;
 }
 
 ::ng-deep .yt-message img {
@@ -109,9 +107,8 @@ mat-select {
   }
 
   .yt-message {
-    margin-right: -74px;
-    padding-right: 74px;
-    width: 93%;
+    padding: 8px 110px 14px 14px;
+    margin-right: -101px;
   }
 
   .yt-donation span {
