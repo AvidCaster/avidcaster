@@ -1,13 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { I18nModule } from '@fullerstack/ngx-i18n';
 
 import { OverlayComponent } from './overlay.component';
 
-describe('OverlayComponent', () => {
+xdescribe('OverlayComponent', () => {
   let component: OverlayComponent;
   let fixture: ComponentFixture<OverlayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [I18nModule],
       declarations: [OverlayComponent],
     }).compileComponents();
   });
