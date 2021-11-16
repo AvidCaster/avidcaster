@@ -30,7 +30,8 @@
                   "scope:ngx-data",
                   "scope:ngx-util",
                   "scope:ngx-ui",
-                  "scope:ngx-shared"
+                  "scope:ngx-shared",
+                  "scope:ngx-feature"
                 ]
               },
               {

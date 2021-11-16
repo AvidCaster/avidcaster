@@ -1,7 +1,10 @@
 <div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="i18n.direction">
   <section class="yt-control">
     <div class="">
-      <button mat-raised-button color="warn" (click)="clearMessage()">{{ 'COMMON.CLEAR_CHAT' | translate }}</button>
+      <button mat-raised-button color="warn" (click)="clearMessage()">
+        Clear Message
+        <!-- {{ 'COMMON.CLEAR_CHAT' | translate }} -->
+      </button>
     </div>
   </section>
   <mat-divider></mat-divider>
