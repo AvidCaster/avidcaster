@@ -6,6 +6,7 @@ export * from './lib/animation/animation.fade';
 export * from './lib/animation/animation.rotation';
 export * from './lib/animation/animation.route';
 export * from './lib/animation/animation.shake';
+export * from './lib/animation/animation.slidein';
 
 export * from './lib/component/alert/alert.component';
 export * from './lib/component/card/card.component';

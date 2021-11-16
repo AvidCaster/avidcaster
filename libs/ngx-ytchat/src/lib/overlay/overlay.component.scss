@@ -6,32 +6,18 @@
   background: #000;
   color: #fff;
   overflow: hidden;
-  padding: 38px 40px;
+  padding: 3px 40px;
   font-family: Helvetica, Geneva, Verdana, Arial, sans-serif;
 }
 
 .yt-control {
-  position: fixed;
-  top: 0;
+  top: 2px;
 }
 
-.yt-overlay {
-  position: fixed;
-  bottom: 33px;
-}
-
-.yt-overlay .yt-chat {
-  transform: translateY(130%);
-  transition-timing-function: ease-in;
-  transition: 0.2s;
-}
-
-.yt-overlay.shown .yt-chat {
-  transition: 0.25s;
-  transition-timing-function: ease-out;
-
-  transform: translateY(0);
-  opacity: 1;
+.mat-divider {
+  border-top-color: #fff;
+  margin-bottom: 5px !important;
+  margin-top: -15px;
 }
 
 .yt-author {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { I18nService } from '@fullerstack/ngx-i18n';
+import { slideInAnimations } from '@fullerstack/ngx-shared';
 
 import { MAX_CHAT_MESSAGES_LENGTH, defaultYtChatMessage } from '../ytchat.default';
 import { YtChatMessage } from '../ytchat.model';
@@ -9,11 +10,12 @@ import { YtChatService } from '../ytchat.service';
   selector: 'fullerstack-overlay',
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss'],
+  animations: [slideInAnimations.slideIn],
 })
 export class OverlayComponent implements OnInit {
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data = defaultYtChatMessage();
-  isShown = true;
+  slideInState = 0;
 
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
@@ -31,7 +33,7 @@ export class OverlayComponent implements OnInit {
 
   setData(data: YtChatMessage) {
     if (data?.authorName.length && data?.message?.length) {
-      this.isShown = false;
+      this.slideInState++;
       this.data = {
         ...data,
         message: data.message,

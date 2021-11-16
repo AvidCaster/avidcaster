@@ -4,9 +4,9 @@
       <button mat-raised-button color="warn" (click)="clearMessage()">Clear Message</button>
     </div>
   </section>
-  <mat-divider class="mb2" [ngStyle]="{ 'border-top': '2px solid', 'border-color': '#ccc' }"></mat-divider>
-  <section *ngIf="data?.authorName" class="yt-overlay yt-chat" [class.shown]="isShown">
-    <div class="yt-inner-box" fxLayout="row">
+  <mat-divider></mat-divider>
+  <section class="yt-overlay" [@slideIn]="slideInState">
+    <div class="yt-inner-box" fxLayout="row" *ngIf="data?.authorName">
       <div class="yt-image-fields" fxLayout="column">
         <div class="yt-author-img"><img width="160" height="160" src="{{ data?.authorImg }}" /></div>
       </div>
