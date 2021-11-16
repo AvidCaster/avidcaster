@@ -33,7 +33,7 @@ export const AppRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'annotate/draw',
+    redirectTo: 'home',
   },
   {
     path: 'home',
@@ -172,6 +172,12 @@ export const AppRoutes: Routes = [
     // canActivate: [AuthAuthenticatedGuard],
     // canDeactivate: [DeactivateGuard],
     loadChildren: () => import('@fullerstack/ngx-annotator').then((m) => m.AnnotatorModule),
+  },
+  {
+    path: 'ytchat',
+    // canActivate: [AuthAuthenticatedGuard],
+    // canDeactivate: [DeactivateGuard],
+    loadChildren: () => import('@fullerstack/ngx-ytchat').then((m) => m.YtChatModule),
   },
   {
     path: '**',

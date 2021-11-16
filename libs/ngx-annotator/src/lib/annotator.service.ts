@@ -421,18 +421,18 @@ export class AnnotatorService implements OnDestroy {
    * @param rect rect - canvas element
    * @returns point - {x, y}
    */
-  getEventPoint(event: MouseEvent | TouchEvent, rect: DOMRect): Point {
+  getEventPoint(event: MouseEvent | TouchEvent): Point {
     let point: Point = { x: 0, y: 0 };
 
     if (event instanceof MouseEvent) {
       point = {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
+        x: event.clientX,
+        y: event.clientY,
       };
     } else if (event instanceof TouchEvent) {
       point = {
-        x: event.touches[0].clientX - rect.left,
-        y: event.touches[0].clientY - rect.top,
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
       };
     }
 

@@ -26,6 +26,7 @@ async function bootstrap() {
     req.ipInfo = ipware.getClientIP(req);
     next();
   });
+  app.enableCors();
   const port = process.env.PORT || environment.port || 3333;
   await app.listen(port);
 

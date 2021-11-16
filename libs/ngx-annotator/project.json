@@ -19,5 +19,5 @@
       }
     }
   },
-  "tags": ["lib:libs/ngx-annotator", "scope:ngx-ui"]
+  "tags": ["lib:libs/ngx-annotator", "scope:ngx-feature"]
 }

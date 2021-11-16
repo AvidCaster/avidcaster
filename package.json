@@ -11,7 +11,9 @@
     "url": "https://github.com/neekware/fullerstack.git/issues"
   },
   "homepage": "https://github.com/neekware/fullerstack.git",
+  "main": "main.js",
   "scripts": {
+    "start:host": "sudo ng serve avidcaster --port 80 --ssl true --disable-host-check",
     "ts-node": "./node_modules/.bin/ts-node -P ./tools/tsconfig.tools.json",
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main && yarn prisma:generate && husky install",
@@ -70,7 +72,12 @@
     "serve:dist": "cd dist/apps/fullerstack; open http://localhost:8080; python3 -m http.server 8080",
     "<--------- [ test related ] ------->": "test related",
     "test:ipware": "yarn nx test nax-ipware",
-    "build:azure": "yarn install && yarn nx build avidcaster --prod"
+    "build:azure": "yarn install && yarn nx build avidcaster --prod",
+    "<--------- [ build electron ] ------->": "electron",
+    "electron": "./node_modules/.bin/electron",
+    "nx:el": "node ./node_modules/@nrwl/cli/bin/nx.js",
+    "build:el": "yarn build --configuration=electron --baseHref=./ ",
+    "load:el": "yarn electron ."
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"
@@ -159,6 +166,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.2",
     "@types/cookie-parser": "1.4.2",
     "@types/crypto-js": "4.0.1",
+    "@types/electron": "^1.6.10",
     "@types/gtag.js": "0.0.4",
     "@types/jest": "26.0.8",
     "@types/lodash": "4.14.168",
@@ -181,6 +189,7 @@
     "coveralls": "3.1.0",
     "cypress": "6.0.1",
     "dotenv": "10.0.0",
+    "electron": "^15.3.0",
     "eslint": "7.22.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "2.10.3",

@@ -11,6 +11,7 @@
     "target": "es2015",
     "module": "esnext",
     "lib": ["es2017", "dom", "esnext.asynciterable"],
+    "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -50,6 +51,7 @@
       "@fullerstack/nsx-prisma/mock": ["libs/nsx-prisma/src/mock.ts"],
       "@fullerstack/nsx-system": ["libs/nsx-system/src/index.ts"],
       "@fullerstack/nsx-user": ["libs/nsx-user/src/index.ts"],
+      "@fullerstack/ngx-ytchat": ["libs/ngx-ytchat/src/index.ts"],
       "ts-essentials/*": ["node_modules/ts-essentials/*"]
     }
   },

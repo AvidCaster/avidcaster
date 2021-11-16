@@ -8,10 +8,11 @@
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '@fullerstack/ngx-auth';
-import { CachifyInterceptor } from '@fullerstack/ngx-cachify';
+// import { CachifyInterceptor } from '@fullerstack/ngx-cachify';
 import { GqlInterceptor } from '@fullerstack/ngx-gql';
 import { I18nInterceptor } from '@fullerstack/ngx-i18n';
 import { LoggerInterceptor, ProgressInterceptor } from '@fullerstack/ngx-shared';
+import { SystemElectronInterceptor } from '@fullerstack/ngx-system';
 
 /**
  * List of interceptors. Order is very important.
@@ -49,7 +50,12 @@ export const httpInterceptorProvidersOrderedList = [
    * The url along with headers are used to generate the cache key. Caching is based on the cache options, passed in via HttpContext.
    * This is to prevent herding requests, where multiple components are requesting the same url with a short amount of time.
    */
-  { provide: HTTP_INTERCEPTORS, useClass: CachifyInterceptor, multi: true },
+  // { provide: HTTP_INTERCEPTORS, useClass: CachifyInterceptor, multi: true },
+
+  /**
+   * Electron is using file:// protocol, so we need to intercept the request and return the file.
+   */
+  { provide: HTTP_INTERCEPTORS, useClass: SystemElectronInterceptor, multi: true },
 
   /**
    * Gql Interceptor, handles every gql response and converts gql errors of 200 http code to real http errors

@@ -30,7 +30,8 @@
                   "scope:ngx-data",
                   "scope:ngx-util",
                   "scope:ngx-ui",
-                  "scope:ngx-shared"
+                  "scope:ngx-shared",
+                  "scope:ngx-feature"
                 ]
               },
               {
@@ -74,6 +75,17 @@
               },
               {
                 "sourceTag": "scope:ngx-ui",
+                "onlyDependOnLibsWithTags": [
+                  "scope:agx-data",
+                  "scope:agx-util",
+                  "scope:ngx-data",
+                  "scope:ngx-util",
+                  "scope:ngx-shared",
+                  "scope:ngx-ui"
+                ]
+              },
+              {
+                "sourceTag": "scope:ngx-feature",
                 "onlyDependOnLibsWithTags": [
                   "scope:agx-data",
                   "scope:agx-util",
