@@ -90,59 +90,6 @@
   vertical-align: middle;
 }
 
-.yt-superchat {
-  display: block;
-  text-align: center;
-  z-index: 15;
-  min-width: 128px;
-  border-radius: 14px;
-  padding: 30px 5px 0;
-  overflow: hidden;
-  background: linear-gradient(to right, #413f3d, #ede599, #b38728);
-  color: #5a4211;
-  transform: rotate(0deg) translateX(-50%);
-  font-weight: bolder;
-  font-size: 1.5rem;
-  margin-left: 70px;
-  position: absolute;
-  margin-top: -26px;
-}
-
-.yt-superchat::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  font-size: 18px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.23);
-  border-radius: 10px 10px 0 0;
-  padding: 5px 0 0;
-  display: block;
-  content: 'SUPERCHAT';
-  color: #fff;
-}
-
-.yt-superchat::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: 0;
-  height: 200%;
-  width: 1px;
-  background-color: #fff;
-  box-shadow: 0 0 20px 20px #fff;
-  opacity: 0.7;
-  transform: rotate(9deg) translate3D(250px, 0, 0);
-  animation: superchat 2s ease-in-out infinite;
-}
-
-@keyframes superchat {
-  from {
-    transform: rotate(9deg) translate3D(-250px, 0, 0);
-  }
-}
-
 [dir='rtl'] {
   .yt-author {
     margin-right: -79px;
