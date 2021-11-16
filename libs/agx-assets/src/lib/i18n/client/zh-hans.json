@@ -21,6 +21,7 @@
   "APP.SIGNUP": "注册",
   "APP.SUB_HEADLINE": "跟踪 - 分析 - 行为 - 利润",
   "BAD_USER_INPUT": "无效用户输入",
+  "CHAT.CLEAR": "清除消息",
   "CHAT.DEFAULT_MESSAGE": "这是一个示例聊天😘与长文本和表情符号，以便我们可以测试消息覆盖",
   "CHAT.OVERLAY": "聊天叠加",
   "CHAT.OVERLAY_DESC": "聊天覆盖为 Youtube 和较低的第三",

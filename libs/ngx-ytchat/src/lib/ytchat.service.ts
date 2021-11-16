@@ -12,6 +12,7 @@ import { YTCHAT_URL } from './ytchat.model';
 
 @Injectable()
 export class YtChatService {
+  nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
   private lastUrl: string;
 
@@ -25,6 +26,7 @@ export class YtChatService {
     readonly i18n: I18nService
   ) {
     this.subRouteChange();
+    this.logger.info(`[${this.nameSpace}] AnnotatorService ready ...`);
   }
 
   private subRouteChange() {

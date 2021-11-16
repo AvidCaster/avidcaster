@@ -21,6 +21,7 @@
   "APP.SIGNUP": "Regístrate",
   "APP.SUB_HEADLINE": "Seguimiento - Analizar - Actuar - Beneficio",
   "BAD_USER_INPUT": "Entrada de usuario no válida",
+  "CHAT.CLEAR": "Mensaje claro",
   "CHAT.DEFAULT_MESSAGE": "Este es un ejemplo de chat 😘 con un texto largo y emoji para que podamos probar la superposición de mensajes",
   "CHAT.OVERLAY": "Superposición de chat",
   "CHAT.OVERLAY_DESC": "Superposición de chat para Youtube y 3ª inferior",
