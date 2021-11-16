@@ -1,3 +1,4 @@
+import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
 import { YtChatMessage } from './ytchat.model';
@@ -5,8 +6,7 @@ import { YtChatMessage } from './ytchat.model';
 export const MAX_CHAT_MESSAGES_LENGTH = 40;
 
 export const defaultYtChatMessage = (): YtChatMessage => {
-  const text =
-    "Lorem Ipsum is simply dummy 😘 text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
+  const text = _('CHAT.DEFAULT_MESSAGE');
 
   return ldDeepClone({
     donation: '$100.00',

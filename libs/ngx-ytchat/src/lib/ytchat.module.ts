@@ -11,7 +11,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { I18nModule } from '@fullerstack/ngx-i18n';
 import { MaterialModule } from '@fullerstack/ngx-material';
-import { SharedModule } from '@fullerstack/ngx-shared';
 
 import { OverlayComponent } from './overlay/overlay.component';
 import { ytChatRoutes } from './ytchat.routes';
@@ -23,7 +22,6 @@ import { YtChatService } from './ytchat.service';
     MaterialModule,
     RouterModule.forChild(ytChatRoutes),
     I18nModule.forChild(),
-    SharedModule,
   ],
   exports: [OverlayComponent],
   declarations: [OverlayComponent],

@@ -1,10 +1,21 @@
 <div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="i18n.direction">
   <section class="yt-control">
-    <div class="">
+    <div fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button color="warn" (click)="clearMessage()">
-        Clear Message
-        <!-- {{ 'COMMON.CLEAR_CHAT' | translate }} -->
+        {{ 'CHAT.CLEAR' | translate }}
       </button>
+      <div class="yt-language" mat-raised-button>
+        <mat-select
+          placeholder="{{ 'COMMON.LANGUAGE' | translate }}"
+          #ctrl="ngModel"
+          [(ngModel)]="currentLanguage"
+          (ngModelChange)="i18n.setCurrentLanguage(currentLanguage)"
+        >
+          <mat-option *ngFor="let iso of i18n.enabledLanguages" [value]="iso">
+            {{ i18n.getLanguageName(iso) }}
+          </mat-option>
+        </mat-select>
+      </div>
     </div>
   </section>
   <mat-divider></mat-divider>
@@ -15,12 +26,12 @@
       </div>
       <div class="yt-text-fields" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="10px">
-          <div class="yt-author">
-            {{ data?.authorName }}
-            <span class="yt-donation">
-              <span *ngIf="data?.donation">🌺</span>
-              {{ data?.donation }}
-              <span *ngIf="data?.donation">🌺</span>
+          <div fxLayout="row" class="yt-author">
+            <span>{{ data?.authorName }}</span>
+            <span *ngIf="data?.donation" class="yt-donation">
+              <span>🌺</span>
+              <span>{{ data?.donation }}</span>
+              <span>🌺</span>
             </span>
           </div>
         </div>
