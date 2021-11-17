@@ -7,7 +7,7 @@
   color: #fff;
   overflow: hidden;
   padding: 3px 40px;
-  font-family: Noteworthy, Helvetica, Geneva, Verdana, Arial, sans-serif;
+  font-family: Helvetica, Geneva, Verdana, Arial, sans-serif;
 }
 
 .yt-control {
@@ -98,6 +98,14 @@
 
 mat-select {
   width: 100px;
+}
+
+::ng-deep .mat-select-placeholder {
+  color: #000;
+}
+
+::ng-deep .mat-select-arrow {
+  color: #000;
 }
 
 [dir='rtl'] {

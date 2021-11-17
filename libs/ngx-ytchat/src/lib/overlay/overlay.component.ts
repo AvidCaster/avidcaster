@@ -15,14 +15,13 @@ import { YtChatService } from '../ytchat.service';
 })
 export class OverlayComponent implements OnInit {
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
-  data = defaultYtChatMessage();
+  data: YtChatMessage = {};
   slideInState = 0;
   currentLanguage;
 
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
   ngOnInit(): void {
-    this.setData(defaultYtChatMessage());
     window.addEventListener(
       'message',
       (event) => {
@@ -52,5 +51,9 @@ export class OverlayComponent implements OnInit {
 
   clearMessage() {
     this.data = {};
+  }
+
+  testMessage() {
+    this.setData(defaultYtChatMessage());
   }
 }

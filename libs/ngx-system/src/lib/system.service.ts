@@ -79,7 +79,7 @@ export class SystemService implements OnDestroy {
 
     this.i18n.stateChange$
       .pipe(
-        filter(() => Object.keys(this.routeDataSubject.value).length > 0),
+        filter(() => Object.keys(this.routeDataSubject?.value || {}).length > 0),
         map(() => this.routeDataSubject.value),
         takeUntil(this.destroy$)
       )

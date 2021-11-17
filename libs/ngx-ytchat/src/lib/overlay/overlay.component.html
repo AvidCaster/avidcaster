@@ -1,6 +1,6 @@
 <div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="i18n.direction">
   <section class="yt-control">
-    <div fxLayout="row" fxLayoutGap="20px">
+    <div fxLayout="row" fxLayoutGap="10px">
       <button mat-raised-button color="warn" (click)="clearMessage()">
         {{ 'CHAT.CLEAR' | translate }}
       </button>
@@ -16,6 +16,9 @@
           </mat-option>
         </mat-select>
       </div>
+      <button mat-raised-button color="warn" (click)="testMessage()">
+        {{ 'CHAT.TEST' | translate }}
+      </button>
     </div>
   </section>
   <mat-divider></mat-divider>

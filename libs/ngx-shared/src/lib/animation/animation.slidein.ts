@@ -23,7 +23,7 @@ export const slideInAnimations: {
       '* => *',
       animate(
         300,
-        keyframes([style({ transform: 'translateY(100%)' }), style({ transform: 'translateY(0)' })])
+        keyframes([style({ transform: 'translateY(200%)' }), style({ transform: 'translateY(0)' })])
       )
     ),
   ]),
