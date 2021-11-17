@@ -1673,45 +1673,45 @@
     ts-essentials "^7.0.2"
     tslib "^2.0.0"
 
-"@fullerstack/ngx-config@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-config/-/ngx-config-0.0.8.tgz#8a211a1cf597cff597c495fda2226052cb60318c"
-  integrity sha512-YSLPSSzrkwjVjbF9/pKaAO4TGPB3mnroKdOTYOsftY4OqmQ/XFDhNnyanw2MW50ti71/u1GawuOSPUm96m3+yg==
+"@fullerstack/ngx-config@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-config/-/ngx-config-0.0.9.tgz#e4544942454428ec74ff0ae89a6ebb9a70c06a6f"
+  integrity sha512-UH1L0hED1AffqSNdUuuFxOMWE7GAdPexI1L07CjnY1p0B/VFK96CZ+3u9puUq74HvvQxK+6vGZxs/eQvI4Q8lw==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-i18n@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-i18n/-/ngx-i18n-0.0.2.tgz#16b48b225e43f04f283ff712601c2278267d3cbe"
-  integrity sha512-6yGB9JQC9jZ1UTa7ZYP4Cs2SX8GBlubAIpEjvKcqC2K/UbdDW7tt+dIn/J5ayOYtyVC6+XZNpo9tHShDkFCJhw==
-  dependencies:
-    tslib "^2.0.0"
-
-"@fullerstack/ngx-jwt@^0.0.3":
+"@fullerstack/ngx-i18n@^0.0.3":
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-jwt/-/ngx-jwt-0.0.3.tgz#095faba9bfd1a17c6588404833f0a37aecbb5af7"
-  integrity sha512-qSntnYH9VjTtlZzxroBLSA1JFvjjf4HRxLIUbjQeeUka5rzt0Ve+EbOUBzSBr7EOgGWdBw49ZEhnBOKGPzUnGQ==
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-i18n/-/ngx-i18n-0.0.3.tgz#3f212227eeeb06586133936938d99507a07d5938"
+  integrity sha512-WHYv+k4UA80f8gZBrujrOQ7Uf3aWpcJXcD62DPQIwkSQd02PevYiIdGyCeLPOiAD6hEoH8VHX4S+UOvrwuk4rw==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-logger@^0.0.3":
+"@fullerstack/ngx-jwt@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-jwt/-/ngx-jwt-0.0.4.tgz#86d803ccc76c5a1719d0632af49e3daba08fbd21"
+  integrity sha512-0S+wOTSd7F2///72RYT9OKWeba3yvrtJxiyZvKbzqFjC2UHpoJzGLQ4jgNfnIEvuLlwXxQE+lRv4cjbnDdHnMQ==
+  dependencies:
+    tslib "^2.0.0"
+
+"@fullerstack/ngx-logger@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-logger/-/ngx-logger-0.0.4.tgz#328853db6d89585e9383feb1e9242f78af00563f"
+  integrity sha512-HaTgVWaX0J5i+YLr9ThvEI8pDEkaKOr9ORfA34D7v2GMa71qC77IZokia85nBZ0H1rPi+Jril6ssUFBMlljaCg==
+  dependencies:
+    tslib "^2.0.0"
+
+"@fullerstack/ngx-menu@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-menu/-/ngx-menu-0.0.4.tgz#2f1d59421f8c6fe16e31ec0f0e18610c0e2722e5"
+  integrity sha512-logfvVCgdeQpwJlG72XJHqFQNMU6lkC+G4iCGYF2+1IAo8eT6HN7DYGUe9twOqktDi/4kqI92asnb570669Wkg==
+  dependencies:
+    tslib "^2.0.0"
+
+"@fullerstack/ngx-store@^0.0.3":
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-logger/-/ngx-logger-0.0.3.tgz#69305c58b287364d503e81adda0939a12a545912"
-  integrity sha512-fhNs61Ck7gtPPpcdB9X4oCoxZBTSZ6R/CD8XvQcORKB8mW0yW7BRMZFNSuSB/ipCNXe2OO1a3DIK6WtKWvQBwg==
-  dependencies:
-    tslib "^2.0.0"
-
-"@fullerstack/ngx-menu@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-menu/-/ngx-menu-0.0.2.tgz#c45c6ec9eff6df5edbc3339736bb81e8763244e1"
-  integrity sha512-itB8h8MjyuZQJE7nbYmFisOjyMmuFhB68S0L/28vw9+bOatXCxq+fPJupmrASkC45mV+Y5HVzHoKFfgM4OAinA==
-  dependencies:
-    tslib "^2.0.0"
-
-"@fullerstack/ngx-store@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-store/-/ngx-store-0.0.2.tgz#244816c305b97958561a04bf0293b5b2a1ba6431"
-  integrity sha512-ZGh2fBNi0U63p7/JbWpBkxeLJnwxdXumUNEGeBfxRB3C4dIfZU0kukJjp7yDZIm0YZ3gDPkWBQ8aw80v5GlwaQ==
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-store/-/ngx-store-0.0.3.tgz#965e17bfd687ca0d971a0ccf4227793eb7457679"
+  integrity sha512-rvWNO7nCwASdNRdvqL042NzBk/hx15E8Tznn8IUIS70vw5MODwuGen71x5/uuhbxoZKzAnZ6mB0dmTBiCiUC8w==
   dependencies:
     tslib "^2.0.0"
 
