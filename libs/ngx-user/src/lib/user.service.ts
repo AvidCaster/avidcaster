@@ -16,7 +16,6 @@ import {
 import { GqlErrorsHandler, GqlService } from '@fullerstack/ngx-gql';
 import { UserSelfQuery, UserSelfUpdateMutation } from '@fullerstack/ngx-gql/operations';
 import { UserSelfUpdateInput } from '@fullerstack/ngx-gql/schema';
-import { GTagService } from '@fullerstack/ngx-gtag';
 import { I18nService, i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { LogLevel, LoggerService } from '@fullerstack/ngx-logger';
 import { MsgService } from '@fullerstack/ngx-msg';
@@ -43,7 +42,6 @@ export class UserService {
     readonly store: StoreService,
     readonly msg: MsgService,
     readonly gql: GqlService,
-    readonly gtag: GTagService,
     readonly logger: LoggerService,
     readonly i18n: I18nService,
     readonly auth: AuthService
