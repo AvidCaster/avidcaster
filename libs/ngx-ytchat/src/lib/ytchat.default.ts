@@ -11,7 +11,8 @@ export const defaultYtChatMessage = (): YtChatMessage => {
   return ldDeepClone({
     donation: '$100.00',
     authorName: 'Mike Tyson',
-    authorImg: './assets/images/misc/avatar-default.png',
+    authorImage: './assets/images/misc/avatar-default.png',
+    authorBadge: './assets/images/misc/avatar-default.png',
     message: {
       html: text,
       length: text.length,

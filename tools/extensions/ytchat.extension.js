@@ -52,10 +52,18 @@ function getAuthorName(element) {
   return authorName;
 }
 
-// get author avatar from the clicked element
-function getAuthorAvatar(element) {
-  var authorAvatar = element.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
-  return authorAvatar;
+// get author image from the clicked element
+function getAuthorImage(element) {
+  var authorImage = element.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
+  return authorImage;
+}
+
+// get author badge from the clicked element
+function getAuthorBadge(element) {
+  var authorBadge = element
+    .find('#chat-badges .yt-live-chat-author-badge-renderer img')
+    .attr('src');
+  return authorBadge;
 }
 
 // get the message from the clicked element
@@ -79,7 +87,7 @@ function getDonationAmount(element) {
   if (!donationAmount) {
     donationAmount = element.find('#purchase-amount-chip').text();
   }
-  return donationAmount;
+  return donationAmount?.replace(/\s\s+/g, ' ').trim();
 }
 
 // post message to iframe
@@ -137,15 +145,18 @@ $('body')
       type: '',
       message: '',
       authorName: '',
-      authorImg: '',
+      authorImage: '',
       donation: '',
     };
 
     // Get the author name
     data.authorName = getAuthorName(clicked);
 
-    // Get author avatar image
-    data.authorImg = getAuthorAvatar(clicked);
+    // Get author image image
+    data.authorImage = getAuthorImage(clicked);
+
+    // Get author badge
+    data.authorBadge = getAuthorBadge(clicked);
 
     // Get the message
     data.message = getMessage(clicked);

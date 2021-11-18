@@ -40,16 +40,20 @@ export class OverlayComponent implements OnInit {
   }
 
   setData(data?: YtChatMessage) {
-    if (data?.authorName.length && data?.message?.length) {
+    if (!data.message.html && data.donation) {
+      data.message.html = '🎉😊🎉';
+    }
+
+    if (data?.authorName.length) {
       this.slideInState++;
       this.i18n.translate
-        .get(data?.message.html)
+        .get(data?.message?.html)
         .pipe(take(1))
         .subscribe((html: string) => {
           this.data = {
             ...data,
             message: { ...data.message, html },
-            authorImg: data.authorImg || './assets/images/misc/avatar-default.png',
+            authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
           };
         });
       if (this.data.donation) {
