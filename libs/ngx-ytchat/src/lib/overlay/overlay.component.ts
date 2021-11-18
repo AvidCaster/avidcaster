@@ -23,13 +23,15 @@ export class OverlayComponent implements OnInit {
   fwAction: FireworkAction = 'stop';
   fwEnabled = true;
 
+  cleanEnabled = false;
+
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
   ngOnInit(): void {
     window.addEventListener(
       'message',
       (event) => {
-        if (event.data.type === 'ytchat-data') {
+        if (event.data.type === 'ytchat-data-south') {
           this.setData(event.data as YtChatMessage);
         }
       },
@@ -80,5 +82,15 @@ export class OverlayComponent implements OnInit {
     if (!this.fwEnabled && this.fwAction === 'start') {
       this.fwAction = 'stop';
     }
+  }
+
+  cleanChat(clean: boolean) {
+    this.cleanEnabled = clean;
+    const data = {
+      type: 'ytchat-data-north',
+      action: clean ? 'clean-up' : 'show-all',
+    };
+
+    window.parent.postMessage(data, '*');
   }
 }

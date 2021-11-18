@@ -1,20 +1,25 @@
 #avidcaster-iframe {
-  min-height: 40%;
+  min-height: 40% !important;
 }
 
-yt-live-chat-text-message-renderer:hover {
-  cursor: pointer;
+yt-live-chat-text-message-renderer:hover,
+yt-live-chat-item-list-renderer:hover {
+  cursor: pointer !important;
 }
 
-yt-live-chat-text-message-renderer.avidcaster-dispatched {
+.avidcaster-dispatched {
   background-color: #555555 !important;
-  opacity: 0.4;
+  opacity: 0.4 !important;
 }
 
 .avidcaster-dispatched:hover {
-  opacity: 0.6;
+  opacity: 0.6 !important;
 }
 
 yt-live-chat-text-message-renderer.avidcaster-deleted {
-  display: none;
+  display: none !important;
+}
+
+.avidcaster-hide {
+  display: none !important;
 }
