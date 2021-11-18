@@ -54,14 +54,13 @@ export class FireworksService implements OnDestroy {
     this.updateActionDimensions(width, height);
   }
 
-  start(): () => void {
+  start(): void {
     if (this.interval) {
-      this.pause();
+      this.stop();
     }
 
     this.interval = setInterval(() => this.action.spawnRockets(), this.options.rocketSpawnInterval);
     this.rafInterval = requestAnimationFrame(() => this.update());
-    return (): void => this.pause();
   }
 
   pause(): void {

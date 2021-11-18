@@ -19,11 +19,17 @@
       <button mat-raised-button color="warn" (click)="testMessage()">
         {{ 'CHAT.TEST' | translate }}
       </button>
-      <button *ngIf="action === 'stop'" mat-raised-button color="warn" (click)="fireworksAction('start')">
+      <button *ngIf="fwEnabled && fwAction === 'stop'" mat-raised-button color="warn" (click)="fireworksAction('start')">
         {{ 'FIREWORKS.START' | translate }}
       </button>
-      <button *ngIf="action === 'start'" mat-raised-button color="warn" (click)="fireworksAction('stop')">
+      <button *ngIf="fwEnabled && fwAction === 'start'" mat-raised-button color="warn" (click)="fireworksAction('stop')">
         {{ 'FIREWORKS.STOP' | translate }}
+      </button>
+      <button *ngIf="!fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(true)">
+        {{ 'FIREWORKS.ENABLE' | translate }}
+      </button>
+      <button *ngIf="fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(false)">
+        {{ 'FIREWORKS.DISABLE' | translate }}
       </button>
     </div>
   </section>
@@ -48,5 +54,5 @@
       </div>
     </div>
   </section>
-  <fullerstack-fireworks [ngStyle]="{}" [action]="action" id="yt-fireworks"></fullerstack-fireworks>
+  <fullerstack-fireworks [ngStyle]="{}" [action]="fwAction" id="yt-fireworks"></fullerstack-fireworks>
 </div>

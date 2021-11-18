@@ -13,6 +13,7 @@ import { FireworksService } from '../fireworks.service';
 })
 export class FireworksComponent implements OnInit, OnDestroy {
   @ViewChild('fireworksCanvas', { static: true }) canvas: ElementRef | undefined | null;
+
   @Input() set action(value: FireworkAction) {
     if (value === 'start') {
       this.fireworks.start();
