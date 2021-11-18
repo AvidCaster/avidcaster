@@ -19,11 +19,23 @@
       <button mat-raised-button color="warn" (click)="testMessage()">
         {{ 'CHAT.TEST' | translate }}
       </button>
+      <button *ngIf="fwEnabled && fwAction === 'stop'" mat-raised-button color="warn" (click)="fireworksAction('start')">
+        {{ 'FIREWORKS.START' | translate }}
+      </button>
+      <button *ngIf="fwEnabled && fwAction === 'start'" mat-raised-button color="warn" (click)="fireworksAction('stop')">
+        {{ 'FIREWORKS.STOP' | translate }}
+      </button>
+      <button *ngIf="!fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(true)">
+        {{ 'FIREWORKS.ENABLE' | translate }}
+      </button>
+      <button *ngIf="fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(false)">
+        {{ 'FIREWORKS.DISABLE' | translate }}
+      </button>
     </div>
   </section>
   <mat-divider></mat-divider>
-  <section class="yt-overlay" [@slideIn]="slideInState">
-    <div class="yt-inner-box" fxLayout="row" *ngIf="data?.authorName">
+  <section class="yt-overlay" *ngIf="data?.authorName">
+    <div class="yt-inner-box" fxLayout="row" [@slideIn]="slideInState">
       <div class="yt-image-fields" fxLayout="column">
         <div class="yt-author-img"><img width="160" height="160" src="{{ data?.authorImg }}" /></div>
       </div>
@@ -42,4 +54,5 @@
       </div>
     </div>
   </section>
+  <fullerstack-fireworks [ngStyle]="{}" [action]="fwAction" id="yt-fireworks"></fullerstack-fireworks>
 </div>

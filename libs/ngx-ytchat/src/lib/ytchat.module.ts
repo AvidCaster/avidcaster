@@ -9,6 +9,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FireworksModule } from '@fullerstack/ngx-fireworks';
 import { I18nModule } from '@fullerstack/ngx-i18n';
 import { MaterialModule } from '@fullerstack/ngx-material';
 
@@ -22,6 +23,7 @@ import { YtChatService } from './ytchat.service';
     MaterialModule,
     RouterModule.forChild(ytChatRoutes),
     I18nModule.forChild(),
+    FireworksModule,
   ],
   exports: [OverlayComponent],
   declarations: [OverlayComponent],

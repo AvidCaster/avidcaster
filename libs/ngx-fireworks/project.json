@@ -1,0 +1,23 @@
+{
+  "projectType": "library",
+  "root": "libs/ngx-fireworks",
+  "sourceRoot": "libs/ngx-fireworks/src",
+  "prefix": "fullerstack",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ngx-fireworks"],
+      "options": {
+        "jestConfig": "libs/ngx-fireworks/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/ngx-fireworks/src/**/*.ts", "libs/ngx-fireworks/src/**/*.html"]
+      }
+    }
+  },
+  "tags": ["lib:fireworks", "scope:ngx-ui"]
+}

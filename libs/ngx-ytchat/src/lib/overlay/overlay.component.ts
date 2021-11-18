@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FireworkAction } from '@fullerstack/ngx-fireworks';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { take } from 'rxjs';
@@ -19,6 +20,9 @@ export class OverlayComponent implements OnInit {
   slideInState = 0;
   currentLanguage;
 
+  fwAction: FireworkAction = 'stop';
+  fwEnabled = true;
+
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
   ngOnInit(): void {
@@ -33,7 +37,7 @@ export class OverlayComponent implements OnInit {
     );
   }
 
-  setData(data: YtChatMessage) {
+  setData(data?: YtChatMessage) {
     if (data?.authorName.length && data?.message?.length) {
       this.slideInState++;
       this.i18n.translate
@@ -46,14 +50,33 @@ export class OverlayComponent implements OnInit {
             authorImg: data.authorImg || './assets/images/misc/avatar-default.png',
           };
         });
+      if (this.data.donation) {
+        this.fireworksAction('start');
+      }
+    } else {
+      this.data = {};
+      this.fireworksAction('stop');
     }
   }
 
   clearMessage() {
-    this.data = {};
+    this.setData();
   }
 
   testMessage() {
     this.setData(defaultYtChatMessage());
+  }
+
+  fireworksAction(action: FireworkAction) {
+    if (this.fwEnabled) {
+      this.fwAction = action;
+    }
+  }
+
+  enableFireworks(enable: boolean) {
+    this.fwEnabled = enable;
+    if (!this.fwEnabled && this.fwAction === 'start') {
+      this.fwAction = 'stop';
+    }
   }
 }

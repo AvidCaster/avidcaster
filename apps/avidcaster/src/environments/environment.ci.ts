@@ -8,10 +8,8 @@
 
 import { AnnotatorConfig } from '@fullerstack/ngx-annotator';
 import { AuthConfig } from '@fullerstack/ngx-auth';
-// import { CachifyConfig } from '@fullerstack/ngx-cachify';
 import { ApplicationConfig } from '@fullerstack/ngx-config';
 import { GqlConfig } from '@fullerstack/ngx-gql';
-import { GTagConfig } from '@fullerstack/ngx-gtag';
 import { I18nConfig } from '@fullerstack/ngx-i18n';
 import { LayoutConfig } from '@fullerstack/ngx-layout';
 import { LogLevel, LoggerConfig } from '@fullerstack/ngx-logger';
@@ -24,11 +22,6 @@ const logger: LoggerConfig = {
 
 const gql: GqlConfig = {
   endpoint: 'http://localhost:4201/graphql',
-} as const;
-
-const gtag: GTagConfig = {
-  trackingId: 'U-something',
-  isEnabled: false,
 } as const;
 
 const i18n: I18nConfig = {
@@ -95,10 +88,6 @@ const store: StoreConfig = {
   immutable: true,
 } as const;
 
-// const cachify: CachifyConfig = {
-//   ttl: 30, // 30 seconds
-// } as const;
-
 const layout: LayoutConfig = {
   logState: true,
 } as const;
@@ -115,11 +104,9 @@ export const environment: Readonly<ApplicationConfig> = {
   logger,
   i18n,
   gql,
-  gtag,
   auth,
   user,
   store,
-  // cachify,
   layout,
   annotator,
 };
