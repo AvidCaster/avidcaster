@@ -52,6 +52,8 @@ export class OverlayComponent implements OnInit {
         });
       if (this.data.donation) {
         this.fireworksAction('start');
+      } else {
+        this.fireworksAction('stop');
       }
     } else {
       this.data = {};
