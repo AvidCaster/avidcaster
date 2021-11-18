@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { LoggerService } from '@fullerstack/ngx-logger';
 
 import { defaultFireworksOptions } from './fireworks.default';
 import { FireworksOptions } from './fireworks.model';
@@ -15,8 +16,8 @@ export class FireworksService implements OnDestroy {
   private width: number;
   private height: number;
 
-  constructor() {
-    console.log('FireworksService.constructor()');
+  constructor(readonly logger: LoggerService) {
+    this.logger.debug('FireworksService Started! ... ');
   }
 
   get minHeight(): number {

@@ -1,10 +1,3 @@
-// if we are in a pop out, open the chat in new tab
-if (window.opener && window.opener !== window) {
-  // we are in a popup, open the chat in new tab and close the popup
-  window.open(window.location.href, '_blank');
-  window.close();
-}
-
 // get url parameters from URL
 var getUrlParameter = function getUrlParameter(sParam) {
   var sPageURL = window.location.search.substring(1),
@@ -22,14 +15,79 @@ var getUrlParameter = function getUrlParameter(sParam) {
   return false;
 };
 
-// if &prod=false is passed in the URL, use official website
-var isProd = getUrlParameter('prod') === 'false' ? false : true;
+function cleanUp() {
+  // remove poll messages
+  $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
 
-var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
+  // remove pinned messages
+  $('#visible-banners yt-live-chat-banner-header-renderer')
+    .closest('#visible-banners')
+    .addClass('avidcaster-hide');
 
-$('yt-live-chat-app').append(
-  '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
-);
+  // remove subscriber messages
+  $('#card.yt-live-chat-viewer-engagement-message-renderer')
+    .closest('#card')
+    .addClass('avidcaster-hide');
+}
+
+function showAll() {
+  // show poll messages
+  $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hide');
+
+  // show pinned messages
+  $('#visible-banners yt-live-chat-banner-header-renderer')
+    .closest('#visible-banners')
+    .removeClass('avidcaster-hide');
+
+  // show subscriber messages
+  $('#card.yt-live-chat-viewer-engagement-message-renderer')
+    .closest('#card')
+    .removeClass('avidcaster-hide');
+}
+
+// get author name from the clicked element
+function getAuthorName(element) {
+  element.find('#author-name #tooltip.hidden').remove();
+  var authorName = element.find('#author-name').text();
+  return authorName;
+}
+
+// get author avatar from the clicked element
+function getAuthorAvatar(element) {
+  var authorAvatar = element.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
+  return authorAvatar;
+}
+
+// get the message from the clicked element
+function getMessage(element) {
+  // Clean up the message and extract it as html
+  element.find('#message hidden').remove();
+  element.find('#message').children().not('img').remove();
+  element.find('#message').children().removeClass();
+
+  var message = {
+    html: element.find('#message').html(),
+    length: element.find('#message').text().length + element.find('#message').children().length,
+  };
+
+  return message;
+}
+
+// get donation amount from the clicked element
+function getDonationAmount(element) {
+  var donationAmount = element.find('#purchase-amount').text();
+  if (!donationAmount) {
+    donationAmount = element.find('#purchase-amount-chip').text();
+  }
+  return donationAmount;
+}
+
+// post message to iframe
+function postMessageSouthBound(data) {
+  // post the data to the remote window
+  data.type = 'ytchat-data-south';
+  document.getElementById('avidcaster-iframe').contentWindow.postMessage(data, '*');
+}
 
 var clickable = [
   'yt-live-chat-text-message-renderer',
@@ -38,6 +96,26 @@ var clickable = [
   'yt-live-chat-paid-sticker-renderer',
 ];
 
+////// actions //////
+
+// if &prod=false is passed in the URL, use official website
+////////////////////////////////////////////////////////////////////////////////
+var isProd = getUrlParameter('prod') === 'false' ? false : true;
+var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
+$('yt-live-chat-app').append(
+  '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
+);
+
+// if we are in a pop out, open the chat in new tab
+////////////////////////////////////////////////////////////////////////////////
+if (window.opener && window.opener !== window) {
+  // we are in a popup, open the chat in new tab and close the popup
+  window.open(window.location.href, '_blank');
+  window.close();
+}
+
+// listen for clicked elements and send data to iframe
+///////////////////////////////////////////////////////////////////////////////
 $('body')
   .unbind('click')
   .on('click', clickable.join(','), function () {
@@ -64,53 +142,23 @@ $('body')
     };
 
     // Get the author name
-    clicked.find('#author-name #tooltip.hidden').remove();
-    data.authorName = clicked.find('#author-name').text();
+    data.authorName = getAuthorName(clicked);
 
     // Get author avatar image
-    data.authorImg = clicked.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
+    data.authorImg = getAuthorAvatar(clicked);
 
-    // Clean up the message and extract it as html
-    clicked.find('#message hidden').remove();
-    clicked.find('#message').children().not('img').remove();
-    clicked.find('#message').children().removeClass();
-
-    data.message = {
-      html: clicked.find('#message').html(),
-      length: clicked.find('#message').text().length + clicked.find('#message').children().length,
-    };
+    // Get the message
+    data.message = getMessage(clicked);
 
     // Get the donation
-    data.donation = (
-      clicked.find('#purchase-amount') || clicked.find('#purchase-amount-chip')
-    ).text();
+    data.donation = getDonationAmount(clicked);
 
-    // post the data to the remote window
-    data.type = 'ytchat-data-south';
-    document.getElementById('avidcaster-iframe').contentWindow.postMessage(data, '*');
+    // Post the data to the remote window
+    postMessageSouthBound(data);
   });
 
-function cleanUp() {
-  // remove poll messages
-  $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
-
-  // remove pinned messages
-  $('#visible-banners yt-live-chat-banner-header-renderer')
-    .closest('#visible-banners')
-    .addClass('avidcaster-hide');
-}
-
-function showAll() {
-  // remove poll messages
-  $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hide');
-
-  // remove pinned messages
-  $('#visible-banners yt-live-chat-banner-header-renderer')
-    .closest('#visible-banners')
-    .removeClass('avidcaster-hide');
-}
-
 // listen to incoming actions by the remote window
+///////////////////////////////////////////////////////////////////////////////
 window.addEventListener(
   'message',
   (event) => {
