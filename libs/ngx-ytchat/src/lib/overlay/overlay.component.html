@@ -19,6 +19,12 @@
       <button mat-raised-button color="warn" (click)="testMessage()">
         {{ 'CHAT.TEST' | translate }}
       </button>
+      <button *ngIf="action === 'stop'" mat-raised-button color="warn" (click)="fireworksAction('start')">
+        {{ 'FIREWORKS.START' | translate }}
+      </button>
+      <button *ngIf="action === 'start'" mat-raised-button color="warn" (click)="fireworksAction('stop')">
+        {{ 'FIREWORKS.STOP' | translate }}
+      </button>
     </div>
   </section>
   <mat-divider></mat-divider>
@@ -42,5 +48,5 @@
       </div>
     </div>
   </section>
-  <fullerstack-fireworks [ngStyle]="{}" id="yt-fireworks"></fullerstack-fireworks>
+  <fullerstack-fireworks [ngStyle]="{}" [action]="action" id="yt-fireworks"></fullerstack-fireworks>
 </div>

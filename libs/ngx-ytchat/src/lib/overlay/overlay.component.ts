@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FireworkAction } from '@fullerstack/ngx-fireworks';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { take } from 'rxjs';
@@ -18,6 +19,7 @@ export class OverlayComponent implements OnInit {
   data: YtChatMessage = {};
   slideInState = 0;
   currentLanguage;
+  action: FireworkAction = 'stop';
 
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
@@ -55,5 +57,9 @@ export class OverlayComponent implements OnInit {
 
   testMessage() {
     this.setData(defaultYtChatMessage());
+  }
+
+  fireworksAction(action: FireworkAction) {
+    this.action = action;
   }
 }
