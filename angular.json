@@ -42,11 +42,11 @@
     "avidcaster-e2e": "apps/avidcaster-e2e",
     "ngx-annotator": "libs/ngx-annotator",
     "ngx-auth": "libs/ngx-auth",
+    "ngx-fireworks": "libs/ngx-fireworks",
     "ngx-gql": "libs/ngx-gql",
     "ngx-layout": "libs/ngx-layout",
     "ngx-material": "libs/ngx-material",
     "ngx-msg": "libs/ngx-msg",
-
     "ngx-shared": "libs/ngx-shared",
     "ngx-system": "libs/ngx-system",
     "ngx-uix": "libs/ngx-uix",

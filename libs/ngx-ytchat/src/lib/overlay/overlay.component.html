@@ -22,8 +22,8 @@
     </div>
   </section>
   <mat-divider></mat-divider>
-  <section class="yt-overlay" [@slideIn]="slideInState">
-    <div class="yt-inner-box" fxLayout="row" *ngIf="data?.authorName">
+  <section class="yt-overlay" *ngIf="data?.authorName">
+    <div class="yt-inner-box" fxLayout="row" [@slideIn]="slideInState">
       <div class="yt-image-fields" fxLayout="column">
         <div class="yt-author-img"><img width="160" height="160" src="{{ data?.authorImg }}" /></div>
       </div>
@@ -42,4 +42,5 @@
       </div>
     </div>
   </section>
+  <fullerstack-fireworks [ngStyle]="{}" id="yt-fireworks"></fullerstack-fireworks>
 </div>

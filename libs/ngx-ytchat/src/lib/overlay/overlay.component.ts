@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { take } from 'rxjs';
@@ -14,6 +14,8 @@ import { YtChatService } from '../ytchat.service';
   animations: [slideInAnimations.slideIn],
 })
 export class OverlayComponent implements OnInit {
+  @ViewChild('chatBox', { static: true }) chatBox: ElementRef | undefined | null;
+
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data: YtChatMessage = {};
   slideInState = 0;
@@ -22,6 +24,7 @@ export class OverlayComponent implements OnInit {
   constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
 
   ngOnInit(): void {
+    console.log(this.chatBox.nativeElement);
     window.addEventListener(
       'message',
       (event) => {

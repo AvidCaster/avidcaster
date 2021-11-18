@@ -21,17 +21,18 @@
       "@fullerstack/assets": ["libs/agx-assets/src/index.ts"],
       "@fullerstack/ngx-annotator": ["libs/ngx-annotator/src/index.ts"],
       "@fullerstack/ngx-auth": ["libs/ngx-auth/src/index.ts"],
+      "@fullerstack/ngx-fireworks": ["libs/ngx-fireworks/src/index.ts"],
       "@fullerstack/ngx-gql": ["libs/ngx-gql/src/index.ts"],
       "@fullerstack/ngx-gql/operations": ["libs/ngx-gql/src/lib/graphql/index.gql.ts"],
       "@fullerstack/ngx-gql/schema": ["libs/ngx-gql/src/lib/gql.schema.ts"],
       "@fullerstack/ngx-layout": ["libs/ngx-layout/src/index.ts"],
       "@fullerstack/ngx-material": ["libs/ngx-material/src/index.ts"],
       "@fullerstack/ngx-msg": ["libs/ngx-msg/src/index.ts"],
-
       "@fullerstack/ngx-shared": ["libs/ngx-shared/src/index.ts"],
       "@fullerstack/ngx-system": ["libs/ngx-system/src/index.ts"],
       "@fullerstack/ngx-uix": ["libs/ngx-uix/src/index.ts"],
       "@fullerstack/ngx-user": ["libs/ngx-user/src/index.ts"],
+      "@fullerstack/ngx-ytchat": ["libs/ngx-ytchat/src/index.ts"],
       "@fullerstack/nsx-auth": ["libs/nsx-auth/src/index.ts"],
       "@fullerstack/nsx-common": ["libs/nsx-common/src/index.ts"],
       "@fullerstack/nsx-i18n": ["libs/nsx-i18n/src/index.ts"],
@@ -40,7 +41,6 @@
       "@fullerstack/nsx-prisma/mock": ["libs/nsx-prisma/src/mock.ts"],
       "@fullerstack/nsx-system": ["libs/nsx-system/src/index.ts"],
       "@fullerstack/nsx-user": ["libs/nsx-user/src/index.ts"],
-      "@fullerstack/ngx-ytchat": ["libs/ngx-ytchat/src/index.ts"],
       "ts-essentials/*": ["node_modules/ts-essentials/*"]
     }
   },
