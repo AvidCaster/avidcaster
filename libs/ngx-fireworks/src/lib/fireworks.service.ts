@@ -56,36 +56,27 @@ export class FireworksService implements OnDestroy {
 
   start(): () => void {
     if (this.interval) {
-      this.stop();
+      this.pause();
     }
 
     this.interval = setInterval(() => this.action.spawnRockets(), this.options.rocketSpawnInterval);
     this.rafInterval = requestAnimationFrame(() => this.update());
-    return (): void => this.stop();
+    return (): void => this.pause();
   }
 
-  stop(): void {
+  pause(): void {
     clearInterval(this.interval);
     cancelAnimationFrame(this.rafInterval);
     this.interval = null;
   }
 
-  kill(): void {
-    this.action.clear();
-    this.stop();
-    cancelAnimationFrame(this.rafInterval);
-    this.finish();
-  }
-
-  fire(): void {
-    this.action.spawnRocket();
-    if (!this.rafInterval) {
-      this.rafInterval = requestAnimationFrame(() => this.update());
+  stop(): void {
+    if (this.action) {
+      this.action.clear();
+      this.pause();
+      cancelAnimationFrame(this.rafInterval);
+      this.finish();
     }
-  }
-
-  onFinish(cb: () => void): void {
-    this.finishCallbacks.push(cb);
   }
 
   private clear(force = false): void {
