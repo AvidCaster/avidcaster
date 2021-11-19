@@ -205,7 +205,7 @@ window.addEventListener(
           break;
         case 'highlight-words':
           highlightedWords = (event.data.words || [])
-            .map((word) => word.trim())
+            .map((word) => word.trim().toLowerCase())
             .filter((word) => word.length > 0);
         default:
           break;
@@ -222,10 +222,14 @@ onElementInserted(
   'yt-live-chat-text-message-renderer',
   function (element) {
     // Check for highlight words
-    var chatWords = $(element).find('#message').text().split(' ');
-    var highlights = chatWords.filter((value) =>
-      highlightedWords.includes(value.toLowerCase().replace(/[^a-z0-9]/gi, ''))
-    );
+    var chatWords = $(element)
+      .find('#message')
+      .text()
+      .toLowerCase()
+      .replace(/\s\s+/g, ' ')
+      .trim()
+      .split(' ');
+    var highlights = chatWords.filter((value) => highlightedWords.includes(value));
     if (highlights.length > 0) {
       $(element).addClass('avidcaster-highlighted');
     }
