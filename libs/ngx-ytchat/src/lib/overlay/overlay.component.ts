@@ -40,7 +40,7 @@ export class OverlayComponent implements OnInit {
   }
 
   setData(data?: YtChatMessage) {
-    if (!data.message.html && data.donation) {
+    if (!data?.message.html && data?.donation) {
       data.message.html = '🎉😊🎉';
     }
 

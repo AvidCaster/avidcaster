@@ -13,7 +13,6 @@ import { FireworksService } from '../fireworks.service';
 })
 export class FireworksComponent implements OnInit, OnDestroy {
   @ViewChild('fireworksCanvas', { static: true }) canvas: ElementRef | undefined | null;
-
   @Input() set action(value: FireworkAction) {
     if (value === 'start') {
       this.fireworks.start();
@@ -21,10 +20,9 @@ export class FireworksComponent implements OnInit, OnDestroy {
       this.fireworks.stop();
     }
   }
-
+  private destroy$ = new Subject<boolean>();
   private canvasEl: HTMLCanvasElement | undefined | null;
   private ctx: CanvasRenderingContext2D | undefined | null;
-  private destroy$ = new Subject<boolean>();
 
   constructor(
     readonly elementRef: ElementRef,
@@ -54,6 +52,7 @@ export class FireworksComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('fireworks destroy');
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
