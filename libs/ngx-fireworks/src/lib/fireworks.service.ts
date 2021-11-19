@@ -3,14 +3,14 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 
 import { defaultFireworksOptions } from './fireworks.default';
 import { FireworksOptions } from './fireworks.model';
-import { Action } from './fireworks.util';
+import { Fireworks } from './fireworks.util';
 
 @Injectable()
 export class FireworksService implements OnDestroy {
   private finishCallbacks: Array<() => void> = [];
   private ctx: CanvasRenderingContext2D;
   private options = defaultFireworksOptions();
-  private action: Action;
+  private fireworks: Fireworks;
   private interval;
   private rafInterval;
   private width: number;
@@ -33,7 +33,7 @@ export class FireworksService implements OnDestroy {
     this.width = canvasEl.offsetWidth;
     this.height = canvasEl.offsetHeight;
     this.ctx = ctx;
-    this.action = new Action({
+    this.fireworks = new Fireworks({
       maxRockets: this.options.maxRockets,
       numParticles: this.options.numParticles,
       cw: this.width,
@@ -47,8 +47,8 @@ export class FireworksService implements OnDestroy {
   private updateActionDimensions(width: number, height: number): void {
     this.width = width;
     this.height = height;
-    this.action.ch = height;
-    this.action.cw = width;
+    this.fireworks.ch = height;
+    this.fireworks.cw = width;
   }
 
   resize(width: number, height: number): void {
@@ -60,7 +60,10 @@ export class FireworksService implements OnDestroy {
       this.stop();
     }
 
-    this.interval = setInterval(() => this.action.spawnRockets(), this.options.rocketSpawnInterval);
+    this.interval = setInterval(
+      () => this.fireworks.spawnRockets(),
+      this.options.rocketSpawnInterval
+    );
     this.rafInterval = requestAnimationFrame(() => this.update());
   }
 
@@ -71,8 +74,8 @@ export class FireworksService implements OnDestroy {
   }
 
   stop(): void {
-    if (this.action) {
-      this.action.clear();
+    if (this.fireworks) {
+      this.fireworks.clear();
       this.pause();
       cancelAnimationFrame(this.rafInterval);
       this.finish();
@@ -95,20 +98,20 @@ export class FireworksService implements OnDestroy {
   update(): void {
     this.clear();
 
-    for (const particle of this.action.entries()) {
+    for (const particle of this.fireworks.entries()) {
       particle.draw(this.ctx);
       particle.update();
 
       if (particle.shouldRemove(this.width, this.height)) {
-        this.action.delete(particle);
+        this.fireworks.delete(particle);
       } else if (
         particle.shouldExplode(this.maxHeight, this.minHeight, this.options.explosionChance)
       ) {
-        this.action.explode(particle);
+        this.fireworks.explode(particle);
       }
     }
 
-    if (this.interval || this.action.size() > 0) {
+    if (this.interval || this.fireworks.size() > 0) {
       this.rafInterval = requestAnimationFrame(() => this.update());
     } else {
       this.finish();
@@ -116,8 +119,9 @@ export class FireworksService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('FireworksService ngOnDestroy()');
     clearInterval(this.interval);
     cancelAnimationFrame(this.rafInterval);
+    this.fireworks.destroy();
+    this.fireworks = null;
   }
 }

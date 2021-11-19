@@ -104,7 +104,7 @@ export class Particle {
   /**
    * Determines if a rocket should explode - based on explosionHeight & explosionChance
    * @param {Particle} particle rocket to check
-   * @returns {boolean} whether or not the rocket shoudl explode
+   * @returns {boolean} whether or not the rocket should explode
    */
   shouldExplode(maxHeight: number, minHeight: number, chance: number): boolean {
     if (!this.isRocket) {
@@ -156,8 +156,8 @@ export class Particle {
   }
 }
 
-export class Action {
-  private _set: Set<Particle>;
+export class Fireworks {
+  private particleSet: Set<Particle>;
   private maxRockets: number;
   private numParticles: number;
   public cw: number;
@@ -167,7 +167,7 @@ export class Action {
   private cannons: Point[];
 
   constructor({ maxRockets, numParticles, cw, ch, rocketInitialPoint, cannons }: ActionOptions) {
-    this._set = new Set();
+    this.particleSet = new Set();
     this.rockets = 0;
     this.maxRockets = maxRockets;
     this.numParticles = numParticles;
@@ -183,25 +183,25 @@ export class Action {
   }
 
   size(): number {
-    return this._set.size;
+    return this.particleSet.size;
   }
 
   entries(): Set<Particle> {
-    return this._set;
+    return this.particleSet;
   }
 
   clear(): void {
-    this._set.clear();
+    this.particleSet.clear();
     this.rockets = 0;
   }
 
   delete(thing: Particle): void {
-    this._set.delete(thing);
+    this.particleSet.delete(thing);
     if (thing.isRocket) this.rockets--;
   }
 
   add(thing: Particle): void {
-    this._set.add(thing);
+    this.particleSet.add(thing);
   }
 
   /**
@@ -243,5 +243,9 @@ export class Action {
     if (this.rockets < this.maxRockets) {
       this.spawnRocket();
     }
+  }
+
+  destroy(): void {
+    this.clear();
   }
 }
