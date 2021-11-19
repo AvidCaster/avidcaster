@@ -219,7 +219,6 @@ onElementInserted(
   '.yt-live-chat-item-list-renderer#items',
   'yt-live-chat-text-message-renderer',
   function (element) {
-    console.log('New dom element inserted', element.tagName);
     // Check for highlight words
     var chatWords = $(element).find('#message').text().split(' ');
     var highlights = chatWords.filter((value) =>
