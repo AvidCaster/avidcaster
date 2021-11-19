@@ -1,9 +1,6 @@
 <div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="i18n.direction">
   <section class="yt-control">
     <div fxLayout="row" fxLayoutGap="10px">
-      <button mat-raised-button color="warn" (click)="clearMessage()">
-        {{ 'CHAT.CLEAR' | translate }}
-      </button>
       <div class="yt-language" mat-raised-button>
         <mat-select
           placeholder="{{ 'COMMON.LANGUAGE' | translate }}"
@@ -16,13 +13,22 @@
           </mat-option>
         </mat-select>
       </div>
-      <button mat-raised-button color="warn" (click)="testMessage()">
+      <button mat-raised-button color="warn" (click)="clearMessage()">
+        {{ 'CHAT.CLEAR' | translate }}
+      </button>
+      <button mat-raised-button color="primary" (click)="testMessage()">
         {{ 'CHAT.TEST' | translate }}
       </button>
-      <button *ngIf="fwEnabled && fwAction === 'stop'" mat-raised-button color="warn" (click)="fireworksAction('start')">
+      <form [formGroup]="form" fxLayout="column" autocomplete="off" class="yt-highlighted-words">
+        <mat-form-field>
+          <mat-icon matSuffix svgIcon="flashlight"></mat-icon>
+          <input matInput type="text" formControlName="words" placeholder="{{ 'CHAT.HIGHLIGHTED_WORDS' | translate }}" />
+        </mat-form-field>
+      </form>
+      <button *ngIf="fwEnabled && fwAction === 'stop'" mat-raised-button color="primary" (click)="fireworksAction('start')">
         {{ 'FIREWORKS.START' | translate }}
       </button>
-      <button *ngIf="fwEnabled && fwAction === 'start'" mat-raised-button color="warn" (click)="fireworksAction('stop')">
+      <button *ngIf="fwEnabled && fwAction === 'start'" mat-raised-button color="primary" (click)="fireworksAction('stop')">
         {{ 'FIREWORKS.STOP' | translate }}
       </button>
       <button *ngIf="!fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(true)">
@@ -31,18 +37,12 @@
       <button *ngIf="fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(false)">
         {{ 'FIREWORKS.DISABLE' | translate }}
       </button>
-      <button *ngIf="!cleanEnabled" mat-raised-button color="warn" (click)="cleanChat(true)">
+      <button *ngIf="!cleanEnabled" mat-raised-button color="accent" (click)="cleanChat(true)">
         {{ 'CHAT.DECLUTTER' | translate }}
       </button>
-      <button *ngIf="cleanEnabled" mat-raised-button color="warn" (click)="cleanChat(false)">
+      <button *ngIf="cleanEnabled" mat-raised-button color="accent" (click)="cleanChat(false)">
         {{ 'CHAT.RECLUTTER' | translate }}
       </button>
-      <form [formGroup]="form" fxLayout="column" autocomplete="off" class="yt-highlighted-words">
-        <mat-form-field>
-          <mat-icon matSuffix svgIcon="flashlight"></mat-icon>
-          <input matInput type="text" formControlName="words" placeholder="{{ 'CHAT.HIGHLIGHTED_WORDS' | translate }}" />
-        </mat-form-field>
-      </form>
     </div>
   </section>
   <mat-divider></mat-divider>

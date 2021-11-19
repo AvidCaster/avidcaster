@@ -1,3 +1,6 @@
+// pick a prebuilt theme
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+// overwrite it with custom theme
 @import 'libs/agx-assets/src/lib/styles/material/dark-blue/themes';
 @import 'libs/agx-assets/src/lib/styles/reset';
 @import 'libs/agx-assets/src/lib/styles/site/site';
