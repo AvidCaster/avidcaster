@@ -26,7 +26,7 @@ export class YtChatService {
     readonly i18n: I18nService
   ) {
     this.subRouteChange();
-    this.logger.info(`[${this.nameSpace}] AnnotatorService ready ...`);
+    this.logger.info(`[${this.nameSpace}] ChatOverlay ready ...`);
   }
 
   private subRouteChange() {
