@@ -15,6 +15,27 @@ var getUrlParameter = function getUrlParameter(sParam) {
   return false;
 };
 
+// detect DOM changes/insertions, and invoke the callback
+function onElementInserted(containerSelector, tagName, callback) {
+  var onMutationsObserved = function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.addedNodes.length) {
+        for (var i = 0, len = mutation.addedNodes.length; i < len; i++) {
+          if (mutation.addedNodes[i].tagName === tagName.toUpperCase()) {
+            callback(mutation.addedNodes[i]);
+          }
+        }
+      }
+    });
+  };
+
+  var target = document.querySelectorAll(containerSelector)[0];
+  var config = { childList: true, subtree: true };
+  var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  var observer = new MutationObserver(onMutationsObserved);
+  observer.observe(target, config);
+}
+
 function cleanUp() {
   // remove poll messages
   $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
@@ -105,14 +126,7 @@ var clickable = [
 ];
 
 ////// actions //////
-
-// if &prod=false is passed in the URL, use official website
-////////////////////////////////////////////////////////////////////////////////
-var isProd = getUrlParameter('prod') === 'false' ? false : true;
-var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
-$('yt-live-chat-app').append(
-  '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
-);
+var highlightedWords = [];
 
 // if we are in a pop out, open the chat in new tab
 ////////////////////////////////////////////////////////////////////////////////
@@ -121,6 +135,14 @@ if (window.opener && window.opener !== window) {
   window.open(window.location.href, '_blank');
   window.close();
 }
+
+// if &prod=false is passed in the URL, use official website
+////////////////////////////////////////////////////////////////////////////////
+var isProd = getUrlParameter('prod') === 'false' ? false : true;
+var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
+$('yt-live-chat-app').append(
+  '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
+);
 
 // listen for clicked elements and send data to iframe
 ///////////////////////////////////////////////////////////////////////////////
@@ -180,10 +202,31 @@ window.addEventListener(
           break;
         case 'show-all':
           showAll();
+          break;
+        case 'highlight-words':
+          highlightedWords = event.data.words;
         default:
           break;
       }
     }
   },
   false
+);
+
+// listen to dom changes, and highlight the new comments if selected keywords are found
+////////////////////////////////////////////////////////////////////////////////
+onElementInserted(
+  '.yt-live-chat-item-list-renderer#items',
+  'yt-live-chat-text-message-renderer',
+  function (element) {
+    console.log('New dom element inserted', element.tagName);
+    // Check for highlight words
+    var chatWords = $(element).find('#message').text().split(' ');
+    var highlights = chatWords.filter((value) =>
+      highlightedWords.includes(value.toLowerCase().replace(/[^a-z0-9]/gi, ''))
+    );
+    if (highlights.length > 0) {
+      $(element).addClass('avidcaster-highlighted');
+    }
+  }
 );
