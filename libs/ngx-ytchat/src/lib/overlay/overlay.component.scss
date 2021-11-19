@@ -124,6 +124,11 @@ mat-select {
   border-radius: 4px;
 }
 
+::ng-deep .yt-highlighted-words .mat-form-field-wrapper {
+  margin-bottom: -18px;
+  padding-left: 3px;
+}
+
 [dir='rtl'] {
   .yt-author {
     margin-right: -98px;
