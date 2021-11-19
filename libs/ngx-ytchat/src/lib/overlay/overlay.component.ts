@@ -25,6 +25,7 @@ export class OverlayComponent implements OnInit {
   fwAction: FireworkAction = 'stop';
   fwEnabled = true;
   cleanEnabled = false;
+  isFullscreen = false;
   form: FormGroup;
 
   constructor(
@@ -129,5 +130,16 @@ export class OverlayComponent implements OnInit {
 
       window.parent.postMessage(data, '*');
     }
+  }
+
+  toggleFullscreen() {
+    this.isFullscreen = !this.isFullscreen;
+    const data = {
+      type: 'ytchat-data-north',
+      action: 'fullscreen',
+      fullscreen: this.isFullscreen,
+    };
+
+    window.parent.postMessage(data, '*');
   }
 }

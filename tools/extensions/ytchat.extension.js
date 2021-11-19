@@ -36,6 +36,38 @@ function onElementInserted(containerSelector, tagName, callback) {
   observer.observe(target, config);
 }
 
+// open fullscreen on element
+function openFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    /* Safari */
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) {
+    /* IE11 */
+    element.msRequestFullscreen();
+  }
+}
+
+/* Close fullscreen on full page */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    /* IE11 */
+    document.msExitFullscreen();
+  }
+}
+
+// go fullscreen on the full web page
+function toggleFullscreen(fullscreen) {
+  var element = document.documentElement;
+  fullscreen ? openFullscreen(element) : closeFullscreen();
+}
+
 function cleanUp() {
   // remove poll messages
   $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
@@ -197,6 +229,9 @@ window.addEventListener(
   (event) => {
     if (event.data.type === 'ytchat-data-north') {
       switch (event.data.action) {
+        case 'fullscreen':
+          toggleFullscreen(event.data.fullscreen);
+          break;
         case 'clean-up':
           cleanUp();
           break;
