@@ -124,9 +124,34 @@ mat-select {
   border-radius: 4px;
 }
 
-::ng-deep .yt-highlighted-words .mat-form-field-wrapper {
-  margin-bottom: -18px;
-  padding-left: 3px;
+::ng-deep .yt-highlighted-words {
+  .mat-form-field-underline {
+    display: none !important;
+  }
+
+  .mat-form-field-wrapper {
+    padding-left: 3px;
+    padding-bottom: 0;
+  }
+  .mat-form-field-infix {
+    margin-top: -6px;
+  }
+
+  .mat-form-field.mat-focused {
+    .mat-form-field-label {
+      margin-top: 5px;
+    }
+  }
+
+  .mat-form-field .mat-form-field-label:not(.mat-empty) {
+    .mat-form-field-label {
+      margin-top: 5px;
+    }
+  }
+
+  .mat-form-field:not(.mat-focused) .mat-form-field-label:not(.mat-empty) {
+    margin-top: 5px;
+  }
 }
 
 [dir='rtl'] {
