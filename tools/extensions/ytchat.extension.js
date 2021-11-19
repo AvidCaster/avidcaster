@@ -204,7 +204,9 @@ window.addEventListener(
           showAll();
           break;
         case 'highlight-words':
-          highlightedWords = event.data.words;
+          highlightedWords = (event.data.words || [])
+            .map((word) => word.trim())
+            .filter((word) => word.length > 0);
         default:
           break;
       }

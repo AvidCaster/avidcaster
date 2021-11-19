@@ -119,6 +119,7 @@ export class OverlayComponent implements OnInit {
   }
 
   setHighlightedWords(words: string[]) {
+    words = words?.map((word) => word.trim()).filter((word) => word.length > 0);
     if (words?.length) {
       const data = {
         type: 'ytchat-data-north',
