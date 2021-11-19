@@ -21,14 +21,6 @@ export class FireworksService implements OnDestroy {
     this.logger.debug('FireworksService Started! ... ');
   }
 
-  get minHeight(): number {
-    return this.options.height * (1 - this.options.explosionMinHeight);
-  }
-
-  get maxHeight(): number {
-    return this.options.height * (1 - this.options.explosionMinHeight);
-  }
-
   init(canvasEl: HTMLElement, ctx: CanvasRenderingContext2D, options?: FireworksOptions): void {
     this.options = { ...this.options, ...options };
     this.width = canvasEl.offsetWidth;
@@ -106,7 +98,13 @@ export class FireworksService implements OnDestroy {
       if (particle.shouldRemove(this.width, this.height)) {
         this.fireworks.delete(particle);
       } else if (
-        particle.shouldExplode(this.maxHeight, this.minHeight, this.options.explosionChance)
+        particle.shouldExplode({
+          boxWidth: this.width,
+          boxHeight: this.height,
+          minHeight: this.options.explosionMinHeight,
+          maxHeight: this.options.explosionMaxHeight,
+          chance: this.options.explosionChance,
+        })
       ) {
         this.fireworks.explode(particle);
       }

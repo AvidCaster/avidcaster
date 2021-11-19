@@ -33,3 +33,11 @@ export interface FireworksOptions {
 }
 
 export type FireworkAction = 'start' | 'stop';
+
+export interface FireworksExplosionOptions {
+  boxHeight: number;
+  boxWidth: number;
+  minHeight: number;
+  maxHeight: number;
+  chance: number;
+}

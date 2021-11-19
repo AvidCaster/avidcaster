@@ -1,4 +1,9 @@
-import { ActionOptions, ParticleOptions, Point } from './fireworks.model';
+import {
+  ActionOptions,
+  FireworksExplosionOptions,
+  ParticleOptions,
+  Point,
+} from './fireworks.model';
 
 /**
  * Returns a random number between min and max
@@ -28,6 +33,7 @@ export class Particle {
   private alpha: number;
   private hue: number;
   private brightness: number;
+  private explodeAtMaxHeightOnly = false;
 
   constructor({
     isRocket = false,
@@ -106,22 +112,42 @@ export class Particle {
    * @param {Particle} particle rocket to check
    * @returns {boolean} whether or not the rocket should explode
    */
-  shouldExplode(maxHeight: number, minHeight: number, chance: number): boolean {
+  shouldExplode(options: FireworksExplosionOptions): boolean {
     if (!this.isRocket) {
       return false;
     }
 
-    // make sure things explode once they hit explosionMaxHeight (90% default) of height
-    if (this.position.y <= maxHeight) {
-      return true;
-    }
+    const minHeight = options.boxHeight * (1 - options.minHeight);
+    const midHeight = options.boxHeight / 2;
+    const maxHeight = options.boxHeight * (1 - options.maxHeight);
+    const minWidth = options.boxWidth * 0.15;
+    const maxWidth = options.boxWidth * 0.85;
 
-    // make sure particle has reached explosionMinHeight (20% default) before explosion chance.
+    // make sure we pass the minHeight before exploding, but some will by chance
     if (this.position.y >= minHeight) {
       return false;
     }
 
-    return random(0, 1) <= chance;
+    // make sure things explode once they hit max height
+    if (this.position.y <= maxHeight) {
+      return true;
+    }
+
+    // make sure things explode once they are close to leave the window from the sides
+    if (this.position.x <= minWidth || this.position.x >= maxWidth) {
+      return true;
+    }
+
+    // make sure things 1/3 of times if they pass the mid line.
+    if (!this.explodeAtMaxHeightOnly && this.position.y <= midHeight) {
+      if (random(0, 1) <= 0.3) {
+        this.explodeAtMaxHeightOnly = true;
+        return false;
+      }
+      return true;
+    }
+
+    return false;
   }
 
   /**
