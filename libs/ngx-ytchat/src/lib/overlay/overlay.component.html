@@ -32,7 +32,7 @@
         <button *ngIf="fwEnabled && fwAction === 'start'" mat-raised-button color="primary" (click)="fireworksAction('stop')">
           {{ 'FIREWORKS.STOP' | translate }}
         </button>
-        <button *ngIf="!fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(true)">
+        <button *ngIf="!fwEnabled" mat-raised-button color="primary" (click)="enableFireworks(true)">
           {{ 'FIREWORKS.ENABLE' | translate }}
         </button>
         <button *ngIf="fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(false)">
