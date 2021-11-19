@@ -11,10 +11,11 @@ export class FireworksService implements OnDestroy {
   private ctx: CanvasRenderingContext2D;
   private options = defaultFireworksOptions();
   private fireworks: Fireworks;
-  private interval;
-  private rafInterval;
   private width: number;
   private height: number;
+
+  private interval: number;
+  private rafInterval: number;
 
   constructor(readonly logger: LoggerService) {
     this.logger.debug('FireworksService Started! ... ');
@@ -44,13 +45,6 @@ export class FireworksService implements OnDestroy {
     this.updateActionDimensions(this.width, this.height);
   }
 
-  private updateActionDimensions(width: number, height: number): void {
-    this.width = width;
-    this.height = height;
-    this.fireworks.ch = height;
-    this.fireworks.cw = width;
-  }
-
   resize(width: number, height: number): void {
     this.updateActionDimensions(width, height);
   }
@@ -67,12 +61,6 @@ export class FireworksService implements OnDestroy {
     this.rafInterval = requestAnimationFrame(() => this.update());
   }
 
-  pause(): void {
-    clearInterval(this.interval);
-    cancelAnimationFrame(this.rafInterval);
-    this.interval = null;
-  }
-
   stop(): void {
     if (this.fireworks) {
       this.fireworks.clear();
@@ -80,6 +68,19 @@ export class FireworksService implements OnDestroy {
       cancelAnimationFrame(this.rafInterval);
       this.finish();
     }
+  }
+
+  private pause(): void {
+    clearInterval(this.interval);
+    cancelAnimationFrame(this.rafInterval);
+    this.interval = null;
+  }
+
+  private updateActionDimensions(width: number, height: number): void {
+    this.width = width;
+    this.height = height;
+    this.fireworks.ch = height;
+    this.fireworks.cw = width;
   }
 
   private clear(force = false): void {
