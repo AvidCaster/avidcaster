@@ -37,6 +37,12 @@
       <button *ngIf="cleanEnabled" mat-raised-button color="warn" (click)="cleanChat(false)">
         {{ 'CHAT.RECLUTTER' | translate }}
       </button>
+      <form [formGroup]="form" fxLayout="column" autocomplete="off" class="yt-highlighted-words">
+        <mat-form-field>
+          <mat-icon matSuffix svgIcon="flashlight"></mat-icon>
+          <input matInput type="text" formControlName="words" placeholder="{{ 'CHAT.HIGHLIGHTED_WORDS' | translate }}" />
+        </mat-form-field>
+      </form>
     </div>
   </section>
   <mat-divider></mat-divider>

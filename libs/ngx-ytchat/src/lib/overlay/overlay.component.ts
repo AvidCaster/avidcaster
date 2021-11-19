@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { FireworkAction } from '@fullerstack/ngx-fireworks';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
-import { take } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
 
 import { MAX_CHAT_MESSAGES_LENGTH, defaultYtChatMessage } from '../ytchat.default';
 import { YtChatMessage } from '../ytchat.model';
@@ -15,6 +16,7 @@ import { YtChatService } from '../ytchat.service';
   animations: [slideInAnimations.slideIn],
 })
 export class OverlayComponent implements OnInit {
+  private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data: YtChatMessage = {};
   slideInState = 0;
@@ -22,12 +24,18 @@ export class OverlayComponent implements OnInit {
 
   fwAction: FireworkAction = 'stop';
   fwEnabled = true;
-
   cleanEnabled = false;
+  form: FormGroup;
 
-  constructor(readonly i18n: I18nService, readonly ytchatService: YtChatService) {}
+  constructor(
+    readonly formBuilder: FormBuilder,
+    readonly i18n: I18nService,
+    readonly ytchatService: YtChatService
+  ) {}
 
   ngOnInit(): void {
+    this.buildForm();
+
     window.addEventListener(
       'message',
       (event) => {
@@ -37,6 +45,18 @@ export class OverlayComponent implements OnInit {
       },
       false
     );
+
+    this.form.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.setHighlightedWords(value?.words.split(' '));
+      });
+  }
+
+  private buildForm() {
+    this.form = this.formBuilder.group({
+      words: [''],
+    });
   }
 
   setData(data?: YtChatMessage) {
@@ -96,5 +116,17 @@ export class OverlayComponent implements OnInit {
     };
 
     window.parent.postMessage(data, '*');
+  }
+
+  setHighlightedWords(words: string[]) {
+    if (words?.length) {
+      const data = {
+        type: 'ytchat-data-north',
+        action: 'highlight-words',
+        words,
+      };
+
+      window.parent.postMessage(data, '*');
+    }
   }
 }
