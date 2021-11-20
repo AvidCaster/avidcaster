@@ -50,8 +50,8 @@
         <button mat-icon-button (click)="toggleFullscreen()">
           <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse-all' : 'arrow-expand-all'"></mat-icon>
         </button>
-        <button mat-icon-button>
-          <a mat-icon-button routerLink="/" class="no-underline"> <mat-icon class="clickable-menu-icon" svgIcon="home"></mat-icon> </a>
+        <button mat-icon-button (click)="navigate('/')">
+          <mat-icon class="clickable-menu-icon" svgIcon="home"></mat-icon>
         </button>
       </div>
     </div>

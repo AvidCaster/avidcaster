@@ -68,6 +68,11 @@ function toggleFullscreen(fullscreen) {
   fullscreen ? openFullscreen(element) : closeFullscreen();
 }
 
+// open link in new tab
+function navigate(link) {
+  window.open(link, '_blank');
+}
+
 // clean up clutters from the page so messages show better
 function cleanUp() {
   // remove poll messages
@@ -177,7 +182,7 @@ var highlightedWords = [];
 ////////////////////////////////////////////////////////////////////////////////
 if (window.opener && window.opener !== window) {
   // we are in a popup, open the chat in new tab and close the popup
-  window.open(window.location.href, '_blank');
+  navigate(window.location.href);
   window.close();
 }
 
@@ -242,6 +247,9 @@ window.addEventListener(
   (event) => {
     if (event.data.type === 'ytchat-data-north') {
       switch (event.data.action) {
+        case 'navigate':
+          navigate(event.data.url);
+          break;
         case 'fullscreen':
           toggleFullscreen(event.data.fullscreen);
           break;

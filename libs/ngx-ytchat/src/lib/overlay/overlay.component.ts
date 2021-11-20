@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from '@fullerstack/ngx-auth';
 import { FireworkAction } from '@fullerstack/ngx-fireworks';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
+import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
 
 import { MAX_CHAT_MESSAGES_LENGTH, defaultYtChatMessage } from '../ytchat.default';
@@ -15,7 +17,7 @@ import { YtChatService } from '../ytchat.service';
   styleUrls: ['./overlay.component.scss'],
   animations: [slideInAnimations.slideIn],
 })
-export class OverlayComponent implements OnInit {
+export class OverlayComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data: YtChatMessage = {};
@@ -31,13 +33,15 @@ export class OverlayComponent implements OnInit {
   constructor(
     readonly formBuilder: FormBuilder,
     readonly i18n: I18nService,
+    readonly auth: AuthService,
+    readonly uix: UixService,
     readonly ytchatService: YtChatService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
 
-    window.addEventListener(
+    this.uix.window.addEventListener(
       'message',
       (event) => {
         if (event.data.type === 'ytchat-data-south') {
@@ -116,7 +120,7 @@ export class OverlayComponent implements OnInit {
       action: clean ? 'clean-up' : 'show-all',
     };
 
-    window.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   setHighlightedWords(words: string[]) {
@@ -128,7 +132,7 @@ export class OverlayComponent implements OnInit {
         words,
       };
 
-      window.parent.postMessage(data, '*');
+      this.uix.window.parent.postMessage(data, '*');
     }
   }
 
@@ -141,5 +145,25 @@ export class OverlayComponent implements OnInit {
     };
 
     window.parent.postMessage(data, '*');
+  }
+
+  navigate(url: string) {
+    if (this.uix.inIframe) {
+      const baseUrl = this.uix.window?.location?.origin;
+      const data = {
+        type: 'ytchat-data-north',
+        action: 'navigate',
+        url: `${baseUrl}${url}`,
+      };
+
+      this.uix.window.parent.postMessage(data, '*');
+    } else {
+      this.auth.goTo(url);
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
