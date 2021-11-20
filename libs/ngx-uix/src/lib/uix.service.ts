@@ -145,7 +145,7 @@ export class UixService implements OnDestroy {
     this.document.defaultView.location.reload();
   }
 
-  inIframe(): boolean {
+  get inIframe(): boolean {
     return this.window?.parent !== this.window;
   }
 
