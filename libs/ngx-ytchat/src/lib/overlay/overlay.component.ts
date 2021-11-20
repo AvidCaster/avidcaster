@@ -73,7 +73,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
       this.slideInState++;
       this.i18n.translate
         .get(data?.message?.html)
-        .pipe(take(1))
+        .pipe(take(1), takeUntil(this.destroy$))
         .subscribe((html: string) => {
           this.data = {
             ...data,
