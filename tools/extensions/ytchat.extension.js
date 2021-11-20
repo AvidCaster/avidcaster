@@ -1,5 +1,5 @@
 // get url parameters from URL
-var getUrlParameter = function getUrlParameter(sParam) {
+function getUrlParameter(sParam) {
   var sPageURL = window.location.search.substring(1),
     sURLVariables = sPageURL.split('&'),
     sParameterName,
@@ -13,15 +13,15 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
   }
   return false;
-};
+}
 
-// detect DOM changes/insertions, and invoke the callback
-function onElementInserted(containerSelector, tagName, callback) {
-  var onMutationsObserved = function (mutations) {
+// detect insertions into container, and invoke the callback
+function selectOnInsertion(containerSelector, tag, callback) {
+  var insertionObserver = function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.addedNodes.length) {
         for (var i = 0, len = mutation.addedNodes.length; i < len; i++) {
-          if (mutation.addedNodes[i].tagName === tagName.toUpperCase()) {
+          if (mutation.addedNodes[i].tagName === tag.toUpperCase()) {
             callback(mutation.addedNodes[i]);
           }
         }
@@ -32,7 +32,7 @@ function onElementInserted(containerSelector, tagName, callback) {
   var target = document.querySelectorAll(containerSelector)[0];
   var config = { childList: true, subtree: true };
   var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-  var observer = new MutationObserver(onMutationsObserved);
+  var observer = new MutationObserver(insertionObserver);
   observer.observe(target, config);
 }
 
@@ -68,6 +68,7 @@ function toggleFullscreen(fullscreen) {
   fullscreen ? openFullscreen(element) : closeFullscreen();
 }
 
+// clean up clutters from the page so messages show better
 function cleanUp() {
   // remove poll messages
   $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
@@ -81,8 +82,14 @@ function cleanUp() {
   $('#card.yt-live-chat-viewer-engagement-message-renderer')
     .closest('#card')
     .addClass('avidcaster-hide');
+
+  // remove subscriber only messages
+  $('#container .yt-live-chat-restricted-participation-renderer')
+    .closest('#input-panel')
+    .addClass('avidcaster-hide');
 }
 
+// show the page as it was, to negate the effect of the prior clean up
 function showAll() {
   // show poll messages
   $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hide');
@@ -95,6 +102,11 @@ function showAll() {
   // show subscriber messages
   $('#card.yt-live-chat-viewer-engagement-message-renderer')
     .closest('#card')
+    .removeClass('avidcaster-hide');
+
+  // show subscriber only messages
+  $('#container .yt-live-chat-restricted-participation-renderer')
+    .closest('#input-panel')
     .removeClass('avidcaster-hide');
 }
 
@@ -150,6 +162,7 @@ function postMessageSouthBound(data) {
   document.getElementById('avidcaster-iframe').contentWindow.postMessage(data, '*');
 }
 
+// clickable tags we are interested in
 var clickable = [
   'yt-live-chat-text-message-renderer',
   'yt-live-chat-paid-message-renderer',
@@ -252,7 +265,7 @@ window.addEventListener(
 
 // listen to dom changes, and highlight the new comments if selected keywords are found
 ////////////////////////////////////////////////////////////////////////////////
-onElementInserted(
+selectOnInsertion(
   '.yt-live-chat-item-list-renderer#items',
   'yt-live-chat-text-message-renderer',
   function (element) {
