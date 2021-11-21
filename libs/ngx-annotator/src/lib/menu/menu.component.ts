@@ -123,7 +123,7 @@ export class MenuComponent implements OnDestroy {
     this.uix.toggleFullscreen();
     setTimeout(() => {
       this.isFullscreen = this.uix.isFullscreen();
-    }, 100);
+    }, 0);
   }
 
   toggleCursor() {

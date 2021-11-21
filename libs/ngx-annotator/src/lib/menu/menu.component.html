@@ -131,7 +131,7 @@
   </button>
 
   <button *ngIf="annotation.state.showFullscreen" mat-icon-button class="quick-menu-button material-icons" (click)="toggleFullscreen()">
-    <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse-all' : 'arrow-expand-all'"></mat-icon>
+    <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
   </button>
 
   <button *ngIf="annotation.state.showRefresh" mat-icon-button class="quick-menu-button material-icons" (click)="uix.refreshPage()">

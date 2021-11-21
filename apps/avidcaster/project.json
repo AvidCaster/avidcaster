@@ -29,6 +29,11 @@
             "output": "assets/images"
           },
           {
+            "glob": "**/ytchat.extension.*",
+            "input": "tools/extensions",
+            "output": "assets/code"
+          },
+          {
             "glob": "**/*",
             "input": "libs/agx-assets/src/lib/i18n/client",
             "output": "assets/i18n"

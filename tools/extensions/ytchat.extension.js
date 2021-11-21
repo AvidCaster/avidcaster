@@ -74,7 +74,7 @@ function navigate(link) {
 }
 
 // clean up clutters from the page so messages show better
-function cleanUp() {
+function declutter() {
   // remove poll messages
   $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
 
@@ -92,10 +92,15 @@ function cleanUp() {
   $('#container .yt-live-chat-restricted-participation-renderer')
     .closest('#input-panel')
     .addClass('avidcaster-hide');
+
+  // remove say something messages
+  $('#container .yt-live-chat-message-input-renderer')
+    .closest('#input-panel')
+    .addClass('avidcaster-hide');
 }
 
 // show the page as it was, to negate the effect of the prior clean up
-function showAll() {
+function reclutter() {
   // show poll messages
   $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hide');
 
@@ -111,6 +116,11 @@ function showAll() {
 
   // show subscriber only messages
   $('#container .yt-live-chat-restricted-participation-renderer')
+    .closest('#input-panel')
+    .removeClass('avidcaster-hide');
+
+  // show say something messages
+  $('#container .yt-live-chat-message-input-renderer')
     .closest('#input-panel')
     .removeClass('avidcaster-hide');
 }
@@ -163,7 +173,7 @@ function getDonationAmount(element) {
 // post message to iframe
 function postMessageSouthBound(data) {
   // post the data to the remote window
-  data.type = 'ytchat-data-south';
+  data = { type: 'avidcaster-overlay-south-bound', action: 'yt-chat', payload: data };
   document.getElementById('avidcaster-iframe').contentWindow.postMessage(data, '*');
 }
 
@@ -214,7 +224,6 @@ $('body')
 
     //  Properties to send to remote window:
     var data = {
-      type: '',
       message: '',
       authorName: '',
       authorImage: '',
@@ -245,22 +254,22 @@ $('body')
 window.addEventListener(
   'message',
   (event) => {
-    if (event.data.type === 'ytchat-data-north') {
+    if (event.data.type === 'avidcaster-overlay-north-bound') {
       switch (event.data.action) {
         case 'navigate':
-          navigate(event.data.url);
+          navigate(event.data.payload.url);
           break;
         case 'fullscreen':
-          toggleFullscreen(event.data.fullscreen);
+          toggleFullscreen(event.data.payload.fullscreen);
           break;
-        case 'clean-up':
-          cleanUp();
+        case 'declutter':
+          declutter();
           break;
-        case 'show-all':
-          showAll();
+        case 'reclutter':
+          reclutter();
           break;
         case 'highlight-words':
-          highlightedWords = (event.data.words || [])
+          highlightedWords = (event.data.payload.words || [])
             .map((word) => word.trim().toLowerCase())
             .filter((word) => word.length > 0);
         default:
