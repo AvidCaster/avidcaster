@@ -49,7 +49,7 @@
     "nx:ci": "node ./node_modules/@nrwl/cli/bin/nx.js",
     "format:ci": "yarn nx:ci format:check",
     "lint:ci": "yarn nx:ci  run-many --target=lint --all --configuration=ci --parallel",
-    "build:ci": "yarn nx:ci  run-many --target=build --all --configuration=ci --parallel",
+    "build:ci": "yarn nx:ci  run-many --target=build --all --configuration=ci --parallel && yarn chat:ext:js:min; yarn chat:ext:css:min",
     "test:ci": "yarn nx:ci  run-many --target=test --codeCoverage --all --configuration=ci --parallel",
     "e2e:ci": "yarn nx:ci  e2e fullerstack-e2e --configuration=ci --headless",
     "api:ci": "yarn nx:ci  serve api --configuration=ci",
@@ -72,12 +72,15 @@
     "serve:dist": "cd dist/apps/fullerstack; open http://localhost:8080; python3 -m http.server 8080",
     "<--------- [ test related ] ------->": "test related",
     "test:ipware": "yarn nx test nax-ipware",
-    "build:azure": "yarn install && yarn nx build avidcaster --prod",
+    "build:azure": "yarn install && yarn nx build avidcaster --prod && yarn chat:ext:js:min; yarn chat:ext:css:min",
     "<--------- [ build electron ] ------->": "electron",
     "electron": "./node_modules/.bin/electron",
     "nx:el": "node ./node_modules/@nrwl/cli/bin/nx.js",
     "build:el": "yarn build --configuration=electron --baseHref=./ ",
-    "load:el": "yarn electron ."
+    "load:el": "yarn electron .",
+    "<--------- [ chrome extension ] ------->": "chrome extension",
+    "chat:ext:js:min": "./node_modules/.bin/uglifyjs dist/apps/avidcaster/assets/code/ytchat.extension.js -o dist/apps/avidcaster/assets/code/ytchat.extension.min.js",
+    "chat:ext:css:min": "./node_modules/.bin/css-minify -f dist/apps/avidcaster/assets/code/ytchat.extension.css  -o dist/apps/avidcaster/assets/code"
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"
@@ -195,6 +198,7 @@
     "commander": "2.20.3",
     "copy-webpack-plugin": "9.0.1",
     "coveralls": "3.1.0",
+    "css-minify": "^2.0.0",
     "cypress": "6.0.1",
     "dotenv": "10.0.0",
     "electron": "15.3.0",
@@ -225,6 +229,7 @@
     "ts-jest": "27.0.3",
     "ts-node": "9.1.1",
     "typescript": "4.3.5",
+    "uglify-js": "^3.14.3",
     "webpack": "5.47.0",
     "webpack-bundle-analyzer": "4.4.0",
     "webpack-dev-server": "4.0.0-rc.0",

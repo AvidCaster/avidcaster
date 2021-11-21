@@ -10,11 +10,13 @@ import { Subject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rx
 import {
   MAX_CHAT_MESSAGES_LENGTH,
   YTCHAT_CSS_FILE_NAME,
+  YTCHAT_CSS_MIN_FILE_NAME,
   YTCHAT_JS_FILE_NAME,
+  YTCHAT_JS_MIN_FILE_NAME,
   defaultYTChatMessage,
 } from '../ytchat.default';
 import { YTChatMessageData, YTChatPayload } from '../ytchat.model';
-import { YtChatService } from '../ytchat.service';
+import { YTChatService } from '../ytchat.service';
 
 @Component({
   selector: 'fullerstack-overlay',
@@ -40,7 +42,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     readonly i18n: I18nService,
     readonly auth: AuthService,
     readonly uix: UixService,
-    readonly ytchatService: YtChatService
+    readonly ytchatService: YTChatService
   ) {}
 
   ngOnInit(): void {
@@ -80,12 +82,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
 
   private injectScript() {
     const baseUrl = this.uix.window?.location?.origin;
-
+    const scriptFile = this.ytchatService.options.production
+      ? YTCHAT_JS_MIN_FILE_NAME
+      : YTCHAT_JS_FILE_NAME;
     const data = {
       type: 'avidcaster-overlay-north-bound',
       action: 'inject-js',
       payload: {
-        url: `${baseUrl}/assets/code/${YTCHAT_JS_FILE_NAME}`,
+        url: `${baseUrl}/assets/code/${scriptFile}`,
       },
     };
 
@@ -94,12 +98,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
 
   private injectStyle() {
     const baseUrl = this.uix.window?.location?.origin;
-
+    const styleFile = this.ytchatService.options.production
+      ? YTCHAT_CSS_MIN_FILE_NAME
+      : YTCHAT_CSS_FILE_NAME;
     const data = {
       type: 'avidcaster-overlay-north-bound',
       action: 'inject-css',
       payload: {
-        url: `${baseUrl}/assets/code/${YTCHAT_CSS_FILE_NAME}`,
+        url: `${baseUrl}/assets/code/${styleFile}`,
       },
     };
 

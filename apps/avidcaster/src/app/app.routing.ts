@@ -177,7 +177,7 @@ export const AppRoutes: Routes = [
     path: 'ytchat',
     // canActivate: [AuthAuthenticatedGuard],
     // canDeactivate: [DeactivateGuard],
-    loadChildren: () => import('@fullerstack/ngx-ytchat').then((m) => m.YtChatModule),
+    loadChildren: () => import('@fullerstack/ngx-ytchat').then((m) => m.YTChatModule),
   },
   {
     path: '**',
