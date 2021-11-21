@@ -27,6 +27,8 @@ import { SvgIcons } from './uix.icon';
 @Injectable({ providedIn: 'root' })
 export class UixService implements OnDestroy {
   private nameSpace = 'UIX';
+  window: Window;
+
   @Output() fullscreen$ = new EventEmitter<boolean>();
   private reSize$ = new BehaviorSubject<{ x: number; y: number }>({ x: 0, y: 0 });
   reSizeSub$ = this.reSize$
@@ -48,6 +50,8 @@ export class UixService implements OnDestroy {
       this.config.options,
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
+
+    this.window = this.document.defaultView;
 
     this.initFullscreen();
     this.InitResizeListener();
@@ -139,6 +143,10 @@ export class UixService implements OnDestroy {
 
   refreshPage() {
     this.document.defaultView.location.reload();
+  }
+
+  get inIframe(): boolean {
+    return this.window?.parent !== this.window;
   }
 
   ngOnDestroy() {

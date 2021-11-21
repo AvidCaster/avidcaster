@@ -19,7 +19,7 @@ export interface YtChatConfig {
   [id: string]: any;
 }
 
-export interface YtChatMessage {
+export interface YTChatPayload {
   donation?: string;
   authorName?: string;
   authorImage?: string;
@@ -28,4 +28,25 @@ export interface YtChatMessage {
     html: string;
     length: number;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [id: string]: any;
+}
+
+export type YTChatMessageDataType =
+  | 'avidcaster-overlay-north-bound'
+  | 'avidcaster-overlay-south-bound';
+export type YtChatMessageAction =
+  | 'inject-js'
+  | 'inject-css'
+  | 'declutter'
+  | 'reclutter'
+  | 'highlight-words'
+  | 'fullscreen'
+  | 'navigate'
+  | 'yt-chat';
+
+export interface YTChatMessageData {
+  type: YTChatMessageDataType;
+  action: YtChatMessageAction;
+  payload?: YTChatPayload;
 }
