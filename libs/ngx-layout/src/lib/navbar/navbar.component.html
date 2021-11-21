@@ -6,7 +6,9 @@
   <div *ngIf="!authState.isLoggedIn" fxFlex></div>
 
   <div class="branding" (click)="auth.goTo('/')">
-    <img [src]="brandImage" alt="{{ layoutState.appName | translate }}" />
+    <!-- <mat-icon class="svg-x1_5" svgIcon="play-circle-outline" color="warn"></mat-icon> -->
+    <img src="./assets/images/logos/logo-micro.png" alt="Logo" />
+    <span class="text">vidcaster</span>
   </div>
 
   <div fxFlex></div>

@@ -63,3 +63,15 @@
 .radius-none {
   border-radius: 0;
 }
+
+.flip-horizontal {
+  transform: rotate(360deg) scaleX(-1);
+}
+
+.flip-vertical {
+  transform: rotate(360deg) scaleY(-1);
+}
+
+.flip-vertical-horizontal {
+  transform: rotate(360deg) scaleX(-1) scaleY(-1);
+}

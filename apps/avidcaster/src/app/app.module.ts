@@ -35,7 +35,6 @@ import { AboutComponent } from './pages/about/about.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { EmailChangePerformComponent } from './pages/email-change-perform/email-change-perform.component';
 import { EmailChangeRequestComponent } from './pages/email-change-request/email-change-request.component';
-import { ForexComponent } from './pages/forex/forex.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LanguageChangeComponent } from './pages/language-change/language-change.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -43,10 +42,9 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { PasswordChangeComponent } from './pages/password-change/password-change.component';
 import { PasswordResetPerformComponent } from './pages/password-reset-perform/password-reset-perform.component';
 import { PasswordResetRequestComponent } from './pages/password-reset-request/password-reset-request.component';
-import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 import { ProfileUpdateComponent } from './pages/profile-update/profile-update.component';
 import { SignupComponent } from './pages/signup/signup.component';
-import { TrendComponent } from './pages/trend/trend.component';
+import { TermsComponent } from './pages/terms/terms.component';
 import { UserVerifyComponent } from './pages/user-verify/user-verify.component';
 
 @NgModule({
@@ -65,10 +63,8 @@ import { UserVerifyComponent } from './pages/user-verify/user-verify.component';
     EmailChangePerformComponent,
     LanguageChangeComponent,
     ContactUsComponent,
-    ForexComponent,
-    PortfolioComponent,
-    TrendComponent,
     UserVerifyComponent,
+    TermsComponent,
   ],
   imports: [
     BrowserModule,

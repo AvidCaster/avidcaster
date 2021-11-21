@@ -1,19 +1,7 @@
-<div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="i18n.direction">
+<div id="yt-overlay-box" fxLayout="column" fxLayoutGap="20px" [dir]="ltr ? 'ltr' : 'rtl'">
   <section class="yt-control">
     <div fxLayout="row" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxLayoutGap="10px">
-        <div class="yt-language" mat-raised-button>
-          <mat-select
-            placeholder="{{ 'COMMON.LANGUAGE' | translate }}"
-            #ctrl="ngModel"
-            [(ngModel)]="currentLanguage"
-            (ngModelChange)="i18n.setCurrentLanguage(currentLanguage)"
-          >
-            <mat-option *ngFor="let iso of i18n.enabledLanguages" [value]="iso">
-              {{ i18n.getLanguageName(iso) }}
-            </mat-option>
-          </mat-select>
-        </div>
         <button mat-raised-button color="warn" (click)="clearMessage()">
           {{ 'CHAT.CLEAR' | translate }}
         </button>
@@ -47,11 +35,14 @@
       </div>
       <div fxFlex></div>
       <div>
+        <button mat-icon-button (click)="toggleDirection()">
+          <mat-icon [class.flip-horizontal]="ltr" svgIcon="directions"></mat-icon>
+        </button>
         <button mat-icon-button (click)="toggleFullscreen()">
-          <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
+          <mat-icon [svgIcon]="isFullscreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
         </button>
         <button mat-icon-button (click)="navigate('/')">
-          <mat-icon class="clickable-menu-icon" svgIcon="home"></mat-icon>
+          <mat-icon svgIcon="home"></mat-icon>
         </button>
       </div>
     </div>
@@ -73,7 +64,7 @@
             </span>
           </div>
         </div>
-        <div class="yt-message" [innerHtml]="data?.message.html"></div>
+        <div class="yt-message" [innerHtml]="data?.message"></div>
       </div>
     </div>
   </section>

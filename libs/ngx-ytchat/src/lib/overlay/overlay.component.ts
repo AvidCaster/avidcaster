@@ -30,7 +30,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   data: YTChatPayload = {};
   slideInState = 0;
   currentLanguage;
-
+  ltr = true;
   fwAction: FireworkAction = 'stop';
   fwEnabled = true;
   cleanEnabled = false;
@@ -113,22 +113,30 @@ export class OverlayComponent implements OnInit, OnDestroy {
   }
 
   setData(data?: YTChatPayload) {
-    if (!data?.message.html && data?.donation) {
-      data.message.html = '🎉😊🎉';
+    if (!data?.message && data?.donation) {
+      data.message = '🎉😊🎉';
     }
 
     if (data?.authorName.length) {
       this.slideInState++;
-      this.i18n.translate
-        .get(data?.message?.html)
-        .pipe(take(1), takeUntil(this.destroy$))
-        .subscribe((html: string) => {
-          this.data = {
-            ...data,
-            message: { ...data.message, html },
-            authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
-          };
-        });
+      if (data?.message) {
+        this.i18n.translate
+          .get(data?.message)
+          .pipe(take(1), takeUntil(this.destroy$))
+          .subscribe((message: string) => {
+            this.data = {
+              ...data,
+              message,
+              authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
+            };
+          });
+      } else {
+        this.data = {
+          ...data,
+          authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
+        };
+      }
+
       if (this.data.donation) {
         this.fireworksAction('start');
       } else {
@@ -221,6 +229,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
     } else {
       this.auth.goTo(url);
     }
+  }
+
+  toggleDirection() {
+    this.ltr = !this.ltr;
   }
 
   ngOnDestroy() {

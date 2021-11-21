@@ -8,22 +8,22 @@
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { TrendComponent } from './trend.component';
+import { TermsComponent } from './terms.component';
 
-xdescribe('TrendComponent', () => {
-  let component: TrendComponent;
-  let fixture: ComponentFixture<TrendComponent>;
+xdescribe('TermsComponent', () => {
+  let component: TermsComponent;
+  let fixture: ComponentFixture<TermsComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [TrendComponent],
+        declarations: [TermsComponent],
       }).compileComponents();
     })
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrendComponent);
+    fixture = TestBed.createComponent(TermsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
