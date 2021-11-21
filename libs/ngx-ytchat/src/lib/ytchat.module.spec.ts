@@ -1,19 +1,19 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
-import { YtChatModule } from './ytchat.module';
-import { YtChatService } from './ytchat.service';
+import { YTChatModule } from './ytchat.module';
+import { YTChatService } from './ytchat.service';
 
-xdescribe('YtChatModule', () => {
+xdescribe('YTChatModule', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [YtChatModule],
-        providers: [YtChatService],
+        imports: [YTChatModule],
+        providers: [YTChatService],
       }).compileComponents();
     })
   );
 
   it('should have a module definition', () => {
-    expect(YtChatModule).toBeDefined();
+    expect(YTChatModule).toBeDefined();
   });
 });

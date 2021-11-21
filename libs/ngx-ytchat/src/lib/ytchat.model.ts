@@ -12,11 +12,19 @@ export const YTCHAT_URL = '/ytchat';
 /**
  * Layout config declaration
  */
-export interface YtChatConfig {
+export interface YTChatConfig {
   logState?: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [id: string]: any;
+}
+
+export interface YTChatState {
+  logger: boolean;
+}
+
+export interface YTChatState {
+  signature: string;
 }
 
 export interface YTChatPayload {
@@ -35,7 +43,7 @@ export interface YTChatPayload {
 export type YTChatMessageDataType =
   | 'avidcaster-overlay-north-bound'
   | 'avidcaster-overlay-south-bound';
-export type YtChatMessageAction =
+export type YTChatMessageAction =
   | 'inject-js'
   | 'inject-css'
   | 'declutter'
@@ -47,6 +55,6 @@ export type YtChatMessageAction =
 
 export interface YTChatMessageData {
   type: YTChatMessageDataType;
-  action: YtChatMessageAction;
+  action: YTChatMessageAction;
   payload?: YTChatPayload;
 }

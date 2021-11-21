@@ -1,9 +1,20 @@
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
-import { YTChatPayload } from './ytchat.model';
+import { YTChatConfig, YTChatPayload } from './ytchat.model';
 
 export const MAX_CHAT_MESSAGES_LENGTH = 40;
+
+/**
+ * Default configuration - YTChat module
+ */
+const DefaultYTChatConfig: YTChatConfig = {
+  logState: false,
+};
+
+export const defaultYTChatConfig = (): YTChatConfig => {
+  return ldDeepClone(DefaultYTChatConfig);
+};
 
 export const defaultYTChatMessage = (): YTChatPayload => {
   const text = _('CHAT.DEFAULT_MESSAGE');
@@ -22,3 +33,6 @@ export const defaultYTChatMessage = (): YTChatPayload => {
 
 export const YTCHAT_JS_FILE_NAME = 'ytchat.extension.js';
 export const YTCHAT_CSS_FILE_NAME = 'ytchat.extension.css';
+
+export const YTCHAT_JS_MIN_FILE_NAME = 'ytchat.extension.min.js';
+export const YTCHAT_CSS_MIN_FILE_NAME = 'ytchat.extension.min.css';

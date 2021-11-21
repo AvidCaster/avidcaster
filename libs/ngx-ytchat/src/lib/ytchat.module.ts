@@ -15,7 +15,7 @@ import { MaterialModule } from '@fullerstack/ngx-material';
 
 import { OverlayComponent } from './overlay/overlay.component';
 import { ytChatRoutes } from './ytchat.routes';
-import { YtChatService } from './ytchat.service';
+import { YTChatService } from './ytchat.service';
 
 @NgModule({
   imports: [
@@ -27,6 +27,6 @@ import { YtChatService } from './ytchat.service';
   ],
   exports: [OverlayComponent],
   declarations: [OverlayComponent],
-  providers: [YtChatService],
+  providers: [YTChatService],
 })
-export class YtChatModule {}
+export class YTChatModule {}

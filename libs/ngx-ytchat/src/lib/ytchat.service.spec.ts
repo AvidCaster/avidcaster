@@ -2,17 +2,17 @@ import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 import { I18nModule } from '@fullerstack/ngx-i18n';
 
-import { YtChatService } from './ytchat.service';
+import { YTChatService } from './ytchat.service';
 
-xdescribe('YtChatService', () => {
-  let service: YtChatService;
+xdescribe('YTChatService', () => {
+  let service: YTChatService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [I18nModule, RouterModule],
-      providers: [YtChatService],
+      providers: [YTChatService],
     });
-    service = TestBed.inject(YtChatService);
+    service = TestBed.inject(YTChatService);
   });
 
   it('should be created', () => {
