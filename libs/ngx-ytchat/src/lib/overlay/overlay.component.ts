@@ -30,7 +30,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   data: YTChatPayload = {};
   slideInState = 0;
   currentLanguage;
-
+  ltr = true;
   fwAction: FireworkAction = 'stop';
   fwEnabled = true;
   cleanEnabled = false;
@@ -221,6 +221,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
     } else {
       this.auth.goTo(url);
     }
+  }
+
+  toggleDirection() {
+    this.ltr = !this.ltr;
   }
 
   ngOnDestroy() {
