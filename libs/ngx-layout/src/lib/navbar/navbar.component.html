@@ -28,7 +28,7 @@
     <span [class.fs-bell-label]="true"></span>
   </button>
 
-  <button [matMenuTriggerFor]="accountMenu" mat-icon-button>
+  <button *ngIf="false" [matMenuTriggerFor]="accountMenu" mat-icon-button>
     <mat-icon svgIcon="account" *ngIf="authState.isLoggedIn"></mat-icon>
     <mat-icon svgIcon="dots-vertical" *ngIf="!authState.isLoggedIn"></mat-icon>
   </button>
