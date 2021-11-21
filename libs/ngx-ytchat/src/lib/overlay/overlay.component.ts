@@ -85,7 +85,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
       type: 'avidcaster-overlay-north-bound',
       action: 'inject-js',
       payload: {
-        url: `${baseUrl}${YTCHAT_JS_FILE_NAME}`,
+        url: `${baseUrl}/assets/code/${YTCHAT_JS_FILE_NAME}`,
       },
     };
 
@@ -99,7 +99,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
       type: 'avidcaster-overlay-north-bound',
       action: 'inject-css',
       payload: {
-        url: `${baseUrl}${YTCHAT_CSS_FILE_NAME}`,
+        url: `${baseUrl}/assets/code/${YTCHAT_CSS_FILE_NAME}`,
       },
     };
 

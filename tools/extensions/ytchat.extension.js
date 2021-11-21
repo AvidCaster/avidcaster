@@ -188,22 +188,6 @@ var clickable = [
 ////// actions //////
 var highlightedWords = [];
 
-// if we are in a pop out, open the chat in new tab
-////////////////////////////////////////////////////////////////////////////////
-if (window.opener && window.opener !== window) {
-  // we are in a popup, open the chat in new tab and close the popup
-  navigate(window.location.href);
-  window.close();
-}
-
-// if &prod=false is passed in the URL, use official website
-////////////////////////////////////////////////////////////////////////////////
-var isProd = getUrlParameter('prod') === 'false' ? false : true;
-var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
-$('yt-live-chat-app').append(
-  '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
-);
-
 // listen for clicked elements and send data to iframe
 ///////////////////////////////////////////////////////////////////////////////
 $('body')
