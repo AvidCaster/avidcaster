@@ -59,11 +59,9 @@ window.addEventListener(
     if (event.data.type === 'avidcaster-overlay-north-bound') {
       switch (event.data.action) {
         case 'inject-js':
-          console.log(event.data.payload.url);
           addScript(event.data.payload.url);
           break;
         case 'inject-css':
-          console.log(event.data.payload.url);
           addStyle(event.data.payload.url);
           break;
         default:
