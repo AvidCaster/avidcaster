@@ -24,19 +24,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   logoSize = 'large';
   pitchList = [
     {
-      title: _('PITCH.GROW.TITLE'),
-      description: _('PITCH.GROW.DESCRIPTION'),
-      image: '/assets/images/misc/ceo.png',
+      title: _('PITCH.OVERLAY.TITLE'),
+      description: _('PITCH.OVERLAY.DESCRIPTION'),
+      image: '/assets/images/misc/overlay-viewer.png',
     },
     {
-      title: _('PITCH.CURRENCY.TITLE'),
-      description: _('PITCH.CURRENCY.DESCRIPTION'),
-      image: '/assets/images/misc/currencies.png',
+      title: _('PITCH.OVERLAY_ADMIN.TITLE'),
+      description: _('PITCH.OVERLAY_ADMIN.DESCRIPTION'),
+      image: '/assets/images/misc/overlay-admin.png',
     },
     {
-      title: _('PITCH.HISTORICAL.TITLE'),
-      description: _('PITCH.HISTORICAL.DESCRIPTION'),
-      image: '/assets/images/misc/trends.png',
+      title: _('PITCH.ANNOTATE.TITLE'),
+      description: _('PITCH.ANNOTATE.DESCRIPTION'),
+      image: '/assets/images/misc/annotation.png',
     },
     {
       title: _('PITCH.PLATFORMS.TITLE'),
