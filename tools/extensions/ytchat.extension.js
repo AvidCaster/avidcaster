@@ -75,25 +75,25 @@ function navigate(link) {
 
 // clean up clutters from the page so messages show better
 function declutter() {
-  // remove poll messages
+  // hide poll messages
   $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
 
-  // remove pinned messages
+  // hide pinned messages
   $('#visible-banners yt-live-chat-banner-header-renderer')
     .closest('#visible-banners')
     .addClass('avidcaster-hide');
 
-  // remove subscriber messages
+  // hide subscriber messages
   $('#card.yt-live-chat-viewer-engagement-message-renderer')
     .closest('#card')
     .addClass('avidcaster-hide');
 
-  // remove subscriber only messages
+  // hide subscriber only messages
   $('#container .yt-live-chat-restricted-participation-renderer')
     .closest('#input-panel')
     .addClass('avidcaster-hide');
 
-  // remove say something messages
+  // hide say something messages
   $('#container .yt-live-chat-message-input-renderer')
     .closest('#input-panel')
     .addClass('avidcaster-hide');
