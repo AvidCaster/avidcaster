@@ -168,8 +168,20 @@ function getMessage(element) {
 
 // get the membership from the clicked element
 function getMembership(element) {
-  var membership = element.find('.yt-live-chat-membership-item-renderer #header-subtext').html();
-  return membership;
+  var primaryText = element.find('#header-primary-text ').html();
+  var secondaryText = element.find('#header-subtext').html();
+
+  if (primaryText && secondaryText) {
+    return primaryText + ' ' + secondaryText;
+  }
+
+  if (primaryText) {
+    return primaryText;
+  }
+
+  if (secondaryText) {
+    return secondaryText;
+  }
 }
 
 // get donation amount from the clicked element
