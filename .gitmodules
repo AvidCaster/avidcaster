@@ -1,3 +1,0 @@
-[submodule "subs/chrome-extension"]
-	path = subs/chrome-extension
-	url = https://github.com/AvidCaster/avidcaster-chrome-extension

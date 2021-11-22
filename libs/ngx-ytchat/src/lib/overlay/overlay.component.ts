@@ -46,8 +46,8 @@ export class OverlayComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.injectScript();
-    this.injectStyle();
+    this.appendScript();
+    this.appendStyle();
 
     this.buildForm();
 
@@ -80,14 +80,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
     });
   }
 
-  private injectScript() {
+  private appendScript() {
     const baseUrl = this.uix.window?.location?.origin;
     const scriptFile = this.ytchatService.options.production
       ? YTCHAT_JS_MIN_FILE_NAME
       : YTCHAT_JS_FILE_NAME;
     const data = {
       type: 'avidcaster-overlay-north-bound',
-      action: 'inject-js',
+      action: 'append-script',
       payload: {
         url: `${baseUrl}/assets/code/${scriptFile}`,
       },
@@ -96,14 +96,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.uix.window.parent.postMessage(data, '*');
   }
 
-  private injectStyle() {
+  private appendStyle() {
     const baseUrl = this.uix.window?.location?.origin;
     const styleFile = this.ytchatService.options.production
       ? YTCHAT_CSS_MIN_FILE_NAME
       : YTCHAT_CSS_FILE_NAME;
     const data = {
       type: 'avidcaster-overlay-north-bound',
-      action: 'inject-css',
+      action: 'append-style',
       payload: {
         url: `${baseUrl}/assets/code/${styleFile}`,
       },

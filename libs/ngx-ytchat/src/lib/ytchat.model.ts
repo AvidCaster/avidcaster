@@ -41,8 +41,8 @@ export type YTChatMessageDataType =
   | 'avidcaster-overlay-north-bound'
   | 'avidcaster-overlay-south-bound';
 export type YTChatMessageAction =
-  | 'inject-js'
-  | 'inject-css'
+  | 'append-script'
+  | 'append-style'
   | 'declutter'
   | 'reclutter'
   | 'highlight-words'
