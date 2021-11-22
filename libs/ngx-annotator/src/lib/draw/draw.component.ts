@@ -54,6 +54,7 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.undoSub();
     this.redoSub();
     this.stateSub();
+    this.uix.preventOnTouchMove();
   }
 
   private trashSub() {

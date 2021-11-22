@@ -149,6 +149,11 @@ export class UixService implements OnDestroy {
     return this.window?.parent !== this.window;
   }
 
+  preventOnTouchMove() {
+    this.document.body.style.touchAction = 'none';
+    // ontouchmove="event.preventDefault()"
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
