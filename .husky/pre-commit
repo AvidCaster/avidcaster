@@ -1,4 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn loc:generate && git add README.md
+yarn loc:generate
+yarn minify
+git add .

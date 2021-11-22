@@ -117,6 +117,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
       data.message = '🎉😊🎉';
     }
 
+    if (!data?.message && data?.membership) {
+      data.message = data.membership;
+    }
+
     if (data?.authorName.length) {
       this.slideInState++;
       if (data?.message) {
@@ -137,7 +141,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
         };
       }
 
-      if (this.data.donation) {
+      if (this.data.donation || this.data.membership) {
         this.fireworksAction('start');
       } else {
         this.fireworksAction('stop');

@@ -25,6 +25,7 @@ export const defaultYTChatMessage = (): YTChatPayload => {
     authorImage: './assets/images/misc/avatar-default.png',
     authorBadge: './assets/images/misc/avatar-default.png',
     message,
+    membership: '',
   });
 };
 
