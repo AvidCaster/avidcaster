@@ -1,5 +1,5 @@
 #avidcaster-iframe {
-  min-height: 33.3% !important;
+  min-height: calc(33.3% - 40px) !important;
 }
 
 yt-live-chat-text-message-renderer:hover,

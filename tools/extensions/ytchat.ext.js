@@ -168,8 +168,10 @@ function getMessage(element) {
 
 // get the membership from the clicked element
 function getMembership(element) {
-  var primaryText = element.find('#header-primary-text ').html();
-  var secondaryText = element.find('#header-subtext').html();
+  var primaryText = element
+    .find('.yt-live-chat-membership-item-renderer #header-primary-text ')
+    .html();
+  var secondaryText = element.find('.yt-live-chat-membership-item-renderer #header-subtext').html();
 
   if (primaryText && secondaryText) {
     return primaryText + ' ' + secondaryText;
