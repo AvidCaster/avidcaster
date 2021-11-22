@@ -41,7 +41,7 @@ if (window.opener && window.opener !== window) {
 }
 
 // inject jquery into dom
-addScript('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js');
+addScript('https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js');
 
 // if &prod=false is passed in the URL, use official website
 ////////////////////////////////////////////////////////////////////////////////
