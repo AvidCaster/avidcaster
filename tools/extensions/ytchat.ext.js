@@ -1,3 +1,11 @@
+// if we are in a pop out, open the chat in new tab as this is chat admin page
+////////////////////////////////////////////////////////////////////////////////
+if (window.opener && window.opener !== window) {
+  // we are in a popup, open the chat in new tab and close the popup
+  window.open(window.location.href, '_blank');
+  window.close();
+}
+
 // get url parameters from URL
 function getUrlParameter(sParam) {
   var sPageURL = window.location.search.substring(1),
@@ -150,14 +158,11 @@ function getAuthorBadge(element) {
 function getMessage(element) {
   // Clean up the message and extract it as html
   element.find('#message hidden').remove();
+  element.find('#message font').contents().unwrap();
   element.find('#message').children().not('img').remove();
   element.find('#message').children().removeClass();
 
-  var message = {
-    html: element.find('#message').html(),
-    length: element.find('#message').text().length + element.find('#message').children().length,
-  };
-
+  var message = element.find('#message').html();
   return message;
 }
 
@@ -188,10 +193,22 @@ var clickable = [
 ////// actions //////
 var highlightedWords = [];
 
+// if we are in a pop out, open the chat in new tab
+////////////////////////////////////////////////////////////////////////////////
+if (window.opener && window.opener !== window) {
+  // we are in a popup, open the chat in new tab and close the popup
+  window.open(window.location.href, '_blank');
+  window.close();
+}
+
+// if &prod=false is passed in the URL, use official website
+////////////////////////////////////////////////////////////////////////////////
+var isProd = getUrlParameter('prod') === 'false' ? false : true;
+
 // listen for clicked elements and send data to iframe
 ///////////////////////////////////////////////////////////////////////////////
 $('body')
-  .unbind('click')
+  .off('click')
   .on('click', clickable.join(','), function () {
     // Skip deleted messages
     if ($(this)[0].hasAttribute('is-deleted')) {

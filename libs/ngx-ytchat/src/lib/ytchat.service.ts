@@ -15,7 +15,7 @@ import { Subject, filter, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import { defaultYTChatConfig } from './ytchat.default';
-import { YTCHAT_URL } from './ytchat.model';
+import { YTCHAT_URL_FULLSCREEN } from './ytchat.model';
 
 @Injectable()
 export class YTChatService {
@@ -52,9 +52,9 @@ export class YTChatService {
       )
       .subscribe({
         next: () => {
-          if (this.router.url?.startsWith(YTCHAT_URL)) {
+          if (this.router.url?.startsWith(YTCHAT_URL_FULLSCREEN)) {
             this.layout.setHeadless(true);
-          } else if (this.lastUrl?.startsWith(YTCHAT_URL)) {
+          } else if (this.lastUrl?.startsWith(YTCHAT_URL_FULLSCREEN)) {
             this.layout.setHeadless(false);
           }
           this.lastUrl = this.router.url;

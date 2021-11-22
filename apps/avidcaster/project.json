@@ -29,7 +29,7 @@
             "output": "assets/images"
           },
           {
-            "glob": "**/ytchat.extension.*",
+            "glob": "**/*(*.js|*.css)",
             "input": "tools/extensions",
             "output": "assets/code"
           },

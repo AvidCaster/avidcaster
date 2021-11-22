@@ -15,6 +15,10 @@ function getUrlParameter(sParam) {
   return false;
 }
 
+function getDomainName(domain) {
+  return window.location.hostname.split('.').slice(-2).join('.').split('.')[0].toLowerCase();
+}
+
 // append script to body
 function appendScript(src) {
   var s = document.createElement('script');
@@ -64,12 +68,13 @@ window.addEventListener(
   false
 );
 
-// if &prod=false is passed in the URL, use official website
+// if &prod=false is NOT passed in the URL, use official website
 ////////////////////////////////////////////////////////////////////////////////
 var isProd = getUrlParameter('prod') === 'false' ? false : true;
-var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
-setTimeout(function () {
+var site = isProd ? 'avidcaster.net' : 'avidcaster.dev:80';
+var target = getDomainName() || 'youtube';
+var targetSite = setTimeout(function () {
   $('yt-live-chat-app').append(
-    '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
+    `<iframe id="avidcaster-iframe" src="https://${site}/chat/${target}/overlay"></iframe>`
   );
 }, 1000);
