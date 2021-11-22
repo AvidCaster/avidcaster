@@ -116,8 +116,8 @@ export const layoutMenuTree: MenuItem[] = [
   },
   {
     name: _('CHAT.OVERLAY'),
-    icon: 'chat',
-    link: '/ytchat/overlay',
+    icon: 'youtube',
+    link: 'chat/youtube',
     fullscreen: true,
     headless: true,
   },

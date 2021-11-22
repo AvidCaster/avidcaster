@@ -64,12 +64,14 @@ window.addEventListener(
   false
 );
 
-// if &prod=false is passed in the URL, use official website
+// if &prod=false is NOT passed in the URL, use official website
 ////////////////////////////////////////////////////////////////////////////////
 var isProd = getUrlParameter('prod') === 'false' ? false : true;
-var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
+var site = isProd ? 'avidcaster.net' : 'avidcaster.dev:80';
+var targetSite = (getUrlParameter('chat') || 'youtube').toLowerCase();
+
 setTimeout(function () {
   $('yt-live-chat-app').append(
-    '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
+    `<iframe id="avidcaster-iframe" src="https://${site}/chat/${targetSite}/overlay"></iframe>`
   );
 }, 1000);
