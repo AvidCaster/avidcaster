@@ -15,6 +15,10 @@ function getUrlParameter(sParam) {
   return false;
 }
 
+function getDomainName(domain) {
+  return window.location.hostname.split('.').slice(-2).join('.').split('.')[0].toLowerCase();
+}
+
 // append script to body
 function appendScript(src) {
   var s = document.createElement('script');
@@ -68,10 +72,9 @@ window.addEventListener(
 ////////////////////////////////////////////////////////////////////////////////
 var isProd = getUrlParameter('prod') === 'false' ? false : true;
 var site = isProd ? 'avidcaster.net' : 'avidcaster.dev:80';
-var targetSite = (getUrlParameter('chat') || 'youtube').toLowerCase();
-
-setTimeout(function () {
+var target = getDomainName() || 'youtube';
+var targetSite = setTimeout(function () {
   $('yt-live-chat-app').append(
-    `<iframe id="avidcaster-iframe" src="https://${site}/chat/${targetSite}/overlay"></iframe>`
+    `<iframe id="avidcaster-iframe" src="https://${site}/chat/${target}/overlay"></iframe>`
   );
 }, 1000);

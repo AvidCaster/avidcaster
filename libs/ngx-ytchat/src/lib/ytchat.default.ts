@@ -28,8 +28,8 @@ export const defaultYTChatMessage = (): YTChatPayload => {
   });
 };
 
-export const YTCHAT_JS_FILE_NAME = 'ytchat.extension.js';
-export const YTCHAT_CSS_FILE_NAME = 'ytchat.extension.css';
+export const YTCHAT_JS_FILE_NAME = 'ytchat.ext.js';
+export const YTCHAT_CSS_FILE_NAME = 'ytchat.ext.css';
 
-export const YTCHAT_JS_MIN_FILE_NAME = 'ytchat.extension.min.js';
-export const YTCHAT_CSS_MIN_FILE_NAME = 'ytchat.extension.min.css';
+export const YTCHAT_JS_MIN_FILE_NAME = 'ytchat.ext.min.js';
+export const YTCHAT_CSS_MIN_FILE_NAME = 'ytchat.ext.min.css';

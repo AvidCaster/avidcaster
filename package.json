@@ -79,9 +79,10 @@
     "build:el": "yarn build --configuration=electron --baseHref=./ ",
     "load:el": "yarn electron .",
     "<--------- [ chrome extension ] ------->": "chrome extension",
-    "minify:js:chat": "./node_modules/.bin/uglifyjs tools/extensions/ytchat.js -o dist/apps/avidcaster/assets/code/ytchat.min.js",
-    "minify:js:ytchat": "./node_modules/.bin/uglifyjs tools/extensions/ytchat.ext.js -o dist/apps/avidcaster/assets/code/ytchat.ext.min.js",
-    "minify:css:ytchat": "./node_modules/.bin/css-minify -f tools/extensions/ytchat.ext.css -o dist/apps/avidcaster/assets/code/ytchat.ext.min.css"
+    "minify:js:chat": "./node_modules/.bin/uglifyjs tools/extensions/chat.overlay.js -o tools/extensions/chat.overlay.min.js",
+    "minify:js:ytchat": "./node_modules/.bin/uglifyjs tools/extensions/ytchat.ext.js -o tools/extensions/ytchat.ext.min.js",
+    "minify:css:ytchat": "./node_modules/.bin/css-minify -f tools/extensions/ytchat.ext.css -o tools/extensions",
+    "minify": "yarn minify:js:chat && yarn minify:js:ytchat && yarn minify:css:ytchat"
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"

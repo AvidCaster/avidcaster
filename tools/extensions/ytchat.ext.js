@@ -204,10 +204,6 @@ if (window.opener && window.opener !== window) {
 // if &prod=false is passed in the URL, use official website
 ////////////////////////////////////////////////////////////////////////////////
 var isProd = getUrlParameter('prod') === 'false' ? false : true;
-var targetSite = isProd ? 'avidcaster.net' : 'avidcaster.dev:80/';
-$('yt-live-chat-app').append(
-  '<iframe id="avidcaster-iframe" src="https://' + targetSite + '/ytchat/overlay"></iframe>'
-);
 
 // listen for clicked elements and send data to iframe
 ///////////////////////////////////////////////////////////////////////////////
