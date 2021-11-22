@@ -166,6 +166,12 @@ function getMessage(element) {
   return message;
 }
 
+// get the membership from the clicked element
+function getMembership(element) {
+  var membership = element.find('.yt-live-chat-membership-item-renderer #header-subtext').html();
+  return membership;
+}
+
 // get donation amount from the clicked element
 function getDonationAmount(element) {
   var donationAmount = element.find('#purchase-amount').text();
@@ -229,6 +235,7 @@ $('body')
       authorName: '',
       authorImage: '',
       donation: '',
+      membership: '',
     };
 
     // Get the author name
@@ -242,6 +249,9 @@ $('body')
 
     // Get the message
     data.message = getMessage(clicked);
+
+    // Get the membership
+    data.membership = getMembership(clicked);
 
     // Get the donation
     data.donation = getDonationAmount(clicked);

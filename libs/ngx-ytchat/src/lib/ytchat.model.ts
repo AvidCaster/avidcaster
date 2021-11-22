@@ -33,6 +33,7 @@ export interface YTChatPayload {
   authorImage?: string;
   authorBadge?: string;
   message?: string;
+  membership?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [id: string]: any;
 }
