@@ -281,6 +281,8 @@ window.addEventListener(
   'message',
   (event) => {
     if (event.data.type === 'avidcaster-overlay-north-bound') {
+      // console.log(event.data.action, event.data.payload);
+
       switch (event.data.action) {
         case 'navigate':
           navigate(event.data.payload.url);
@@ -327,13 +329,13 @@ selectOnInsertion(
         case 'highlight':
           if (match) {
             $(element).addClass('avidcaster-highlighted');
-            console.log('highlight', wordsAction, wordsList);
+            // console.log(wordsAction, wordsList);
           }
           break;
         case 'filter':
           if (!match) {
             $(element).addClass('avidcaster-filtered');
-            console.log('filter', wordsAction, wordsList);
+            // console.log(wordsAction, wordsList);
           }
           break;
         default:
