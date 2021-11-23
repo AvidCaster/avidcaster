@@ -27,3 +27,7 @@ yt-live-chat-text-message-renderer.avidcaster-deleted {
 .avidcaster-highlighted {
   border: 1px solid orange !important;
 }
+
+.avidcaster-filtered {
+  display: none !important;
+}

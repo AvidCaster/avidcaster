@@ -38,7 +38,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   form: FormGroup;
   highlightWords: string[] = [];
   filterWords = false;
-  wordsPlaceholder = 'CHAT.HIGHLIGHTED_WORDS';
+  wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
 
   constructor(
     readonly formBuilder: FormBuilder,
@@ -213,9 +213,9 @@ export class OverlayComponent implements OnInit, OnDestroy {
       },
     };
     if (this.filterWords) {
-      this.wordsPlaceholder = 'CHAT.FILTERED_WORDS';
+      this.wordsPlaceholder = 'CHAT.FILTER_WORDS';
     } else {
-      this.wordsPlaceholder = 'CHAT.HIGHLIGHTED_WORDS';
+      this.wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
     }
     this.uix.window.parent.postMessage(data, '*');
   }

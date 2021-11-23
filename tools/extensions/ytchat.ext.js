@@ -212,6 +212,7 @@ var clickable = [
 
 ////// actions //////
 var highlightedWords = [];
+var isFiltering = false;
 
 // if we are in a pop out, open the chat in new tab
 ////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +294,9 @@ window.addEventListener(
         case 'reclutter':
           reclutter();
           break;
+        case 'filter-words':
         case 'highlight-words':
+          isFiltering = event.data.payload.filter;
           highlightedWords = (event.data.payload.words || [])
             .map((word) => word.trim().toLowerCase())
             .filter((word) => word.length > 0);
@@ -321,7 +324,11 @@ selectOnInsertion(
       .split(' ');
     var highlights = chatWords.filter((value) => highlightedWords.includes(value));
     if (highlights.length > 0) {
-      $(element).addClass('avidcaster-highlighted');
+      if (!isFiltering) {
+        $(element).addClass('avidcaster-highlighted');
+      } else {
+        $(element).addClass('avidcaster-filtered');
+      }
     }
   }
 );
