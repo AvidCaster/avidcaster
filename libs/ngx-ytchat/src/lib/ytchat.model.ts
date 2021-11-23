@@ -46,11 +46,12 @@ export type YTChatMessageAction =
   | 'append-style'
   | 'declutter'
   | 'reclutter'
-  | 'highlight-words'
-  | 'filter-words'
+  | 'process-words'
   | 'fullscreen'
   | 'navigate'
   | 'yt-chat';
+
+export type YTChatWordAction = 'highlight' | 'filter';
 
 export interface YTChatMessageData {
   type: YTChatMessageDataType;
