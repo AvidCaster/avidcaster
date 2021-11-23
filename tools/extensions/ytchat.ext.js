@@ -84,53 +84,53 @@ function navigate(link) {
 // clean up clutters from the page so messages show better
 function declutter() {
   // hide poll messages
-  $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hide');
+  $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hidden');
 
   // hide pinned messages
   $('#visible-banners yt-live-chat-banner-header-renderer')
     .closest('#visible-banners')
-    .addClass('avidcaster-hide');
+    .addClass('avidcaster-hidden');
 
   // hide subscriber messages
   $('#card.yt-live-chat-viewer-engagement-message-renderer')
     .closest('#card')
-    .addClass('avidcaster-hide');
+    .addClass('avidcaster-hidden');
 
   // hide subscriber only messages
   $('#container .yt-live-chat-restricted-participation-renderer')
     .closest('#input-panel')
-    .addClass('avidcaster-hide');
+    .addClass('avidcaster-hidden');
 
   // hide say something messages
   $('#container .yt-live-chat-message-input-renderer')
     .closest('#input-panel')
-    .addClass('avidcaster-hide');
+    .addClass('avidcaster-hidden');
 }
 
 // show the page as it was, to negate the effect of the prior clean up
 function reclutter() {
   // show poll messages
-  $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hide');
+  $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hidden');
 
   // show pinned messages
   $('#visible-banners yt-live-chat-banner-header-renderer')
     .closest('#visible-banners')
-    .removeClass('avidcaster-hide');
+    .removeClass('avidcaster-hidden');
 
   // show subscriber messages
   $('#card.yt-live-chat-viewer-engagement-message-renderer')
     .closest('#card')
-    .removeClass('avidcaster-hide');
+    .removeClass('avidcaster-hidden');
 
   // show subscriber only messages
   $('#container .yt-live-chat-restricted-participation-renderer')
     .closest('#input-panel')
-    .removeClass('avidcaster-hide');
+    .removeClass('avidcaster-hidden');
 
   // show say something messages
   $('#container .yt-live-chat-message-input-renderer')
     .closest('#input-panel')
-    .removeClass('avidcaster-hide');
+    .removeClass('avidcaster-hidden');
 }
 
 // get author name from the clicked element
@@ -211,7 +211,8 @@ var clickable = [
 ];
 
 ////// actions //////
-var highlightedWords = [];
+var wordsList = [];
+var wordsAction = 'highlight';
 
 // if we are in a pop out, open the chat in new tab
 ////////////////////////////////////////////////////////////////////////////////
@@ -280,6 +281,8 @@ window.addEventListener(
   'message',
   (event) => {
     if (event.data.type === 'avidcaster-overlay-north-bound') {
+      // console.log(event.data.action, event.data.payload);
+
       switch (event.data.action) {
         case 'navigate':
           navigate(event.data.payload.url);
@@ -293,10 +296,12 @@ window.addEventListener(
         case 'reclutter':
           reclutter();
           break;
-        case 'highlight-words':
-          highlightedWords = (event.data.payload.words || [])
+        case 'process-words':
+          wordsAction = event.data.payload.action;
+          wordsList = (event.data.payload.words || [])
             .map((word) => word.trim().toLowerCase())
             .filter((word) => word.length > 0);
+          break;
         default:
           break;
       }
@@ -311,17 +316,31 @@ selectOnInsertion(
   '.yt-live-chat-item-list-renderer#items',
   'yt-live-chat-text-message-renderer',
   function (element) {
-    // Check for highlight words
-    var chatWords = $(element)
-      .find('#message')
-      .text()
-      .toLowerCase()
-      .replace(/\s\s+/g, ' ')
-      .trim()
-      .split(' ');
-    var highlights = chatWords.filter((value) => highlightedWords.includes(value));
-    if (highlights.length > 0) {
-      $(element).addClass('avidcaster-highlighted');
+    if (wordsList.length) {
+      var chatWords = $(element)
+        .find('#message')
+        .text()
+        .toLowerCase()
+        .replace(/\s\s+/g, ' ')
+        .trim()
+        .split(' ');
+      var match = chatWords.filter((value) => wordsList.includes(value)).length > 0;
+      switch (wordsAction) {
+        case 'highlight':
+          if (match) {
+            $(element).addClass('avidcaster-highlighted');
+            // console.log(wordsAction, wordsList);
+          }
+          break;
+        case 'filter':
+          if (!match) {
+            $(element).addClass('avidcaster-filtered');
+            // console.log(wordsAction, wordsList);
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
 );

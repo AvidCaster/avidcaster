@@ -20,10 +20,16 @@ yt-live-chat-text-message-renderer.avidcaster-deleted {
   display: none !important;
 }
 
-.avidcaster-hide {
+.avidcaster-hidden {
   display: none !important;
 }
 
 .avidcaster-highlighted {
   border: 1px solid orange !important;
+}
+
+.avidcaster-filtered {
+  background-color: #3b3a3a !important;
+  opacity: 0.1 !important;
+  color: #585656;
 }
