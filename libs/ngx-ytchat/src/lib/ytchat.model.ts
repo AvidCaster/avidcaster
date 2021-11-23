@@ -47,6 +47,7 @@ export type YTChatMessageAction =
   | 'declutter'
   | 'reclutter'
   | 'highlight-words'
+  | 'filtered-words'
   | 'fullscreen'
   | 'navigate'
   | 'yt-chat';

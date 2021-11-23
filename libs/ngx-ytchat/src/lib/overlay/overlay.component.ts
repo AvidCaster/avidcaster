@@ -36,6 +36,9 @@ export class OverlayComponent implements OnInit, OnDestroy {
   cleanEnabled = false;
   isFullscreen = false;
   form: FormGroup;
+  highlightWords: string[] = [];
+  filterWords = false;
+  wordsPlaceholder = 'CHAT.HIGHLIGHTED_WORDS';
 
   constructor(
     readonly formBuilder: FormBuilder,
@@ -184,18 +187,37 @@ export class OverlayComponent implements OnInit, OnDestroy {
   }
 
   setHighlightedWords(words: string[]) {
-    words = words?.map((word) => word.trim()).filter((word) => word.length > 0);
-    if (words?.length) {
+    this.highlightWords = words?.map((word) => word.trim()).filter((word) => word.length > 0);
+    if (this.highlightWords?.length) {
       const data = {
         type: 'avidcaster-overlay-north-bound',
         action: 'highlight-words',
         payload: {
-          words,
+          words: this.highlightWords,
+          filtered: this.filterWords,
         },
       };
 
       this.uix.window.parent.postMessage(data, '*');
     }
+  }
+
+  toggleFilterWords() {
+    this.filterWords = !this.filterWords;
+    const data = {
+      type: 'avidcaster-overlay-north-bound',
+      action: 'filter-words',
+      payload: {
+        words: this.highlightWords,
+        filter: this.filterWords,
+      },
+    };
+    if (this.filterWords) {
+      this.wordsPlaceholder = 'CHAT.FILTERED_WORDS';
+    } else {
+      this.wordsPlaceholder = 'CHAT.HIGHLIGHTED_WORDS';
+    }
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   toggleFullscreen() {

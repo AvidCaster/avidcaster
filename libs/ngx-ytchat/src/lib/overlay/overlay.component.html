@@ -2,18 +2,21 @@
   <section class="yt-control">
     <div fxLayout="row" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxLayoutGap="10px">
-        <button mat-raised-button color="warn" (click)="clearMessage()">
-          {{ 'CHAT.CLEAR' | translate }}
-        </button>
         <button mat-raised-button color="primary" (click)="testMessage()">
           {{ 'CHAT.TEST' | translate }}
         </button>
         <form [formGroup]="form" fxLayout="column" autocomplete="off" class="yt-highlighted-words">
           <mat-form-field>
-            <mat-icon matSuffix svgIcon="flashlight"></mat-icon>
-            <input matInput type="text" formControlName="words" placeholder="{{ 'CHAT.HIGHLIGHTED_WORDS' | translate }}" />
+            <mat-icon matSuffix [svgIcon]="filterWords ? 'filter' : 'flashlight'"></mat-icon>
+            <input matInput type="text" formControlName="words" placeholder="{{ wordsPlaceholder | translate }}" />
           </mat-form-field>
         </form>
+        <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="toggleFilterWords()">
+          <mat-icon [svgIcon]="filterWords ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+        </div>
+        <button mat-raised-button color="warn" (click)="clearMessage()">
+          {{ 'CHAT.CLEAR' | translate }}
+        </button>
         <button *ngIf="fwEnabled && fwAction === 'stop'" mat-raised-button color="primary" (click)="fireworksAction('start')">
           {{ 'FIREWORKS.START' | translate }}
         </button>
