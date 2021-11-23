@@ -226,6 +226,11 @@ if (window.opener && window.opener !== window) {
 ////////////////////////////////////////////////////////////////////////////////
 var isProd = getUrlParameter('prod') === 'false' ? false : true;
 
+// this is a admin, chat overlay, not seen by anyone but the admin, prevent jumping around
+$('yt-live-chat-app a').click(function (e) {
+  e.preventDefault();
+});
+
 // listen for clicked elements and send data to iframe
 ///////////////////////////////////////////////////////////////////////////////
 $('body')
