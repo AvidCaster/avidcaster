@@ -15,7 +15,7 @@ import {
   YTCHAT_JS_MIN_FILE_NAME,
   defaultYTChatMessage,
 } from '../ytchat.default';
-import { YTChatMessageData, YTChatPayload } from '../ytchat.model';
+import { YTChatMessageData, YTChatPayload, YTChatWordAction } from '../ytchat.model';
 import { YTChatService } from '../ytchat.service';
 
 @Component({
@@ -36,6 +36,9 @@ export class OverlayComponent implements OnInit, OnDestroy {
   cleanEnabled = false;
   isFullscreen = false;
   form: FormGroup;
+  wordsList: string[] = [];
+  wordsAction: YTChatWordAction = 'highlight';
+  wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
 
   constructor(
     readonly formBuilder: FormBuilder,
@@ -68,9 +71,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
     );
 
     this.form.valueChanges
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((value) => {
-        this.setHighlightedWords(value?.words.split(' '));
+        this.wordsList = value?.words
+          .split(' ')
+          ?.map((words) => words.trim())
+          .filter((words) => words.length > 0);
+
+        this.processWords();
       });
   }
 
@@ -183,19 +191,27 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.uix.window.parent.postMessage(data, '*');
   }
 
-  setHighlightedWords(words: string[]) {
-    words = words?.map((word) => word.trim()).filter((word) => word.length > 0);
-    if (words?.length) {
-      const data = {
-        type: 'avidcaster-overlay-north-bound',
-        action: 'highlight-words',
-        payload: {
-          words,
-        },
-      };
-
-      this.uix.window.parent.postMessage(data, '*');
+  processWords(isToggle = false) {
+    if (isToggle) {
+      if (this.wordsAction === 'highlight') {
+        this.wordsPlaceholder = 'CHAT.FILTER_WORDS';
+        this.wordsAction = 'filter';
+      } else if (this.wordsAction === 'filter') {
+        this.wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
+        this.wordsAction = 'highlight';
+      }
     }
+
+    const data = {
+      type: 'avidcaster-overlay-north-bound',
+      action: 'process-words',
+      payload: {
+        words: this.wordsList,
+        action: this.wordsAction,
+      },
+    };
+
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   toggleFullscreen() {
