@@ -32,8 +32,6 @@ export interface FireworksOptions {
   cannons?: Point[];
 }
 
-export type FireworkAction = 'start' | 'stop';
-
 export interface FireworksExplosionOptions {
   boxHeight: number;
   boxWidth: number;

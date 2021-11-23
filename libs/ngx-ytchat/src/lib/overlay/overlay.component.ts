@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '@fullerstack/ngx-auth';
-import { FireworkAction } from '@fullerstack/ngx-fireworks';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
@@ -31,7 +30,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   slideInState = 0;
   currentLanguage;
   ltr = true;
-  fwAction: FireworkAction = 'stop';
+  fwStarted = false;
   fwEnabled = true;
   cleanEnabled = false;
   isFullscreen = false;
@@ -150,13 +149,13 @@ export class OverlayComponent implements OnInit, OnDestroy {
       }
 
       if (this.data.donation || this.data.membership) {
-        this.fireworksAction('start');
+        this.setFireworks(true);
       } else {
-        this.fireworksAction('stop');
+        this.setFireworks(false);
       }
     } else {
       this.data = {};
-      this.fireworksAction('stop');
+      this.setFireworks(false);
     }
   }
 
@@ -168,16 +167,24 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.setData(defaultYTChatMessage());
   }
 
-  fireworksAction(action: FireworkAction) {
-    if (this.fwEnabled) {
-      this.fwAction = action;
+  setFireworks(start: boolean) {
+    if (this.fwEnabled && start) {
+      this.fwStarted = start;
+    } else {
+      this.fwStarted = false;
     }
   }
 
-  enableFireworks(enable: boolean) {
-    this.fwEnabled = enable;
-    if (!this.fwEnabled && this.fwAction === 'start') {
-      this.fwAction = 'stop';
+  toggleFireworks() {
+    if (this.fwEnabled) {
+      this.fwStarted = !this.fwStarted;
+    }
+  }
+
+  enableDisableFireworks() {
+    this.fwEnabled = !this.fwEnabled;
+    if (!this.fwEnabled && this.fwStarted) {
+      this.fwStarted = false;
     }
   }
 

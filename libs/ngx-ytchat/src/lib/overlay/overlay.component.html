@@ -17,20 +17,20 @@
         <button mat-raised-button color="warn" (click)="clearMessage()">
           {{ 'CHAT.CLEAR' | translate }}
         </button>
-        <button *ngIf="fwEnabled && fwAction === 'stop'" mat-raised-button color="primary" (click)="fireworksAction('start')">
-          {{ 'FIREWORKS.START' | translate }}
-        </button>
-        <button *ngIf="fwEnabled && fwAction === 'start'" mat-raised-button color="primary" (click)="fireworksAction('stop')">
-          {{ 'FIREWORKS.STOP' | translate }}
-        </button>
-        <button *ngIf="!fwEnabled" mat-raised-button color="primary" (click)="enableFireworks(true)">
-          {{ 'FIREWORKS.ENABLE' | translate }}
-        </button>
-        <button *ngIf="fwEnabled" mat-raised-button color="warn" (click)="enableFireworks(false)">
-          {{ 'FIREWORKS.DISABLE' | translate }}
-        </button>
-        <button *ngIf="!cleanEnabled" mat-raised-button color="accent" (click)="cleanChat(true)">
-          {{ 'CHAT.DECLUTTER' | translate }}
+        <button
+          class="yt-multi-button"
+          mat-raised-button
+          [color]="fwEnabled ? 'primary' : 'warn'"
+          [class.yt-button-cursor-off]="!fwEnabled"
+        >
+          <div fxLayout="row" fxLayoutGap="30px">
+            <mat-icon [svgIcon]="fwStarted ? 'firework-off' : 'firework'" (click)="toggleFireworks()"></mat-icon>
+            <mat-icon
+              [svgIcon]="fwEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
+              class="yt-cursor-on"
+              (click)="enableDisableFireworks()"
+            ></mat-icon>
+          </div>
         </button>
         <button *ngIf="cleanEnabled" mat-raised-button color="accent" (click)="cleanChat(false)">
           {{ 'CHAT.RECLUTTER' | translate }}
@@ -71,5 +71,5 @@
       </div>
     </div>
   </section>
-  <fullerstack-fireworks [ngStyle]="{}" [action]="fwAction" id="yt-fireworks"></fullerstack-fireworks>
+  <fullerstack-fireworks [ngStyle]="{}" [action]="fwStarted" id="yt-fireworks"></fullerstack-fireworks>
 </div>
