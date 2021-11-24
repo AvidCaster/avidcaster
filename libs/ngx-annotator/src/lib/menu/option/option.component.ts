@@ -7,6 +7,7 @@
  */
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AuthService } from '@fullerstack/ngx-auth';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
@@ -24,10 +25,18 @@ import { AnnotatorService } from '../../annotator.service';
 export class MenuOptionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
-  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
+  constructor(
+    readonly auth: AuthService,
+    readonly uix: UixService,
+    readonly annotation: AnnotatorService
+  ) {}
 
   ngOnInit() {
     this.setMenuOverlayClass(this.annotation.state.bgColor);
+  }
+
+  navigate(url: string) {
+    this.auth.goTo(url);
   }
 
   get menuColorValues(): string[] {
