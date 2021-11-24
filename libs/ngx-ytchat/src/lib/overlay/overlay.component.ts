@@ -178,24 +178,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
 
   setAudio(start: boolean) {
     this.audioStarted = this.audioEnable && start;
-    if (this.audioStarted) {
-      this.$player.currentTime = 0;
-      this.$player.play();
-    } else {
-      this.$player.pause();
-    }
+    this.audioPlayPause();
   }
 
   toggleAudio() {
     if (this.audioEnable) {
       this.audioStarted = !this.audioStarted;
     }
-    if (this.audioStarted) {
-      this.$player.currentTime = 0;
-      this.$player.play();
-    } else {
-      this.$player.pause();
-    }
+    this.audioPlayPause();
   }
 
   enableDisableAudio() {
@@ -203,6 +193,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
     if (!this.audioEnable && this.audioStarted) {
       this.audioStarted = false;
     }
+    this.audioPlayPause();
+  }
+
+  audioPlayPause() {
     if (this.audioStarted) {
       this.$player.currentTime = 0;
       this.$player.play();
