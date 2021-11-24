@@ -3,7 +3,7 @@
     <div fxLayout="row" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxLayoutGap="10px">
         <button
-          [class.yt-icon-dim-no-action]="data?.authorName"
+          [class.yt-icon-dim]="data?.authorName"
           [class.yt-cursor-default]="data?.authorName"
           mat-raised-button
           color="primary"
@@ -44,41 +44,28 @@
           color="warn"
           (click)="clearMessage()"
         >
-          <mat-icon [class.yt-icon-dim-no-action]="!data?.authorName" svgIcon="trash-can-outline"></mat-icon>
+          <mat-icon [class.yt-icon-dim]="!data?.authorName" svgIcon="trash-can-outline"></mat-icon>
         </button>
-        <button
-          class="yt-multi-button"
-          mat-raised-button
-          [color]="fwEnabled ? 'primary' : 'warn'"
-          [class.yt-button-cursor-off]="!fwEnabled"
-        >
+        <button class="yt-multi-button" mat-raised-button [color]="fwEnabled ? 'primary' : 'warn'">
           <div fxLayout="row" fxLayoutGap="30px">
             <mat-icon
+              [class.yt-icon-dim]="!fwEnabled"
               matTooltipPosition="before"
               matTooltip="{{ (fwEnabled ? (fwStarted ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate }}"
               class="yt-icon-dim"
               [svgIcon]="!fwEnabled || fwStarted ? 'firework-off' : 'firework'"
               (click)="toggleFireworks()"
             ></mat-icon>
-            <mat-icon
-              [svgIcon]="fwEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
-              class="yt-cursor-on"
-              (click)="enableDisableFireworks()"
-            ></mat-icon>
+            <mat-icon [svgIcon]="fwEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'" (click)="enableDisableFireworks()"></mat-icon>
           </div>
         </button>
 
-        <button
-          class="yt-multi-button"
-          mat-raised-button
-          [color]="audioEnable ? 'primary' : 'warn'"
-          [class.yt-button-cursor-off]="!audioEnable"
-        >
+        <button class="yt-multi-button" mat-raised-button [color]="audioEnable ? 'primary' : 'warn'">
           <div fxLayout="row" fxLayoutGap="30px">
             <mat-icon
+              [class.yt-icon-dim]="!audioEnable"
               matTooltipPosition="before"
               matTooltip="{{ (audioEnable ? (audioStarted ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
-              class="yt-icon-dim"
               [svgIcon]="!audioEnable || audioStarted ? 'volume-off' : 'volume-high'"
               (click)="toggleAudio()"
             ></mat-icon>
@@ -86,7 +73,6 @@
               matTooltipPosition="after"
               matTooltip="{{ (audioEnable ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}"
               [svgIcon]="audioEnable ? 'checkbox-marked' : 'checkbox-blank-outline'"
-              class="yt-cursor-on"
               (click)="enableDisableAudio()"
             ></mat-icon>
           </div>
@@ -99,13 +85,23 @@
       <audio #audioTag preload="auto" src="./assets/audio/yelling-yay.mp3" class="yt-audio"></audio>
       <div fxFlex></div>
       <div>
-        <button mat-icon-button (click)="toggleDirection()">
+        <button
+          matTooltipPosition="after"
+          matTooltip="{{ (ltr ? 'COMMON.DIR_RTL' : 'COMMON.DIR_LTR') | translate }}"
+          mat-icon-button
+          (click)="toggleDirection()"
+        >
           <mat-icon [class.flip-horizontal]="ltr" svgIcon="directions"></mat-icon>
         </button>
-        <button mat-icon-button (click)="toggleFullscreen()">
+        <button
+          matTooltipPosition="after"
+          matTooltip="{{ (isFullscreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
+          mat-icon-button
+          (click)="toggleFullscreen()"
+        >
           <mat-icon [svgIcon]="isFullscreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
         </button>
-        <button mat-icon-button (click)="navigate('/')">
+        <button matTooltipPosition="after" matTooltip="{{ 'COMMON.HOME' | translate }}" mat-icon-button (click)="navigate('/')">
           <mat-icon svgIcon="home"></mat-icon>
         </button>
       </div>

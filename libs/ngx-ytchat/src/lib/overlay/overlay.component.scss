@@ -160,18 +160,6 @@ mat-select {
   line-height: 36px;
 }
 
-.yt-button-cursor-off {
-  cursor: none;
-}
-
-.yt-cursor-on {
-  cursor: pointer !important;
-}
-
-.yt-cursor-off {
-  cursor: none !important;
-}
-
 .yt-cursor-default {
   cursor: default !important;
 }
@@ -181,12 +169,9 @@ mat-select {
   padding-left: 6px;
 }
 
-.yt-button-cursor-off .yt-icon-dim {
+.yt-icon-dim {
   opacity: 0.5;
-}
-
-.yt-icon-dim-no-action {
-  opacity: 0.5;
+  cursor: default;
 }
 
 .yt-audio {
