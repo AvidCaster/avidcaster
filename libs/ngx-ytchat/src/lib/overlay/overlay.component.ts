@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '@fullerstack/ngx-auth';
-import { FireworkAction } from '@fullerstack/ngx-fireworks';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
@@ -25,20 +24,25 @@ import { YTChatService } from '../ytchat.service';
   animations: [slideInAnimations.slideIn],
 })
 export class OverlayComponent implements OnInit, OnDestroy {
+  $player: HTMLAudioElement;
+  @ViewChild('audioTag') set playerRef(ref: ElementRef<HTMLAudioElement>) {
+    this.$player = ref.nativeElement;
+  }
   private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data: YTChatPayload = {};
   slideInState = 0;
   currentLanguage;
   ltr = true;
-  fwAction: FireworkAction = 'stop';
+  fwStarted = false;
   fwEnabled = true;
   cleanEnabled = false;
   isFullscreen = false;
   form: FormGroup;
   wordsList: string[] = [];
   wordsAction: YTChatWordAction = 'highlight';
-  wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
+  audioStarted = false;
+  audioEnable = false;
 
   constructor(
     readonly formBuilder: FormBuilder,
@@ -150,13 +154,16 @@ export class OverlayComponent implements OnInit, OnDestroy {
       }
 
       if (this.data.donation || this.data.membership) {
-        this.fireworksAction('start');
+        this.setFireworks(true);
+        this.setAudio(true);
       } else {
-        this.fireworksAction('stop');
+        this.setFireworks(false);
+        this.setAudio(false);
       }
     } else {
       this.data = {};
-      this.fireworksAction('stop');
+      this.setFireworks(false);
+      this.setAudio(false);
     }
   }
 
@@ -165,27 +172,62 @@ export class OverlayComponent implements OnInit, OnDestroy {
   }
 
   testMessage() {
-    this.setData(defaultYTChatMessage());
+    if (!this.data?.authorName) {
+      this.setData(defaultYTChatMessage());
+    }
   }
 
-  fireworksAction(action: FireworkAction) {
+  setAudio(start: boolean) {
+    this.audioStarted = this.audioEnable && start;
+    this.audioPlayPause();
+  }
+
+  toggleAudio() {
+    if (this.audioEnable) {
+      this.audioStarted = !this.audioStarted;
+    }
+    this.audioPlayPause();
+  }
+
+  enableDisableAudio() {
+    this.audioEnable = !this.audioEnable;
+    if (!this.audioEnable && this.audioStarted) {
+      this.audioStarted = false;
+    }
+    this.audioPlayPause();
+  }
+
+  audioPlayPause() {
+    if (this.audioStarted) {
+      this.$player.currentTime = 0;
+      this.$player.play();
+    } else {
+      this.$player.pause();
+    }
+  }
+
+  setFireworks(start: boolean) {
+    this.fwStarted = this.fwEnabled && start;
+  }
+
+  toggleFireworks() {
     if (this.fwEnabled) {
-      this.fwAction = action;
+      this.fwStarted = !this.fwStarted;
     }
   }
 
-  enableFireworks(enable: boolean) {
-    this.fwEnabled = enable;
-    if (!this.fwEnabled && this.fwAction === 'start') {
-      this.fwAction = 'stop';
+  enableDisableFireworks() {
+    this.fwEnabled = !this.fwEnabled;
+    if (!this.fwEnabled && this.fwStarted) {
+      this.fwStarted = false;
     }
   }
 
-  cleanChat(clean: boolean) {
-    this.cleanEnabled = clean;
+  toggleCleanChat() {
+    this.cleanEnabled = !this.cleanEnabled;
     const data = {
       type: 'avidcaster-overlay-north-bound',
-      action: clean ? 'declutter' : 'reclutter',
+      action: this.cleanEnabled ? 'declutter' : 'reclutter',
     };
 
     this.uix.window.parent.postMessage(data, '*');
@@ -194,10 +236,8 @@ export class OverlayComponent implements OnInit, OnDestroy {
   processWords(isToggle = false) {
     if (isToggle) {
       if (this.wordsAction === 'highlight') {
-        this.wordsPlaceholder = 'CHAT.FILTER_WORDS';
         this.wordsAction = 'filter';
       } else if (this.wordsAction === 'filter') {
-        this.wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
         this.wordsAction = 'highlight';
       }
     }

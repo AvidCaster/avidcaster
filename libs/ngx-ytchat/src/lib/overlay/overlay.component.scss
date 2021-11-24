@@ -160,6 +160,24 @@ mat-select {
   line-height: 36px;
 }
 
+.yt-cursor-default {
+  cursor: default !important;
+}
+
+.yt-multi-button {
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.yt-icon-dim {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.yt-audio {
+  visibility: hidden;
+}
+
 [dir='rtl'] {
   .yt-author {
     margin-right: -98px;

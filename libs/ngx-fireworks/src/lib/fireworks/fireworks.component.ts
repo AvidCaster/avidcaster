@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@ang
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, takeUntil } from 'rxjs';
 
-import { FireworkAction } from '../fireworks.model';
 import { FireworksService } from '../fireworks.service';
 
 @Component({
@@ -13,10 +12,10 @@ import { FireworksService } from '../fireworks.service';
 })
 export class FireworksComponent implements OnInit, OnDestroy {
   @ViewChild('fireworksCanvas', { static: true }) canvas: ElementRef | undefined | null;
-  @Input() set action(value: FireworkAction) {
-    if (value === 'start') {
+  @Input() set action(start: boolean) {
+    if (start) {
       this.fireworks.start();
-    } else if (value === 'stop') {
+    } else {
       this.fireworks.stop();
     }
   }
