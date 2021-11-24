@@ -3,7 +3,7 @@ var AC_WordsList = [];
 
 // if we are in popup
 function AC_InPopup() {
-  return window.self !== window.top;
+  return window.opener && window.opener !== window;
 }
 
 // reopen popup in new tab
