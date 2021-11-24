@@ -14,6 +14,10 @@
   button {
     margin-top: 22px;
   }
+  .beta-status {
+    margin-top: -48px;
+    font-weight: bold;
+  }
 }
 
 .bulletin-board.large.auth {
@@ -29,13 +33,17 @@
   }
   .headline {
     font-size: 1.3rem;
-    margin-top: -10px;
+    margin-top: 22px;
   }
   .message {
     font-size: 0.8rem;
   }
   button {
     margin-top: 12px;
+  }
+  .beta-status {
+    margin-top: -54px;
+    font-weight: default;
   }
 }
 

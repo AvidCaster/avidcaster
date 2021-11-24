@@ -6,8 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -26,6 +26,7 @@ import { StoreModule } from '@fullerstack/ngx-store';
 import { UixModule } from '@fullerstack/ngx-uix';
 import { UserModule } from '@fullerstack/ngx-user';
 import { YTChatModule } from '@fullerstack/ngx-ytchat';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -70,6 +71,7 @@ import { UserVerifyComponent } from './pages/user-verify/user-verify.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MarkdownModule.forRoot({ loader: HttpClient, sanitize: SecurityContext.NONE }),
     MaterialModule,
     RouterModule.forRoot(AppRoutes, {
       scrollPositionRestoration: 'enabled',
