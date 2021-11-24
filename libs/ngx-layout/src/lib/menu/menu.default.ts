@@ -116,11 +116,28 @@ export const layoutMenuTree: MenuItem[] = [
   },
   {
     name: _('CHAT.OVERLAY'),
-    icon: 'youtube',
-    link: 'chat/youtube',
-    fullscreen: true,
-    headless: true,
+    icon: 'message-text',
+    children: [
+      {
+        name: _('COMMON.OVERVIEW'),
+        icon: 'magnify-expand',
+        link: 'chat/overview',
+      },
+      {
+        name: _('COMMON.SETUP'),
+        icon: 'cog',
+        link: 'chat/setup',
+      },
+      // {
+      //   name: _('CHAT.OVERLAY'),
+      //   icon: 'youtube',
+      //   link: 'chat/youtube/overlay',
+      //   fullscreen: true,
+      //   headless: true,
+      // },
+    ],
   },
+
   // {
   //   name: _('COMMON.YOUTUBE'),
   //   icon: 'youtube',
