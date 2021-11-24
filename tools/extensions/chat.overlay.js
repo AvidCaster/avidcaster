@@ -178,13 +178,13 @@ function AC_InjectJquery() {
 // if we are in a popup, reopen in new tab
 AC_OpenInTab();
 
+// inject jquery into dom
+AC_InjectJquery();
+
+// listen to incoming actions by the remote window (avidcaster)
+AC_ListenToChild();
+
 setTimeout(function () {
-  // inject jquery into dom
-  AC_InjectJquery();
-
-  // listen to incoming actions by the remote window (avidcaster)
-  AC_ListenToChild();
-
   // insert iframe, allowing for jquery to load
   AC_InsertIframe();
 }, 500);
