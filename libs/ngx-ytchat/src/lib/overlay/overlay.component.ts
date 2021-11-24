@@ -41,7 +41,6 @@ export class OverlayComponent implements OnInit, OnDestroy {
   form: FormGroup;
   wordsList: string[] = [];
   wordsAction: YTChatWordAction = 'highlight';
-  wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
   audioStarted = false;
   audioEnable = false;
 
@@ -173,7 +172,9 @@ export class OverlayComponent implements OnInit, OnDestroy {
   }
 
   testMessage() {
-    this.setData(defaultYTChatMessage());
+    if (!this.data?.authorName) {
+      this.setData(defaultYTChatMessage());
+    }
   }
 
   setAudio(start: boolean) {
@@ -235,10 +236,8 @@ export class OverlayComponent implements OnInit, OnDestroy {
   processWords(isToggle = false) {
     if (isToggle) {
       if (this.wordsAction === 'highlight') {
-        this.wordsPlaceholder = 'CHAT.FILTER_WORDS';
         this.wordsAction = 'filter';
       } else if (this.wordsAction === 'filter') {
-        this.wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
         this.wordsAction = 'highlight';
       }
     }

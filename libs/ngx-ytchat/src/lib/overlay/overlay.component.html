@@ -2,20 +2,49 @@
   <section class="yt-control">
     <div fxLayout="row" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxLayoutGap="10px">
-        <button mat-raised-button color="primary" (click)="testMessage()">
-          {{ 'CHAT.TEST' | translate }}
+        <button
+          [class.yt-icon-dim-no-action]="data?.authorName"
+          [class.yt-cursor-default]="data?.authorName"
+          mat-raised-button
+          color="primary"
+          (click)="testMessage()"
+        >
+          <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
         </button>
         <form [formGroup]="form" fxLayout="column" autocomplete="off" class="yt-highlighted-words">
           <mat-form-field>
-            <mat-icon matSuffix [svgIcon]="wordsAction === 'filter' ? 'filter' : 'flashlight'"></mat-icon>
-            <input matInput type="text" formControlName="words" placeholder="{{ wordsPlaceholder | translate }}" />
+            <mat-icon
+              matSuffix
+              [color]="wordsAction === 'filter' ? 'primary' : 'accent'"
+              [svgIcon]="wordsAction === 'filter' ? 'filter' : 'flashlight'"
+            ></mat-icon>
+            <input
+              matInput
+              type="text"
+              formControlName="words"
+              placeholder="{{ (wordsAction === 'filter' ? 'CHAT.FILTER_WORDS' : 'CHAT.HIGHLIGHT_WORDS') | translate }}"
+            />
           </mat-form-field>
         </form>
-        <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="processWords(true)">
+        <div
+          matTooltipPosition="after"
+          matTooltip="{{ (wordsAction === 'filter' ? 'CHAT.HIGHLIGHT_WORDS' : 'CHAT.FILTER_WORDS') | translate }}"
+          fxLayout="row"
+          fxLayoutAlign="space-between center"
+          fxLayoutGap="3px"
+          (click)="processWords(true)"
+        >
           <mat-icon [svgIcon]="wordsAction === 'filter' ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
         </div>
-        <button mat-raised-button color="warn" (click)="clearMessage()">
-          {{ 'CHAT.CLEAR' | translate }}
+        <button
+          mat-raised-button
+          [class.yt-cursor-default]="!data?.authorName"
+          matTooltipPosition="before"
+          matTooltip="{{ 'CHAT.CLEAR' | translate }}"
+          color="warn"
+          (click)="clearMessage()"
+        >
+          <mat-icon [class.yt-icon-dim-no-action]="!data?.authorName" svgIcon="trash-can-outline"></mat-icon>
         </button>
         <button
           class="yt-multi-button"
@@ -25,6 +54,8 @@
         >
           <div fxLayout="row" fxLayoutGap="30px">
             <mat-icon
+              matTooltipPosition="before"
+              matTooltip="{{ (fwEnabled ? (fwStarted ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate }}"
               class="yt-icon-dim"
               [svgIcon]="!fwEnabled || fwStarted ? 'firework-off' : 'firework'"
               (click)="toggleFireworks()"
@@ -45,11 +76,15 @@
         >
           <div fxLayout="row" fxLayoutGap="30px">
             <mat-icon
+              matTooltipPosition="before"
+              matTooltip="{{ (audioEnable ? (audioStarted ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
               class="yt-icon-dim"
               [svgIcon]="!audioEnable || audioStarted ? 'volume-off' : 'volume-high'"
               (click)="toggleAudio()"
             ></mat-icon>
             <mat-icon
+              matTooltipPosition="after"
+              matTooltip="{{ (audioEnable ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}"
               [svgIcon]="audioEnable ? 'checkbox-marked' : 'checkbox-blank-outline'"
               class="yt-cursor-on"
               (click)="enableDisableAudio()"
@@ -93,7 +128,7 @@
             </span>
           </div>
         </div>
-        <div class="yt-message" [innerHtml]="data?.message"></div>
+        <div class="yt-message" [innerHtml]="data?.authorName"></div>
       </div>
     </div>
   </section>

@@ -168,12 +168,24 @@ mat-select {
   cursor: pointer !important;
 }
 
+.yt-cursor-off {
+  cursor: none !important;
+}
+
+.yt-cursor-default {
+  cursor: default !important;
+}
+
 .yt-multi-button {
   padding-right: 6px;
   padding-left: 6px;
 }
 
 .yt-button-cursor-off .yt-icon-dim {
+  opacity: 0.5;
+}
+
+.yt-icon-dim-no-action {
   opacity: 0.5;
 }
 
