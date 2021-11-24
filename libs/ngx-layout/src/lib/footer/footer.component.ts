@@ -32,7 +32,7 @@ export class FooterComponent {
         },
         {
           name: _('COMMON.GITHUB'),
-          link: 'https://github.com/AvidCaster/avidcaster',
+          link: 'https://github.com/AvidCaster/AvidcasterYouTubeOverlay',
           icon: 'github',
           external: true,
         },
