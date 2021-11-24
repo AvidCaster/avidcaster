@@ -188,11 +188,11 @@ export class OverlayComponent implements OnInit, OnDestroy {
     }
   }
 
-  cleanChat(clean: boolean) {
-    this.cleanEnabled = clean;
+  toggleCleanChat() {
+    this.cleanEnabled = !this.cleanEnabled;
     const data = {
       type: 'avidcaster-overlay-north-bound',
-      action: clean ? 'declutter' : 'reclutter',
+      action: this.cleanEnabled ? 'declutter' : 'reclutter',
     };
 
     this.uix.window.parent.postMessage(data, '*');
