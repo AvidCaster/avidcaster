@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '@fullerstack/ngx-auth';
 import { I18nService } from '@fullerstack/ngx-i18n';
@@ -24,6 +24,10 @@ import { YTChatService } from '../ytchat.service';
   animations: [slideInAnimations.slideIn],
 })
 export class OverlayComponent implements OnInit, OnDestroy {
+  $player: HTMLAudioElement;
+  @ViewChild('audioTag') set playerRef(ref: ElementRef<HTMLAudioElement>) {
+    this.$player = ref.nativeElement;
+  }
   private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data: YTChatPayload = {};
@@ -38,6 +42,8 @@ export class OverlayComponent implements OnInit, OnDestroy {
   wordsList: string[] = [];
   wordsAction: YTChatWordAction = 'highlight';
   wordsPlaceholder = 'CHAT.HIGHLIGHT_WORDS';
+  audioStarted = false;
+  audioEnable = false;
 
   constructor(
     readonly formBuilder: FormBuilder,
@@ -150,12 +156,15 @@ export class OverlayComponent implements OnInit, OnDestroy {
 
       if (this.data.donation || this.data.membership) {
         this.setFireworks(true);
+        this.setAudio(true);
       } else {
         this.setFireworks(false);
+        this.setAudio(false);
       }
     } else {
       this.data = {};
       this.setFireworks(false);
+      this.setAudio(false);
     }
   }
 
@@ -167,12 +176,43 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.setData(defaultYTChatMessage());
   }
 
-  setFireworks(start: boolean) {
-    if (this.fwEnabled && start) {
-      this.fwStarted = start;
+  setAudio(start: boolean) {
+    this.audioStarted = this.audioEnable && start;
+    if (this.audioStarted) {
+      this.$player.currentTime = 0;
+      this.$player.play();
     } else {
-      this.fwStarted = false;
+      this.$player.pause();
     }
+  }
+
+  toggleAudio() {
+    if (this.audioEnable) {
+      this.audioStarted = !this.audioStarted;
+    }
+    if (this.audioStarted) {
+      this.$player.currentTime = 0;
+      this.$player.play();
+    } else {
+      this.$player.pause();
+    }
+  }
+
+  enableDisableAudio() {
+    this.audioEnable = !this.audioEnable;
+    if (!this.audioEnable && this.audioStarted) {
+      this.audioStarted = false;
+    }
+    if (this.audioStarted) {
+      this.$player.currentTime = 0;
+      this.$player.play();
+    } else {
+      this.$player.pause();
+    }
+  }
+
+  setFireworks(start: boolean) {
+    this.fwStarted = this.fwEnabled && start;
   }
 
   toggleFireworks() {

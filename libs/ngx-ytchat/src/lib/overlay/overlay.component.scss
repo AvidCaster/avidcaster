@@ -173,6 +173,14 @@ mat-select {
   padding-left: 6px;
 }
 
+.yt-button-cursor-off .yt-icon-dim {
+  opacity: 0.5;
+}
+
+.yt-audio {
+  visibility: hidden;
+}
+
 [dir='rtl'] {
   .yt-author {
     margin-right: -98px;

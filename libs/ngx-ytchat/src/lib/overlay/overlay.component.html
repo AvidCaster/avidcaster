@@ -24,7 +24,11 @@
           [class.yt-button-cursor-off]="!fwEnabled"
         >
           <div fxLayout="row" fxLayoutGap="30px">
-            <mat-icon [svgIcon]="fwStarted ? 'firework-off' : 'firework'" (click)="toggleFireworks()"></mat-icon>
+            <mat-icon
+              class="yt-icon-dim"
+              [svgIcon]="!fwEnabled || fwStarted ? 'firework-off' : 'firework'"
+              (click)="toggleFireworks()"
+            ></mat-icon>
             <mat-icon
               [svgIcon]="fwEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
               class="yt-cursor-on"
@@ -32,11 +36,32 @@
             ></mat-icon>
           </div>
         </button>
-        <button class="yt-multi-button" mat-raised-button color="accent" (click)="toggleCleanChat()">
+
+        <button
+          class="yt-multi-button"
+          mat-raised-button
+          [color]="audioEnable ? 'primary' : 'warn'"
+          [class.yt-button-cursor-off]="!audioEnable"
+        >
+          <div fxLayout="row" fxLayoutGap="30px">
+            <mat-icon
+              class="yt-icon-dim"
+              [svgIcon]="!audioEnable || audioStarted ? 'volume-off' : 'volume-high'"
+              (click)="toggleAudio()"
+            ></mat-icon>
+            <mat-icon
+              [svgIcon]="audioEnable ? 'checkbox-marked' : 'checkbox-blank-outline'"
+              class="yt-cursor-on"
+              (click)="enableDisableAudio()"
+            ></mat-icon>
+          </div>
+        </button>
+        <button class="yt-multi-button" mat-raised-button [color]="cleanEnabled ? 'primary' : 'warn'" (click)="toggleCleanChat()">
           {{ (cleanEnabled ? 'CHAT.DECLUTTER' : 'CHAT.RECLUTTER') | translate }}
           <mat-icon svgIcon="broom"></mat-icon>
         </button>
       </div>
+      <audio #audioTag preload="auto" src="./assets/audio/yelling-yay.mp3" class="yt-audio"></audio>
       <div fxFlex></div>
       <div>
         <button mat-icon-button (click)="toggleDirection()">
