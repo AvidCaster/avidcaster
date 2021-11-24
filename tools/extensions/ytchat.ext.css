@@ -33,3 +33,7 @@ yt-live-chat-text-message-renderer.avidcaster-deleted {
   opacity: 0.1 !important;
   color: #585656;
 }
+
+.avidcaster-unclickable {
+  pointer-events: none;
+}

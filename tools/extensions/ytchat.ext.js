@@ -1,88 +1,13 @@
-// if we are in a pop out, open the chat in new tab as this is chat admin page
-////////////////////////////////////////////////////////////////////////////////
-if (window.opener && window.opener !== window) {
-  // we are in a popup, open the chat in new tab and close the popup
-  window.open(window.location.href, '_blank');
-  window.close();
-}
-
-// get url parameters from URL
-function getUrlParameter(sParam) {
-  var sPageURL = window.location.search.substring(1),
-    sURLVariables = sPageURL.split('&'),
-    sParameterName,
-    i;
-
-  for (i = 0; i < sURLVariables.length; i++) {
-    sParameterName = sURLVariables[i].split('=');
-
-    if (sParameterName[0] === sParam) {
-      return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-    }
-  }
-  return false;
-}
-
-// detect insertions into container, and invoke the callback
-function selectOnInsertion(containerSelector, tag, callback) {
-  var insertionObserver = function (mutations) {
-    mutations.forEach(function (mutation) {
-      if (mutation.addedNodes.length) {
-        for (var i = 0, len = mutation.addedNodes.length; i < len; i++) {
-          if (mutation.addedNodes[i].tagName === tag.toUpperCase()) {
-            callback(mutation.addedNodes[i]);
-          }
-        }
-      }
-    });
-  };
-
-  var target = document.querySelectorAll(containerSelector)[0];
-  var config = { childList: true, subtree: true };
-  var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-  var observer = new MutationObserver(insertionObserver);
-  observer.observe(target, config);
-}
-
-// open fullscreen on element
-function openFullscreen(element) {
-  if (element.requestFullscreen) {
-    element.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
-    /* Safari */
-    element.webkitRequestFullscreen();
-  } else if (element.msRequestFullscreen) {
-    /* IE11 */
-    element.msRequestFullscreen();
-  }
-}
-
-/* Close fullscreen on full page */
-function closeFullscreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
-    /* Safari */
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    /* IE11 */
-    document.msExitFullscreen();
-  }
-}
-
-// go fullscreen on the full web page
-function toggleFullscreen(fullscreen) {
-  var element = document.documentElement;
-  fullscreen ? openFullscreen(element) : closeFullscreen();
-}
-
-// open link in new tab
-function navigate(link) {
-  window.open(link, '_blank');
-}
+// clickable chat selectors we are interested in
+var AC_ClickableChats = [
+  'yt-live-chat-text-message-renderer',
+  'yt-live-chat-paid-message-renderer',
+  'yt-live-chat-membership-item-renderer',
+  'yt-live-chat-paid-sticker-renderer',
+];
 
 // clean up clutters from the page so messages show better
-function declutter() {
+function AC_Declutter() {
   // hide poll messages
   $('#contents yt-live-chat-poll-renderer').addClass('avidcaster-hidden');
 
@@ -108,7 +33,7 @@ function declutter() {
 }
 
 // show the page as it was, to negate the effect of the prior clean up
-function reclutter() {
+function AC_Reclutter() {
   // show poll messages
   $('#contents yt-live-chat-poll-renderer').removeClass('avidcaster-hidden');
 
@@ -134,20 +59,20 @@ function reclutter() {
 }
 
 // get author name from the clicked element
-function getAuthorName(element) {
+function AC_GetAuthorName(element) {
   element.find('#author-name #tooltip.hidden').remove();
   var authorName = element.find('#author-name').text();
   return authorName;
 }
 
 // get author image from the clicked element
-function getAuthorImage(element) {
+function AC_GetAuthorImage(element) {
   var authorImage = element.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
   return authorImage;
 }
 
 // get author badge from the clicked element
-function getAuthorBadge(element) {
+function AC_GetAuthorBadge(element) {
   var authorBadge = element
     .find('#chat-badges .yt-live-chat-author-badge-renderer img')
     .attr('src');
@@ -155,7 +80,7 @@ function getAuthorBadge(element) {
 }
 
 // get the message from the clicked element
-function getMessage(element) {
+function AC_GetMessage(element) {
   // Clean up the message and extract it as html
   element.find('#message hidden').remove();
   element.find('#message font').contents().unwrap();
@@ -167,7 +92,7 @@ function getMessage(element) {
 }
 
 // get the membership from the clicked element
-function getMembership(element) {
+function AC_GetMembership(element) {
   var primaryText = element
     .find('.yt-live-chat-membership-item-renderer #header-primary-text')
     .html();
@@ -187,7 +112,7 @@ function getMembership(element) {
 }
 
 // get donation amount from the clicked element
-function getDonationAmount(element) {
+function AC_GetDonationAmount(element) {
   var donationAmount = element.find('#purchase-amount').text();
   if (!donationAmount) {
     donationAmount = element.find('#purchase-amount-chip').text();
@@ -196,156 +121,135 @@ function getDonationAmount(element) {
 }
 
 // post message to iframe
-function postMessageSouthBound(data) {
+function AC_PostMessageSouthBound(data) {
   // post the data to the remote window
   data = { type: 'avidcaster-overlay-south-bound', action: 'yt-chat', payload: data };
   document.getElementById('avidcaster-iframe').contentWindow.postMessage(data, '*');
 }
 
-// clickable tags we are interested in
-var clickable = [
-  'yt-live-chat-text-message-renderer',
-  'yt-live-chat-paid-message-renderer',
-  'yt-live-chat-membership-item-renderer',
-  'yt-live-chat-paid-sticker-renderer',
-];
-
-////// actions //////
-var wordsList = [];
-var wordsAction = 'highlight';
-
-// if we are in a pop out, open the chat in new tab
-////////////////////////////////////////////////////////////////////////////////
-if (window.opener && window.opener !== window) {
-  // we are in a popup, open the chat in new tab and close the popup
-  window.open(window.location.href, '_blank');
-  window.close();
+// this is a admin, chat overlay, not seen by anyone but the admin, prevent jumping around
+function AC_DisableHotLinks(element) {
+  element.addClass('avidcaster-unclickable');
 }
 
-// if &prod=false is passed in the URL, use official website
-////////////////////////////////////////////////////////////////////////////////
-var isProd = getUrlParameter('prod') === 'false' ? false : true;
-
-// this is a admin, chat overlay, not seen by anyone but the admin, prevent jumping around
-$('yt-live-chat-app a').click(function (e) {
-  e.preventDefault();
-});
-
 // listen for clicked elements and send data to iframe
-///////////////////////////////////////////////////////////////////////////////
-$('body')
-  .off('click')
-  .on('click', clickable.join(','), function () {
-    // Skip deleted messages
-    if ($(this)[0].hasAttribute('is-deleted')) {
-      $(this).addClass('avidcaster-deleted');
-      return;
-    }
-
-    // Mark this comment as shown
-    $(this).addClass('avidcaster-dispatched');
-    // Mark nested comments as shown
-    $(this).find('yt-live-chat-paid-message-renderer').addClass('avidcaster-dispatched');
-
-    var clicked = $(this).clone();
-
-    //  Properties to send to remote window:
-    var data = {
-      message: '',
-      authorName: '',
-      authorImage: '',
-      donation: '',
-      membership: '',
-    };
-
-    // Get the author name
-    data.authorName = getAuthorName(clicked);
-
-    // Get author image image
-    data.authorImage = getAuthorImage(clicked);
-
-    // Get author badge
-    data.authorBadge = getAuthorBadge(clicked);
-
-    // Get the message
-    data.message = getMessage(clicked);
-
-    // Get the membership
-    data.membership = getMembership(clicked);
-
-    // Get the donation
-    data.donation = getDonationAmount(clicked);
-
-    // Post the data to the remote window
-    postMessageSouthBound(data);
-  });
-
-// listen to incoming actions by the remote window
-///////////////////////////////////////////////////////////////////////////////
-window.addEventListener(
-  'message',
-  (event) => {
-    if (event.data.type === 'avidcaster-overlay-north-bound') {
-      // console.log(event.data.action, event.data.payload);
-
-      switch (event.data.action) {
-        case 'navigate':
-          navigate(event.data.payload.url);
-          break;
-        case 'fullscreen':
-          toggleFullscreen(event.data.payload.fullscreen);
-          break;
-        case 'declutter':
-          declutter();
-          break;
-        case 'reclutter':
-          reclutter();
-          break;
-        case 'process-words':
-          wordsAction = event.data.payload.action;
-          wordsList = (event.data.payload.words || [])
-            .map((word) => word.trim().toLowerCase())
-            .filter((word) => word.length > 0);
-          break;
-        default:
-          break;
+function AC_ListenForClicks() {
+  $('body')
+    .off('click')
+    .on('click', AC_ClickableChats.join(','), function () {
+      // Skip deleted messages
+      if ($(this)[0].hasAttribute('is-deleted')) {
+        $(this).addClass('avidcaster-deleted');
+        return;
       }
-    }
-  },
-  false
-);
+
+      // Mark this comment as shown
+      $(this).addClass('avidcaster-dispatched');
+      // Mark nested comments as shown
+      $(this).find('yt-live-chat-paid-message-renderer').addClass('avidcaster-dispatched');
+
+      var clicked = $(this).clone();
+
+      //  Properties to send to remote window:
+      var data = {
+        message: '',
+        authorName: '',
+        authorImage: '',
+        donation: '',
+        membership: '',
+      };
+
+      // Get the author name
+      data.authorName = AC_GetAuthorName(clicked);
+
+      // Get author image image
+      data.authorImage = AC_GetAuthorImage(clicked);
+
+      // Get the message
+      data.message = AC_GetMessage(clicked);
+
+      // Get the membership
+      data.membership = AC_GetMembership(clicked);
+
+      // Get the donation
+      data.donation = AC_GetDonationAmount(clicked);
+
+      // Post the data to the remote window
+      AC_PostMessageSouthBound(data);
+    });
+}
+
+// listen to incoming actions by the parent window
+function AC_ListenToParent() {
+  window.addEventListener(
+    'message',
+    (event) => {
+      if (event.data.type === 'avidcaster-overlay-north-bound') {
+        switch (event.data.action) {
+          case 'declutter':
+            AC_Declutter();
+            break;
+          case 'reclutter':
+            AC_Reclutter();
+            break;
+          default:
+            break;
+        }
+      }
+    },
+    false
+  );
+}
 
 // listen to dom changes, and highlight the new comments if selected keywords are found
-////////////////////////////////////////////////////////////////////////////////
-selectOnInsertion(
-  '.yt-live-chat-item-list-renderer#items',
-  'yt-live-chat-text-message-renderer',
-  function (element) {
-    if (wordsList.length) {
-      var chatWords = $(element)
-        .find('#message')
-        .text()
-        .toLowerCase()
-        .replace(/\s\s+/g, ' ')
-        .trim()
-        .split(' ');
-      var match = chatWords.filter((value) => wordsList.includes(value)).length > 0;
-      switch (wordsAction) {
-        case 'highlight':
-          if (match) {
-            $(element).addClass('avidcaster-highlighted');
-            // console.log(wordsAction, wordsList);
-          }
-          break;
-        case 'filter':
-          if (!match) {
-            $(element).addClass('avidcaster-filtered');
-            // console.log(wordsAction, wordsList);
-          }
-          break;
-        default:
-          break;
+function AC_ListenForNewChat() {
+  AC_SelectOnInsertion(
+    '.yt-live-chat-item-list-renderer#items',
+    'yt-live-chat-text-message-renderer',
+    function (element) {
+      AC_DisableHotLinks($('#message > a'));
+
+      if (AC_WordsList.length) {
+        var chatWords = $(element)
+          .find('#message')
+          .text()
+          .toLowerCase()
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .split(' ');
+        var match = chatWords.filter((value) => AC_WordsList.includes(value)).length > 0;
+        switch (AC_WordsAction) {
+          case 'highlight':
+            if (match) {
+              $(element).addClass('avidcaster-highlighted');
+              // console.log(AC_WordsAction, AC_WordsList);
+            }
+            break;
+          case 'filter':
+            if (!match) {
+              $(element).addClass('avidcaster-filtered');
+              // console.log(AC_WordsAction, AC_WordsList);
+            }
+            break;
+          default:
+            break;
+        }
       }
     }
-  }
-);
+  );
+}
+
+// invoke functions below this line ONLY
+////////////////////////////////////////////////////////////////////////////////
+
+// disable hotlinks in admin view
+AC_DisableHotLinks($('#message > a'));
+
+// listen for clicks on chat items
+AC_ListenForClicks();
+
+// listen for incoming actions by the parent window
+AC_ListenToParent();
+
+// listen for new comments
+AC_ListenForNewChat();
