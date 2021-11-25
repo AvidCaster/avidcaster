@@ -1,9 +1,4 @@
-<mat-expansion-panel
-  *ngIf="node"
-  [expanded]="node.isActive(router.url)"
-  [class.active]="node.isActive(router.url)"
-  [disabled]="node.disabled"
->
+<mat-expansion-panel [expanded]="isActive" [class.active]="isActive" [disabled]="node.disabled">
   <mat-expansion-panel-header>
     <mat-panel-title fxFlex fxLayout="row" fxLayoutGap="16px">
       <mat-icon [class.text-color-muted]="node.disabled" svgIcon="{{ node.icon }}"></mat-icon>
@@ -12,7 +7,11 @@
   </mat-expansion-panel-header>
 
   <div *ngFor="let child of node.children">
-    <fullerstack-menu-node *ngIf="child.isNode" [node]="child"></fullerstack-menu-node>
-    <fullerstack-menu-link *ngIf="child.isLink" [link]="child"></fullerstack-menu-link>
+    <div *ngIf="child.isNode">
+      <fullerstack-menu-node [node]="child"></fullerstack-menu-node>
+    </div>
+    <div *ngIf="child.isLink">
+      <fullerstack-menu-link [link]="child"></fullerstack-menu-link>
+    </div>
   </div>
 </mat-expansion-panel>
