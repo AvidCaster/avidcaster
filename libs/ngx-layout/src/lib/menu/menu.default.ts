@@ -121,12 +121,12 @@ export const layoutMenuTree: MenuItem[] = [
       {
         name: _('COMMON.OVERVIEW'),
         icon: 'magnify-expand',
-        link: 'chat/overview',
+        link: '/chat/overview',
       },
       {
         name: _('COMMON.SETUP'),
         icon: 'cog',
-        link: 'chat/setup',
+        link: '/chat/setup',
       },
       // {
       //   name: _('CHAT.OVERLAY'),
