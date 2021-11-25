@@ -47,7 +47,7 @@ The following image is the chrome extension configured for `YouTube`.
 Copy the code from <a href="/assets/code/chat.overlay.min.js" target="_blank">here</a> and paste it in the profile you just created, in the "Copy Javascript Code Here" box and click "save" as per the following image.
 
 <p>
-<img src="./assets/images/howto/AvidTraderOverlayLogic.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/AvidCasterOverlayLogic.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
 ## `YouTube Chat Overlay - Popup`
