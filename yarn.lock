@@ -1701,10 +1701,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-menu@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-menu/-/ngx-menu-0.0.4.tgz#2f1d59421f8c6fe16e31ec0f0e18610c0e2722e5"
-  integrity sha512-logfvVCgdeQpwJlG72XJHqFQNMU6lkC+G4iCGYF2+1IAo8eT6HN7DYGUe9twOqktDi/4kqI92asnb570669Wkg==
+"@fullerstack/ngx-menu@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-menu/-/ngx-menu-0.0.5.tgz#1e24b1981aa4c8ee51a16fd68be7347e2e3d3839"
+  integrity sha512-Kibzc9fHEq+TQBkX8OxvmHdVZZfZSOvxNtFXmm3sWrH2CYQZ6qTqs79RDjPcRP6u2ZwNilTRXmp9b5vZY0tTNA==
   dependencies:
     tslib "^2.0.0"
 

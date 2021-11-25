@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { YTChatService } from '../ytchat.service';
 
@@ -7,10 +7,6 @@ import { YTChatService } from '../ytchat.service';
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent {
   constructor(readonly ytchatService: YTChatService) {}
-
-  ngOnInit(): void {
-    console.log('overview');
-  }
 }
