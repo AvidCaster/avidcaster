@@ -111,7 +111,7 @@
     "@fullerstack/ngx-i18n": "^0.0.3",
     "@fullerstack/ngx-jwt": "^0.0.4",
     "@fullerstack/ngx-logger": "^0.0.4",
-    "@fullerstack/ngx-menu": "^0.0.4",
+    "@fullerstack/ngx-menu": "^0.0.5",
     "@fullerstack/ngx-store": "^0.0.3",
     "@nestjs/common": "8.0.8",
     "@nestjs/config": "1.0.1",
