@@ -1,19 +1,6 @@
 var AC_WordsAction = 'highlight';
 var AC_WordsList = [];
 
-// if we are in popup
-function AC_InPopup() {
-  return window.opener && window.opener !== window;
-}
-
-// reopen popup in new tab
-function AC_OpenInTab() {
-  if (AC_InPopup()) {
-    window.open(window.location.href, '_blank');
-    window.close();
-  }
-}
-
 // get url parameters from URL
 function AC_GetUrlParameter(sParam) {
   var sPageURL = window.location.search.substring(1),
@@ -29,6 +16,43 @@ function AC_GetUrlParameter(sParam) {
     }
   }
   return false;
+}
+
+// get domain name from url
+function AC_GetDomainName(domain) {
+  return window.location.hostname.split('.').slice(-2).join('.').split('.')[0].toLowerCase();
+}
+
+// if we are in popup
+function AC_InPopup() {
+  return window.opener && window.opener !== window;
+}
+
+// if popup is allowed, open it in a new tab
+function AC_IsPopupAllowed(newWindow) {
+  if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+    return false;
+  }
+  return true;
+}
+
+// reopen popup in new tab
+function AC_OpenInTab() {
+  var newWindow;
+  if (AC_InPopup()) {
+    var domain = AC_GetDomainName();
+    switch (domain) {
+      case 'youtube':
+        const videoId = AC_GetUrlParameter('v');
+        newWindow = window.open(`https://youtube.com/live_chat?v=${videoId}`, '_blank');
+        AC_IsPopupAllowed(newWindow) ? window.close() : console.log('popup blocked');
+        break;
+      case 'twitch':
+      case 'facebook':
+      default:
+        console.log(`AC_OpenInTab: ${domain} not found`);
+    }
+  }
 }
 
 // detect insertions into container, and invoke the callback
@@ -87,10 +111,6 @@ function AC_ToggleFullscreen(fullscreen) {
 // open link in new tab
 function AC_Navigate(link) {
   window.open(link, '_blank');
-}
-
-function AC_GetDomainName(domain) {
-  return window.location.hostname.split('.').slice(-2).join('.').split('.')[0].toLowerCase();
 }
 
 // append script to body
