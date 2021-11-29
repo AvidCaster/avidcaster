@@ -1658,60 +1658,60 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fullerstack/agx-store@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@fullerstack/agx-store/-/agx-store-0.0.3.tgz#47038c5bc0e69f50f04453fbdb1ba9645d9488d4"
-  integrity sha512-hDzKriZBZs+6Toju80QWGyQQsXlAcvekcld+bZZhxadRYJDSTIvakD17xC3X0X3KtnvQM0lWzQmK8hDzlHRynw==
+"@fullerstack/agx-store@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@fullerstack/agx-store/-/agx-store-0.0.6.tgz#5a4f7b03d892425080ca408935d6e30c945521ea"
+  integrity sha512-yb963/CxzQgg/zt6mgOfCwCod/R7OgeniDOk0JSQyF9Lzm5li/iX1eY2+qdaP0Hz8pJQDh+LVvlznodYEsXoYw==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/nax-ipware@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@fullerstack/nax-ipware/-/nax-ipware-0.0.5.tgz#ff5d90109e5a3562952e6eb75199400c2444e801"
-  integrity sha512-EzV8kbvzBEHongShfja+dQNOTfchKjy9uIDkutIJ9i6KFb6XMlfRVZTsi6jlYJsr5UufldAybruXPF2smZOorg==
+"@fullerstack/nax-ipware@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@fullerstack/nax-ipware/-/nax-ipware-0.0.9.tgz#6707924515bd4a6490cac1dd3032bfdd6908360f"
+  integrity sha512-xKKzzx1R3D1SLAL3z71uks04h/nCDxJHTNPLdUW5sBBTeo3/A0Tg7r3NIPohTGC1UIC4FoXfDZq8uviNePBzQA==
   dependencies:
     ts-essentials "^7.0.2"
     tslib "^2.0.0"
 
-"@fullerstack/ngx-config@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-config/-/ngx-config-0.0.9.tgz#e4544942454428ec74ff0ae89a6ebb9a70c06a6f"
-  integrity sha512-UH1L0hED1AffqSNdUuuFxOMWE7GAdPexI1L07CjnY1p0B/VFK96CZ+3u9puUq74HvvQxK+6vGZxs/eQvI4Q8lw==
+"@fullerstack/ngx-config@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-config/-/ngx-config-0.1.2.tgz#800f29b8c92997fe08714bae6d5f6f8ee7571adf"
+  integrity sha512-+alUR+P0imK9nJvbBi4v+XiFgUU7qkEc5Ik1rGctMXBZ7OTzUFhsU953nunAfFRkOb9ksaqRdD9/pfUrxQ8rOQ==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-i18n@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-i18n/-/ngx-i18n-0.0.3.tgz#3f212227eeeb06586133936938d99507a07d5938"
-  integrity sha512-WHYv+k4UA80f8gZBrujrOQ7Uf3aWpcJXcD62DPQIwkSQd02PevYiIdGyCeLPOiAD6hEoH8VHX4S+UOvrwuk4rw==
+"@fullerstack/ngx-i18n@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-i18n/-/ngx-i18n-0.0.8.tgz#fce610d13ec1ca0d6d8acafbafacc6bf11d5883b"
+  integrity sha512-gkB10sKokk3i7o0PeyA/YmGTCl+5iLWJylmcPqHfphoahQc+tdkyJIyFesKv1Ju7EIMwLgLAAEfQ0TrwucRyuQ==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-jwt@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-jwt/-/ngx-jwt-0.0.4.tgz#86d803ccc76c5a1719d0632af49e3daba08fbd21"
-  integrity sha512-0S+wOTSd7F2///72RYT9OKWeba3yvrtJxiyZvKbzqFjC2UHpoJzGLQ4jgNfnIEvuLlwXxQE+lRv4cjbnDdHnMQ==
+"@fullerstack/ngx-jwt@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-jwt/-/ngx-jwt-0.0.6.tgz#7288a6b72ff8ea762bbf56eee1f5a0bdd25fc680"
+  integrity sha512-kH9bOfrLVC+P+/11o2RbBXSHbvS/On9Ib1Do8dr5cPqLkmUOeA+UjV0VdgdpjjlQad+JhmRklR06jaUa8NOTbw==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-logger@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-logger/-/ngx-logger-0.0.4.tgz#328853db6d89585e9383feb1e9242f78af00563f"
-  integrity sha512-HaTgVWaX0J5i+YLr9ThvEI8pDEkaKOr9ORfA34D7v2GMa71qC77IZokia85nBZ0H1rPi+Jril6ssUFBMlljaCg==
+"@fullerstack/ngx-logger@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-logger/-/ngx-logger-0.0.7.tgz#430bfaa029b5d9ac0c0bb9b2dd5eeaaf52bbf694"
+  integrity sha512-tOV9t8RIGt4q5b8rmG8+QlynHJVMnhcnk+Nx1iMvzYf+W63YkF60s847u15YFKeNWELhgev4gEr5w35hEXgq1A==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-menu@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-menu/-/ngx-menu-0.0.5.tgz#1e24b1981aa4c8ee51a16fd68be7347e2e3d3839"
-  integrity sha512-Kibzc9fHEq+TQBkX8OxvmHdVZZfZSOvxNtFXmm3sWrH2CYQZ6qTqs79RDjPcRP6u2ZwNilTRXmp9b5vZY0tTNA==
+"@fullerstack/ngx-menu@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-menu/-/ngx-menu-0.0.8.tgz#ce1e2fc85baa699298ef71ffae5ae7fcb1433a3a"
+  integrity sha512-GqmADtVu96U2/3B1fCenJuiXAkPc+kjZvqKASJK0zp1a6haAPwHzLAzHteUG24e2kQSKwAftALpvzzZGFIJNDg==
   dependencies:
     tslib "^2.0.0"
 
-"@fullerstack/ngx-store@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-store/-/ngx-store-0.0.3.tgz#965e17bfd687ca0d971a0ccf4227793eb7457679"
-  integrity sha512-rvWNO7nCwASdNRdvqL042NzBk/hx15E8Tznn8IUIS70vw5MODwuGen71x5/uuhbxoZKzAnZ6mB0dmTBiCiUC8w==
+"@fullerstack/ngx-store@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@fullerstack/ngx-store/-/ngx-store-0.0.6.tgz#96e52029ab86de0b07dd0d9d6fa60d12099b5cda"
+  integrity sha512-RvaGNm1Cuvgpa7jkB6YYaYeFnW+SjO6aWERe6EutmIx7r81ed0Y2XTe43jt63hz34dy4Rw7DoqlGwDmdXlyUeA==
   dependencies:
     tslib "^2.0.0"
 
@@ -2176,12 +2176,12 @@
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-12.2.8.tgz#4e508280b98301950a81ef546b6447b633d9a9ea"
   integrity sha512-utQrOXm4eS3BEQh2/y8zt5fVF9cuakfVQSPD/pWPKLqZsGc9wB3CHkrQED0EizsBfrsn5yLc3yPh3P8yGUmdRw==
 
-"@ngx-translate/core@13.0.0":
-  version "13.0.0"
-  resolved "https://registry.yarnpkg.com/@ngx-translate/core/-/core-13.0.0.tgz#60547cb8a0845a2a0abfde6b0bf5ec6516a63fd6"
-  integrity sha512-+tzEp8wlqEnw0Gc7jtVRAJ6RteUjXw6JJR4O65KlnxOmJrCGPI0xjV/lKRnQeU0w4i96PQs/jtpL921Wrb7PWg==
+"@ngx-translate/core@14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/core/-/core-14.0.0.tgz#af421d0e1a28376843f0fed375cd2fae7630a5ff"
+  integrity sha512-UevdwNCXMRCdJv//0kC8h2eSfmi02r29xeE8E9gJ1Al4D4jEJ7eiLPdjslTMc21oJNGguqqWeEVjf64SFtvw2w==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.3.0"
 
 "@ngx-translate/http-loader@6.0.0":
   version "6.0.0"
