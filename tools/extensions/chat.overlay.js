@@ -80,7 +80,7 @@ function AC_SelectOnInsertion(containerSelector, tag, callback) {
 function AC_OpenFullscreen(element) {
   if (element.requestFullscreen) {
     element.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
+  } else if (element.webkitRequestFullscreen) {
     /* Safari */
     element.webkitRequestFullscreen();
   } else if (element.msRequestFullscreen) {
