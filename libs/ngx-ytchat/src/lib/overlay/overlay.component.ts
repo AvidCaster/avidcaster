@@ -8,10 +8,8 @@ import { Subject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rx
 
 import {
   MAX_CHAT_MESSAGES_LENGTH,
-  YTCHAT_CSS_FILE_NAME,
-  YTCHAT_CSS_MIN_FILE_NAME,
-  YTCHAT_JS_FILE_NAME,
-  YTCHAT_JS_MIN_FILE_NAME,
+  YTChatIframeContainer,
+  YTChatObserverDefault,
   defaultYTChatMessage,
 } from '../ytchat.default';
 import { YTChatMessageData, YTChatPayload, YTChatWordAction } from '../ytchat.model';
@@ -53,18 +51,29 @@ export class OverlayComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.appendScript();
-    this.appendStyle();
-
     this.buildForm();
 
+    this.setIframeContainer();
+    this.southBoundMessageSubscription();
+    this.keywordFilterSubscription();
+    this.setNewChatSelector();
+  }
+
+  private buildForm() {
+    this.form = this.formBuilder.group({
+      words: [''],
+    });
+  }
+
+  private southBoundMessageSubscription() {
     this.uix.window.addEventListener(
       'message',
       (event) => {
-        if (event.data.type === 'avidcaster-overlay-south-bound') {
+        if (event.data.type === 'avidcaster-chat-south-bound') {
           switch (event.data.action) {
-            case 'yt-chat':
-              this.setData(event.data?.payload as YTChatMessageData);
+            case 'new-chat':
+              console.log('new chat', event.data.payload);
+              // this.setData(event.data?.payload as YTChatMessageData);
               break;
             default:
               break;
@@ -73,7 +82,19 @@ export class OverlayComponent implements OnInit, OnDestroy {
       },
       false
     );
+  }
 
+  private setIframeContainer() {
+    const data = {
+      type: 'avidcaster-chat-north-bound',
+      action: 'insert-iframe',
+      payload: YTChatIframeContainer,
+    };
+
+    this.uix.window.parent.postMessage(data, '*');
+  }
+
+  private keywordFilterSubscription() {
     this.form.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((value) => {
@@ -86,39 +107,11 @@ export class OverlayComponent implements OnInit, OnDestroy {
       });
   }
 
-  private buildForm() {
-    this.form = this.formBuilder.group({
-      words: [''],
-    });
-  }
-
-  private appendScript() {
-    const baseUrl = this.uix.window?.location?.origin;
-    const scriptFile = this.ytchatService.options.production
-      ? YTCHAT_JS_MIN_FILE_NAME
-      : YTCHAT_JS_FILE_NAME;
+  private setNewChatSelector() {
     const data = {
-      type: 'avidcaster-overlay-north-bound',
-      action: 'append-script',
-      payload: {
-        url: `${baseUrl}/assets/code/${scriptFile}`,
-      },
-    };
-
-    this.uix.window.parent.postMessage(data, '*');
-  }
-
-  private appendStyle() {
-    const baseUrl = this.uix.window?.location?.origin;
-    const styleFile = this.ytchatService.options.production
-      ? YTCHAT_CSS_MIN_FILE_NAME
-      : YTCHAT_CSS_FILE_NAME;
-    const data = {
-      type: 'avidcaster-overlay-north-bound',
-      action: 'append-style',
-      payload: {
-        url: `${baseUrl}/assets/code/${styleFile}`,
-      },
+      type: 'avidcaster-chat-north-bound',
+      action: 'observe-chat',
+      payload: YTChatObserverDefault,
     };
 
     this.uix.window.parent.postMessage(data, '*');
@@ -226,7 +219,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   toggleCleanChat() {
     this.cleanEnabled = !this.cleanEnabled;
     const data = {
-      type: 'avidcaster-overlay-north-bound',
+      type: 'avidcaster-chat-north-bound',
       action: this.cleanEnabled ? 'declutter' : 'reclutter',
     };
 
@@ -243,7 +236,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     }
 
     const data = {
-      type: 'avidcaster-overlay-north-bound',
+      type: 'avidcaster-chat-north-bound',
       action: 'process-words',
       payload: {
         words: this.wordsList,
@@ -258,7 +251,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     if (this.uix.inIframe) {
       this.isFullscreen = !this.isFullscreen;
       const data = {
-        type: 'avidcaster-overlay-north-bound',
+        type: 'avidcaster-chat-north-bound',
         action: 'fullscreen',
         payload: {
           fullscreen: this.isFullscreen,
@@ -278,7 +271,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     if (this.uix.inIframe) {
       const baseUrl = this.uix.window?.location?.origin;
       const data: YTChatMessageData = {
-        type: 'avidcaster-overlay-north-bound',
+        type: 'avidcaster-chat-north-bound',
         action: 'navigate',
         payload: {
           url: `${baseUrl}${url}`,

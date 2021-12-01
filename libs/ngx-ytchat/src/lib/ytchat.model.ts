@@ -38,23 +38,17 @@ export interface YTChatPayload {
   [id: string]: any;
 }
 
-export type YTChatMessageDataType =
-  | 'avidcaster-overlay-north-bound'
-  | 'avidcaster-overlay-south-bound';
-export type YTChatMessageAction =
-  | 'append-script'
-  | 'append-style'
-  | 'declutter'
-  | 'reclutter'
-  | 'process-words'
-  | 'fullscreen'
-  | 'navigate'
-  | 'yt-chat';
-
+export type YTChatMessageDataType = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
+export type YTChatMessageAction = 'fullscreen' | 'navigate' | 'observe';
 export type YTChatWordAction = 'highlight' | 'filter';
 
 export interface YTChatMessageData {
   type: YTChatMessageDataType;
   action: YTChatMessageAction;
   payload?: YTChatPayload;
+}
+
+export interface YTChatObserver {
+  container: string;
+  selectors: string[];
 }
