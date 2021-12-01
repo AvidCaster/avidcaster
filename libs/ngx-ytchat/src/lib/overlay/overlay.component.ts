@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '@fullerstack/ngx-auth';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
@@ -12,8 +13,9 @@ import {
   YTChatObserverDefault,
   defaultYTChatMessage,
 } from '../ytchat.default';
-import { YTChatMessageData, YTChatPayload, YTChatWordAction } from '../ytchat.model';
+import { YTChatInfo, YTChatMessageData, YTChatWordAction } from '../ytchat.model';
 import { YTChatService } from '../ytchat.service';
+import { ytGetMessage, ytGetMessageInfo } from '../ytchat.util';
 
 @Component({
   selector: 'fullerstack-overlay',
@@ -28,7 +30,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   }
   private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
-  data: YTChatPayload = {};
+  data: YTChatInfo = {};
   slideInState = 0;
   currentLanguage;
   ltr = true;
@@ -43,6 +45,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   audioEnable = false;
 
   constructor(
+    readonly sanitizer: DomSanitizer,
     readonly formBuilder: FormBuilder,
     readonly i18n: I18nService,
     readonly auth: AuthService,
@@ -73,7 +76,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
           switch (event.data.action) {
             case 'new-chat':
               console.log('new chat', event.data.payload);
-              // this.setData(event.data?.payload as YTChatMessageData);
+              this.setData(event.data?.payload.chat);
               break;
             default:
               break;
@@ -117,7 +120,9 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.uix.window.parent.postMessage(data, '*');
   }
 
-  setData(data?: YTChatPayload) {
+  setData(chat?: string | YTChatInfo) {
+    const data = typeof chat === 'string' ? ytGetMessageInfo(chat) : chat;
+
     if (!data?.message && data?.donation) {
       data.message = '🎉😊🎉';
     }

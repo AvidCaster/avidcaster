@@ -27,11 +27,10 @@ export interface YTChatState {
   signature: string;
 }
 
-export interface YTChatPayload {
+export interface YTChatInfo {
   donation?: string;
   authorName?: string;
   authorImage?: string;
-  authorBadge?: string;
   message?: string;
   membership?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +44,7 @@ export type YTChatWordAction = 'highlight' | 'filter';
 export interface YTChatMessageData {
   type: YTChatMessageDataType;
   action: YTChatMessageAction;
-  payload?: YTChatPayload;
+  payload?: any;
 }
 
 export interface YTChatObserver {

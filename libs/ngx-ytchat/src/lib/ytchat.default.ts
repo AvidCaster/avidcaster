@@ -1,7 +1,7 @@
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
-import { YTChatConfig, YTChatObserver, YTChatPayload } from './ytchat.model';
+import { YTChatConfig, YTChatInfo, YTChatObserver } from './ytchat.model';
 
 export const MAX_CHAT_MESSAGES_LENGTH = 40;
 
@@ -16,14 +16,13 @@ export const defaultYTChatConfig = (): YTChatConfig => {
   return ldDeepClone(DefaultYTChatConfig);
 };
 
-export const defaultYTChatMessage = (): YTChatPayload => {
+export const defaultYTChatMessage = (): YTChatInfo => {
   const message = _('CHAT.DEFAULT_MESSAGE');
 
   return ldDeepClone({
     donation: '$100.00',
     authorName: 'Mike Tyson',
     authorImage: './assets/images/misc/avatar-default.png',
-    authorBadge: './assets/images/misc/avatar-default.png',
     message,
     membership: '',
   });
