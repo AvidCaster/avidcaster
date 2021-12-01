@@ -82,10 +82,8 @@ export class OverlayComponent implements OnInit, OnDestroy {
       .subscribe((value) => {
         this.wordsList = value?.words
           .split(' ')
-          ?.map((words) => words.trim())
+          .map((word: string) => word.trim().toLowerCase())
           .filter((words) => words.length > 0);
-
-        this.processWords();
       });
   }
 
@@ -103,6 +101,29 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.chatService.chatInfo$
       .pipe(
         filter((data) => !!data?.authorName?.length),
+        filter((data) => {
+          if (this.wordsList.length < 1) {
+            return true;
+          }
+
+          const chatWords = data?.message.toLowerCase().replace(/\s\s+/g, ' ').trim().split(' ');
+          const matched = chatWords.filter((value) => this.wordsList.includes(value)).length > 0;
+
+          switch (this.wordsAction) {
+            case 'highlight':
+              if (matched) {
+                data.action = this.wordsAction;
+              }
+              return true;
+            case 'filter':
+              if (matched) {
+                data.action = this.wordsAction;
+              }
+              return matched;
+            default:
+              return false;
+          }
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
@@ -191,17 +212,6 @@ export class OverlayComponent implements OnInit, OnDestroy {
         this.wordsAction = 'highlight';
       }
     }
-
-    const data = {
-      type: 'avidcaster-chat-north-bound',
-      action: 'process-words',
-      payload: {
-        words: this.wordsList,
-        action: this.wordsAction,
-      },
-    };
-
-    this.uix.window.parent.postMessage(data, '*');
   }
 
   toggleFullscreen() {

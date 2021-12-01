@@ -27,16 +27,6 @@ export interface YTChatState {
   signature: string;
 }
 
-export interface YTChatInfo {
-  donation?: string;
-  authorName?: string;
-  authorImage?: string;
-  message?: string;
-  membership?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [id: string]: any;
-}
-
 export type YTChatMessageDataType = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
 export type YTChatMessageAction = 'fullscreen' | 'navigate' | 'observe';
 export type YTChatWordAction = 'highlight' | 'filter';
@@ -50,4 +40,15 @@ export interface YTChatMessageData {
 export interface YTChatObserver {
   container: string;
   selectors: string[];
+}
+
+export interface YTChatInfo {
+  donation?: string;
+  authorName?: string;
+  authorImage?: string;
+  message?: string;
+  membership?: string;
+  action?: YTChatWordAction;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [id: string]: any;
 }
