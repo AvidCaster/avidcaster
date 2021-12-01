@@ -1,21 +1,19 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@fullerstack/ngx-auth';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
-import { Subject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 import {
   MAX_CHAT_MESSAGES_LENGTH,
   YTChatIframeContainer,
   YTChatObserverDefault,
-  defaultYTChatMessage,
 } from '../ytchat.default';
 import { YTChatInfo, YTChatMessageData, YTChatWordAction } from '../ytchat.model';
 import { YTChatService } from '../ytchat.service';
-import { ytGetMessage, ytGetMessageInfo } from '../ytchat.util';
 
 @Component({
   selector: 'fullerstack-overlay',
@@ -50,14 +48,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
     readonly i18n: I18nService,
     readonly auth: AuthService,
     readonly uix: UixService,
-    readonly ytchatService: YTChatService
+    readonly chatService: YTChatService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
 
     this.setIframeContainer();
-    this.southBoundMessageSubscription();
+    this.setDataInfoSubscription();
     this.keywordFilterSubscription();
     this.setNewChatSelector();
   }
@@ -66,25 +64,6 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       words: [''],
     });
-  }
-
-  private southBoundMessageSubscription() {
-    this.uix.window.addEventListener(
-      'message',
-      (event) => {
-        if (event.data.type === 'avidcaster-chat-south-bound') {
-          switch (event.data.action) {
-            case 'new-chat':
-              console.log('new chat', event.data.payload);
-              this.setData(event.data?.payload.chat);
-              break;
-            default:
-              break;
-          }
-        }
-      },
-      false
-    );
   }
 
   private setIframeContainer() {
@@ -120,59 +99,32 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this.uix.window.parent.postMessage(data, '*');
   }
 
-  setData(chat?: string | YTChatInfo) {
-    const data = typeof chat === 'string' ? ytGetMessageInfo(chat) : chat;
-
-    if (!data?.message && data?.donation) {
-      data.message = '🎉😊🎉';
-    }
-
-    if (!data?.message && data?.membership) {
-      data.message = data.membership;
-    }
-
-    if (data?.authorName.length) {
-      this.slideInState++;
-      if (data?.message) {
-        this.i18n.translate
-          .get(data?.message)
-          .pipe(take(1), takeUntil(this.destroy$))
-          .subscribe((message: string) => {
-            this.data = {
-              ...data,
-              message,
-              authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
-            };
-          });
-      } else {
-        this.data = {
-          ...data,
-          authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
-        };
-      }
-
-      if (this.data.donation || this.data.membership) {
-        this.setFireworks(true);
-        this.setAudio(true);
-      } else {
-        this.setFireworks(false);
-        this.setAudio(false);
-      }
-    } else {
-      this.data = {};
-      this.setFireworks(false);
-      this.setAudio(false);
-    }
+  private setDataInfoSubscription() {
+    this.chatService.chatInfo$
+      .pipe(
+        filter((data) => !!data?.authorName?.length),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((data) => {
+        this.data = data;
+        if (data?.authorName?.length) {
+          if (this.data.donation || this.data.membership) {
+            this.setFireworks(true);
+            this.setAudio(true);
+          } else {
+            this.setFireworks(false);
+            this.setAudio(false);
+          }
+        } else {
+          this.data = {};
+          this.setFireworks(false);
+          this.setAudio(false);
+        }
+      });
   }
 
   clearMessage() {
-    this.setData();
-  }
-
-  testMessage() {
-    if (!this.data?.authorName) {
-      this.setData(defaultYTChatMessage());
-    }
+    this.data = {};
   }
 
   setAudio(start: boolean) {

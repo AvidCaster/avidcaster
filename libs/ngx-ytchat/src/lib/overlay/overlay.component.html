@@ -7,7 +7,7 @@
           [class.yt-cursor-default]="data?.authorName"
           mat-raised-button
           color="primary"
-          (click)="testMessage()"
+          (click)="chatService.testMessage()"
         >
           <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
         </button>
