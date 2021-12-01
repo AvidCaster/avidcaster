@@ -15,10 +15,10 @@ import { MaterialModule } from '@fullerstack/ngx-material';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { OverlayComponent } from './overlay/overlay.component';
-import { ytChatRoutes } from './ytchat.routes';
-import { YTChatService } from './ytchat.service';
 import { OverviewComponent } from './overview/overview.component';
 import { SetupComponent } from './setup/setup.component';
+import { ytChatRoutes } from './ytchat.routes';
+import { YTChatService } from './ytchat.service';
 
 @NgModule({
   imports: [

@@ -7,12 +7,10 @@ import { YTChatInfo } from './ytchat.model';
  * @param chat Youtube chat string (html)
  * @returns author name string
  */
-export const ytGetAuthorName = (chat: string): string => {
-  const $obj = $($.parseHTML(chat));
-
+export const ytGetAuthorName = ($obj: JQuery<Node[]>): string => {
   $obj.find('#author-name #tooltip.hidden').remove();
   const authorName = $obj.find('#author-name').text();
-  return authorName || '';
+  return (authorName || '').replace(/\s\s+/g, ' ').trim();
 };
 
 /**
@@ -20,11 +18,9 @@ export const ytGetAuthorName = (chat: string): string => {
  * @param chat Youtube chat string (html)
  * @returns author image url string
  */
-export const ytGetAuthorImage = (chat: string): string => {
-  const $obj = $($.parseHTML(chat));
-
+export const ytGetAuthorImage = ($obj: JQuery<Node[]>): string => {
   const authorImage = $obj.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
-  return authorImage || '';
+  return (authorImage || '').replace(/\s\s+/g, ' ').trim();
 };
 
 /**
@@ -32,9 +28,7 @@ export const ytGetAuthorImage = (chat: string): string => {
  * @param chat Youtube chat string (html)
  * @returns message string
  */
-export const ytGetMessage = (chat: string): string => {
-  const $obj = $($.parseHTML(chat));
-
+export const ytGetMessage = ($obj: JQuery<Node[]>): string => {
   // Clean up the message and extract it as html
   $obj.find('#message hidden').remove();
   $obj.find('#message font').contents().unwrap();
@@ -47,7 +41,7 @@ export const ytGetMessage = (chat: string): string => {
   });
 
   const message = $obj.find('#message').html();
-  return message || '';
+  return (message || '').replace(/\s\s+/g, ' ').trim();
 };
 
 /**
@@ -55,38 +49,35 @@ export const ytGetMessage = (chat: string): string => {
  * @param chat Youtube chat string (html)
  * @returns donation string
  */
-export const ytGetDonationAmount = (chat: string): string => {
-  const $obj = $($.parseHTML(chat));
-
+export const ytGetDonationAmount = ($obj: JQuery<Node[]>): string => {
   let donationAmount = $obj.find('#purchase-amount').text();
   if (!donationAmount) {
     donationAmount = $obj.find('#purchase-amount-chip').text();
   }
-  return donationAmount?.replace(/\s\s+/g, ' ').trim() || '';
+  return (donationAmount || '').replace(/\s\s+/g, ' ').trim();
 };
 
 // get the membership from the clicked element
-export const ytGetMembership = (chat: string): string => {
-  const $obj = $($.parseHTML(chat));
-
+export const ytGetMembership = ($obj: JQuery<Node[]>): string => {
   const primaryText = $obj
     .find('.yt-live-chat-membership-item-renderer #header-primary-text')
     .html();
   const secondaryText = $obj.find('.yt-live-chat-membership-item-renderer #header-subtext').html();
 
   if (primaryText && secondaryText) {
-    return primaryText + ' ' + secondaryText;
+    return (primaryText + ' ' + secondaryText).replace(/\s\s+/g, ' ').trim();
   }
 
-  return primaryText || secondaryText || '';
+  return (primaryText || secondaryText || '').replace(/\s\s+/g, ' ').trim();
 };
 
 export const ytGetMessageInfo = (chat: string): YTChatInfo => {
+  const $obj = $($.parseHTML(chat));
   const data: YTChatInfo = {};
-  data.authorName = ytGetAuthorName(chat);
-  data.authorImage = ytGetAuthorImage(chat);
-  data.message = ytGetMessage(chat);
-  data.donationAmount = ytGetDonationAmount(chat);
-  data.membership = ytGetMembership(chat);
+  data.authorName = ytGetAuthorName($obj);
+  data.authorImage = ytGetAuthorImage($obj);
+  data.message = ytGetMessage($obj);
+  data.donation = ytGetDonationAmount($obj);
+  data.membership = ytGetMembership($obj);
   return data;
 };
