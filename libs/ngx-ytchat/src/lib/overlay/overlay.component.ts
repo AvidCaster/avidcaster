@@ -106,7 +106,12 @@ export class OverlayComponent implements OnInit, OnDestroy {
             return true;
           }
 
-          const chatWords = data?.message.toLowerCase().replace(/\s\s+/g, ' ').trim().split(' ');
+          const chatWords = data?.message
+            .replace(/<[^>]*>/g, '')
+            .toLowerCase()
+            .replace(/\s\s+/g, ' ')
+            .trim()
+            .split(' ');
           const matched = chatWords.filter((value) => this.wordsList.includes(value)).length > 0;
 
           switch (this.wordsAction) {
