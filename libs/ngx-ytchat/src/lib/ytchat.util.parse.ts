@@ -151,5 +151,5 @@ export const parseChat = (el: HTMLElement, tagName: string): YTChatInfo | undefi
     case 'yt-live-chat-membership-item-renderer':
       return parseMembershipItem(el);
   }
-  return undefined;
+  return {} as YTChatInfo;
 };
