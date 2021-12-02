@@ -203,3 +203,9 @@
 //     expect(chatInfo.membership).toEqual(`${ytMemberMonth} ${ytMemberSecondary}`);
 //   });
 // });
+
+describe('placeholder', () => {
+  it('should 1 be 1', () => {
+    expect(1).toEqual(1);
+  });
+});

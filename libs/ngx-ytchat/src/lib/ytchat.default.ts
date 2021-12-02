@@ -34,7 +34,7 @@ export const YTCHAT_JS_MIN_FILE_NAME = 'ytchat.ext.min.js';
 export const YTCHAT_CSS_MIN_FILE_NAME = 'ytchat.ext.min.css';
 
 export const YTChatObserverDefault: YTChatObserver = {
-  container: '.yt-live-chat-item-list-renderer#items',
+  container: '#item-list.yt-live-chat-renderer',
   selectors: [
     'yt-live-chat-text-message-renderer',
     'yt-live-chat-paid-message-renderer',

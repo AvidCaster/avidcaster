@@ -1,11 +1,29 @@
 import { YTChatInfo } from './ytchat.model';
 
 /**
+ * Check if string contains emoji
+ * @param str string with possible emoji
+ * @returns true if the string contains emoji
+ */
+export const hasEmoji = (str: string): boolean => {
+  const EmojiRegexExp =
+    /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+
+  return EmojiRegexExp.test(str);
+};
+
+/**
  * Get the text for the element
  * @param el element to parse
  * @returns text string
  */
 const getText = (el: HTMLElement, selector: string): string => {
+  el = el.cloneNode(true) as HTMLElement;
+  const delList = el.querySelectorAll(`${selector} > :not(some-fake-element)`);
+  delList.forEach(function (item) {
+    item.parentNode.removeChild(item);
+  });
+
   const author =
     el.querySelector(selector)?.textContent?.replace(/\s\s+/g, ' ').trim() ?? undefined;
   return author;
@@ -17,6 +35,7 @@ const getText = (el: HTMLElement, selector: string): string => {
  * @returns message html
  */
 const getHtml = (el: HTMLElement, selector: string): string => {
+  el = el.cloneNode(true) as HTMLElement;
   const messageHtml = el.querySelector(selector)?.innerHTML;
   return messageHtml;
 };
@@ -27,6 +46,7 @@ const getHtml = (el: HTMLElement, selector: string): string => {
  * @returns author avatar
  */
 const getImage = (el: HTMLElement, selector: string): string => {
+  el = el.cloneNode(true) as HTMLElement;
   const image = el.querySelector(selector) as HTMLImageElement | null;
   const imgUrl = image
     ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/\s\s+/g, ' ').trim()
@@ -40,9 +60,47 @@ const getImage = (el: HTMLElement, selector: string): string => {
  * @returns message card background color
  */
 const getBackgroundColor = (el: HTMLElement, selector: string): string => {
+  el = el.cloneNode(true) as HTMLElement;
   const card = el.querySelector(selector) as HTMLElement | null;
   const backgroundColor = (card && getComputedStyle(card).backgroundColor) ?? undefined;
   return backgroundColor;
+};
+
+/**
+ * Get the message text for the element
+ * @param el element to parse
+ * @returns text only string
+ */
+const getMessageHtml = (el: HTMLElement): string => {
+  el = el.cloneNode(true) as HTMLElement;
+
+  const delList = el.querySelectorAll('#message > :not(img):not(a)');
+  delList.forEach(function (item) {
+    item.parentNode.removeChild(item);
+  });
+
+  el.querySelectorAll('#message a').forEach(function (item) {
+    const href = item.getAttribute('href');
+    item.replaceWith(`(${href})`);
+  });
+
+  el.querySelectorAll('#message img').forEach(function (node) {
+    const alt = node.getAttribute('alt').replace(/ /g, ' ').trim();
+    if (alt && hasEmoji(alt)) {
+      node.replaceWith(alt);
+    } else {
+      const src = node.getAttribute('src');
+      node.replaceWith(`<img src="${src}">`);
+    }
+  });
+
+  const message = el
+    .querySelector('#message')
+    .innerHTML.replace(/(?:\r\n|\r|\n)/g, '')
+    .replace(/ /g, ' ')
+    .trim();
+
+  return message;
 };
 
 /**
@@ -65,7 +123,7 @@ const parseCommonElements = (el: HTMLElement): YTChatInfo => {
  */
 const parseTextMessage = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
-  const html = getHtml(el, '#message');
+  const html = getMessageHtml(el);
 
   return {
     ...params,
@@ -81,7 +139,7 @@ const parseTextMessage = (el: HTMLElement): YTChatInfo => {
  */
 const parsePaidMessage = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
-  const html = getHtml(el, '#message');
+  const html = getMessageHtml(el);
   const donation = getText(el, '#donation-amount-chip');
   const backgroundColor = getBackgroundColor(el, '#card > #header');
 
@@ -122,7 +180,7 @@ const parsePaidSticker = (el: HTMLElement): YTChatInfo => {
 const parseMembershipItem = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
   const backgroundColor = getBackgroundColor(el, '#card > #header');
-  let html = getHtml(el, '#message');
+  let html = getMessageHtml(el);
   let donation = undefined;
   if (html) {
     // milestone chat
