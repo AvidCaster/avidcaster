@@ -13,20 +13,32 @@ export const hasEmoji = (str: string): boolean => {
 };
 
 /**
- * Get the text for the element
+ * Get the inner text for the element (nested: <div>price is<span>$1.9</span></div>) => $1.9 (unwrap)
  * @param el element to parse
  * @returns text string
  */
-const getText = (el: HTMLElement, selector: string): string => {
-  el = el.cloneNode(true) as HTMLElement;
-  const delList = el.querySelectorAll(`${selector} > :not(some-fake-element)`);
+const getInnerText = (el: Element, selector: string): string => {
+  el = el.cloneNode(true) as Element;
+
+  const text = el.querySelector(selector)?.textContent?.replace(/ +/g, ' ').trim() ?? undefined;
+  return text;
+};
+
+/**
+ * Get the top level text for the element
+ * @param el element to parse
+ * @returns text string
+ */
+const getText = (el: Element, selector: string): string => {
+  el = el.cloneNode(true) as Element;
+
+  const delList = el.querySelectorAll(`${selector} > del-all-inner-elements`);
   delList.forEach(function (item) {
     item.parentNode.removeChild(item);
   });
 
-  const author =
-    el.querySelector(selector)?.textContent?.replace(/\s\s+/g, ' ').trim() ?? undefined;
-  return author;
+  const text = el.querySelector(selector)?.textContent?.replace(/ +/g, ' ').trim() ?? undefined;
+  return text;
 };
 
 /**
@@ -34,8 +46,8 @@ const getText = (el: HTMLElement, selector: string): string => {
  * @param el element to parse
  * @returns message html
  */
-const getHtml = (el: HTMLElement, selector: string): string => {
-  el = el.cloneNode(true) as HTMLElement;
+const getHtml = (el: Element, selector: string): string => {
+  el = el.cloneNode(true) as Element;
   const messageHtml = el.querySelector(selector)?.innerHTML;
   return messageHtml;
 };
@@ -45,11 +57,11 @@ const getHtml = (el: HTMLElement, selector: string): string => {
  * @param el element to parse
  * @returns author avatar
  */
-const getImage = (el: HTMLElement, selector: string): string => {
-  el = el.cloneNode(true) as HTMLElement;
+const getImage = (el: Element, selector: string): string => {
+  el = el.cloneNode(true) as Element;
   const image = el.querySelector(selector) as HTMLImageElement | null;
   const imgUrl = image
-    ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/\s\s+/g, ' ').trim()
+    ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim()
     : undefined;
   return imgUrl;
 };
@@ -59,9 +71,9 @@ const getImage = (el: HTMLElement, selector: string): string => {
  * @param el element to parse
  * @returns message card background color
  */
-const getBackgroundColor = (el: HTMLElement, selector: string): string => {
-  el = el.cloneNode(true) as HTMLElement;
-  const card = el.querySelector(selector) as HTMLElement | null;
+const getBackgroundColor = (el: Element, selector: string): string => {
+  el = el.cloneNode(true) as Element;
+  const card = el.querySelector(selector) as Element | null;
   const backgroundColor = (card && getComputedStyle(card).backgroundColor) ?? undefined;
   return backgroundColor;
 };
@@ -71,8 +83,8 @@ const getBackgroundColor = (el: HTMLElement, selector: string): string => {
  * @param el element to parse
  * @returns text only string
  */
-const getMessageHtml = (el: HTMLElement): string => {
-  el = el.cloneNode(true) as HTMLElement;
+const getMessageHtml = (el: Element): string => {
+  el = el.cloneNode(true) as Element;
 
   const delList = el.querySelectorAll('#message > :not(img):not(a)');
   delList.forEach(function (item) {
@@ -85,7 +97,7 @@ const getMessageHtml = (el: HTMLElement): string => {
   });
 
   el.querySelectorAll('#message img').forEach(function (node) {
-    const alt = node.getAttribute('alt').replace(/ /g, ' ').trim();
+    const alt = node.getAttribute('alt').replace(/ +/g, ' ').trim();
     if (alt && hasEmoji(alt)) {
       node.replaceWith(alt);
     } else {
@@ -97,10 +109,23 @@ const getMessageHtml = (el: HTMLElement): string => {
   const message = el
     .querySelector('#message')
     .innerHTML.replace(/(?:\r\n|\r|\n)/g, '')
-    .replace(/ /g, ' ')
+    .replace(/ +/g, ' ')
     .trim();
 
   return message;
+};
+
+/**
+ * Get the donation text for the element
+ * @param el element to parse
+ * @returns donation amount
+ */
+const getDonationAmount = (el: Element): string => {
+  let amount = getInnerText(el, '#purchase-amount');
+  if (!amount) {
+    amount = getInnerText(el, '#purchase-amount-chip');
+  }
+  return amount.replace(/ +/g, ' ').trim();
 };
 
 /**
@@ -108,7 +133,7 @@ const getMessageHtml = (el: HTMLElement): string => {
  * @param el element to parse
  * @returns common info
  */
-const parseCommonElements = (el: HTMLElement): YTChatInfo => {
+const parseCommonElements = (el: Element): YTChatInfo => {
   const author = getText(el, '#author-name');
   const authorType = getText(el, 'author-type');
   const message = getText(el, '#message');
@@ -121,7 +146,7 @@ const parseCommonElements = (el: HTMLElement): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parseTextMessage = (el: HTMLElement): YTChatInfo => {
+const parseTextMessage = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
   const html = getMessageHtml(el);
 
@@ -137,10 +162,10 @@ const parseTextMessage = (el: HTMLElement): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parsePaidMessage = (el: HTMLElement): YTChatInfo => {
+const parsePaidMessage = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
   const html = getMessageHtml(el);
-  const donation = getText(el, '#donation-amount-chip');
+  const donation = getDonationAmount(el);
   const backgroundColor = getBackgroundColor(el, '#card > #header');
 
   return {
@@ -157,9 +182,9 @@ const parsePaidMessage = (el: HTMLElement): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parsePaidSticker = (el: HTMLElement): YTChatInfo => {
+const parsePaidSticker = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
-  const donation = getText(el, '#purchase-amount-chip');
+  const donation = getDonationAmount(el);
   const backgroundColor = getBackgroundColor(el, '#card');
   const stickerUrl = getImage(el, '#sticker > #img');
 
@@ -177,7 +202,7 @@ const parsePaidSticker = (el: HTMLElement): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parseMembershipItem = (el: HTMLElement): YTChatInfo => {
+const parseMembershipItem = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
   const backgroundColor = getBackgroundColor(el, '#card > #header');
   let html = getMessageHtml(el);
@@ -198,7 +223,7 @@ const parseMembershipItem = (el: HTMLElement): YTChatInfo => {
   };
 };
 
-export const parseChat = (el: HTMLElement, tagName: string): YTChatInfo | undefined => {
+export const parseChat = (el: Element, tagName: string): YTChatInfo | undefined => {
   switch (tagName) {
     case 'yt-live-chat-text-message-renderer':
       return parseTextMessage(el);
