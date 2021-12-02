@@ -15,8 +15,8 @@ import { BehaviorSubject, Subject, filter, take, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import { defaultYTChatConfig, defaultYTChatMessage } from './ytchat.default';
-import { YTCHAT_URL_FULLSCREEN, YTChatInfo } from './ytchat.model';
-import { ytGetMessageInfo } from './ytchat.util';
+import { YTCHAT_URL_FULLSCREEN, YTChatDataSouthBound, YTChatInfo } from './ytchat.model';
+import { parseChat } from './ytchat.util.parse';
 
 @Injectable()
 export class YTChatService {
@@ -73,7 +73,7 @@ export class YTChatService {
         if (event.data.type === 'avidcaster-chat-south-bound') {
           switch (event.data.action) {
             case 'new-chat':
-              this.cleanData(event.data.payload);
+              this.cleanData(event.data.payload as YTChatDataSouthBound);
               break;
             default:
               break;
@@ -84,18 +84,20 @@ export class YTChatService {
     );
   }
 
-  private cleanData(data: any) {
-    let info = ytGetMessageInfo(data.chat);
+  private async cleanData(data: YTChatDataSouthBound) {
+    const chatEl = this.layout.uix.window.document.createElement('div');
+    chatEl.innerHTML = data.html;
+    let info = parseChat(chatEl, data.tagName);
 
-    if (!info?.message && info?.donation) {
+    if (!info?.message && info?.purchaseAmount) {
       info.message = '🎉😊🎉';
     }
 
-    if (!info?.message && info?.membership) {
-      info.message = info.membership;
+    if (!info?.message && info?.messageType) {
+      info.message = info.messageType;
     }
 
-    if (info?.authorName.length) {
+    if (info?.author.length) {
       if (info?.message) {
         this.i18n.translate
           .get(info?.message)
@@ -104,13 +106,13 @@ export class YTChatService {
             info = {
               ...info,
               message,
-              authorImage: info.authorImage || './assets/images/misc/avatar-default.png',
+              avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default.png',
             };
           });
       } else {
         info = {
           ...info,
-          authorImage: info.authorImage || './assets/images/misc/avatar-default.png',
+          avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default.png',
         };
       }
     }

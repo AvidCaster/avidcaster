@@ -42,13 +42,20 @@ export interface YTChatObserver {
   selectors: string[];
 }
 
-export interface YTChatInfo {
-  donation?: string;
-  authorName?: string;
-  authorImage?: string;
+export type YTChatInfo = {
+  author?: string;
+  authorType?: string;
   message?: string;
-  membership?: string;
+  messageType?: string;
+  html?: string;
+  avatarUrl?: string;
+  stickerUrl?: string;
+  backgroundColor?: string;
+  purchaseAmount?: string;
   action?: YTChatWordAction;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [id: string]: any;
-}
+};
+
+export type YTChatDataSouthBound = {
+  tagName: string;
+  html: string;
+};

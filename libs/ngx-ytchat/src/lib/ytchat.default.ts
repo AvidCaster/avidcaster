@@ -17,14 +17,13 @@ export const defaultYTChatConfig = (): YTChatConfig => {
 };
 
 export const defaultYTChatMessage = (): YTChatInfo => {
-  const message = _('CHAT.DEFAULT_MESSAGE');
+  const html = _('CHAT.DEFAULT_MESSAGE');
 
   return ldDeepClone({
-    donation: '$100.00',
-    authorName: 'Mike Tyson',
-    authorImage: './assets/images/misc/avatar-default.png',
-    message,
-    membership: '',
+    author: 'Mike Tyson',
+    avatarUrl: './assets/images/misc/avatar-default.png',
+    html,
+    purchaseAmount: '$100.00',
   });
 };
 

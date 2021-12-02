@@ -74,10 +74,10 @@ export const ytGetMembership = ($obj: JQuery<Node[]>): string => {
 export const ytGetMessageInfo = (chat: string): YTChatInfo => {
   const $obj = $($.parseHTML(chat));
   const data: YTChatInfo = {};
-  data.authorName = ytGetAuthorName($obj);
-  data.authorImage = ytGetAuthorImage($obj);
-  data.message = ytGetMessage($obj);
-  data.donation = ytGetDonationAmount($obj);
-  data.membership = ytGetMembership($obj);
+  // data.authorName = ytGetAuthorName($obj);
+  // data.authorImage = ytGetAuthorImage($obj);
+  // data.message = ytGetMessage($obj);
+  // data.donation = ytGetDonationAmount($obj);
+  // data.membership = ytGetMembership($obj);
   return data;
 };

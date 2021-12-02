@@ -100,7 +100,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   private setDataInfoSubscription() {
     this.chatService.chatInfo$
       .pipe(
-        filter((data) => !!data?.authorName?.length),
+        filter((data) => !!data?.author?.length),
         filter((data) => {
           if (this.wordsList.length < 1) {
             return true;
@@ -133,8 +133,8 @@ export class OverlayComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.data = data;
-        if (data?.authorName?.length) {
-          if (this.data.donation || this.data.membership) {
+        if (data?.author?.length) {
+          if (this.data.purchaseAmount || this.data.messageType) {
             this.setFireworks(true);
             this.setAudio(true);
           } else {
