@@ -15,7 +15,7 @@ import { BehaviorSubject, Subject, filter, take, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import { defaultYTChatConfig, defaultYTChatMessage } from './ytchat.default';
-import { YTCHAT_URL_FULLSCREEN, YTChatDataSouthBound, YTChatInfo } from './ytchat.model';
+import { YTCHAT_URL_FULLSCREEN, YTChatInfo, YTChatPayloadSouthBound } from './ytchat.model';
 import { parseChat } from './ytchat.util.parse';
 
 @Injectable()
@@ -73,7 +73,7 @@ export class YTChatService {
         if (event.data.type === 'avidcaster-chat-south-bound') {
           switch (event.data.action) {
             case 'new-chat':
-              this.cleanData(event.data.payload as YTChatDataSouthBound);
+              this.cleanData(event.data.payload as YTChatPayloadSouthBound);
               break;
             default:
               break;
@@ -84,7 +84,7 @@ export class YTChatService {
     );
   }
 
-  private async cleanData(data: YTChatDataSouthBound) {
+  private async cleanData(data: YTChatPayloadSouthBound) {
     const chatEl = this.layout.uix.window.document.createElement('div');
     chatEl.innerHTML = data.html;
     let info = parseChat(chatEl, data.tagName);
@@ -116,7 +116,7 @@ export class YTChatService {
         };
       }
     }
-
+    console.log(JSON.stringify(info, null, 4));
     this.chatInfoObs$.next(info);
   }
 

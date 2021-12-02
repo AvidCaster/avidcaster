@@ -124,7 +124,7 @@
             </span>
           </div>
         </div>
-        <div class="yt-message" [innerHtml]="data?.message"></div>
+        <div class="yt-message" [innerHtml]="data?.html || data?.message"></div>
       </div>
     </div>
   </section>

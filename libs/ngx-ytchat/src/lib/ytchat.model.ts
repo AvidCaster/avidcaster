@@ -30,11 +30,21 @@ export interface YTChatState {
 export type YTChatMessageDataType = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
 export type YTChatMessageAction = 'fullscreen' | 'navigate' | 'observe';
 export type YTChatWordAction = 'highlight' | 'filter';
+export type YTChatMessageType =
+  | 'text-message'
+  | 'paid-message'
+  | 'paid-sticker'
+  | 'membership-item';
+
+export type YTChatPayloadSouthBound = {
+  tagName: string;
+  html: string;
+};
 
 export interface YTChatMessageData {
   type: YTChatMessageDataType;
   action: YTChatMessageAction;
-  payload?: any;
+  payload?: YTChatPayloadSouthBound | any;
 }
 
 export interface YTChatObserver {
@@ -46,16 +56,12 @@ export type YTChatInfo = {
   author?: string;
   authorType?: string;
   message?: string;
-  messageType?: string;
+  donation?: string;
+  messageType?: YTChatMessageType;
   html?: string;
   avatarUrl?: string;
   stickerUrl?: string;
   backgroundColor?: string;
   purchaseAmount?: string;
   action?: YTChatWordAction;
-};
-
-export type YTChatDataSouthBound = {
-  tagName: string;
-  html: string;
 };

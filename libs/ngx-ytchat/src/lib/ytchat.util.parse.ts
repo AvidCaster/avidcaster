@@ -1,23 +1,71 @@
 import { YTChatInfo } from './ytchat.model';
 
-const getBackgroundColor = (el: HTMLElement) => {
-  return getComputedStyle(el).backgroundColor;
+/**
+ * Get the text for the element
+ * @param el element to parse
+ * @returns text string
+ */
+const getText = (el: HTMLElement, selector: string): string => {
+  const author =
+    el.querySelector(selector)?.textContent?.replace(/\s\s+/g, ' ').trim() ?? undefined;
+  return author;
 };
 
-const parseCommonElements = (el: HTMLElement) => {
-  const author = el.querySelector('#author-name')?.textContent ?? undefined;
-  const authorType = el.getAttribute('author-type') ?? undefined;
-  const message = el.querySelector('#message')?.textContent ?? undefined;
-  const avatarImage = el.querySelector('#img') as HTMLImageElement | null;
-  const avatarUrl = avatarImage ? avatarImage.src : undefined;
+/**
+ * Get the message html from the element
+ * @param el element to parse
+ * @returns message html
+ */
+const getHtml = (el: HTMLElement, selector: string): string => {
+  const messageHtml = el.querySelector(selector)?.innerHTML;
+  return messageHtml;
+};
 
+/**
+ * Get the author avatar from the element
+ * @param el element to parse
+ * @returns author avatar
+ */
+const getImage = (el: HTMLElement, selector: string): string => {
+  const image = el.querySelector(selector) as HTMLImageElement | null;
+  const imgUrl = image
+    ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/\s\s+/g, ' ').trim()
+    : undefined;
+  return imgUrl;
+};
+
+/**
+ * Get the message background color from the element
+ * @param el element to parse
+ * @returns message card background color
+ */
+const getBackgroundColor = (el: HTMLElement, selector: string): string => {
+  const card = el.querySelector(selector) as HTMLElement | null;
+  const backgroundColor = (card && getComputedStyle(card).backgroundColor) ?? undefined;
+  return backgroundColor;
+};
+
+/**
+ * Get the common data from the element
+ * @param el element to parse
+ * @returns common info
+ */
+const parseCommonElements = (el: HTMLElement): YTChatInfo => {
+  const author = getText(el, '#author-name');
+  const authorType = getText(el, 'author-type');
+  const message = getText(el, '#message');
+  const avatarUrl = getImage(el, '#img');
   return { message, author, authorType, avatarUrl };
 };
 
-const parseTextMessage = (el: HTMLElement) => {
+/**
+ * Parse the element to get the message info (type text-message)
+ * @param el element to parse
+ * @returns message info
+ */
+const parseTextMessage = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
-
-  const html = el.querySelector('#message')?.innerHTML;
+  const html = getHtml(el, '#message');
 
   return {
     ...params,
@@ -26,60 +74,68 @@ const parseTextMessage = (el: HTMLElement) => {
   };
 };
 
-const parsePaidMessage = (el: HTMLElement) => {
+/**
+ * Parse the element to get the message info (type paid-message)
+ * @param el element to parse
+ * @returns message info
+ */
+const parsePaidMessage = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
-
-  const html = el.querySelector('#message')?.innerHTML;
-  const subText = el.querySelector('#purchase-amount')?.textContent ?? undefined;
-  const card = el.querySelector('#card > #header') as HTMLElement | null;
-  const backgroundColor = (card && getBackgroundColor(card)) ?? undefined;
+  const html = getHtml(el, '#message');
+  const donation = getText(el, '#donation-amount-chip');
+  const backgroundColor = getBackgroundColor(el, '#card > #header');
 
   return {
     ...params,
     html,
     backgroundColor,
-    subText,
+    donation,
     messageType: 'paid-message',
   };
 };
 
-const parsePaidSticker = (el: HTMLElement) => {
+/**
+ * Parse the element to get the message info (type paid-sticker)
+ * @param el element to parse
+ * @returns message info
+ */
+const parsePaidSticker = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
-
-  const subText = el.querySelector('#purchase-amount-chip')?.textContent ?? '';
-  const card = el.querySelector('#card') as HTMLElement | null;
-  const backgroundColor = (card && getBackgroundColor(card)) ?? undefined;
-  const stickerImage = el.querySelector('#sticker > #img') as HTMLImageElement | null;
-  const stickerUrl = stickerImage ? stickerImage.src : undefined;
+  const donation = getText(el, '#purchase-amount-chip');
+  const backgroundColor = getBackgroundColor(el, '#card');
+  const stickerUrl = getImage(el, '#sticker > #img');
 
   return {
     ...params,
     stickerUrl,
     backgroundColor,
-    subText,
+    donation,
     messageType: 'paid-sticker',
   };
 };
 
-const parseMembershipItem = (el: HTMLElement) => {
+/**
+ * Parse the element to get the message info (type membership-item)
+ * @param el element to parse
+ * @returns message info
+ */
+const parseMembershipItem = (el: HTMLElement): YTChatInfo => {
   const params = parseCommonElements(el);
-
-  let html = el.querySelector('#message')?.innerHTML;
-  let subText = undefined;
+  const backgroundColor = getBackgroundColor(el, '#card > #header');
+  let html = getHtml(el, '#message');
+  let donation = undefined;
   if (html) {
     // milestone chat
-    subText = el.querySelector('#header-primary-text')?.textContent ?? undefined;
+    donation = getText(el, '#header-primary-text');
   } else {
-    html = el.querySelector('#header-subtext')?.textContent ?? undefined;
+    html = getText(el, '#header-subtext');
   }
-  const card = el.querySelector('#card > #header') as HTMLElement | null;
-  const backgroundColor = (card && getBackgroundColor(card)) ?? undefined;
 
   return {
     ...params,
     html,
     backgroundColor,
-    subText,
+    donation,
     messageType: 'membership-item',
   };
 };
