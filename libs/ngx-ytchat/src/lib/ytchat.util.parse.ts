@@ -1,3 +1,5 @@
+import { unescape as ldUnescape } from 'lodash-es';
+
 import { YTChatInfo } from './ytchat.model';
 
 /**
@@ -49,7 +51,7 @@ const getText = (el: Element, selector: string): string => {
 const getHtml = (el: Element, selector: string): string => {
   el = el.cloneNode(true) as Element;
   const messageHtml = el.querySelector(selector)?.innerHTML;
-  return messageHtml;
+  return ldUnescape(messageHtml);
 };
 
 /**
@@ -83,20 +85,24 @@ const getBackgroundColor = (el: Element, selector: string): string => {
  * @param el element to parse
  * @returns text only string
  */
-const getMessageHtml = (el: Element): string => {
+const getMessageHtml = (el: Element, selector: string): string => {
   el = el.cloneNode(true) as Element;
 
-  const delList = el.querySelectorAll('#message > :not(img):not(a)');
+  el.querySelectorAll(`${selector} font`).forEach(function (item) {
+    item.replaceWith(item.textContent);
+  });
+
+  const delList = el.querySelectorAll(`${selector}  > :not(img):not(a)`);
   delList.forEach(function (item) {
     item.parentNode.removeChild(item);
   });
 
-  el.querySelectorAll('#message a').forEach(function (item) {
+  el.querySelectorAll(`${selector} a`).forEach(function (item) {
     const href = item.getAttribute('href');
     item.replaceWith(`(${href})`);
   });
 
-  el.querySelectorAll('#message img').forEach(function (node) {
+  el.querySelectorAll(`${selector} img`).forEach(function (node) {
     const alt = node.getAttribute('alt').replace(/ +/g, ' ').trim();
     if (alt && hasEmoji(alt)) {
       node.replaceWith(alt);
@@ -106,13 +112,9 @@ const getMessageHtml = (el: Element): string => {
     }
   });
 
-  const message = el
-    .querySelector('#message')
-    .innerHTML.replace(/(?:\r\n|\r|\n)/g, '')
-    .replace(/ +/g, ' ')
-    .trim();
+  const message = getHtml(el, selector);
 
-  return message;
+  return message.replace(/ +/g, ' ').trim();
 };
 
 /**
@@ -148,7 +150,7 @@ const parseCommonElements = (el: Element): YTChatInfo => {
  */
 const parseTextMessage = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
-  const html = getMessageHtml(el);
+  const html = getMessageHtml(el, '#message');
 
   return {
     ...params,
@@ -164,7 +166,7 @@ const parseTextMessage = (el: Element): YTChatInfo => {
  */
 const parsePaidMessage = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
-  const html = getMessageHtml(el);
+  const html = getMessageHtml(el, '#message');
   const donation = getDonationAmount(el);
   const backgroundColor = getBackgroundColor(el, '#card > #header');
 
@@ -205,13 +207,13 @@ const parsePaidSticker = (el: Element): YTChatInfo => {
 const parseMembershipItem = (el: Element): YTChatInfo => {
   const params = parseCommonElements(el);
   const backgroundColor = getBackgroundColor(el, '#card > #header');
-  let html = getMessageHtml(el);
+  let html = getMessageHtml(el, '#message');
   let donation = undefined;
   if (html) {
     // milestone chat
     donation = getText(el, '#header-primary-text');
   } else {
-    html = getText(el, '#header-subtext');
+    html = getHtml(el, '#header-subtext');
   }
 
   return {
