@@ -3,6 +3,8 @@ import { cloneDeep as ldDeepClone } from 'lodash-es';
 
 import { YTChatConfig, YTChatInfo, YTChatObserver } from './ytchat.model';
 
+export const CHAT_STORAGE_KEY = 'avidcaster-chat';
+
 export const MAX_CHAT_MESSAGES_LENGTH = 40;
 
 /**

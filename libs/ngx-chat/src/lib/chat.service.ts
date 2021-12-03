@@ -4,7 +4,7 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs';
 
-import { CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
+import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
 import { ChatMessage } from './chat.model';
 
 @Injectable()
@@ -49,7 +49,8 @@ export class ChatService {
         if (event.data.type === 'avidcaster-chat-south-bound') {
           switch (event.data.action) {
             case 'new-chat':
-              console.log(event.data);
+              // console.log(event.data);
+              localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(event.data.payload));
               // this.cleanData(event.data.payload as YTChatPayloadSouthBound);
               break;
             default:

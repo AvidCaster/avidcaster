@@ -14,7 +14,7 @@ import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith } from 'lodash-es';
 import { BehaviorSubject, Subject, filter, take, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
-import { defaultYTChatConfig, defaultYTChatMessage } from './ytchat.default';
+import { CHAT_STORAGE_KEY, defaultYTChatConfig, defaultYTChatMessage } from './ytchat.default';
 import { YTCHAT_URL_FULLSCREEN, YTChatInfo, YTChatPayloadSouthBound } from './ytchat.model';
 import { parseChat } from './ytchat.util.parse';
 
@@ -45,6 +45,7 @@ export class YTChatService {
 
     this.subRouteChange();
     this.southBoundMessageSubscription();
+    this.storageSubscription();
     this.logger.info(`[${this.nameSpace}] ChatOverlay ready ...`);
   }
 
@@ -122,5 +123,18 @@ export class YTChatService {
 
   testMessage() {
     this.chatInfoObs$.next(defaultYTChatMessage());
+  }
+
+  private storageSubscription() {
+    addEventListener(
+      'storage',
+      (event) => {
+        if (event.key === CHAT_STORAGE_KEY) {
+          const chat = JSON.parse(event.newValue);
+          console.log(chat);
+        }
+      },
+      false
+    );
   }
 }
