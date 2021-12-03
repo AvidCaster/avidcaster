@@ -10,7 +10,7 @@ import { YTChatInfo } from './ytchat.model';
 export const ytGetAuthorName = ($obj: JQuery<Node[]>): string => {
   $obj.find('#author-name #tooltip.hidden').remove();
   const authorName = $obj.find('#author-name').text();
-  return (authorName || '').replace(/\s\s+/g, ' ').trim();
+  return (authorName || '').replace(/ +/g, ' ').trim();
 };
 
 /**
@@ -20,7 +20,7 @@ export const ytGetAuthorName = ($obj: JQuery<Node[]>): string => {
  */
 export const ytGetAuthorImage = ($obj: JQuery<Node[]>): string => {
   const authorImage = $obj.find('#img').attr('src').replace('s32', 's256').replace('s64', 's256');
-  return (authorImage || '').replace(/\s\s+/g, ' ').trim();
+  return (authorImage || '').replace(/ +/g, ' ').trim();
 };
 
 /**
@@ -41,7 +41,7 @@ export const ytGetMessage = ($obj: JQuery<Node[]>): string => {
   });
 
   const message = $obj.find('#message').html();
-  return (message || '').replace(/\s\s+/g, ' ').trim();
+  return (message || '').replace(/ +/g, ' ').trim();
 };
 
 /**
@@ -54,7 +54,7 @@ export const ytGetDonationAmount = ($obj: JQuery<Node[]>): string => {
   if (!donationAmount) {
     donationAmount = $obj.find('#purchase-amount-chip').text();
   }
-  return (donationAmount || '').replace(/\s\s+/g, ' ').trim();
+  return (donationAmount || '').replace(/ +/g, ' ').trim();
 };
 
 // get the membership from the clicked element
@@ -65,10 +65,10 @@ export const ytGetMembership = ($obj: JQuery<Node[]>): string => {
   const secondaryText = $obj.find('.yt-live-chat-membership-item-renderer #header-subtext').html();
 
   if (primaryText && secondaryText) {
-    return (primaryText + ' ' + secondaryText).replace(/\s\s+/g, ' ').trim();
+    return (primaryText + ' ' + secondaryText).replace(/ +/g, ' ').trim();
   }
 
-  return (primaryText || secondaryText || '').replace(/\s\s+/g, ' ').trim();
+  return (primaryText || secondaryText || '').replace(/ +/g, ' ').trim();
 };
 
 export const ytGetMessageInfo = (chat: string): YTChatInfo => {

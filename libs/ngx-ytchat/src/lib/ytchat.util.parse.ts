@@ -74,7 +74,7 @@ const getImage = (el: Element, selector: string): string => {
 const getBackgroundColor = (el: Element, selector: string): string => {
   el = el.cloneNode(true) as Element;
   const card = el.querySelector(selector) as Element | null;
-  const backgroundColor = (card && getComputedStyle(card).backgroundColor) ?? undefined;
+  const backgroundColor = card ? getComputedStyle(card).backgroundColor : undefined;
   return backgroundColor;
 };
 
