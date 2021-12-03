@@ -92,14 +92,9 @@ const getMessageHtml = (el: Element, selector: string): string => {
     item.replaceWith(item.textContent);
   });
 
-  const delList = el.querySelectorAll(`${selector}  > :not(img):not(a)`);
+  const delList = el.querySelectorAll(`${selector}  > :not(img)`);
   delList.forEach(function (item) {
     item.parentNode.removeChild(item);
-  });
-
-  el.querySelectorAll(`${selector} a`).forEach(function (item) {
-    const href = item.getAttribute('href');
-    item.replaceWith(`(${href})`);
   });
 
   el.querySelectorAll(`${selector} img`).forEach(function (node) {
