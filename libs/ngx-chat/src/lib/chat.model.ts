@@ -18,7 +18,7 @@ export type ChatMessage = {
 };
 
 export type ChatDirection = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
-export type ChatAction = 'chat-new';
+export type ChatAction = 'chat-new' | 'ping-down' | 'ping-up';
 export type ChatSupportedHosts = 'youtube' | 'twitch';
 
 export type ChatMessageData = {

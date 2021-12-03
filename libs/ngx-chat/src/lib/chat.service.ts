@@ -14,7 +14,8 @@ import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } fr
 
 import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
 import { ChatMessage, ChatMessageEvent } from './chat.model';
-import { parseChat } from './chat.youtube';
+import { parseTwitchChat } from './chat.twitch';
+import { parseYouTubeChat } from './chat.youtube';
 
 @Injectable()
 export class ChatService {
@@ -23,6 +24,7 @@ export class ChatService {
   private chatOb$ = new BehaviorSubject<ChatMessage>({});
   chat$ = this.chatOb$.asObservable();
   lastUrl: string;
+  currentHost: string;
 
   constructor(
     readonly router: Router,
@@ -30,10 +32,9 @@ export class ChatService {
     readonly layout: LayoutService
   ) {
     this.onMessageOb$ = fromEvent(window, 'message');
-
     this.changeRouteSubscription();
     this.southBoundSubscription();
-    this.setNewChatSelector();
+    this.setNorthBoundReadyPing();
   }
 
   private changeRouteSubscription() {
@@ -59,16 +60,24 @@ export class ChatService {
       const data = event.data as ChatMessageEvent;
       if (data.type === 'avidcaster-chat-south-bound') {
         switch (data.action) {
+          case 'ping-down':
+            this.currentHost = data.host;
+            this.setNorthBoundSelector(this.currentHost);
+            break;
           case 'chat-new':
             switch (data.host) {
               case 'youtube': {
-                const chat = parseChat(data.payload);
+                const chat = parseYouTubeChat(data.payload);
                 localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat));
                 console.log(JSON.stringify(chat, null, 4));
                 break;
               }
-              case 'twitch':
+              case 'twitch': {
+                const chat = parseTwitchChat(data.payload);
+                localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat));
+                console.log(JSON.stringify(chat, null, 4));
                 break;
+              }
               default:
                 console.log(`Unknown host: ${data.host}`);
                 break;
@@ -81,11 +90,20 @@ export class ChatService {
     });
   }
 
-  private setNewChatSelector() {
+  private setNorthBoundReadyPing() {
+    const data = {
+      type: 'avidcaster-chat-north-bound',
+      action: 'ping-up',
+    };
+
+    this.layout.uix.window.parent.postMessage(data, '*');
+  }
+
+  private setNorthBoundSelector(host: string) {
     const data = {
       type: 'avidcaster-chat-north-bound',
       action: 'observe-chat',
-      payload: ChatSupportedSites.youtube.observer,
+      payload: ChatSupportedSites[host].observer,
     };
 
     this.layout.uix.window.parent.postMessage(data, '*');

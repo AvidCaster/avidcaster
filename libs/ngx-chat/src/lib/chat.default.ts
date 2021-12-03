@@ -18,8 +18,15 @@ export const ChatSupportedSites = {
       ],
     },
   },
-  twitch: {},
+  twitch: {
+    observer: {
+      container: '[data-test-selector="chat-scrollable-area__message-container"]',
+      selectors: ['div'],
+    },
+  },
 };
+
+// , '.user-notice-line--highlighted'
 
 export const CHAT_URL_FULLSCREEN = '/chat/monitor';
 
