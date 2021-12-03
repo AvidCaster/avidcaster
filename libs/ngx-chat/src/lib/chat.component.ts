@@ -12,12 +12,17 @@ import { ChatService } from './chat.service';
 
 @Component({
   selector: 'fullerstack-chat',
-  template: '<p>Chat monitor started!</p>',
+  template: `<a href="{{ homeUrl }}" target="_blank">Go Home</a>`,
 })
 export class ChatComponent implements OnInit {
   constructor(readonly chatService: ChatService) {}
 
   ngOnInit(): void {
     console.log('Chat monitoring started!');
+  }
+
+  homeUrl(url: string) {
+    const baseUrl = this.chatService.layout.uix.window?.location?.origin;
+    return `${baseUrl}${url}`;
   }
 }

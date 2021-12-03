@@ -15,11 +15,7 @@ import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
-import {
-  MAX_CHAT_MESSAGES_LENGTH,
-  YTChatIframeContainer,
-  YTChatObserverDefault,
-} from '../ytchat.default';
+import { MAX_CHAT_MESSAGES_LENGTH } from '../ytchat.default';
 import { YTChatInfo, YTChatMessageData, YTChatWordAction } from '../ytchat.model';
 import { YTChatService } from '../ytchat.service';
 
