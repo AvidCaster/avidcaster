@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -54,26 +62,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
 
-    // this.setIframeContainer();
-    // this.setDataInfoSubscription();
-    // this.keywordFilterSubscription();
-    // this.setNewChatSelector();
+    this.setDataInfoSubscription();
+    this.keywordFilterSubscription();
   }
 
   private buildForm() {
     this.form = this.formBuilder.group({
       words: [''],
     });
-  }
-
-  private setIframeContainer() {
-    const data = {
-      type: 'avidcaster-chat-north-bound',
-      action: 'insert-iframe',
-      payload: YTChatIframeContainer,
-    };
-
-    this.uix.window.parent.postMessage(data, '*');
   }
 
   private keywordFilterSubscription() {
@@ -85,16 +81,6 @@ export class OverlayComponent implements OnInit, OnDestroy {
           .map((word: string) => word.trim().toLowerCase())
           .filter((words) => words.length > 0);
       });
-  }
-
-  private setNewChatSelector() {
-    const data = {
-      type: 'avidcaster-chat-north-bound',
-      action: 'observe-chat',
-      payload: YTChatObserverDefault,
-    };
-
-    this.uix.window.parent.postMessage(data, '*');
   }
 
   private setDataInfoSubscription() {

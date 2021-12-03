@@ -8,7 +8,8 @@
 
 import { unescape as ldUnescape } from 'lodash-es';
 
-import { YTChatInfo } from './ytchat.model';
+import { ChatMessage } from './chat.model';
+import { ChatMessageData } from '..';
 
 /**
  * Check if string contains emoji
@@ -42,7 +43,11 @@ const getInnerText = (el: Element, selector: string): string => {
 const getText = (el: Element, selector: string): string => {
   el = el.cloneNode(true) as Element;
 
-  const delList = el.querySelectorAll(`${selector} > del-all-inner-elements`);
+  el.querySelectorAll(`${selector} font`).forEach(function (node) {
+    node.replaceWith(node?.textContent);
+  });
+
+  const delList = el.querySelectorAll(`${selector} > :not(img)`);
   delList.forEach(function (item) {
     item.parentNode.removeChild(item);
   });
@@ -74,18 +79,6 @@ const getImage = (el: Element, selector: string): string => {
     ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim()
     : undefined;
   return imgUrl;
-};
-
-/**
- * Get the message background color from the element
- * @param el element to parse
- * @returns message card background color
- */
-const getBackgroundColor = (el: Element, selector: string): string => {
-  el = el.cloneNode(true) as Element;
-  const card = el.querySelector(selector) as Element | null;
-  const backgroundColor = card ? getComputedStyle(card).backgroundColor : undefined;
-  return backgroundColor;
 };
 
 /**
@@ -138,12 +131,12 @@ const getDonationAmount = (el: Element): string => {
  * @param el element to parse
  * @returns common info
  */
-const parseCommonElements = (el: Element): YTChatInfo => {
+const parseCommonElements = (el: Element): ChatMessage => {
   const author = getText(el, '#author-name');
-  const authorType = getText(el, 'author-type');
   const message = getText(el, '#message');
-  const avatarUrl = getImage(el, '#img');
-  return { message, author, authorType, avatarUrl };
+  const avatarUrl = getImage(el, '#author-photo > img');
+  const badgeUrl = getImage(el, '#chat-badges .yt-live-chat-author-badge-renderer img');
+  return { message, author, avatarUrl, badgeUrl };
 };
 
 /**
@@ -151,7 +144,7 @@ const parseCommonElements = (el: Element): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parseTextMessage = (el: Element): YTChatInfo => {
+const parseTextMessage = (el: Element): ChatMessage => {
   const params = parseCommonElements(el);
   const html = getMessageHtml(el, '#message');
 
@@ -167,16 +160,14 @@ const parseTextMessage = (el: Element): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parsePaidMessage = (el: Element): YTChatInfo => {
+const parsePaidMessage = (el: Element): ChatMessage => {
   const params = parseCommonElements(el);
   const html = getMessageHtml(el, '#message');
   const donation = getDonationAmount(el);
-  const backgroundColor = getBackgroundColor(el, '#card > #header');
 
   return {
     ...params,
     html,
-    backgroundColor,
     donation,
     messageType: 'paid-message',
   };
@@ -187,16 +178,12 @@ const parsePaidMessage = (el: Element): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parsePaidSticker = (el: Element): YTChatInfo => {
+const parsePaidSticker = (el: Element): ChatMessage => {
   const params = parseCommonElements(el);
   const donation = getDonationAmount(el);
-  const backgroundColor = getBackgroundColor(el, '#card');
-  const stickerUrl = getImage(el, '#sticker > #img');
 
   return {
     ...params,
-    stickerUrl,
-    backgroundColor,
     donation,
     messageType: 'paid-sticker',
   };
@@ -207,9 +194,8 @@ const parsePaidSticker = (el: Element): YTChatInfo => {
  * @param el element to parse
  * @returns message info
  */
-const parseMembershipItem = (el: Element): YTChatInfo => {
+const parseMembershipItem = (el: Element): ChatMessage => {
   const params = parseCommonElements(el);
-  const backgroundColor = getBackgroundColor(el, '#card > #header');
   let html = getMessageHtml(el, '#message');
   let donation = undefined;
   if (html) {
@@ -222,14 +208,15 @@ const parseMembershipItem = (el: Element): YTChatInfo => {
   return {
     ...params,
     html,
-    backgroundColor,
     donation,
     messageType: 'membership-item',
   };
 };
 
-export const parseChat = (el: Element, tagName: string): YTChatInfo | undefined => {
-  switch (tagName) {
+export const parseChat = (chat: ChatMessageData): ChatMessage | undefined => {
+  const el = document.createElement('div');
+  el.innerHTML = chat.html;
+  switch (chat.tagName) {
     case 'yt-live-chat-text-message-renderer':
       return parseTextMessage(el);
     case 'yt-live-chat-paid-message-renderer':
@@ -239,5 +226,5 @@ export const parseChat = (el: Element, tagName: string): YTChatInfo | undefined 
     case 'yt-live-chat-membership-item-renderer':
       return parseMembershipItem(el);
   }
-  return {} as YTChatInfo;
+  return {} as ChatMessage;
 };

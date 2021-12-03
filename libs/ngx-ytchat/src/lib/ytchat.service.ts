@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
@@ -131,7 +139,8 @@ export class YTChatService {
       (event) => {
         if (event.key === CHAT_STORAGE_KEY) {
           const chat = JSON.parse(event.newValue);
-          console.log(chat);
+          this.chatInfoObs$.next(chat);
+          console.log(JSON.stringify(chat, null, 4));
         }
       },
       false

@@ -1,17 +1,27 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 
 import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
-import { ChatMessage } from './chat.model';
+import { ChatMessage, ChatMessageEvent } from './chat.model';
+import { parseChat } from './chat.youtube';
 
 @Injectable()
 export class ChatService {
   private destroy$ = new Subject<boolean>();
-  private chatObs$ = new BehaviorSubject<ChatMessage>({});
-  chat$ = this.chatObs$.asObservable();
+  private onMessageOb$: Observable<Event>;
+  private chatOb$ = new BehaviorSubject<ChatMessage>({});
+  chat$ = this.chatOb$.asObservable();
   lastUrl: string;
 
   constructor(
@@ -19,6 +29,8 @@ export class ChatService {
     readonly logger: LoggerService,
     readonly layout: LayoutService
   ) {
+    this.onMessageOb$ = fromEvent(window, 'message');
+
     this.changeRouteSubscription();
     this.southBoundSubscription();
     this.setNewChatSelector();
@@ -43,23 +55,30 @@ export class ChatService {
   }
 
   private southBoundSubscription() {
-    this.layout.uix.window.addEventListener(
-      'message',
-      (event) => {
-        if (event.data.type === 'avidcaster-chat-south-bound') {
-          switch (event.data.action) {
-            case 'new-chat':
-              // console.log(event.data);
-              localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(event.data.payload));
-              // this.cleanData(event.data.payload as YTChatPayloadSouthBound);
-              break;
-            default:
-              break;
-          }
+    this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
+      const data = event.data as ChatMessageEvent;
+      if (data.type === 'avidcaster-chat-south-bound') {
+        switch (data.action) {
+          case 'chat-new':
+            switch (data.host) {
+              case 'youtube': {
+                const chat = parseChat(data.payload);
+                localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat));
+                console.log(JSON.stringify(chat, null, 4));
+                break;
+              }
+              case 'twitch':
+                break;
+              default:
+                console.log(`Unknown host: ${data.host}`);
+                break;
+            }
+            break;
+          default:
+            break;
         }
-      },
-      false
-    );
+      }
+    });
   }
 
   private setNewChatSelector() {
