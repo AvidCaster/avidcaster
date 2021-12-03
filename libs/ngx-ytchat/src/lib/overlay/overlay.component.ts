@@ -54,10 +54,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
 
-    this.setIframeContainer();
-    this.setDataInfoSubscription();
-    this.keywordFilterSubscription();
-    this.setNewChatSelector();
+    // this.setIframeContainer();
+    // this.setDataInfoSubscription();
+    // this.keywordFilterSubscription();
+    // this.setNewChatSelector();
   }
 
   private buildForm() {

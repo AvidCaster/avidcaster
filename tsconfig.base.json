@@ -21,6 +21,7 @@
       "@fullerstack/assets": ["libs/agx-assets/src/index.ts"],
       "@fullerstack/ngx-annotator": ["libs/ngx-annotator/src/index.ts"],
       "@fullerstack/ngx-auth": ["libs/ngx-auth/src/index.ts"],
+      "@fullerstack/ngx-chat": ["libs/ngx-chat/src/index.ts"],
       "@fullerstack/ngx-fireworks": ["libs/ngx-fireworks/src/index.ts"],
       "@fullerstack/ngx-gql": ["libs/ngx-gql/src/index.ts"],
       "@fullerstack/ngx-gql/operations": ["libs/ngx-gql/src/lib/graphql/index.gql.ts"],
