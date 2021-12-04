@@ -10,7 +10,16 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  buffer,
+  filter,
+  fromEvent,
+  takeUntil,
+  throttleTime,
+} from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
@@ -59,48 +68,50 @@ export class ChatService {
   private broadcastChatMessage(host: string, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
     localStorage.setItem(key, JSON.stringify(chat));
-    setTimeout(() => localStorage.deleteItem(key), 0);
   }
 
   private southBoundSubscription() {
-    this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
-      const data = event.data as ChatMessageEvent;
-      if (data.type === 'avidcaster-chat-south-bound') {
-        switch (data.action) {
-          case 'ping-down':
-            this.currentHost = data.host;
-            this.setNorthBoundSelector(this.currentHost);
-            break;
-          case 'chat-new':
-            switch (data.host) {
-              case 'youtube': {
-                const chat = parseYouTubeChat(data.payload);
-                this.broadcastChatMessage(data.host, chat);
-                console.log(JSON.stringify(chat, null, 4));
-                break;
+    this.onMessageOb$
+      .pipe(buffer(this.onMessageOb$.pipe(throttleTime(100))), takeUntil(this.destroy$))
+      .subscribe((event: Event[]) => {
+        const data = (event[0] as MessageEvent).data as ChatMessageEvent;
+        if (data.type === 'avidcaster-chat-south-bound') {
+          switch (data.action) {
+            case 'pong':
+              this.currentHost = data.host;
+              this.setNorthBoundSelector(this.currentHost);
+              this.setNorthBoundIframe(this.currentHost);
+              break;
+            case 'chat':
+              switch (data.host) {
+                case 'youtube': {
+                  const chat = parseYouTubeChat(data.payload);
+                  this.broadcastChatMessage(data.host, chat);
+                  // console.log(JSON.stringify(chat, null, 4));
+                  break;
+                }
+                case 'twitch': {
+                  const chat = parseTwitchChat(data.payload);
+                  this.broadcastChatMessage(data.host, chat);
+                  // console.log(JSON.stringify(chat, null, 4));
+                  break;
+                }
+                default:
+                  console.log(`Unknown host: ${data.host}`);
+                  break;
               }
-              case 'twitch': {
-                const chat = parseTwitchChat(data.payload);
-                this.broadcastChatMessage(data.host, chat);
-                console.log(JSON.stringify(chat, null, 4));
-                break;
-              }
-              default:
-                console.log(`Unknown host: ${data.host}`);
-                break;
-            }
-            break;
-          default:
-            break;
+              break;
+            default:
+              break;
+          }
         }
-      }
-    });
+      });
   }
 
   private setNorthBoundReadyPing() {
     const data = {
       type: 'avidcaster-chat-north-bound',
-      action: 'ping-up',
+      action: 'ping',
     };
 
     this.layout.uix.window.parent.postMessage(data, '*');
@@ -109,8 +120,18 @@ export class ChatService {
   private setNorthBoundSelector(host: string) {
     const data = {
       type: 'avidcaster-chat-north-bound',
-      action: 'observe-chat',
+      action: 'observe',
       payload: ChatSupportedSites[host].observer,
+    };
+
+    this.layout.uix.window.parent.postMessage(data, '*');
+  }
+
+  private setNorthBoundIframe(host: string) {
+    const data = {
+      type: 'avidcaster-chat-north-bound',
+      action: 'iframe',
+      payload: ChatSupportedSites[host].iframe,
     };
 
     this.layout.uix.window.parent.postMessage(data, '*');

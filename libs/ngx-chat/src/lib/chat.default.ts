@@ -19,6 +19,9 @@ export const ChatSupportedSites = {
         'yt-live-chat-paid-sticker-renderer',
       ],
     },
+    iframe: {
+      container: 'yt-live-chat-app',
+    },
   },
   [ChatMessageHosts.twitch]: {
     observer: {
@@ -27,8 +30,6 @@ export const ChatSupportedSites = {
     },
   },
 };
-
-// , '.user-notice-line--highlighted'
 
 export const CHAT_URL_FULLSCREEN = '/chat/monitor';
 
