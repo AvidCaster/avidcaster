@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
@@ -37,6 +37,7 @@ export class ChatService {
   currentHost: string;
 
   constructor(
+    readonly zone: NgZone,
     readonly router: Router,
     readonly logger: LoggerService,
     readonly layout: LayoutService
@@ -71,41 +72,43 @@ export class ChatService {
   }
 
   private southBoundSubscription() {
-    this.onMessageOb$
-      .pipe(buffer(this.onMessageOb$.pipe(throttleTime(100))), takeUntil(this.destroy$))
-      .subscribe((event: Event[]) => {
-        const data = (event[0] as MessageEvent).data as ChatMessageEvent;
-        if (data.type === 'avidcaster-chat-south-bound') {
-          switch (data.action) {
-            case 'pong':
-              this.currentHost = data.host;
-              this.setNorthBoundSelector(this.currentHost);
-              this.setNorthBoundIframe(this.currentHost);
-              break;
-            case 'chat':
-              switch (data.host) {
-                case 'youtube': {
-                  const chat = parseYouTubeChat(data.payload);
-                  this.broadcastChatMessage(data.host, chat);
-                  // console.log(JSON.stringify(chat, null, 4));
-                  break;
+    this.zone.runOutsideAngular(() => {
+      this.onMessageOb$
+        .pipe(buffer(this.onMessageOb$.pipe(throttleTime(100))), takeUntil(this.destroy$))
+        .subscribe((event: Event[]) => {
+          const data = (event[0] as MessageEvent).data as ChatMessageEvent;
+          if (data.type === 'avidcaster-chat-south-bound') {
+            switch (data.action) {
+              case 'pong':
+                this.currentHost = data.host;
+                this.setNorthBoundSelector(this.currentHost);
+                this.setNorthBoundIframe(this.currentHost);
+                break;
+              case 'chat':
+                switch (data.host) {
+                  case 'youtube': {
+                    const chat = parseYouTubeChat(data.payload);
+                    this.broadcastChatMessage(data.host, chat);
+                    // console.log(JSON.stringify(chat, null, 4));
+                    break;
+                  }
+                  case 'twitch': {
+                    const chat = parseTwitchChat(data.payload);
+                    this.broadcastChatMessage(data.host, chat);
+                    // console.log(JSON.stringify(chat, null, 4));
+                    break;
+                  }
+                  default:
+                    console.log(`Unknown host: ${data.host}`);
+                    break;
                 }
-                case 'twitch': {
-                  const chat = parseTwitchChat(data.payload);
-                  this.broadcastChatMessage(data.host, chat);
-                  // console.log(JSON.stringify(chat, null, 4));
-                  break;
-                }
-                default:
-                  console.log(`Unknown host: ${data.host}`);
-                  break;
-              }
-              break;
-            default:
-              break;
+                break;
+              default:
+                break;
+            }
           }
-        }
-      });
+        });
+    });
   }
 
   private setNorthBoundReadyPing() {

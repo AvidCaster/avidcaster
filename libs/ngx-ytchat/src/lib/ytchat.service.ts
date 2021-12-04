@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   ApplicationConfig,
@@ -37,6 +37,7 @@ export class YTChatService {
   private lastUrl: string;
 
   constructor(
+    readonly zone: NgZone,
     readonly router: Router,
     readonly system: SystemService,
     readonly config: ConfigService,
@@ -76,21 +77,23 @@ export class YTChatService {
   }
 
   private southBoundMessageSubscription() {
-    this.layout.uix.window.addEventListener(
-      'message',
-      (event) => {
-        if (event.data.type === 'avidcaster-chat-south-bound') {
-          switch (event.data.action) {
-            case 'new-chat':
-              this.cleanData(event.data.payload as YTChatPayloadSouthBound);
-              break;
-            default:
-              break;
+    this.zone.runOutsideAngular(() => {
+      this.layout.uix.window.addEventListener(
+        'message',
+        (event) => {
+          if (event.data.type === 'avidcaster-chat-south-bound') {
+            switch (event.data.action) {
+              case 'new-chat':
+                this.cleanData(event.data.payload as YTChatPayloadSouthBound);
+                break;
+              default:
+                break;
+            }
           }
-        }
-      },
-      false
-    );
+        },
+        false
+      );
+    });
   }
 
   private async cleanData(data: YTChatPayloadSouthBound) {
