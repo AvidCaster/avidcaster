@@ -6,8 +6,10 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+import { ChatMessageHosts } from './chat.model';
+
 export const ChatSupportedSites = {
-  youtube: {
+  [ChatMessageHosts.youtube]: {
     observer: {
       container: '#item-list.yt-live-chat-renderer',
       selectors: [
@@ -18,7 +20,7 @@ export const ChatSupportedSites = {
       ],
     },
   },
-  twitch: {
+  [ChatMessageHosts.twitch]: {
     observer: {
       container: '[data-test-selector="chat-scrollable-area__message-container"]',
       selectors: ['div'],

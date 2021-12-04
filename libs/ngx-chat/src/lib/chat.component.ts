@@ -12,7 +12,8 @@ import { ChatService } from './chat.service';
 
 @Component({
   selector: 'fullerstack-chat',
-  template: `<a href="{{ homeUrl }}" target="_blank">Go Home</a>`,
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
   constructor(readonly chatService: ChatService) {}

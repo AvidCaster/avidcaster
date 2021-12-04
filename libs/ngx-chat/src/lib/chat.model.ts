@@ -6,7 +6,13 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+export enum ChatMessageHosts {
+  youtube = 'youtube',
+  twitch = 'twitch',
+}
+
 export type ChatMessage = {
+  host?: ChatMessageHosts;
   author?: string;
   avatarUrl?: string;
   badgeUrl?: string;
@@ -19,7 +25,6 @@ export type ChatMessage = {
 
 export type ChatDirection = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
 export type ChatAction = 'chat-new' | 'ping-down' | 'ping-up';
-export type ChatSupportedHosts = 'youtube' | 'twitch';
 
 export type ChatMessageData = {
   tagName: string;
@@ -29,6 +34,6 @@ export type ChatMessageData = {
 export type ChatMessageEvent = {
   type: ChatDirection;
   action: ChatAction;
-  host: ChatSupportedHosts;
+  host: ChatMessageHosts;
   payload: ChatMessageData;
 };

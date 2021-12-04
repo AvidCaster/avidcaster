@@ -11,11 +11,12 @@ import { NavigationEnd, Router } from '@angular/router';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { v4 as uuid_v4 } from 'uuid';
 
 import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
 import { ChatMessage, ChatMessageEvent } from './chat.model';
-import { parseTwitchChat } from './chat.twitch';
-import { parseYouTubeChat } from './chat.youtube';
+import { parseTwitchChat } from './chat.util.twitch';
+import { parseYouTubeChat } from './chat.util.youtube';
 
 @Injectable()
 export class ChatService {
@@ -55,6 +56,12 @@ export class ChatService {
       });
   }
 
+  private broadcastChatMessage(host: string, chat: ChatMessage) {
+    const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
+    localStorage.setItem(key, JSON.stringify(chat));
+    setTimeout(() => localStorage.deleteItem(key), 0);
+  }
+
   private southBoundSubscription() {
     this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
       const data = event.data as ChatMessageEvent;
@@ -68,13 +75,13 @@ export class ChatService {
             switch (data.host) {
               case 'youtube': {
                 const chat = parseYouTubeChat(data.payload);
-                localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat));
+                this.broadcastChatMessage(data.host, chat);
                 console.log(JSON.stringify(chat, null, 4));
                 break;
               }
               case 'twitch': {
                 const chat = parseTwitchChat(data.payload);
-                localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chat));
+                this.broadcastChatMessage(data.host, chat);
                 console.log(JSON.stringify(chat, null, 4));
                 break;
               }
