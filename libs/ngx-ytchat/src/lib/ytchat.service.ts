@@ -53,7 +53,6 @@ export class YTChatService {
     );
 
     this.subRouteChange();
-    this.southBoundMessageSubscription();
     this.storageSubscription();
     this.logger.info(`[${this.nameSpace}] ChatOverlay ready ...`);
   }
@@ -74,26 +73,6 @@ export class YTChatService {
           this.lastUrl = this.router.url;
         },
       });
-  }
-
-  private southBoundMessageSubscription() {
-    this.zone.runOutsideAngular(() => {
-      this.layout.uix.window.addEventListener(
-        'message',
-        (event) => {
-          if (event.data.type === 'avidcaster-chat-south-bound') {
-            switch (event.data.action) {
-              case 'new-chat':
-                this.cleanData(event.data.payload as YTChatPayloadSouthBound);
-                break;
-              default:
-                break;
-            }
-          }
-        },
-        false
-      );
-    });
   }
 
   private async cleanData(data: YTChatPayloadSouthBound) {
@@ -137,17 +116,19 @@ export class YTChatService {
   }
 
   private storageSubscription() {
-    addEventListener(
-      'storage',
-      (event) => {
-        if (event.key.startsWith(CHAT_STORAGE_KEY)) {
-          const chat = JSON.parse(event.newValue);
-          // this.chatInfoObs$.next(chat);
-          setTimeout(() => localStorage.removeItem(event.key), 0);
-          console.log(JSON.stringify(chat, null, 4));
-        }
-      },
-      false
-    );
+    this.zone.runOutsideAngular(() => {
+      addEventListener(
+        'storage',
+        (event) => {
+          if (event.key.startsWith(CHAT_STORAGE_KEY)) {
+            const chat = JSON.parse(event.newValue);
+            // this.chatInfoObs$.next(chat);
+            setTimeout(() => localStorage.removeItem(event.key), 0);
+            console.log(JSON.stringify(chat, null, 4));
+          }
+        },
+        false
+      );
+    });
   }
 }
