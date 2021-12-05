@@ -6,225 +6,142 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { unescape as ldUnescape } from 'lodash-es';
+import { tryGet } from '@fullerstack/agx-util';
+import * as $ from 'jquery';
 
-import { ChatMessage } from './chat.model';
-import { ChatMessageData } from '..';
+import { ChatMessage, ChatMessageData } from './chat.model';
+import { includesEmoji } from './chat.util';
 
-/**
- * Check if string contains emoji
- * @param str string with possible emoji
- * @returns true if the string contains emoji
- */
-export const hasEmoji = (str: string): boolean => {
-  const EmojiRegexExp =
-    /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
-
-  return EmojiRegexExp.test(str);
+const getAuthor = ($obj: JQuery<Node[]>): string => {
+  return tryGet(() => {
+    const el = $obj.find('#author-name');
+    el.find('#tooltip.hidden').remove();
+    return el.text().replace(/ +/g, ' ').trim();
+  }, '');
 };
 
-/**
- * Get the inner text for the element (nested: <div>price is<span>$1.9</span></div>) => $1.9 (unwrap)
- * @param el element to parse
- * @returns text string
- */
-const getInnerText = (el: Element, selector: string): string => {
-  el = el.cloneNode(true) as Element;
-
-  const text = el.querySelector(selector)?.textContent?.replace(/ +/g, ' ').trim() ?? undefined;
-  return text;
+const getAvatarUrl = ($obj: JQuery<Node[]>): string => {
+  return tryGet(() => {
+    const el = $obj.find('#img');
+    return el.attr('src').replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim();
+  }, '');
 };
 
-/**
- * Get the top level text for the element
- * @param el element to parse
- * @returns text string
- */
-const getText = (el: Element, selector: string): string => {
-  el = el.cloneNode(true) as Element;
-
-  el.querySelectorAll(`${selector} font`).forEach(function (node) {
-    node.replaceWith(node?.textContent);
-  });
-
-  const delList = el.querySelectorAll(`${selector} > :not(img)`);
-  delList.forEach(function (item) {
-    item.parentNode.removeChild(item);
-  });
-
-  const text = el.querySelector(selector)?.textContent?.replace(/ +/g, ' ').trim() ?? undefined;
-  return text;
+const getBadgeUrl = ($obj: JQuery<Node[]>): string => {
+  return tryGet(() => {
+    const el = $obj.find('#chat-badges .yt-live-chat-author-badge-renderer');
+    const avatarUrl = el.find('img').attr('src') || '';
+    return avatarUrl.replace(/ +/g, ' ').trim();
+  }, '');
 };
 
-/**
- * Get the message html from the element
- * @param el element to parse
- * @returns message html
- */
-const getHtml = (el: Element, selector: string): string => {
-  el = el.cloneNode(true) as Element;
-  const messageHtml = el.querySelector(selector)?.innerHTML;
-  return ldUnescape(messageHtml);
+const getMessageHtml = ($obj: JQuery<Node[]>): string => {
+  return tryGet(() => {
+    let el = $obj.find('#message').clone();
+
+    el.find('hidden').remove();
+    el.find('font').contents().unwrap();
+    el.find('img').each(function () {
+      const alt = $(this).attr('alt').replace(/ +/g, ' ').trim();
+      if (alt && includesEmoji(alt)) {
+        $(this).replaceWith(alt);
+      } else {
+        $(this).replaceWith('');
+      }
+    });
+
+    el.children().remove();
+
+    const html = el.html();
+
+    el = undefined;
+    return html.replace(/ +/g, ' ').trim();
+  }, '');
 };
 
-/**
- * Get the author avatar from the element
- * @param el element to parse
- * @returns author avatar
- */
-const getImage = (el: Element, selector: string): string => {
-  el = el.cloneNode(true) as Element;
-  const image = el.querySelector(selector) as HTMLImageElement | null;
-  const imgUrl = image
-    ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim()
-    : undefined;
-  return imgUrl;
+const getMessageText = ($obj: JQuery<Node[]>): string => {
+  return tryGet(() => {
+    let el = $obj.find('#message').clone();
+
+    el.find('font').contents().unwrap();
+    el.children().remove();
+
+    const text = el.text() || '';
+
+    el = undefined;
+    return text.replace(/ +/g, ' ').trim();
+  }, '');
 };
 
-/**
- * Get the message text for the element
- * @param el element to parse
- * @returns text only string
- */
-const getMessageHtml = (el: Element, selector: string): string => {
-  el = el.cloneNode(true) as Element;
-
-  el.querySelectorAll(`${selector} font`).forEach(function (item) {
-    item.replaceWith(item.textContent);
-  });
-
-  const delList = el.querySelectorAll(`${selector}  > :not(img)`);
-  delList.forEach(function (item) {
-    item.parentNode.removeChild(item);
-  });
-
-  el.querySelectorAll(`${selector} img`).forEach(function (node) {
-    const alt = node.getAttribute('alt').replace(/ +/g, ' ').trim();
-    if (alt && hasEmoji(alt)) {
-      node.replaceWith(alt);
-    } else {
-      const src = node.getAttribute('src');
-      node.replaceWith(`<img src="${src}">`);
+const getPurchaseAmount = ($obj: JQuery<Node[]>): string => {
+  return tryGet(() => {
+    let amount = $obj.find('#purchase-amount').text();
+    if (!amount) {
+      amount = $obj.find('#purchase-amount-chip').text();
     }
-  });
-
-  const message = getHtml(el, selector);
-
-  return message.replace(/ +/g, ' ').trim();
+    return amount.replace(/ +/g, ' ').trim();
+  }, '');
 };
 
-/**
- * Get the donation text for the element
- * @param el element to parse
- * @returns donation amount
- */
-const getDonationAmount = (el: Element): string => {
-  let amount = getInnerText(el, '#purchase-amount');
-  if (!amount) {
-    amount = getInnerText(el, '#purchase-amount-chip');
-  }
-  return amount.replace(/ +/g, ' ').trim();
-};
-
-/**
- * Get the common data from the element
- * @param el element to parse
- * @returns common info
- */
-const parseCommonElements = (el: Element): ChatMessage => {
-  const author = getText(el, '#author-name');
-  const message = getText(el, '#message');
-  const avatarUrl = getImage(el, '#author-photo > img');
-  const badgeUrl = getImage(el, '#chat-badges .yt-live-chat-author-badge-renderer img');
-  return { message, author, avatarUrl, badgeUrl };
-};
-
-/**
- * Parse the element to get the message info (type text-message)
- * @param el element to parse
- * @returns message info
- */
-const parseTextMessage = (el: Element): ChatMessage => {
-  const params = parseCommonElements(el);
-  const html = getMessageHtml(el, '#message');
-
+const parseCommonElements = (el: JQuery<Node[]>): ChatMessage => {
   return {
-    ...params,
-    html,
+    author: getAuthor(el),
+    message: getMessageText(el),
+    html: getMessageHtml(el),
+    avatarUrl: getAvatarUrl(el),
+    badgeUrl: getBadgeUrl(el),
+    donation: getPurchaseAmount(el),
     messageType: 'text-message',
   };
 };
 
-/**
- * Parse the element to get the message info (type paid-message)
- * @param el element to parse
- * @returns message info
- */
-const parsePaidMessage = (el: Element): ChatMessage => {
+const parsePaidMessage = (el: JQuery<Node[]>): ChatMessage => {
   const params = parseCommonElements(el);
-  const html = getMessageHtml(el, '#message');
-  const donation = getDonationAmount(el);
-
-  return {
-    ...params,
-    html,
-    donation,
-    messageType: 'paid-message',
-  };
+  params.messageType = 'paid-message';
+  return params;
 };
 
-/**
- * Parse the element to get the message info (type paid-sticker)
- * @param el element to parse
- * @returns message info
- */
-const parsePaidSticker = (el: Element): ChatMessage => {
+const parsePaidSticker = (el: JQuery<Node[]>): ChatMessage => {
   const params = parseCommonElements(el);
-  const donation = getDonationAmount(el);
-
-  return {
-    ...params,
-    donation,
-    messageType: 'paid-sticker',
-  };
+  params.messageType = 'paid-sticker';
+  return params;
 };
 
-/**
- * Parse the element to get the message info (type membership-item)
- * @param el element to parse
- * @returns message info
- */
-const parseMembershipItem = (el: Element): ChatMessage => {
+const parseMembershipItem = (el: JQuery<Node[]>): ChatMessage => {
   const params = parseCommonElements(el);
-  let html = getMessageHtml(el, '#message');
-  let donation = undefined;
-  if (html) {
+  if (params.html && !params.donation) {
     // milestone chat
-    donation = getText(el, '#header-primary-text');
+    params.donation = tryGet(
+      () => el.find('#header-primary-text').text().replace(/ +/g, ' ').trim(),
+      ''
+    );
   } else {
-    html = getHtml(el, '#header-subtext');
+    params.html = tryGet(() => el.find('#header-subtext').html().replace(/ +/g, ' ').trim(), '');
   }
 
-  return {
-    ...params,
-    html,
-    donation,
-    messageType: 'membership-item',
-  };
+  params.messageType = 'membership-item';
+  return params;
 };
 
 export const parseYouTubeChat = (chat: ChatMessageData): ChatMessage | undefined => {
-  const el = document.createElement('div');
-  el.innerHTML = chat.html;
+  let parsed = {} as ChatMessage;
+  let el = $($.parseHTML(chat.html));
   switch (chat.tagName) {
     case 'yt-live-chat-text-message-renderer':
-      return parseTextMessage(el);
+      parsed = parseCommonElements(el);
+      break;
     case 'yt-live-chat-paid-message-renderer':
-      return parsePaidMessage(el);
+      parsed = parsePaidMessage(el);
+      break;
     case 'yt-live-chat-paid-sticker-renderer':
-      return parsePaidSticker(el);
+      parsed = parsePaidSticker(el);
+      break;
     case 'yt-live-chat-membership-item-renderer':
-      return parseMembershipItem(el);
+      parsed = parseMembershipItem(el);
+      break;
+    default:
+      break;
   }
-  return {} as ChatMessage;
+  el = undefined;
+  return parsed;
 };
