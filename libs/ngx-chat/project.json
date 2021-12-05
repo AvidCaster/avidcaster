@@ -19,5 +19,5 @@
       }
     }
   },
-  "tags": ["lib:libs/ngx-chat"]
+  "tags": ["lib:libs/ngx-chat", "scope:ngx-feature"]
 }

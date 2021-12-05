@@ -18,10 +18,10 @@ export const chatRoutes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'monitor',
+        redirectTo: 'iframe',
       },
       {
-        path: 'monitor',
+        path: 'iframe',
         component: ChatComponent,
         data: {
           title: _('COMMON.MONITOR'),

@@ -26,4 +26,12 @@ export class ChatComponent implements OnInit {
     const baseUrl = this.chatService.layout.uix.window?.location?.origin;
     return `${baseUrl}${url}`;
   }
+
+  OpenOverlay() {
+    this.chatService.layout.uix.window.open(
+      '/chat/overlay/screen',
+      '_blank',
+      'width=1200,height=720,left=100,top=100'
+    );
+  }
 }

@@ -7,7 +7,7 @@
  */
 
 export const YTCHAT_STORAGE_KEY = 'ytchat';
-export const YTCHAT_URL_FULLSCREEN = '/chat/youtube/overlay';
+export const YTCHAT_URL_FULLSCREEN = '/chat/overlay/screen';
 
 /**
  * Layout config declaration

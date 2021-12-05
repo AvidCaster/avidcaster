@@ -52,12 +52,12 @@ export class YTChatService {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
-    this.subRouteChange();
+    this.changeRouteSubscription();
     this.storageSubscription();
     this.logger.info(`[${this.nameSpace}] ChatOverlay ready ...`);
   }
 
-  private subRouteChange() {
+  private changeRouteSubscription() {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

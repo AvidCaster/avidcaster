@@ -31,6 +31,6 @@ export const ChatSupportedSites = {
   },
 };
 
-export const CHAT_URL_FULLSCREEN = '/chat/monitor';
+export const CHAT_URL_FULLSCREEN = '/chat/monitor/iframe';
 
 export const CHAT_STORAGE_KEY = 'avidcaster-chat';

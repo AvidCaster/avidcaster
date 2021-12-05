@@ -52,7 +52,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     readonly i18n: I18nService,
     readonly auth: AuthService,
     readonly uix: UixService,
-    readonly chatService: YTChatService
+    readonly ytchatService: YTChatService
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   }
 
   private setDataInfoSubscription() {
-    this.chatService.chatInfo$
+    this.ytchatService.chatInfo$
       .pipe(
         filter((data) => !!data?.author?.length),
         filter((data) => {

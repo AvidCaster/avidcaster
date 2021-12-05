@@ -158,16 +158,16 @@ export const AppRoutes: Routes = [
     loadChildren: () => import('@fullerstack/ngx-annotator').then((m) => m.AnnotatorModule),
   },
   {
-    path: 'chat/youtube',
+    path: 'chat/monitor',
     // canActivate: [AuthAuthenticatedGuard],
     // canDeactivate: [DeactivateGuard],
-    loadChildren: () => import('@fullerstack/ngx-ytchat').then((m) => m.YTChatModule),
+    loadChildren: () => import('@fullerstack/ngx-chat').then((m) => m.ChatModule),
   },
   {
     path: 'chat',
     // canActivate: [AuthAuthenticatedGuard],
     // canDeactivate: [DeactivateGuard],
-    loadChildren: () => import('@fullerstack/ngx-chat').then((m) => m.ChatModule),
+    loadChildren: () => import('@fullerstack/ngx-ytchat').then((m) => m.YTChatModule),
   },
   {
     path: '**',

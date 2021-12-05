@@ -10,20 +10,18 @@ import { Injectable, NgZone } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  buffer,
-  filter,
-  fromEvent,
-  takeUntil,
-  throttleTime,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN, ChatSupportedSites } from './chat.default';
-import { ChatMessage, ChatMessageEvent } from './chat.model';
+import {
+  ChatMessage,
+  ChatMessageDirection,
+  ChatMessageDownstreamAction,
+  ChatMessageEvent,
+  ChatMessageHosts,
+  ChatMessageUpstreamAction,
+} from './chat.model';
 import { parseTwitchChat } from './chat.util.twitch';
 import { parseYouTubeChat } from './chat.util.youtube';
 
@@ -76,22 +74,22 @@ export class ChatService {
     this.zone.runOutsideAngular(() => {
       this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
         const data = event.data as ChatMessageEvent;
-        if (data.type === 'avidcaster-chat-south-bound') {
+        if (data.type === ChatMessageDirection.SouthBound) {
           switch (data.action) {
-            case 'pong':
+            case ChatMessageDownstreamAction.pong:
               this.currentHost = data.host;
               this.setNorthBoundSelector(this.currentHost);
               this.setNorthBoundIframe(this.currentHost);
               break;
-            case 'chat':
+            case ChatMessageDownstreamAction.chat:
               switch (data.host) {
-                case 'youtube': {
+                case ChatMessageHosts.youtube: {
                   const chat = parseYouTubeChat(data.payload);
                   this.broadcastChatMessage(data.host, chat);
                   // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
-                case 'twitch': {
+                case ChatMessageHosts.twitch: {
                   const chat = parseTwitchChat(data.payload);
                   this.broadcastChatMessage(data.host, chat);
                   // console.log(JSON.stringify(chat, null, 4));
@@ -112,8 +110,8 @@ export class ChatService {
 
   private setNorthBoundReadyPing() {
     const data = {
-      type: 'avidcaster-chat-north-bound',
-      action: 'ping',
+      type: ChatMessageDirection.NorthBound,
+      action: ChatMessageUpstreamAction.ping,
     };
 
     this.layout.uix.window.parent.postMessage(data, '*');
@@ -121,8 +119,8 @@ export class ChatService {
 
   private setNorthBoundSelector(host: string) {
     const data = {
-      type: 'avidcaster-chat-north-bound',
-      action: 'observe',
+      type: ChatMessageDirection.NorthBound,
+      action: ChatMessageUpstreamAction.observe,
       payload: ChatSupportedSites[host].observer,
     };
 
@@ -131,8 +129,8 @@ export class ChatService {
 
   private setNorthBoundIframe(host: string) {
     const data = {
-      type: 'avidcaster-chat-north-bound',
-      action: 'iframe',
+      type: ChatMessageDirection.NorthBound,
+      action: ChatMessageUpstreamAction.iframe,
       payload: ChatSupportedSites[host].iframe,
     };
 

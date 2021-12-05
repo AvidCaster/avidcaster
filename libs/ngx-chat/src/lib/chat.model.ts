@@ -13,6 +13,22 @@ export enum ChatMessageHosts {
   twitch = 'twitch',
 }
 
+export enum ChatMessageDownstreamAction {
+  pong = 'pong',
+  chat = 'chat',
+}
+
+export enum ChatMessageUpstreamAction {
+  iframe = 'iframe',
+  ping = 'ping',
+  observe = 'observe',
+}
+
+export enum ChatMessageDirection {
+  NorthBound = 'avidcaster-chat-north-bound',
+  SouthBound = 'avidcaster-chat-south-bound',
+}
+
 export type ChatMessage = {
   host?: ChatMessageHosts;
   author?: string;
@@ -25,17 +41,14 @@ export type ChatMessage = {
   messageType?: string;
 };
 
-export type ChatDirection = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
-export type ChatAction = 'chat' | 'ping' | 'pong' | 'iframe';
-
 export type ChatMessageData = {
   tagName: string;
   html: string;
 };
 
 export type ChatMessageEvent = {
-  type: ChatDirection;
-  action: ChatAction;
+  type: ChatMessageDirection;
+  action: ChatMessageUpstreamAction | ChatMessageDownstreamAction;
   host: ChatMessageHosts;
   payload: ChatMessageData;
 };

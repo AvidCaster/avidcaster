@@ -15,15 +15,15 @@ import { SetupComponent } from './setup/setup.component';
 
 export const ytChatRoutes: Routes = [
   {
-    path: 'chat',
+    path: '',
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'overlay',
+        redirectTo: 'overlay/overview',
       },
       {
-        path: 'overview',
+        path: 'overlay/overview',
         component: OverviewComponent,
         data: {
           title: _('COMMON.OVERVIEW'),
@@ -31,7 +31,7 @@ export const ytChatRoutes: Routes = [
         },
       },
       {
-        path: 'setup',
+        path: 'overlay/setup',
         component: SetupComponent,
         data: {
           title: _('COMMON.SETUP'),
@@ -39,7 +39,7 @@ export const ytChatRoutes: Routes = [
         },
       },
       {
-        path: 'youtube/overlay',
+        path: 'overlay/screen',
         component: OverlayComponent,
         data: {
           title: _('CHAT.OVERLAY'),
