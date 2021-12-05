@@ -70,9 +70,10 @@
 }
 
 ::ng-deep .yt-message img {
-  width: 36px;
+  width: 36px !important;
   text-align: center;
   vertical-align: middle;
+  border-radius: 50%;
 }
 
 .yt-image-fields {

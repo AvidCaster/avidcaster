@@ -111,7 +111,9 @@
   <section class="yt-overlay" *ngIf="data?.author">
     <div class="yt-inner-box" fxLayout="row" [@slideIn]="slideInState">
       <div class="yt-image-fields" fxLayout="column">
-        <div class="yt-author-img"><img width="160" height="160" src="{{ data?.avatarUrl }}" /></div>
+        <div class="yt-author-img">
+          <img width="160" height="160" src="{{ data?.avatarUrl }}" (error)="onImageError($event)" />
+        </div>
       </div>
       <div class="yt-text-fields" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="10px">

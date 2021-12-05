@@ -16,7 +16,12 @@ import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 import { MAX_CHAT_MESSAGES_LENGTH } from '../ytchat.default';
-import { YTChatInfo, YTChatMessageData, YTChatWordAction } from '../ytchat.model';
+import {
+  YTCHAT_DEFAULT_AVATAR_URL,
+  YTChatInfo,
+  YTChatMessageData,
+  YTChatWordAction,
+} from '../ytchat.model';
 import { YTChatService } from '../ytchat.service';
 
 @Component({
@@ -60,6 +65,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
 
     this.setDataInfoSubscription();
     this.keywordFilterSubscription();
+  }
+
+  onImageError(event) {
+    event.target.src = YTCHAT_DEFAULT_AVATAR_URL;
   }
 
   private buildForm() {
