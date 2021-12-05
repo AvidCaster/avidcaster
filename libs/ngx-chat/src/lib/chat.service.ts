@@ -69,6 +69,7 @@ export class ChatService {
   private broadcastChatMessage(host: string, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
     localStorage.setItem(key, JSON.stringify(chat));
+    setTimeout(() => localStorage.removeItem(key), 0);
   }
 
   private southBoundSubscription() {
