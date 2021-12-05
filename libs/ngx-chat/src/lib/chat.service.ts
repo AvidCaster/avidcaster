@@ -91,7 +91,7 @@ export class ChatService {
                 case ChatMessageHosts.twitch: {
                   const chat = parseTwitchChat(data.payload);
                   this.broadcastChatMessage(data.host, chat);
-                  // console.log(JSON.stringify(chat, null, 4));
+                  console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
                 default:

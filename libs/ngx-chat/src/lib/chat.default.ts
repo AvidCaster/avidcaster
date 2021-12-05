@@ -29,7 +29,7 @@ export const ChatSupportedSites = {
       selectors: ['div'],
     },
     iframe: {
-      container: '[data-test-selector="chat-room-component-layout"]',
+      container: '.stream-chat',
     },
   },
 };
@@ -37,3 +37,5 @@ export const ChatSupportedSites = {
 export const CHAT_URL_FULLSCREEN = '/chat/monitor/iframe';
 
 export const CHAT_STORAGE_KEY = 'avidcaster-chat';
+
+export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/twitch-x256.png';
