@@ -78,7 +78,6 @@ export class ChatService {
           switch (data.action) {
             case ChatMessageDownstreamAction.pong:
               this.currentHost = data.host;
-              this.setNorthBoundSelector(this.currentHost);
               this.setNorthBoundIframe(this.currentHost);
               break;
             case ChatMessageDownstreamAction.chat:
@@ -135,5 +134,6 @@ export class ChatService {
     };
 
     this.layout.uix.window.parent.postMessage(data, '*');
+    setTimeout(() => this.setNorthBoundSelector(host), 1000);
   }
 }

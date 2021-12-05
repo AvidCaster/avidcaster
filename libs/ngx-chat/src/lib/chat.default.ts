@@ -25,8 +25,11 @@ export const ChatSupportedSites = {
   },
   [ChatMessageHosts.twitch]: {
     observer: {
-      container: '[data-test-selector="chat-scrollable-area__message-container"]',
+      container: '.simplebar-content .chat-scrollable-area__message-container',
       selectors: ['div'],
+    },
+    iframe: {
+      container: '[data-test-selector="chat-room-component-layout"]',
     },
   },
 };
