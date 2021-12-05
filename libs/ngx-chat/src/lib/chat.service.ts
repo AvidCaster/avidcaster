@@ -73,41 +73,39 @@ export class ChatService {
 
   private southBoundSubscription() {
     this.zone.runOutsideAngular(() => {
-      this.onMessageOb$
-        .pipe(buffer(this.onMessageOb$.pipe(throttleTime(100))), takeUntil(this.destroy$))
-        .subscribe((event: Event[]) => {
-          const data = (event[0] as MessageEvent).data as ChatMessageEvent;
-          if (data.type === 'avidcaster-chat-south-bound') {
-            switch (data.action) {
-              case 'pong':
-                this.currentHost = data.host;
-                this.setNorthBoundSelector(this.currentHost);
-                this.setNorthBoundIframe(this.currentHost);
-                break;
-              case 'chat':
-                switch (data.host) {
-                  case 'youtube': {
-                    const chat = parseYouTubeChat(data.payload);
-                    this.broadcastChatMessage(data.host, chat);
-                    // console.log(JSON.stringify(chat, null, 4));
-                    break;
-                  }
-                  case 'twitch': {
-                    const chat = parseTwitchChat(data.payload);
-                    this.broadcastChatMessage(data.host, chat);
-                    // console.log(JSON.stringify(chat, null, 4));
-                    break;
-                  }
-                  default:
-                    console.log(`Unknown host: ${data.host}`);
-                    break;
+      this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
+        const data = event.data as ChatMessageEvent;
+        if (data.type === 'avidcaster-chat-south-bound') {
+          switch (data.action) {
+            case 'pong':
+              this.currentHost = data.host;
+              this.setNorthBoundSelector(this.currentHost);
+              this.setNorthBoundIframe(this.currentHost);
+              break;
+            case 'chat':
+              switch (data.host) {
+                case 'youtube': {
+                  const chat = parseYouTubeChat(data.payload);
+                  this.broadcastChatMessage(data.host, chat);
+                  // console.log(JSON.stringify(chat, null, 4));
+                  break;
                 }
-                break;
-              default:
-                break;
-            }
+                case 'twitch': {
+                  const chat = parseTwitchChat(data.payload);
+                  this.broadcastChatMessage(data.host, chat);
+                  // console.log(JSON.stringify(chat, null, 4));
+                  break;
+                }
+                default:
+                  console.log(`Unknown host: ${data.host}`);
+                  break;
+              }
+              break;
+            default:
+              break;
           }
-        });
+        }
+      });
     });
   }
 
