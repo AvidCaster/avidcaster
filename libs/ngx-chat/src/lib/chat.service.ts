@@ -83,13 +83,13 @@ export class ChatService {
             case ChatMessageDownstreamAction.chat:
               switch (data.host) {
                 case ChatMessageHosts.youtube: {
-                  const chat = parseYouTubeChat(data.payload);
+                  const chat = parseYouTubeChat(data.host, data.payload);
                   this.broadcastChatMessage(data.host, chat);
                   // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
                 case ChatMessageHosts.twitch: {
-                  const chat = parseTwitchChat(data.payload);
+                  const chat = parseTwitchChat(data.host, data.payload);
                   this.broadcastChatMessage(data.host, chat);
                   console.log(JSON.stringify(chat, null, 4));
                   break;

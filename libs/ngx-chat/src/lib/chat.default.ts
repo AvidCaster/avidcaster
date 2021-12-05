@@ -38,4 +38,5 @@ export const CHAT_URL_FULLSCREEN = '/chat/monitor/iframe';
 
 export const CHAT_STORAGE_KEY = 'avidcaster-chat';
 
-export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/twitch-x256.png';
+export const CHAT_YOUTUBE_DEFAULT_AVATAR = './assets/images/misc/avatar-default-youtube.png';
+export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-twitch.png';

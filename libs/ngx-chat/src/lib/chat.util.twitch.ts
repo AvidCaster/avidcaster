@@ -10,7 +10,7 @@ import { tryGet } from '@fullerstack/agx-util';
 import * as $ from 'jquery';
 
 import { CHAT_TWITCH_DEFAULT_AVATAR } from './chat.default';
-import { ChatMessage, ChatMessageData } from './chat.model';
+import { ChatMessage, ChatMessageData, ChatMessageHosts } from './chat.model';
 
 const getAuthor = ($obj: JQuery<Node[]>): string => {
   return tryGet(() => {
@@ -90,7 +90,10 @@ const parseCommonElements = (el: JQuery<Node[]>): ChatMessage => {
   };
 };
 
-export const parseTwitchChat = (chat: ChatMessageData): ChatMessage | undefined => {
+export const parseTwitchChat = (
+  host: ChatMessageHosts,
+  chat: ChatMessageData
+): ChatMessage | undefined => {
   let parsed = {} as ChatMessage;
   let el = $($.parseHTML(chat.html));
   switch (chat.tagName) {
@@ -102,5 +105,5 @@ export const parseTwitchChat = (chat: ChatMessageData): ChatMessage | undefined 
       break;
   }
   el = undefined;
-  return parsed;
+  return { ...parsed, host };
 };

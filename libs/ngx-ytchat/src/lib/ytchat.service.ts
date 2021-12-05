@@ -97,13 +97,13 @@ export class YTChatService {
             info = {
               ...info,
               message,
-              avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default.png',
+              avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default-red.png',
             };
           });
       } else {
         info = {
           ...info,
-          avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default.png',
+          avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default-red.png',
         };
       }
     }

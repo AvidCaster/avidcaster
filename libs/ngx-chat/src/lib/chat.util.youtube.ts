@@ -9,7 +9,8 @@
 import { tryGet } from '@fullerstack/agx-util';
 import * as $ from 'jquery';
 
-import { ChatMessage, ChatMessageData } from './chat.model';
+import { CHAT_YOUTUBE_DEFAULT_AVATAR } from './chat.default';
+import { ChatMessage, ChatMessageData, ChatMessageHosts } from './chat.model';
 import { includesEmoji } from './chat.util';
 
 const getAuthor = ($obj: JQuery<Node[]>): string => {
@@ -24,7 +25,7 @@ const getAvatarUrl = ($obj: JQuery<Node[]>): string => {
   return tryGet(() => {
     const el = $obj.find('#img');
     return el.attr('src').replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim();
-  }, '');
+  }, CHAT_YOUTUBE_DEFAULT_AVATAR);
 };
 
 const getBadgeUrl = ($obj: JQuery<Node[]>): string => {
@@ -123,7 +124,10 @@ const parseMembershipItem = (el: JQuery<Node[]>): ChatMessage => {
   return params;
 };
 
-export const parseYouTubeChat = (chat: ChatMessageData): ChatMessage | undefined => {
+export const parseYouTubeChat = (
+  host: ChatMessageHosts,
+  chat: ChatMessageData
+): ChatMessage | undefined => {
   let parsed = {} as ChatMessage;
   let el = $($.parseHTML(chat.html));
   switch (chat.tagName) {
@@ -143,5 +147,5 @@ export const parseYouTubeChat = (chat: ChatMessageData): ChatMessage | undefined
       break;
   }
   el = undefined;
-  return parsed;
+  return { ...parsed, host };
 };

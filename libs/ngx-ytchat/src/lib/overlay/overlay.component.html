@@ -118,7 +118,7 @@
       <div class="yt-text-fields" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="row" class="yt-author">
-            <span>{{ data?.author }}</span>
+            <span><mat-icon [svgIcon]="data?.host"></mat-icon>{{ data?.author }}</span>
             <span *ngIf="data?.purchaseAmount" class="yt-donation">
               <span>🌺</span>
               <span>{{ data?.purchaseAmount }}</span>

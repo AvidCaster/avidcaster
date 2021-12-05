@@ -8,7 +8,7 @@
 
 export const YTCHAT_STORAGE_KEY = 'ytchat';
 export const YTCHAT_URL_FULLSCREEN = '/chat/overlay/screen';
-export const YTCHAT_DEFAULT_AVATAR_URL = './assets/images/misc/avatar-default.png';
+export const YTCHAT_DEFAULT_AVATAR_URL = './assets/images/misc/avatar-default-red.png';
 /**
  * Layout config declaration
  */
@@ -53,6 +53,7 @@ export interface YTChatObserver {
 }
 
 export type YTChatInfo = {
+  host?: string;
   author?: string;
   authorType?: string;
   message?: string;

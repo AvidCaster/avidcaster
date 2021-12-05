@@ -31,7 +31,7 @@ export const defaultYTChatMessage = (): YTChatInfo => {
 
   return ldDeepClone({
     author: 'Mike Tyson',
-    avatarUrl: './assets/images/misc/avatar-default.png',
+    avatarUrl: './assets/images/misc/avatar-default-red.png',
     html,
     purchaseAmount: '$100.00',
   });
