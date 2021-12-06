@@ -6,7 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { LoggerService } from '@fullerstack/ngx-logger';
 
 import { ChatService } from '../chat.service';
 
@@ -16,10 +17,14 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./chat-iframe.component.scss'],
 })
 export class ChatIframeComponent implements OnInit {
-  constructor(readonly chatService: ChatService) {}
+  constructor(
+    readonly cdRef: ChangeDetectorRef,
+    readonly logger: LoggerService,
+    readonly chatService: ChatService
+  ) {}
 
   ngOnInit(): void {
-    console.log('Chat monitoring started!');
+    this.logger.info('Chat monitoring started!');
   }
 
   homeUrl(url: string) {
@@ -33,5 +38,9 @@ export class ChatIframeComponent implements OnInit {
       '_blank',
       'width=1200,height=720,left=100,top=100'
     );
+  }
+
+  showStreamId() {
+    this.cdRef.detectChanges();
   }
 }
