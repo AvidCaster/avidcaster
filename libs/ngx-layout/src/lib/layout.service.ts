@@ -24,7 +24,7 @@ import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { DeepReadonly } from 'ts-essentials';
 
 import { DefaultLayoutConfig, DefaultLayoutState } from './layout.default';
@@ -35,6 +35,8 @@ export class LayoutService implements OnDestroy {
   private nameSpace = 'LAYOUT';
   private claimId: string;
   private destroy$ = new Subject<boolean>();
+  private headlessPaths: string[] = [];
+  private lastUrl: string;
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
   state: DeepReadonly<LayoutState> = DefaultLayoutState;
   stateSub$: Observable<LayoutState>;
@@ -88,8 +90,12 @@ export class LayoutService implements OnDestroy {
     this.subAuthState();
     this.subStorage();
     this.subRouteChange();
-
+    this.subHeadlessRoutes();
     this.logger.info(`[${this.nameSpace}] LayoutService ready ...`);
+  }
+
+  registerHeadlessPath(path: string[]) {
+    this.headlessPaths = [...this.headlessPaths, ...path];
   }
 
   /**
@@ -200,6 +206,25 @@ export class LayoutService implements OnDestroy {
         }
       },
     });
+  }
+
+  private subHeadlessRoutes() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          if (this.headlessPaths.includes(this.router.url)) {
+            this.setHeadless(true);
+          } else if (this.headlessPaths.includes(this.lastUrl)) {
+            this.setHeadless(false);
+          }
+
+          this.lastUrl = this.router.url;
+        },
+      });
   }
 
   setMenu(menuOpen: boolean) {

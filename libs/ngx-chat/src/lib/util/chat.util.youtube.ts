@@ -10,7 +10,7 @@ import { tryGet } from '@fullerstack/agx-util';
 import * as $ from 'jquery';
 
 import { CHAT_YOUTUBE_DEFAULT_AVATAR } from '../chat.default';
-import { ChatMessage, ChatMessageData, ChatMessageHosts } from '../chat.model';
+import { ChatMessage, ChatMessageEvent, ChatMessageItem } from '../chat.model';
 import { includesEmoji } from './chat.util';
 
 const getAuthor = ($obj: JQuery<Node[]>): string => {
@@ -124,13 +124,10 @@ const parseMembershipItem = (el: JQuery<Node[]>): ChatMessage => {
   return params;
 };
 
-export const parseYouTubeChat = (
-  host: ChatMessageHosts,
-  chat: ChatMessageData
-): ChatMessage | undefined => {
-  let parsed = {} as ChatMessage;
-  let el = $($.parseHTML(chat.html));
-  switch (chat.tagName) {
+export const parseYouTubeChat = (event: ChatMessageEvent): ChatMessageItem | undefined => {
+  let parsed = {} as ChatMessageItem;
+  let el = $($.parseHTML(event?.payload.html));
+  switch (event?.payload.tagName) {
     case 'yt-live-chat-text-message-renderer':
       parsed = parseCommonElements(el);
       break;
@@ -147,5 +144,5 @@ export const parseYouTubeChat = (
       break;
   }
   el = undefined;
-  return { ...parsed, host };
+  return { ...parsed, host: event?.host };
 };

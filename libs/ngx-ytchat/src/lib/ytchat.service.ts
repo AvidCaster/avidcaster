@@ -121,10 +121,10 @@ export class YTChatService {
         'storage',
         (event) => {
           if (event.key.startsWith(CHAT_STORAGE_KEY)) {
-            const chat = JSON.parse(event.newValue);
-            setTimeout(() => localStorage.removeItem(event.key), 0);
-            this.chatInfoObs$.next(chat);
-            console.log(JSON.stringify(chat, null, 4));
+            // const chat = JSON.parse(event.newValue);
+            // setTimeout(() => localStorage.removeItem(event.key), 0);
+            // this.chatInfoObs$.next(chat);
+            // console.log(JSON.stringify(chat, null, 4));
           }
         },
         false

@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { I18nModule } from '@fullerstack/ngx-i18n';
+import { MaterialModule } from '@fullerstack/ngx-material';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { chatRoutes } from './chat.routes';
@@ -23,6 +24,7 @@ import { ChatSetupComponent } from './setup/chat-setup.component';
 @NgModule({
   imports: [
     CommonModule,
+    MaterialModule,
     RouterModule.forChild(chatRoutes),
     MarkdownModule.forChild(),
     I18nModule.forChild(),

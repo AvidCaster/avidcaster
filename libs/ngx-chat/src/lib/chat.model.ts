@@ -29,7 +29,7 @@ export enum ChatMessageDirection {
   SouthBound = 'avidcaster-chat-south-bound',
 }
 
-export type ChatMessage = {
+export interface ChatMessage {
   host?: ChatMessageHosts;
   author?: string;
   avatarUrl?: string;
@@ -39,20 +39,26 @@ export type ChatMessage = {
   donation?: string;
   membership?: string;
   messageType?: string;
-};
+}
 
-export type ChatMessageData = {
+export interface ChatMessageItem extends ChatMessage {
+  timestamp?: number;
+  prefix?: string;
+  streamId?: string;
+}
+
+export interface ChatMessageData {
   tagName: string;
   html: string;
-};
+}
 
-export type ChatMessageEvent = {
+export interface ChatMessageEvent {
   type: ChatMessageDirection;
   host: ChatMessageHosts;
   streamId: string;
   action: ChatMessageUpstreamAction | ChatMessageDownstreamAction;
   payload: ChatMessageData;
-};
+}
 
 export type BufferDebounce = <T>(time: number) => OperatorFunction<T, T[]>;
 export type BufferThrottle = <T>(time: number) => OperatorFunction<T, T[]>;
