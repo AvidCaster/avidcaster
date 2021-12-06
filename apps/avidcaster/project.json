@@ -50,12 +50,7 @@
           },
           {
             "glob": "**/*.md",
-            "input": "libs/ngx-chat/src/lib/overview",
-            "output": "assets/md"
-          },
-          {
-            "glob": "**/*.md",
-            "input": "libs/ngx-chat/src/lib/setup",
+            "input": "libs/ngx-chat/src/lib",
             "output": "assets/md"
           }
         ],

@@ -13,22 +13,11 @@ import { OverlayComponent } from './overlay/overlay.component';
 
 export const ytChatRoutes: Routes = [
   {
-    path: '',
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'overlay/overview',
-      },
-
-      {
-        path: 'overlay/screen',
-        component: OverlayComponent,
-        data: {
-          title: _('CHAT.OVERLAY'),
-          description: _('CHAT.OVERLAY_DESC'),
-        },
-      },
-    ],
+    path: 'screen',
+    component: OverlayComponent,
+    data: {
+      title: _('CHAT.OVERLAY'),
+      description: _('CHAT.OVERLAY_DESC'),
+    },
   },
 ];

@@ -10,28 +10,42 @@ import { Routes } from '@angular/router';
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 
 import { ChatIframeComponent } from './iframe/chat-iframe.component';
+import { ChatOverlayComponent } from './overlay/chat-overlay.component';
 import { ChatOverviewComponent } from './overview/chat-overview.component';
 import { ChatSetupComponent } from './setup/chat-setup.component';
 
 export const chatRoutes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'overlay',
+  },
+  {
+    path: 'iframe',
+    component: ChatIframeComponent,
+    data: {
+      title: _('COMMON.MONITOR'),
+      description: _('CHAT.MONITOR_DESC'),
+    },
+  },
+  {
+    path: 'overlay',
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'iframe',
+        redirectTo: 'overview',
       },
       {
-        path: 'iframe',
-        component: ChatIframeComponent,
+        path: 'screen',
+        component: ChatOverlayComponent,
         data: {
-          title: _('COMMON.MONITOR'),
-          description: _('CHAT.MONITOR_DESC'),
+          title: _('CHAT.OVERLAY'),
+          description: _('CHAT.OVERLAY_DESC'),
         },
       },
       {
-        path: 'overlay/overview',
+        path: 'overview',
         component: ChatOverviewComponent,
         data: {
           title: _('COMMON.OVERVIEW'),
@@ -39,7 +53,7 @@ export const chatRoutes: Routes = [
         },
       },
       {
-        path: 'overlay/setup',
+        path: 'setup',
         component: ChatSetupComponent,
         data: {
           title: _('COMMON.SETUP'),
