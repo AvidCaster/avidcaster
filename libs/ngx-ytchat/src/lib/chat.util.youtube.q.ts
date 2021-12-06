@@ -8,8 +8,8 @@
 
 import { unescape as ldUnescape } from 'lodash-es';
 
-import { ChatMessage } from './chat.model';
-import { ChatMessageData } from '..';
+import { ChatMessageData } from '../../../ngx-chat/src';
+import { ChatMessage } from '../../../ngx-chat/src/lib/chat.model';
 
 /**
  * Check if string contains emoji
@@ -76,7 +76,7 @@ const getImage = (el: Element, selector: string): string => {
   el = el.cloneNode(true) as Element;
   const image = el.querySelector(selector) as HTMLImageElement | null;
   const imgUrl = image
-    ? image[0].src?.replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim()
+    ? image.src?.replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim()
     : undefined;
   return imgUrl;
 };
@@ -87,22 +87,25 @@ const getImage = (el: Element, selector: string): string => {
  * @returns text only string
  */
 const getMessageHtml = (el: Element, selector: string): string => {
-  return '';
-  const elem = el.querySelector(selector).cloneNode(true) as Element;
+  el = el.cloneNode(true) as Element;
 
-  elem.querySelectorAll(`${selector} [data-a-target="chat-message-text"]`).forEach(function (item) {
+  el.querySelectorAll(`${selector} font`).forEach(function (item) {
     item.replaceWith(item.textContent);
   });
 
-  const images = el.querySelectorAll(`${selector} [data-test-selector="emote-button"]`);
-  images.forEach(function (item) {
-    const img = item.querySelector('img');
-    img ? item.replaceWith(`<img src="${img.src}" />`) : item.remove();
-  });
-
-  const delList = el.querySelectorAll(`${selector} anything-else`);
+  const delList = el.querySelectorAll(`${selector}  > :not(img)`);
   delList.forEach(function (item) {
     item.parentNode.removeChild(item);
+  });
+
+  el.querySelectorAll(`${selector} img`).forEach(function (node) {
+    const alt = node.getAttribute('alt').replace(/ +/g, ' ').trim();
+    if (alt && hasEmoji(alt)) {
+      node.replaceWith(alt);
+    } else {
+      const src = node.getAttribute('src');
+      node.replaceWith(`<img src="${src}">`);
+    }
   });
 
   const message = getHtml(el, selector);
@@ -129,11 +132,11 @@ const getDonationAmount = (el: Element): string => {
  * @returns common info
  */
 const parseCommonElements = (el: Element): ChatMessage => {
-  const author = getText(el, '[data-test-selector="message-username"]');
-  const message = getText(el, '[data-a-target="chat-message-text"]');
-  const avatarUrl = getImage(el, '[data-a-target="chat-badge]');
-  // const badgeUrl = getImage(el, '#chat-badges .yt-live-chat-author-badge-renderer img');
-  return { message, author, avatarUrl };
+  const author = getText(el, '#author-name');
+  const message = getText(el, '#message');
+  const avatarUrl = getImage(el, '#author-photo > img');
+  const badgeUrl = getImage(el, '#chat-badges .yt-live-chat-author-badge-renderer img');
+  return { message, author, avatarUrl, badgeUrl };
 };
 
 /**
@@ -143,7 +146,7 @@ const parseCommonElements = (el: Element): ChatMessage => {
  */
 const parseTextMessage = (el: Element): ChatMessage => {
   const params = parseCommonElements(el);
-  const html = getMessageHtml(el, '[data-a-target="chat-line-message-body"]');
+  const html = getMessageHtml(el, '#message');
 
   return {
     ...params,
@@ -210,12 +213,18 @@ const parseMembershipItem = (el: Element): ChatMessage => {
   };
 };
 
-export const parseTwitchChat = (chat: ChatMessageData): ChatMessage | undefined => {
+export const parseYouTubeChat = (chat: ChatMessageData): ChatMessage | undefined => {
   const el = document.createElement('div');
   el.innerHTML = chat.html;
   switch (chat.tagName) {
-    case 'div':
+    case 'yt-live-chat-text-message-renderer':
       return parseTextMessage(el);
+    case 'yt-live-chat-paid-message-renderer':
+      return parsePaidMessage(el);
+    case 'yt-live-chat-paid-sticker-renderer':
+      return parsePaidSticker(el);
+    case 'yt-live-chat-membership-item-renderer':
+      return parseMembershipItem(el);
   }
   return {} as ChatMessage;
 };

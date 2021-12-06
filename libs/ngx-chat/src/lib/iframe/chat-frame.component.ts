@@ -8,14 +8,14 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { ChatService } from './chat.service';
+import { ChatService } from '../chat.service';
 
 @Component({
-  selector: 'fullerstack-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss'],
+  selector: 'fullerstack-chat-iframe',
+  templateUrl: './chat-iframe.component.html',
+  styleUrls: ['./chat-iframe.component.scss'],
 })
-export class ChatComponent implements OnInit {
+export class ChatIframeComponent implements OnInit {
   constructor(readonly chatService: ChatService) {}
 
   ngOnInit(): void {

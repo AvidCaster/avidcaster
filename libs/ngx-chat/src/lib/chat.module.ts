@@ -11,13 +11,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { I18nModule } from '@fullerstack/ngx-i18n';
 
-import { ChatComponent } from './chat.component';
 import { chatRoutes } from './chat.routes';
 import { ChatService } from './chat.service';
+import { ChatIframeComponent } from './iframe/chat-frame.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(chatRoutes), I18nModule.forChild()],
-  declarations: [ChatComponent],
+  declarations: [ChatIframeComponent],
   providers: [ChatService],
 })
 export class ChatModule {}

@@ -9,7 +9,7 @@
 import { Routes } from '@angular/router';
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 
-import { ChatComponent } from './chat.component';
+import { ChatIframeComponent } from './iframe/chat-frame.component';
 
 export const chatRoutes: Routes = [
   {
@@ -22,7 +22,7 @@ export const chatRoutes: Routes = [
       },
       {
         path: 'iframe',
-        component: ChatComponent,
+        component: ChatIframeComponent,
         data: {
           title: _('COMMON.MONITOR'),
           description: _('CHAT.MONITOR_DESC'),
