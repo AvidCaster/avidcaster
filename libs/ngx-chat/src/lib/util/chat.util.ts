@@ -8,8 +8,8 @@
 
 import { Observable, buffer, debounceTime, throttleTime } from 'rxjs';
 
-import { ChatSupportedSites } from './chat.default';
-import { BufferDebounce, BufferThrottle } from './chat.model';
+import { ChatSupportedSites } from '../chat.default';
+import { BufferDebounce, BufferThrottle } from '../chat.model';
 
 export const isSiteSupported = (site: string): boolean => {
   return Object.keys(ChatSupportedSites).includes(site);

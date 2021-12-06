@@ -9,8 +9,8 @@
 import { tryGet } from '@fullerstack/agx-util';
 import * as $ from 'jquery';
 
-import { CHAT_TWITCH_DEFAULT_AVATAR } from './chat.default';
-import { ChatMessage, ChatMessageData, ChatMessageHosts } from './chat.model';
+import { CHAT_TWITCH_DEFAULT_AVATAR } from '../chat.default';
+import { ChatMessage, ChatMessageData, ChatMessageHosts } from '../chat.model';
 
 const getAuthor = ($obj: JQuery<Node[]>): string => {
   return tryGet(() => {

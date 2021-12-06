@@ -22,8 +22,8 @@ import {
   ChatMessageHosts,
   ChatMessageUpstreamAction,
 } from './chat.model';
-import { parseTwitchChat } from './chat.util.twitch';
-import { parseYouTubeChat } from './chat.util.youtube';
+import { parseTwitchChat } from './util/chat.util.twitch';
+import { parseYouTubeChat } from './util/chat.util.youtube';
 
 @Injectable()
 export class ChatService {
