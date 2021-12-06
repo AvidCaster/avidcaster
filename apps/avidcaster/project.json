@@ -50,12 +50,12 @@
           },
           {
             "glob": "**/*.md",
-            "input": "libs/ngx-ytchat/src/lib/overview",
+            "input": "libs/ngx-chat/src/lib/overview",
             "output": "assets/md"
           },
           {
             "glob": "**/*.md",
-            "input": "libs/ngx-ytchat/src/lib/setup",
+            "input": "libs/ngx-chat/src/lib/setup",
             "output": "assets/md"
           }
         ],

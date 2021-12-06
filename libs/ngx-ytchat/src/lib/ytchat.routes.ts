@@ -10,8 +10,6 @@ import { Routes } from '@angular/router';
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 
 import { OverlayComponent } from './overlay/overlay.component';
-import { OverviewComponent } from './overview/overview.component';
-import { SetupComponent } from './setup/setup.component';
 
 export const ytChatRoutes: Routes = [
   {
@@ -22,22 +20,7 @@ export const ytChatRoutes: Routes = [
         pathMatch: 'full',
         redirectTo: 'overlay/overview',
       },
-      {
-        path: 'overlay/overview',
-        component: OverviewComponent,
-        data: {
-          title: _('COMMON.OVERVIEW'),
-          description: _('CHAT.OVERVIEW_DESC'),
-        },
-      },
-      {
-        path: 'overlay/setup',
-        component: SetupComponent,
-        data: {
-          title: _('COMMON.SETUP'),
-          description: _('CHAT.SETUP_DESC'),
-        },
-      },
+
       {
         path: 'overlay/screen',
         component: OverlayComponent,

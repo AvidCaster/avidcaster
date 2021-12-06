@@ -15,8 +15,6 @@ import { MaterialModule } from '@fullerstack/ngx-material';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { OverlayComponent } from './overlay/overlay.component';
-import { OverviewComponent } from './overview/overview.component';
-import { SetupComponent } from './setup/setup.component';
 import { ytChatRoutes } from './ytchat.routes';
 import { YTChatService } from './ytchat.service';
 
@@ -30,7 +28,7 @@ import { YTChatService } from './ytchat.service';
     FireworksModule,
   ],
   exports: [OverlayComponent],
-  declarations: [OverlayComponent, OverviewComponent, SetupComponent],
+  declarations: [OverlayComponent],
   providers: [YTChatService],
 })
 export class YTChatModule {}
