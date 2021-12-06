@@ -33,6 +33,7 @@ export class ChatService {
   chat$ = this.chatOb$.asObservable();
   lastUrl: string;
   currentHost: string;
+  streamId: string;
 
   constructor(
     readonly zone: NgZone,
@@ -78,6 +79,7 @@ export class ChatService {
           switch (data.action) {
             case ChatMessageDownstreamAction.pong:
               this.currentHost = data.host;
+              this.streamId = data.streamId;
               this.setNorthBoundIframe(this.currentHost);
               break;
             case ChatMessageDownstreamAction.chat:
@@ -91,7 +93,7 @@ export class ChatService {
                 case ChatMessageHosts.twitch: {
                   const chat = parseTwitchChat(data.host, data.payload);
                   this.broadcastChatMessage(data.host, chat);
-                  console.log(JSON.stringify(chat, null, 4));
+                  // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
                 default:

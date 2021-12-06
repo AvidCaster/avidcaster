@@ -48,8 +48,9 @@ export type ChatMessageData = {
 
 export type ChatMessageEvent = {
   type: ChatMessageDirection;
-  action: ChatMessageUpstreamAction | ChatMessageDownstreamAction;
   host: ChatMessageHosts;
+  streamId: string;
+  action: ChatMessageUpstreamAction | ChatMessageDownstreamAction;
   payload: ChatMessageData;
 };
 

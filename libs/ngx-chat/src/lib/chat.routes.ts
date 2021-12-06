@@ -9,7 +9,7 @@
 import { Routes } from '@angular/router';
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 
-import { ChatIframeComponent } from './iframe/chat-frame.component';
+import { ChatIframeComponent } from './iframe/chat-iframe.component';
 import { ChatOverviewComponent } from './overview/chat-overview.component';
 import { ChatSetupComponent } from './setup/chat-setup.component';
 

@@ -27,7 +27,7 @@ export class ChatIframeComponent implements OnInit {
     return `${baseUrl}${url}`;
   }
 
-  OpenOverlay() {
+  openOverlay() {
     this.chatService.layout.uix.window.open(
       '/chat/overlay/screen',
       '_blank',
