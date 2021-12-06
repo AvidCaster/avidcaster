@@ -1,0 +1,8 @@
+<mat-list-item class="chat-item">
+  <img matListAvatar [src]="chat?.avatarUrl" />
+  <h3 class="chat-author" matLine>{{ chat.author }}</h3>
+  <p matLine>
+    <span> {{ chat.html }} </span>
+    <span class="demo-2"> -- {{ chat?.message }} </span>
+  </p>
+</mat-list-item>

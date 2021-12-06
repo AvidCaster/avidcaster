@@ -66,22 +66,22 @@ export class ChatService {
               break;
             case ChatMessageDownstreamAction.chat:
               switch (data.host) {
-                case ChatMessageHosts.youtube: {
+                case 'youtube': {
                   const chat = parseYouTubeChat(data);
                   chat.streamId = this.streamId;
                   chat.timestamp = new Date().getTime();
                   chat.prefix = this.prefix || this.streamId;
                   this.broadcastChatMessage(data.host, chat);
-                  console.log(JSON.stringify(chat, null, 4));
+                  // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
-                case ChatMessageHosts.twitch: {
+                case 'twitch': {
                   const chat = parseTwitchChat(data);
                   chat.streamId = this.streamId;
                   chat.timestamp = new Date().getTime();
                   chat.prefix = this.prefix || this.streamId;
                   this.broadcastChatMessage(data.host, chat);
-                  console.log(JSON.stringify(chat, null, 4));
+                  // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
                 default:
@@ -134,9 +134,9 @@ export class ChatService {
         (event) => {
           if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
             const chat = JSON.parse(event.newValue);
-            // setTimeout(() => localStorage.removeItem(event.key), 0);
+            setTimeout(() => localStorage.removeItem(event.key), 0);
             this.chatListOb$.next([...this.chatListOb$.value, chat]);
-            console.log(JSON.stringify(chat, null, 4));
+            // console.log(JSON.stringify(chat, null, 4));
           }
         },
         false

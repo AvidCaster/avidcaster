@@ -16,6 +16,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { chatRoutes } from './chat.routes';
 import { ChatService } from './chat.service';
 import { ChatIframeComponent } from './iframe/chat-iframe.component';
+import { ChatItemComponent } from './item/chat-item.component';
 import { ChatListComponent } from './list/chat-list.component';
 import { ChatOverlayComponent } from './overlay/chat-overlay.component';
 import { ChatOverviewComponent } from './overview/chat-overview.component';
@@ -33,6 +34,7 @@ import { ChatSetupComponent } from './setup/chat-setup.component';
     ChatIframeComponent,
     ChatSetupComponent,
     ChatOverviewComponent,
+    ChatItemComponent,
     ChatListComponent,
     ChatOverlayComponent,
   ],

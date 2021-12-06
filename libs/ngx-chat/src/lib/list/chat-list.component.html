@@ -1,22 +1,26 @@
-<div fxLayout="column">
-  <mat-list fxLayout="row">
-    <mat-list-item *ngFor="let chat of chatService.chatList$ | async">
-      <img matListAvatar [src]="chat?.avatarUrl" />
-      <h3 matLine>{{ chat?.author }}</h3>
-      <p matLine>
-        <span> {{ chat?.html }} </span>
-      </p>
-      <div class="chat-item-actions">
-        <button mat-icon-button>
-          <mat-icon>thumb_up</mat-icon>
-        </button>
-        <button mat-icon-button>
-          <mat-icon>thumb_down</mat-icon>
-        </button>
-        <button mat-icon-button>
-          <mat-icon>reply</mat-icon>
-        </button>
-      </div>
-    </mat-list-item>
-  </mat-list>
+<mat-list id="chat-list">
+  <div *ngFor="let chat of chatSampleList; let idx = index" class="chat-item chat-viewedz">
+    <fullerstack-chat-item class="chat-item" [chat]="chat"></fullerstack-chat-item>
+  </div>
+</mat-list>
+
+<div class="catchup">
+  <button mat-mini-fab color="primary"><mat-icon svgIcon="arrow-down"> </mat-icon></button>
 </div>
+
+<!-- <div id="chat-list">
+  <div class="chat-item" *ngFor="let chat of chatList" fxLayout="column" fxLayoutGap="5px">
+    <div>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <img class="chat-avatar" [src]="chat?.avatarUrl" width="36" />
+        <div class="chat-author">{{ chat?.author }}</div>
+        <span> {{ chat?.html || chat?.message }} </span>
+      </div>
+      <div fxFlex></div>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-icon svgIcon="trash-can-outline"></mat-icon>
+        <mat-icon svgIcon="key"></mat-icon>
+      </div>
+    </div>
+  </div>
+</div> -->

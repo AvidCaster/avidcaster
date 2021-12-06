@@ -8,10 +8,7 @@
 
 import { OperatorFunction } from 'rxjs';
 
-export enum ChatMessageHosts {
-  youtube = 'youtube',
-  twitch = 'twitch',
-}
+export type ChatMessageHosts = 'youtube' | 'twitch';
 
 export enum ChatMessageDownstreamAction {
   pong = 'pong',

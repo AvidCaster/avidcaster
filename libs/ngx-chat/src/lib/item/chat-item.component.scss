@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  overflow: none;
+}
+
+::ng-deep {
+  .mat-list-base .mat-list-item.mat-2-line,
+  .mat-list-base .mat-list-option.mat-2-line {
+    height: 46px !important;
+  }
+
+  .chat-item:hover {
+    background-color: #d9d4d4 !important;
+    opacity: 0.6;
+  }
+
+  .chat-viewed {
+    background-color: #555555 !important;
+    opacity: 0.4 !important;
+  }
+}
