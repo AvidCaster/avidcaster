@@ -155,7 +155,7 @@ export class ChatService {
     this.awaitOverlayResponse = setTimeout(() => {
       this.openOverlayScreen();
       this.awaitOverlayResponse = undefined;
-    }, 5000);
+    }, 2000);
   }
 
   broadcastNewChatOverlayResponse() {
