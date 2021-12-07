@@ -145,9 +145,9 @@ export class ChatService {
             setTimeout(() => localStorage.removeItem(event.key), 0);
             this.handleMessageBuffer();
             this.chatListOb$.next([...this.chatListOb$.value, chat]);
-            this.chatListOb$.value.length > 30
-              ? console.log(JSON.stringify(this.chatListOb$.value, null, 4))
-              : null;
+            // this.chatListOb$.value.length > 30
+            //   ? console.log(JSON.stringify(this.chatListOb$.value, null, 4))
+            //   : null;
           }
         },
         false

@@ -1,8 +1,8 @@
-<div id="chat-list" (scroll)="handleScroll($event)">
-  <div *ngFor="let chat of getSomeList; let idx = index" class="chat-item">
+<div id="chat-list" [class.auto-scroll]="!autoScrollEnabled" (scroll)="manualScroll($event)">
+  <div *ngFor="let chat of chatService.chatList$ | async; let idx = index" class="chat-item">
     <fullerstack-chat-item class="chat-item" [chat]="chat"></fullerstack-chat-item>
   </div>
 </div>
-<div class="catchup" *ngIf="(scroll$ | async) === false">
-  <button mat-mini-fab color="primary" (click)="scrollToBottom()"><mat-icon svgIcon="arrow-down"> </mat-icon></button>
+<div class="catchup" *ngIf="!autoScrollEnabled">
+  <button mat-mini-fab color="primary" (click)="toggleAutoScroll()"><mat-icon svgIcon="arrow-down"> </mat-icon></button>
 </div>
