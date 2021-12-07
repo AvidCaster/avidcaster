@@ -1,6 +1,6 @@
-<div class="chat-item" fxLayout="row">
+<div class="chat-item" fxLayout="row" [dir]="'rtl'">
   <div class="chat-info" fxLayout="row" fxLayoutGap="8px">
-    <div class="chat-avatar" fxFlex="0 0 auto">
+    <div class="chat-avatar" fxLayout="row" fxLayoutGap="8px">
       <img [src]="chat?.avatarUrl" />
       <mat-icon [svgIcon]="chat?.host" [color]="getHostColor(chat?.host)" fxFlexAlign="center"></mat-icon>
     </div>

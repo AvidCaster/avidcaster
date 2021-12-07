@@ -20,8 +20,8 @@
 }
 
 .chat-avatar mat-icon {
-  margin-left: -18px;
-  margin-top: -14px;
+  margin-left: -21px;
+  margin-top: 25px;
 }
 
 .chat-message {
@@ -50,4 +50,15 @@
 
 .mat-icon {
   vertical-align: middle;
+  z-index: 3;
+}
+
+[dir='rtl'] {
+  .chat-avatar {
+    margin-left: 22px !important;
+  }
+
+  .chat-avatar mat-icon {
+    margin-right: -18px;
+  }
 }

@@ -22,7 +22,7 @@ const getAuthor = ($obj: JQuery<Node[]>): string => {
 const getAvatarUrl = ($obj: JQuery<Node[]>): string => {
   return tryGet(() => {
     const el = $obj.find('[data-a-target="chat-badge"]').find('img').first();
-    return el.attr('src').replace('/1', '/3').replace('/2', '/3').replace(/ +/g, ' ').trim();
+    return el.attr('src').replace(/1$/, '3').replace(/2$/, '3').replace(/ +/g, ' ').trim();
   }, CHAT_TWITCH_DEFAULT_AVATAR);
 };
 
