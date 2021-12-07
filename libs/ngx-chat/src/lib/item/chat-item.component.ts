@@ -18,4 +18,15 @@ export class ChatItemComponent implements OnInit {
   ngOnInit(): void {
     console.log('ChatItemComponent.ngOnInit()');
   }
+
+  getHostColor(host): string {
+    switch (host) {
+      case 'youtube':
+        return 'warn';
+      case 'twitch':
+        return 'primary';
+      default:
+        return 'accent';
+    }
+  }
 }
