@@ -155,7 +155,7 @@ export class ChatService {
     this.awaitOverlayResponse = setTimeout(() => {
       this.openOverlayScreen();
       this.awaitOverlayResponse = undefined;
-    }, 2000);
+    }, 4000);
   }
 
   broadcastNewChatOverlayResponse() {
@@ -188,7 +188,8 @@ export class ChatService {
           } else if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
             // no one is listening, we can safely open the overlay screen
             this.logger.info('Overlay response received');
-            this.awaitOverlayResponse = null;
+            clearTimeout(this.awaitOverlayResponse);
+            this.awaitOverlayResponse = undefined;
           }
         },
         false
