@@ -1,0 +1,20 @@
+<div class="chat-slider-box" fxLayout="row" [@slideIn]="slideInState">
+  <div class="chat-image-fields" fxLayout="column">
+    <div class="chat-author-img">
+      <img width="160" height="160" src="{{ chat?.avatarUrl }}" (error)="onImageError($event, chat?.host)" />
+    </div>
+  </div>
+  <div class="chat-text-fields" fxLayout="column">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <div fxLayout="row" class="chat-author">
+        <span><mat-icon [svgIcon]="chat?.host"></mat-icon>{{ chat?.author }}</span>
+        <span *ngIf="chat?.donation" class="chat-donation">
+          <span>🌺</span>
+          <span>{{ chat?.donation }}</span>
+          <span>🌺</span>
+        </span>
+      </div>
+    </div>
+    <div class="chat-message" [innerHtml]="chat?.html || chat?.message"></div>
+  </div>
+</div>

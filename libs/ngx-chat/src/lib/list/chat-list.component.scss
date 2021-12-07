@@ -1,6 +1,6 @@
 #chat-list {
   padding-right: 0;
-  height: 50vh;
+  height: 100%;
   z-index: 1;
   padding-bottom: 20px;
 }
@@ -16,7 +16,7 @@
 .chat-pause {
   z-index: 2;
   text-align: center;
-  bottom: 48vh;
+  bottom: 36.66vh;
   left: 50vw;
   position: fixed;
 }

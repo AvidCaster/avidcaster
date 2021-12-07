@@ -1,1 +1,14 @@
-<fullerstack-chat-list></fullerstack-chat-list>
+<div id="chat-outer-box" fxLayout="column">
+  <div id="chat-list-box" fxLayout="row">
+    <fullerstack-chat-list></fullerstack-chat-list>
+  </div>
+  <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
+    <section class="chat-control">
+      <div fxLayout="row" fxLayoutAlign="space-around center"></div>
+    </section>
+    <mat-divider></mat-divider>
+    <section class="chat-overlay" *ngIf="(chatService.chatItem$ | async)?.author">
+      <fullerstack-chat-item></fullerstack-chat-item>
+    </section>
+  </div>
+</div>

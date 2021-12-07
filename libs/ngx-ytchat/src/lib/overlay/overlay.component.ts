@@ -35,6 +35,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   @ViewChild('audioTag') set playerRef(ref: ElementRef<HTMLAudioElement>) {
     this.$player = ref.nativeElement;
   }
+
   private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
   data: YTChatInfo = {};

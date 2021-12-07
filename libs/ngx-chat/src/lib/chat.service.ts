@@ -36,6 +36,8 @@ export class ChatService {
   private onMessageOb$: Observable<Event>;
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
+  private chatItemOb$ = new Subject<ChatMessageItem>();
+  chatItem$ = this.chatItemOb$.asObservable();
   currentHost: string;
   streamId: string;
   prefix: string;
@@ -53,6 +55,10 @@ export class ChatService {
     this.setNorthBoundReadyPing();
     this.storageSubscription();
     this.layout.registerHeadlessPath(CHAT_URL_FULLSCREEN_LIST);
+  }
+
+  chatSelected(chat: ChatMessageItem) {
+    this.chatItemOb$.next(chat);
   }
 
   private broadcastNewChatMessage(host: string, chat: ChatMessage) {
