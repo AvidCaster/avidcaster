@@ -35,6 +35,8 @@ export const ChatSupportedSites = {
 export const CHAT_URL_FULLSCREEN_LIST = ['/chat/iframe', '/chat/overlay/screen'];
 
 export const CHAT_STORAGE_KEY = 'avidcaster-chat';
+export const CHAT_STORAGE_KEY_OVERLAY_REQUEST = `${CHAT_STORAGE_KEY}-overlay-request`;
+export const CHAT_STORAGE_KEY_OVERLAY_RESPONSE = `${CHAT_STORAGE_KEY}-overlay-response`;
 
 export const CHAT_YOUTUBE_DEFAULT_AVATAR = './assets/images/misc/avatar-default-youtube.png';
 export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-twitch.png';

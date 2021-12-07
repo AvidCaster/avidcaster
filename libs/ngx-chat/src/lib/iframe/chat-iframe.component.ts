@@ -27,17 +27,13 @@ export class ChatIframeComponent implements OnInit {
     this.logger.info('Chat monitoring started!');
   }
 
+  openOverlay() {
+    this.chatService.broadcastNewChatOverlayRequest();
+  }
+
   homeUrl(url: string) {
     const baseUrl = this.chatService.layout.uix.window?.location?.origin;
     return `${baseUrl}${url}`;
-  }
-
-  openOverlay() {
-    this.chatService.layout.uix.window.open(
-      '/chat/overlay/screen',
-      '_blank',
-      'width=1200,height=720,left=100,top=100'
-    );
   }
 
   showStreamId() {

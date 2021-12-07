@@ -12,7 +12,13 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { BehaviorSubject, Observable, Subject, fromEvent, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
-import { CHAT_STORAGE_KEY, CHAT_URL_FULLSCREEN_LIST, ChatSupportedSites } from './chat.default';
+import {
+  CHAT_STORAGE_KEY,
+  CHAT_STORAGE_KEY_OVERLAY_REQUEST,
+  CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
+  CHAT_URL_FULLSCREEN_LIST,
+  ChatSupportedSites,
+} from './chat.default';
 import {
   ChatMessage,
   ChatMessageDirection,
@@ -35,6 +41,7 @@ export class ChatService {
   prefix: string;
   buffer = 200;
   bufferOffset = 50;
+  awaitOverlayResponse = undefined;
 
   constructor(
     readonly zone: NgZone,
@@ -48,7 +55,7 @@ export class ChatService {
     this.layout.registerHeadlessPath(CHAT_URL_FULLSCREEN_LIST);
   }
 
-  private broadcastChatMessage(host: string, chat: ChatMessage) {
+  private broadcastNewChatMessage(host: string, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
     localStorage.setItem(key, JSON.stringify(chat));
     setTimeout(() => localStorage.removeItem(key), 0);
@@ -72,7 +79,7 @@ export class ChatService {
                   chat.streamId = this.streamId;
                   chat.timestamp = new Date().getTime();
                   chat.prefix = this.prefix || this.streamId;
-                  this.broadcastChatMessage(data.host, chat);
+                  this.broadcastNewChatMessage(data.host, chat);
                   // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
@@ -81,7 +88,7 @@ export class ChatService {
                   chat.streamId = this.streamId;
                   chat.timestamp = new Date().getTime();
                   chat.prefix = this.prefix || this.streamId;
-                  this.broadcastChatMessage(data.host, chat);
+                  this.broadcastNewChatMessage(data.host, chat);
                   // console.log(JSON.stringify(chat, null, 4));
                   break;
                 }
@@ -135,6 +142,30 @@ export class ChatService {
     }
   }
 
+  broadcastNewChatOverlayRequest() {
+    const key = CHAT_STORAGE_KEY_OVERLAY_REQUEST;
+    localStorage.setItem(key, JSON.stringify({ from: 'iframe' }));
+    setTimeout(() => localStorage.removeItem(key), 0);
+    this.awaitOverlayResponse = setTimeout(() => {
+      this.openOverlayScreen();
+      this.awaitOverlayResponse = undefined;
+    }, 5000);
+  }
+
+  broadcastNewChatOverlayResponse() {
+    const key = CHAT_STORAGE_KEY_OVERLAY_RESPONSE;
+    localStorage.setItem(key, JSON.stringify({ from: 'overlay' }));
+    setTimeout(() => localStorage.removeItem(key), 0);
+  }
+
+  openOverlayScreen() {
+    this.layout.uix.window.open(
+      '/chat/overlay/screen',
+      '_blank',
+      'width=1200,height=720,left=100,top=100'
+    );
+  }
+
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
       addEventListener(
@@ -148,6 +179,9 @@ export class ChatService {
             // this.chatListOb$.value.length > 30
             //   ? console.log(JSON.stringify(this.chatListOb$.value, null, 4))
             //   : null;
+          } else if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
+            // no one is listening, we can safely open the overlay screen
+            this.awaitOverlayResponse = null;
           }
         },
         false
