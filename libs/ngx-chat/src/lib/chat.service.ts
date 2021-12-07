@@ -181,6 +181,7 @@ export class ChatService {
             //   : null;
           } else if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
             // no one is listening, we can safely open the overlay screen
+            this.logger.info('Overlay response received');
             this.awaitOverlayResponse = null;
           }
         },
