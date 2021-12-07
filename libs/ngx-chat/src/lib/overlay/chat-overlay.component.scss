@@ -53,3 +53,9 @@
 .chat-selected-hide {
   visibility: hidden;
 }
+
+#chat-fireworks {
+  position: absolute;
+  z-index: 10;
+  top: 5px;
+}
