@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { ChatMessageItem } from '../chat.model';
@@ -9,17 +9,16 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
 })
-export class ChatItemComponent implements OnInit {
+export class ChatItemComponent {
+  @Input() set viewed(value: boolean) {
+    this.chat.viewed = value;
+  }
   @Input() chat: ChatMessageItem;
   private destroyed$ = new Subject<boolean>();
 
-  constructor(readonly chatService: ChatService) {}
+  constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
 
-  ngOnInit(): void {
-    console.log('ChatItemComponent.ngOnInit()');
-  }
-
-  getHostColor(host): string {
+  getHostColor(host: string): string {
     switch (host) {
       case 'youtube':
         return 'warn';
@@ -28,5 +27,10 @@ export class ChatItemComponent implements OnInit {
       default:
         return 'accent';
     }
+  }
+
+  onClick(): void {
+    this.chat.viewed = true;
+    this.cdR.detectChanges();
   }
 }

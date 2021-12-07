@@ -1,4 +1,4 @@
-<div class="chat-item" fxLayout="row" [dir]="'rtl'">
+<div class="chat-item" fxLayout="row" [dir]="'ltr'" (click)="onClick()" [class.chat-viewed]="chat.viewed">
   <div class="chat-info" fxLayout="row" fxLayoutGap="8px">
     <div class="chat-avatar" fxLayout="row" fxLayoutGap="8px">
       <img [src]="chat?.avatarUrl" />

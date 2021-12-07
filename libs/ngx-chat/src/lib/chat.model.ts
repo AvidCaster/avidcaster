@@ -42,6 +42,7 @@ export interface ChatMessageItem extends ChatMessage {
   timestamp?: number;
   prefix?: string;
   streamId?: string;
+  viewed?: boolean;
 }
 
 export interface ChatMessageData {
