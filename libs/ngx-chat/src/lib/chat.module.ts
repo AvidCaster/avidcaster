@@ -20,8 +20,8 @@ import { ChatItemComponent } from './item/chat-item.component';
 import { ChatListComponent } from './list/chat-list.component';
 import { ChatOverlayComponent } from './overlay/chat-overlay.component';
 import { ChatOverviewComponent } from './overview/chat-overview.component';
+import { ChatSelectedComponent } from './selected/chat-selected.component';
 import { ChatSetupComponent } from './setup/chat-setup.component';
-import { ChatSliderComponent } from './slider/chat-slider.component';
 
 @NgModule({
   imports: [
@@ -38,7 +38,7 @@ import { ChatSliderComponent } from './slider/chat-slider.component';
     ChatItemComponent,
     ChatListComponent,
     ChatOverlayComponent,
-    ChatSliderComponent,
+    ChatSelectedComponent,
   ],
   providers: [ChatService],
 })

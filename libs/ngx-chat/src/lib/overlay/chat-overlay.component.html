@@ -7,8 +7,8 @@
       <div fxLayout="row" fxLayoutAlign="space-around center"></div>
     </section>
     <mat-divider></mat-divider>
-    <section class="chat-overlay" *ngIf="(chatService.chatItem$ | async)?.author">
-      <fullerstack-chat-item></fullerstack-chat-item>
+    <section class="chat-overlay">
+      <fullerstack-chat-selected></fullerstack-chat-selected>
     </section>
   </div>
 </div>

@@ -1,5 +1,5 @@
 <div
-  class="chat-item"
+  class="chat-item-box"
   fxLayout="row"
   [dir]="'ltr'"
   (click)="onClick()"
@@ -7,20 +7,20 @@
   [class.chat-is-membership]="chat?.membership"
   [class.chat-is-donation]="chat?.donation"
 >
-  <div class="chat-info" fxLayout="row" fxLayoutGap="8px">
-    <div class="chat-avatar" fxLayout="row" fxLayoutGap="8px">
+  <div class="chat-item-info" fxLayout="row" fxLayoutGap="8px">
+    <div class="chat-item-avatar" fxLayout="row" fxLayoutGap="8px">
       <img [src]="chat?.avatarUrl" />
       <mat-icon [svgIcon]="chat?.host" [color]="getHostColor(chat?.host)"></mat-icon>
     </div>
-    <div class="chat-author" fxLayout="column" fxLayoutAlign="center">{{ chat?.author }} |</div>
-    <div *ngIf="chat?.donation" class="chat-donation" fxLayout="column" fxLayoutAlign="center">{{ chat?.donation }}</div>
-    <div *ngIf="chat?.membership" class="chat-membership" fxLayout="column" fxLayoutAlign="center">{{ chat?.membership }}</div>
-    <div class="chat-message" fxLayout="column" fxLayoutAlign="center">
+    <div class="chat-item-author" fxLayout="column" fxLayoutAlign="center">{{ chat?.author }} |</div>
+    <div *ngIf="chat?.donation" class="chat-item-donation" fxLayout="column" fxLayoutAlign="center">{{ chat?.donation }}</div>
+    <div *ngIf="chat?.membership" class="chat-item-membership" fxLayout="column" fxLayoutAlign="center">{{ chat?.membership }}</div>
+    <div class="chat-item-message" fxLayout="column" fxLayoutAlign="center">
       <span [innerHtml]="chat?.html || chat?.message"></span>
     </div>
   </div>
   <div fxFlex></div>
-  <div fxFlex="30px" class="chat-action" fxLayout="row" fxLayoutAlign="center">
+  <div fxFlex="30px" class="chat-item-action" fxLayout="row" fxLayoutAlign="center">
     <mat-icon svgIcon="palette" fxFlexAlign="center"></mat-icon>
   </div>
 </div>

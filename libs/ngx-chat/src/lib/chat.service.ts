@@ -36,8 +36,8 @@ export class ChatService {
   private onMessageOb$: Observable<Event>;
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
-  private chatItemOb$ = new Subject<ChatMessageItem>();
-  chatItem$ = this.chatItemOb$.asObservable();
+  private chatSelectedOb$ = new Subject<ChatMessageItem>();
+  chatSelected$ = this.chatSelectedOb$.asObservable();
   currentHost: string;
   streamId: string;
   prefix: string;
@@ -58,7 +58,7 @@ export class ChatService {
   }
 
   chatSelected(chat: ChatMessageItem) {
-    this.chatItemOb$.next(chat);
+    this.chatSelectedOb$.next(chat);
   }
 
   private broadcastNewChatMessage(host: string, chat: ChatMessage) {
