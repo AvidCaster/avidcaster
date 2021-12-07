@@ -53,6 +53,18 @@
   z-index: 3;
 }
 
+.chat-is-membership {
+  background: yellowgreen;
+}
+
+.chat-is-donation {
+  background: orange;
+}
+
+.chat-donation {
+  font-weight: 500;
+}
+
 [dir='rtl'] {
   .chat-avatar {
     margin-left: 22px !important;

@@ -1,10 +1,20 @@
-<div class="chat-item" fxLayout="row" [dir]="'ltr'" (click)="onClick()" [class.chat-viewed]="chat.viewed">
+<div
+  class="chat-item"
+  fxLayout="row"
+  [dir]="'ltr'"
+  (click)="onClick()"
+  [class.chat-viewed]="chat?.viewed"
+  [class.chat-is-membership]="chat?.membership"
+  [class.chat-is-donation]="chat?.donation"
+>
   <div class="chat-info" fxLayout="row" fxLayoutGap="8px">
     <div class="chat-avatar" fxLayout="row" fxLayoutGap="8px">
       <img [src]="chat?.avatarUrl" />
       <mat-icon [svgIcon]="chat?.host" [color]="getHostColor(chat?.host)" fxFlexAlign="center"></mat-icon>
     </div>
     <div class="chat-author" fxLayout="column" fxLayoutAlign="center">{{ chat?.author }} |</div>
+    <div *ngIf="chat?.donation" class="chat-donation" fxLayout="column" fxLayoutAlign="center">{{ chat?.donation }}</div>
+    <div *ngIf="chat?.membership" class="chat-membership" fxLayout="column" fxLayoutAlign="center">{{ chat?.membership }}</div>
     <div class="chat-message" fxLayout="column" fxLayoutAlign="center">
       <span [innerHtml]="chat?.html || chat?.message"></span>
     </div>
