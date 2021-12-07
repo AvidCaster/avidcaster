@@ -1,26 +1,8 @@
-<mat-list id="chat-list">
-  <div *ngFor="let chat of chatSampleList; let idx = index" class="chat-item chat-viewedz">
+<div id="chat-list" (scroll)="handleScroll($event)">
+  <div *ngFor="let chat of getSomeList; let idx = index" class="chat-item">
     <fullerstack-chat-item class="chat-item" [chat]="chat"></fullerstack-chat-item>
   </div>
-</mat-list>
-
-<div class="catchup">
-  <button mat-mini-fab color="primary"><mat-icon svgIcon="arrow-down"> </mat-icon></button>
 </div>
-
-<!-- <div id="chat-list">
-  <div class="chat-item" *ngFor="let chat of chatList" fxLayout="column" fxLayoutGap="5px">
-    <div>
-      <div fxLayout="row" fxLayoutGap="10px">
-        <img class="chat-avatar" [src]="chat?.avatarUrl" width="36" />
-        <div class="chat-author">{{ chat?.author }}</div>
-        <span> {{ chat?.html || chat?.message }} </span>
-      </div>
-      <div fxFlex></div>
-      <div fxLayout="row" fxLayoutGap="10px">
-        <mat-icon svgIcon="trash-can-outline"></mat-icon>
-        <mat-icon svgIcon="key"></mat-icon>
-      </div>
-    </div>
-  </div>
-</div> -->
+<div class="catchup" *ngIf="(scroll$ | async) === false">
+  <button mat-mini-fab color="primary" (click)="scrollToBottom()"><mat-icon svgIcon="arrow-down"> </mat-icon></button>
+</div>

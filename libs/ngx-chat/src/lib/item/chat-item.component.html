@@ -1,8 +1,15 @@
-<mat-list-item class="chat-item">
-  <img matListAvatar [src]="chat?.avatarUrl" />
-  <h3 class="chat-author" matLine>{{ chat.author }}</h3>
-  <p matLine>
-    <span> {{ chat.html }} </span>
-    <span class="demo-2"> -- {{ chat?.message }} </span>
-  </p>
-</mat-list-item>
+<div class="chat-item" fxLayout="row">
+  <div class="chat-info" fxLayout="row" fxLayoutGap="8px">
+    <img class="chat-avatar" [src]="chat?.avatarUrl" />
+    <div class="chat-author" fxLayout="column" fxLayoutAlign="center">
+      {{ chat.author }}
+    </div>
+    <div class="chat-message" fxLayout="column" fxLayoutAlign="center">
+      {{ chat.html }}
+    </div>
+  </div>
+  <div fxFlex></div>
+  <div fxFlex="30px" class="chat-action" fxLayout="row" fxLayoutAlign="center">
+    <mat-icon svgIcon="palette" fxFlexAlign="center"></mat-icon>
+  </div>
+</div>

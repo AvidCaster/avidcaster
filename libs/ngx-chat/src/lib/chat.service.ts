@@ -18,7 +18,6 @@ import {
   ChatMessageDirection,
   ChatMessageDownstreamAction,
   ChatMessageEvent,
-  ChatMessageHosts,
   ChatMessageItem,
   ChatMessageUpstreamAction,
 } from './chat.model';
@@ -34,6 +33,8 @@ export class ChatService {
   currentHost: string;
   streamId: string;
   prefix: string;
+  buffer = 200;
+  bufferOffset = 50;
 
   constructor(
     readonly zone: NgZone,
@@ -127,6 +128,13 @@ export class ChatService {
     setTimeout(() => this.setNorthBoundSelector(host), 1000);
   }
 
+  private handleMessageBuffer() {
+    const chatList = this.chatListOb$.value;
+    if (chatList.length > this.buffer + this.bufferOffset) {
+      this.chatListOb$.next(chatList.slice(0, this.buffer));
+    }
+  }
+
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
       addEventListener(
@@ -135,8 +143,11 @@ export class ChatService {
           if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
             const chat = JSON.parse(event.newValue);
             setTimeout(() => localStorage.removeItem(event.key), 0);
+            this.handleMessageBuffer();
             this.chatListOb$.next([...this.chatListOb$.value, chat]);
-            // console.log(JSON.stringify(chat, null, 4));
+            this.chatListOb$.value.length > 30
+              ? console.log(JSON.stringify(this.chatListOb$.value, null, 4))
+              : null;
           }
         },
         false

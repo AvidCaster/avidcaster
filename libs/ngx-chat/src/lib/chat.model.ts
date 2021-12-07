@@ -27,7 +27,7 @@ export enum ChatMessageDirection {
 }
 
 export interface ChatMessage {
-  host?: ChatMessageHosts;
+  host?: string;
   author?: string;
   avatarUrl?: string;
   badgeUrl?: string;
