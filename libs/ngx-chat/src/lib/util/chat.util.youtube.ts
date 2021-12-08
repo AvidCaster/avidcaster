@@ -112,7 +112,7 @@ const parseMembershipItem = (el: JQuery<Node[]>): ChatMessage => {
   const params = parseCommonElements(el);
   if (params.html && !params.donation) {
     // milestone chat
-    params.donation = tryGet(
+    params.membership = tryGet(
       () => el.find('#header-primary-text').text().replace(/ +/g, ' ').trim(),
       ''
     );

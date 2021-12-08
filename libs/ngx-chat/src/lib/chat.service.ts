@@ -169,7 +169,7 @@ export class ChatService {
     this.awaitOverlayResponse = setTimeout(() => {
       this.openOverlayScreen();
       this.awaitOverlayResponse = undefined;
-    }, 4000);
+    }, 1000);
   }
 
   broadcastNewChatOverlayResponse() {
