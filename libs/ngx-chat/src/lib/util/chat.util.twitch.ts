@@ -86,7 +86,6 @@ const parseCommonElements = (el: JQuery<Node[]>): ChatMessage => {
     avatarUrl: getAvatarUrl(el),
     badgeUrl: getBadgeUrl(el),
     donation: getPurchaseAmount(el),
-    membership: 'hello',
     messageType: 'text-message',
   };
 };

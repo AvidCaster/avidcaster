@@ -81,7 +81,7 @@ const getPurchaseAmount = ($obj: JQuery<Node[]>): string => {
       amount = $obj.find('#purchase-amount-chip').text();
     }
     return amount.replace(/ +/g, ' ').trim();
-  }, '$25');
+  }, '');
 };
 
 const parseCommonElements = (el: JQuery<Node[]>): ChatMessage => {
