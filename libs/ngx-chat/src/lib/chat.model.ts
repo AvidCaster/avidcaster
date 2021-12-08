@@ -18,6 +18,7 @@ export interface ChatMessageHostReady {
 export enum ChatMessageDownstreamAction {
   pong = 'pong',
   chat = 'chat',
+  ready = 'ready',
 }
 
 export enum ChatMessageUpstreamAction {

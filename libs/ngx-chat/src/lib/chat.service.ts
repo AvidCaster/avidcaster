@@ -82,6 +82,9 @@ export class ChatService {
               this.streamId = data.streamId;
               this.setNorthBoundIframe(this.currentHost);
               break;
+            case ChatMessageDownstreamAction.ready:
+              this.setNorthBoundObserverReady();
+              break;
             case ChatMessageDownstreamAction.chat:
               switch (data.host) {
                 case 'youtube': {
@@ -115,6 +118,11 @@ export class ChatService {
     });
   }
 
+  private setNorthBoundObserverReady() {
+    this.hostReadyOb$.next({ host: this.currentHost, ready: true });
+    this.logger.info(`Observer is ready for ${this.currentHost}`);
+  }
+
   private setNorthBoundReadyPing() {
     const data = {
       type: ChatMessageDirection.NorthBound,
@@ -144,7 +152,6 @@ export class ChatService {
     this.layout.uix.window.parent.postMessage(data, '*');
     setTimeout(() => {
       this.setNorthBoundSelector(host);
-      this.hostReadyOb$.next({ host, ready: true });
     }, 1000);
   }
 
