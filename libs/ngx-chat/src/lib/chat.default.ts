@@ -6,6 +6,21 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+import { cloneDeep as ldDeepClone } from 'lodash-es';
+
+import { ChatConfig, ChatState } from './chat.model';
+
+/**
+ * Default configuration - Layout module
+ */
+const DefaultChatConfig: ChatConfig = {
+  logState: false,
+};
+
+export const defaultChatConfig = (): ChatConfig => {
+  return ldDeepClone(DefaultChatConfig);
+};
+
 export const ChatSupportedSites = {
   youtube: {
     observer: {
@@ -41,3 +56,20 @@ export const CHAT_STORAGE_KEY_OVERLAY_RESPONSE = `${CHAT_STORAGE_KEY}-overlay-re
 export const CHAT_YOUTUBE_DEFAULT_AVATAR = './assets/images/misc/avatar-default-youtube.png';
 export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-twitch.png';
 export const CHAT_DEFAULT_AVATAR = './assets/images/misc/avatar-default-red.png';
+
+export const CHAT_STATE_STORAGE_KEY = 'avidcaster-chat-state';
+
+const DefaultChatState = {
+  signature: '',
+  tags: [],
+  audioEnabled: false,
+  audioPlay: false,
+  fireworksEnabled: true,
+  fireworksPlay: false,
+  words: [],
+  wordsAction: '',
+};
+
+export const defaultChatState = (): ChatState => {
+  return ldDeepClone(DefaultChatState);
+};

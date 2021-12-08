@@ -6,7 +6,15 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { OperatorFunction } from 'rxjs';
+/**
+ * Layout config declaration
+ */
+export interface ChatConfig {
+  logState?: boolean;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [id: string]: any;
+}
 
 export type ChatMessageHosts = 'youtube' | 'twitch';
 
@@ -64,5 +72,15 @@ export interface ChatMessageEvent {
   payload: ChatMessageData;
 }
 
-export type BufferDebounce = <T>(time: number) => OperatorFunction<T, T[]>;
-export type BufferThrottle = <T>(time: number) => OperatorFunction<T, T[]>;
+export enum ChatMessageFilter {}
+
+export interface ChatState {
+  signature: string;
+  tags: string[];
+  audioEnabled: boolean;
+  audioPlay: boolean;
+  fireworksEnabled: boolean;
+  fireworksPlay: boolean;
+  words: string[];
+  wordsAction: string;
+}

@@ -7,17 +7,29 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
+import {
+  ApplicationConfig,
+  ConfigService,
+  DefaultApplicationConfig,
+} from '@fullerstack/ngx-config';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { BehaviorSubject, Observable, Subject, fromEvent, takeUntil } from 'rxjs';
+import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
+import { StoreService } from '@fullerstack/ngx-store';
+import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
+import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { DeepReadonly } from 'ts-essentials';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
+  CHAT_STATE_STORAGE_KEY,
   CHAT_STORAGE_KEY,
   CHAT_STORAGE_KEY_OVERLAY_REQUEST,
   CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
   CHAT_URL_FULLSCREEN_LIST,
   ChatSupportedSites,
+  defaultChatConfig,
+  defaultChatState,
 } from './chat.default';
 import {
   ChatMessage,
@@ -28,12 +40,18 @@ import {
   ChatMessageHosts,
   ChatMessageItem,
   ChatMessageUpstreamAction,
+  ChatState,
 } from './chat.model';
 import { parseTwitchChat } from './util/chat.util.twitch';
 import { parseYouTubeChat } from './util/chat.util.youtube';
 
 @Injectable()
 export class ChatService {
+  private nameSpace = 'CHAT';
+  private claimId: string;
+  options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
+  state: DeepReadonly<ChatState> = defaultChatState();
+  stateSub$: Observable<ChatState>;
   private destroy$ = new Subject<boolean>();
   private onMessageOb$: Observable<Event>;
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
@@ -51,14 +69,96 @@ export class ChatService {
 
   constructor(
     readonly zone: NgZone,
+    readonly store: StoreService,
+    readonly config: ConfigService,
     readonly logger: LoggerService,
     readonly layout: LayoutService
   ) {
+    this.options = ldMergeWith(
+      ldDeepClone({ chat: defaultChatConfig() }),
+      this.config.options,
+      (dest, src) => (Array.isArray(dest) ? src : undefined)
+    );
+
+    this.claimSlice();
+    this.subState();
+    this.initState();
+
     this.onMessageOb$ = fromEvent(window, 'message');
+
     this.southBoundSubscription();
     this.setNorthBoundReadyPing();
     this.storageSubscription();
+
     this.layout.registerHeadlessPath(CHAT_URL_FULLSCREEN_LIST);
+    this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
+  }
+
+  /**
+   * Claim Auth state:slice
+   */
+  private claimSlice() {
+    if (!this.options?.layout?.logState) {
+      this.claimId = this.store.claimSlice(this.nameSpace);
+    } else {
+      this.claimId = this.store.claimSlice(this.nameSpace, this.logger.debug.bind(this.logger));
+    }
+  }
+
+  /**
+   * Sanitize state
+   * @param state state object or stringify json
+   * @returns state object
+   */
+  private sanitizeState(state: ChatState | string): ChatState {
+    let sanitized = sanitizeJsonStringOrObject<ChatState>(state);
+    if (sanitized) {
+      const validKeys = Object.keys(defaultChatState());
+      sanitized = ldPick(sanitized, validKeys) as ChatState;
+    }
+    sanitized = ldMergeWith(defaultChatState(), sanitized, (dest, src) =>
+      Array.isArray(dest) ? src : undefined
+    );
+    return sanitized;
+  }
+
+  /**
+   * Initialize Layout state, flatten state, remove any array and object values
+   */
+  private initState() {
+    const storageState = localStorage.getItem(CHAT_STATE_STORAGE_KEY);
+    const state = this.sanitizeState(storageState);
+    this.store.setState(this.claimId, {
+      ...state,
+      appName: this.options.appName,
+      eraser: false,
+    });
+  }
+
+  /**
+   * Subscribe to Layout state changes
+   */
+  private subState() {
+    this.stateSub$ = this.store.select$<ChatState>(this.nameSpace);
+
+    this.stateSub$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (newState) => {
+          this.state = { ...defaultChatState(), ...newState };
+          localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
+        },
+      });
+  }
+
+  setState(newState: Partial<ChatState>) {
+    this.store.setState(this.claimId, {
+      ...this.state,
+      ...newState,
+    });
   }
 
   chatSelected(chat: ChatMessageItem) {
@@ -204,6 +304,10 @@ export class ChatService {
             this.logger.info('Overlay response received');
             clearTimeout(this.awaitOverlayResponse);
             this.awaitOverlayResponse = undefined;
+          } else if (event.key === CHAT_STATE_STORAGE_KEY) {
+            const storageState = sanitizeJsonStringOrObject<ChatState>(event.newValue);
+            const state = this.sanitizeState(storageState);
+            this.setState({ ...defaultChatState(), ...state });
           }
         },
         false
