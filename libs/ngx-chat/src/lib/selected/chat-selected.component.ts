@@ -48,6 +48,16 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     this.logger.debug('Chat Selected');
   }
 
+  getHostImage(host: ChatMessageHosts): string {
+    switch (host) {
+      case 'youtube':
+      case 'twitch':
+        return `./assets/images/misc/${host}-x128.png`;
+      default:
+        return '';
+    }
+  }
+
   onImageError(event, host: ChatMessageHosts) {
     switch (host) {
       case 'youtube':

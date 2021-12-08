@@ -29,6 +29,16 @@ export class ChatItemComponent {
     }
   }
 
+  getHostImage(host: ChatMessageHosts): string {
+    switch (host) {
+      case 'youtube':
+      case 'twitch':
+        return `./assets/images/misc/${host}-x48.png`;
+      default:
+        return '';
+    }
+  }
+
   onClick(): void {
     this.chat.viewed = true;
     this.chatService.chatSelected(this.chat);
