@@ -16,6 +16,8 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { Subject, takeUntil } from 'rxjs';
 
+import { ChatMessageHosts } from '../chat.model';
+
 @Component({
   selector: 'fullerstack-chat-selected',
   templateUrl: './chat-selected.component.html',
@@ -46,7 +48,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     this.logger.debug('Chat Selected');
   }
 
-  onImageError(event, host: string) {
+  onImageError(event, host: ChatMessageHosts) {
     switch (host) {
       case 'youtube':
         event.target.src = CHAT_YOUTUBE_DEFAULT_AVATAR;

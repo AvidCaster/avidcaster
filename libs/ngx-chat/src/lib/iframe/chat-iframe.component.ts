@@ -6,8 +6,15 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
+import { Subject, takeUntil } from 'rxjs';
 
 import { ChatService } from '../chat.service';
 
@@ -15,8 +22,11 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-iframe',
   templateUrl: './chat-iframe.component.html',
   styleUrls: ['./chat-iframe.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatIframeComponent implements OnInit {
+export class ChatIframeComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
+
   constructor(
     readonly cdRef: ChangeDetectorRef,
     readonly logger: LoggerService,
@@ -24,7 +34,17 @@ export class ChatIframeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.hostReadySubscription();
     this.logger.info('Chat monitoring started!');
+  }
+
+  hostReadySubscription() {
+    this.chatService.hostReady$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.logger.info('Host ready!');
+        this.cdRef.detectChanges();
+      },
+    });
   }
 
   openOverlay() {
@@ -38,5 +58,10 @@ export class ChatIframeComponent implements OnInit {
 
   showStreamId() {
     this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

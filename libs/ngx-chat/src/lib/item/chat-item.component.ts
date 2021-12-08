@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { ChatMessageItem } from '../chat.model';
+import { ChatMessageHosts, ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ChatItemComponent {
 
   constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
 
-  getHostColor(host: string): string {
+  getHostColor(host: ChatMessageHosts): string {
     switch (host) {
       case 'youtube':
         return 'warn';

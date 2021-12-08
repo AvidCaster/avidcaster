@@ -24,6 +24,8 @@ import {
   ChatMessageDirection,
   ChatMessageDownstreamAction,
   ChatMessageEvent,
+  ChatMessageHostReady,
+  ChatMessageHosts,
   ChatMessageItem,
   ChatMessageUpstreamAction,
 } from './chat.model';
@@ -36,9 +38,11 @@ export class ChatService {
   private onMessageOb$: Observable<Event>;
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
+  private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
+  hostReady$ = this.hostReadyOb$.asObservable();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
-  currentHost: string;
+  currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
   buffer = 200;
@@ -61,7 +65,7 @@ export class ChatService {
     this.chatSelectedOb$.next(chat);
   }
 
-  private broadcastNewChatMessage(host: string, chat: ChatMessage) {
+  private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
     localStorage.setItem(key, JSON.stringify(chat));
     setTimeout(() => localStorage.removeItem(key), 0);
@@ -120,7 +124,7 @@ export class ChatService {
     this.layout.uix.window.parent.postMessage(data, '*');
   }
 
-  private setNorthBoundSelector(host: string) {
+  private setNorthBoundSelector(host: ChatMessageHosts) {
     const data = {
       type: ChatMessageDirection.NorthBound,
       action: ChatMessageUpstreamAction.observe,
@@ -130,7 +134,7 @@ export class ChatService {
     this.layout.uix.window.parent.postMessage(data, '*');
   }
 
-  private setNorthBoundIframe(host: string) {
+  private setNorthBoundIframe(host: ChatMessageHosts) {
     const data = {
       type: ChatMessageDirection.NorthBound,
       action: ChatMessageUpstreamAction.iframe,
@@ -138,7 +142,10 @@ export class ChatService {
     };
 
     this.layout.uix.window.parent.postMessage(data, '*');
-    setTimeout(() => this.setNorthBoundSelector(host), 1000);
+    setTimeout(() => {
+      this.setNorthBoundSelector(host);
+      this.hostReadyOb$.next({ host, ready: true });
+    }, 1000);
   }
 
   private handleMessageBuffer() {

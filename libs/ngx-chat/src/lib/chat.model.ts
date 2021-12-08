@@ -10,6 +10,11 @@ import { OperatorFunction } from 'rxjs';
 
 export type ChatMessageHosts = 'youtube' | 'twitch';
 
+export interface ChatMessageHostReady {
+  host?: ChatMessageHosts;
+  ready: boolean;
+}
+
 export enum ChatMessageDownstreamAction {
   pong = 'pong',
   chat = 'chat',
@@ -27,7 +32,7 @@ export enum ChatMessageDirection {
 }
 
 export interface ChatMessage {
-  host?: string;
+  host?: ChatMessageHosts;
   author?: string;
   avatarUrl?: string;
   badgeUrl?: string;
