@@ -5,6 +5,11 @@
     </div>
     <div class="chat-host-image" *ngIf="getHostImage(chat?.host) as hostImageSrc">
       <img [src]="hostImageSrc" />
+      <div
+        *ngIf="getHoraryImage(chat) as horaryImageSrc"
+        id="chat-special-animation"
+        [ngStyle]="{ backgroundImage: 'url(' + horaryImageSrc + ')' }"
+      ></div>
     </div>
   </div>
   <div class="chat-selected-text-fields" fxLayout="column">

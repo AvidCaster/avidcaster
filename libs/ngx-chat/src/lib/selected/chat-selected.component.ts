@@ -58,6 +58,16 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     }
   }
 
+  getHoraryImage(chat: ChatMessageItem): string {
+    if (chat?.donation) {
+      return `./assets/images/misc/spin-orange-2x.png`;
+    } else if (chat?.membership) {
+      return `./assets/images/misc/spin-green-2x.png`;
+    }
+
+    return '';
+  }
+
   onImageError(event, host: ChatMessageHosts) {
     switch (host) {
       case 'youtube':

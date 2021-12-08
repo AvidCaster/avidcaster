@@ -21,18 +21,45 @@
   vertical-align: middle;
 }
 
+.chat-selected-image-fields .chat-host-image {
+  margin-top: -49px;
+}
+.chat-selected-image-fields .chat-host-image img {
+  width: 49px;
+  margin-left: 95px;
+}
+
 .chat-selected-author-img img {
   background: #ffb300;
   border-radius: 50%;
   border: 5px solid #ffb300;
 }
 
-.chat-selected-image-fields .chat-host-image {
-  margin-top: -49px;
+@keyframes play-rotate {
+  0% {
+    -webkit-transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
-.chat-selected-image-fields .chat-host-image img {
-  width: 68px;
-  margin-left: 98px;
+
+#chat-special-animation {
+  position: absolute;
+  z-index: 4;
+  left: 166px;
+  top: 134px;
+  background-size: 80px 80px;
+  background-position: center;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  pointer-events: none;
+  animation: play-rotate 1s linear infinite;
+  -webkit-animation: play-rotate 1s linear infinite;
+  -moz-animation: play-rotate 1s linear infinite;
+  -ms-animation: play-rotate 1s linear infinite;
+  display: block;
 }
 
 .chat-selected-donation {
