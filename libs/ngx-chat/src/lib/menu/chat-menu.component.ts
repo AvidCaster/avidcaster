@@ -39,20 +39,18 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   private buildForm() {
     this.form = this.formBuilder.group({
       filterText: [''],
-      filterSelect: [''],
     });
   }
 
   isHighlight() {
-    return (
-      getControl('filterSelect')?.value === ChatMessageFilterType[ChatMessageFilterType.Highlight]
-    );
+    const isHighlight =
+      ChatMessageFilterType[this.currentFilter] === ChatMessageFilterType.Highlight;
+    console.log('isHighlight', this.currentFilter, isHighlight);
+    return isHighlight;
   }
 
   getFilterOptions(): string[] {
-    return Object.keys(ChatMessageFilterType).filter((key) => {
-      return typeof ChatMessageFilterType[key] === 'string';
-    });
+    return Object.keys(ChatMessageFilterType);
   }
 
   getFilterName(filter: string): string {

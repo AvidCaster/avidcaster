@@ -11,7 +11,7 @@
         <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
       </button>
       <form [formGroup]="form" fxLayout="column" autocomplete="off" class="chat-filter-input">
-        <mat-form-field *ngIf="isHighlight() as isHighlight">
+        <mat-form-field *tmpLet="isHighlight() as isHighlight">
           <mat-icon matSuffix [color]="isHighlight ? 'accent' : 'primary'" [svgIcon]="isHighlight ? 'flashlight' : 'filter'"></mat-icon>
           <input
             matInput

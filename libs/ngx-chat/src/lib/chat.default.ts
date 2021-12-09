@@ -99,7 +99,7 @@ export const defaultChatTest = (): ChatMessageItem => {
   return ldDeepClone(DefaultChatTest);
 };
 
-export const ChatFilterOptions: { [key: string]: string } = {
+export const ChatFilterOptions = {
   [ChatMessageFilterType.None]: _('FILTER.NONE'),
   [ChatMessageFilterType.Host]: _('FILTER.HOST'),
   [ChatMessageFilterType.Author]: _('FILTER.AUTHOR'),

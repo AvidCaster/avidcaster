@@ -34,6 +34,7 @@ import { ChatSetupComponent } from './setup/chat-setup.component';
     MarkdownModule.forChild(),
     I18nModule.forChild(),
     FireworksModule,
+    SharedModule,
   ],
   declarations: [
     ChatIframeComponent,
