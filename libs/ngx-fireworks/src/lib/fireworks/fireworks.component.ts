@@ -20,6 +20,7 @@ import { FireworksService } from '../fireworks.service';
 })
 export class FireworksComponent implements OnInit, OnDestroy {
   @ViewChild('fireworksCanvas', { static: true }) canvas: ElementRef | undefined | null;
+  @Input() parentEl: HTMLElement | undefined | null;
   @Input() set action(start: boolean) {
     if (start) {
       this.fireworks.start();
@@ -39,6 +40,8 @@ export class FireworksComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.canvasEl = this.canvas?.nativeElement;
+    this.canvasEl.width = this.parentEl.offsetWidth;
+    this.canvasEl.height = this.parentEl.offsetHeight;
     this.ctx = this.canvasEl.getContext('2d');
     this.fireworks.init(this.canvasEl, this.ctx);
     this.resizeCanvas();
@@ -47,8 +50,8 @@ export class FireworksComponent implements OnInit, OnDestroy {
   private resizeCanvas() {
     this.uix.reSizeSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        const width = this.elementRef.nativeElement.offsetWidth;
-        const height = this.elementRef.nativeElement.offsetHeight;
+        const width = this.parentEl.offsetWidth;
+        const height = this.parentEl.offsetHeight;
         this.canvasEl.width = width;
         this.canvasEl.height = height;
         this.canvasEl.style.width = `${width}px`;

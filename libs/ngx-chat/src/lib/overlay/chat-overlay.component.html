@@ -9,9 +9,13 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
+    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author" #fireworksContainer>
       <fullerstack-chat-selected></fullerstack-chat-selected>
-      <fullerstack-fireworks [ngStyle]="{}" [action]="!!(chat?.donation || chat?.membership)" id="chat-fireworks"></fullerstack-fireworks>
+      <fullerstack-fireworks
+        [parentEl]="fireworksContainer"
+        [action]="!!(chat?.donation || chat?.membership)"
+        id="chat-fireworks"
+      ></fullerstack-fireworks>
     </div>
   </div>
 </div>
