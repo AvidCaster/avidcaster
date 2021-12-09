@@ -7,6 +7,7 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   ApplicationConfig,
   ConfigService,
@@ -22,6 +23,7 @@ import { DeepReadonly } from 'ts-essentials';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
+  CHAT_OVERLAY_SCREEN_URL,
   CHAT_STATE_STORAGE_KEY,
   CHAT_STORAGE_KEY,
   CHAT_STORAGE_KEY_OVERLAY_REQUEST,
@@ -70,6 +72,7 @@ export class ChatService {
 
   constructor(
     readonly zone: NgZone,
+    readonly router: Router,
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
@@ -296,7 +299,21 @@ export class ChatService {
       addEventListener(
         'storage',
         (event) => {
-          if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
+          if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
+            // no one is listening, we can safely open the overlay screen
+            this.logger.info('Overlay response received');
+            clearTimeout(this.awaitOverlayResponse);
+            this.awaitOverlayResponse = undefined;
+          } else if (
+            event.key === CHAT_STATE_STORAGE_KEY &&
+            this.router.url.includes(CHAT_OVERLAY_SCREEN_URL)
+          ) {
+            const storageState = sanitizeJsonStringOrObject<ChatState>(event?.newValue);
+            const state = this.sanitizeState(storageState);
+            if (state.signature !== this.state.signature) {
+              this.setState({ ...defaultChatState(), ...state });
+            }
+          } else if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
             const chat = JSON.parse(event.newValue);
             setTimeout(() => localStorage.removeItem(event.key), 0);
             this.handleMessageBuffer();
@@ -304,17 +321,6 @@ export class ChatService {
             // this.chatListOb$.value.length > 30
             //   ? console.log(JSON.stringify(this.chatListOb$.value, null, 4))
             //   : null;
-          } else if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
-            // no one is listening, we can safely open the overlay screen
-            this.logger.info('Overlay response received');
-            clearTimeout(this.awaitOverlayResponse);
-            this.awaitOverlayResponse = undefined;
-          } else if (event.key === CHAT_STATE_STORAGE_KEY) {
-            const storageState = sanitizeJsonStringOrObject<ChatState>(event?.newValue);
-            const state = this.sanitizeState(storageState);
-            if (state.signature !== this.state.signature) {
-              this.setState({ ...defaultChatState(), ...state });
-            }
           }
         },
         false

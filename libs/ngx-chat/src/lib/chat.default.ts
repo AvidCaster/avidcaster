@@ -47,9 +47,11 @@ export const ChatSupportedSites = {
   },
 };
 
-export const CHAT_URL_FULLSCREEN_LIST = ['/chat/iframe', '/chat/overlay/screen'];
+export const CHAT_IFRAME_URL = '/chat/iframe';
+export const CHAT_OVERLAY_SCREEN_URL = '/chat/overlay/screen';
+export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_OVERLAY_SCREEN_URL];
 
-export const CHAT_STORAGE_KEY = 'avidcaster-chat';
+export const CHAT_STORAGE_KEY = 'avidcaster-chat-message';
 export const CHAT_STORAGE_KEY_OVERLAY_REQUEST = `${CHAT_STORAGE_KEY}-overlay-request`;
 export const CHAT_STORAGE_KEY_OVERLAY_RESPONSE = `${CHAT_STORAGE_KEY}-overlay-response`;
 
