@@ -4,7 +4,9 @@
   </div>
   <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
     <section class="chat-control">
-      <div fxLayout="row" fxLayoutAlign="space-around center"></div>
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <fullerstack-chat-menu> </fullerstack-chat-menu>
+      </div>
     </section>
     <mat-divider></mat-divider>
     <section class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
