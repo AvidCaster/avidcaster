@@ -15,3 +15,15 @@
 button {
   cursor: pointer;
 }
+
+.chat-filter-icon {
+  margin-right: 0 !important;
+  margin-left: -5px !important;
+}
+
+[dir='rtl'] {
+  .chat-filter-icon {
+    margin-left: 0 !important;
+    margin-right: -5px !important;
+  }
+}

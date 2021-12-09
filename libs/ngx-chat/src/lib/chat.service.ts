@@ -174,6 +174,10 @@ export class ChatService implements OnDestroy {
     this.chatSelectedOb$.next(defaultChatTest());
   }
 
+  clearMessage() {
+    this.chatSelectedOb$.next(undefined);
+  }
+
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
     localStorage.setItem(key, JSON.stringify(chat));

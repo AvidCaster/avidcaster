@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="space-around center">
+<div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div fxLayout="row" fxLayoutGap="5px" *ngLet="isHighlight() as isHighlight">
     <button
       [class.chat-icon-dim]="chat?.author"
@@ -7,7 +7,7 @@
       color="primary"
       (click)="chatService.loadTestChat()"
     >
-      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
+      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="message-draw"></mat-icon>
     </button>
 
     <input
@@ -16,7 +16,7 @@
       [(ngModel)]="currentKeywords"
       (ngModelChange)="setKeywords(currentKeywords)"
     />
-    <div fxLayout="column" fxLayoutAlign="center">
+    <div fxLayout="column" fxLayoutAlign="center" class="chat-filter-icon">
       <mat-icon
         [color]="isHighlight ? 'accent' : 'warn'"
         [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
@@ -31,6 +31,17 @@
     >
       <option *ngFor="let filter of getFilterOptions()" [value]="filter">{{ getFilterName(filter) | translate }}</option>
     </select>
+
+    <button
+      mat-raised-button
+      [class.yt-cursor-default]="!chat?.author"
+      matTooltipPosition="before"
+      matTooltip="{{ 'CHAT.CLEAR' | translate }}"
+      color="warn"
+      (click)="clearMessage()"
+    >
+      <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
+    </button>
   </div>
   <div fxFlex></div>
   <div fxLayout="row" fxLayoutGap="10px">

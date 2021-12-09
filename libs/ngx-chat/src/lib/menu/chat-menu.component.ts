@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -20,7 +20,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   currentKeywords = '';
 
   constructor(
-    readonly formBuilder: FormBuilder,
+    readonly chR: ChangeDetectorRef,
     readonly logger: LoggerService,
     readonly chatService: ChatService
   ) {}
@@ -30,6 +30,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
+        this.chR.detectChanges();
       },
     });
     this.logger.debug('ChatMenuComponent initialized');
@@ -75,6 +76,10 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   setKeywords(keywords: string) {
     this.currentKeywords = keywords;
     this.chatService.setState({ keywords: keywords.split(' ').filter((word) => !!word) });
+  }
+
+  clearMessage() {
+    this.chatService.clearMessage();
   }
 
   toggleDirection() {
