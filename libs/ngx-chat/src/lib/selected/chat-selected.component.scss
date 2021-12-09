@@ -47,8 +47,6 @@
 #chat-special-animation {
   position: absolute;
   z-index: 4;
-  left: 177px;
-  top: 135px;
   background-size: 80px 80px;
   background-position: center;
   width: 60px;
@@ -60,6 +58,8 @@
   -moz-animation: play-rotate 1s linear infinite;
   -ms-animation: play-rotate 1s linear infinite;
   display: block;
+  margin-left: 100px;
+  margin-top: -56px;
 }
 
 .chat-selected-donation {
@@ -129,7 +129,6 @@
   }
 
   #chat-special-animation {
-    right: 177px;
-    left: unset;
+    margin-right: 100px;
   }
 }
