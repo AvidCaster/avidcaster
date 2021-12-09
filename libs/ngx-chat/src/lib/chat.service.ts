@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ApplicationConfig,
@@ -50,7 +50,7 @@ import { parseTwitchChat } from './util/chat.util.twitch';
 import { parseYouTubeChat } from './util/chat.util.youtube';
 
 @Injectable()
-export class ChatService {
+export class ChatService implements OnDestroy {
   private nameSpace = 'CHAT';
   private claimId: string;
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
@@ -319,13 +319,22 @@ export class ChatService {
             setTimeout(() => localStorage.removeItem(event.key), 0);
             this.handleMessageBuffer();
             this.chatListOb$.next([...this.chatListOb$.value, chat]);
-            // this.chatListOb$.value.length > 30
-            //   ? console.log(JSON.stringify(this.chatListOb$.value, null, 4))
-            //   : null;
           }
         },
         false
       );
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+
+    // remove local storage message items
+    Object.entries(localStorage).map(([key]) => {
+      if (key.startsWith(CHAT_STORAGE_KEY)) {
+        localStorage.removeItem(key);
+      }
     });
   }
 }
