@@ -76,6 +76,7 @@ export enum ChatMessageFilter {}
 
 export interface ChatState {
   signature: string;
+  isLtR: boolean;
   tags: string[];
   audioEnabled: boolean;
   audioPlay: boolean;

@@ -1,4 +1,4 @@
-<div id="chat-outer-box" fxLayout="column">
+<div id="chat-outer-box" fxLayout="column" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div id="chat-list-box" fxLayout="row">
     <fullerstack-chat-list></fullerstack-chat-list>
   </div>

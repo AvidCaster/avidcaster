@@ -1,0 +1,17 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.chat-icon-dim {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.chat-cursor-default {
+  cursor: default !important;
+}
+
+button {
+  cursor: pointer;
+}

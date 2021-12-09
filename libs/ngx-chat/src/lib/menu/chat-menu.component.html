@@ -1,1 +1,42 @@
-<p>chat-menu works!</p>
+<section class="chat-menu">
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <button
+        [class.chat-icon-dim]="chat?.author"
+        [class.chat-cursor-default]="chat?.author"
+        mat-raised-button
+        color="primary"
+        (click)="chatService.loadTestChat()"
+      >
+        <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
+      </button>
+    </div>
+    <div fxFlex></div>
+    <div>
+      <button
+        matTooltipPosition="after"
+        matTooltip="{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}"
+        mat-icon-button
+        (click)="toggleDirection()"
+      >
+        <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
+      </button>
+      <button
+        matTooltipPosition="after"
+        matTooltip="{{ (chatService.layout.state.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
+        mat-icon-button
+        (click)="chatService.layout.toggleFullscreen()"
+      >
+        <mat-icon [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
+      </button>
+      <button
+        matTooltipPosition="after"
+        matTooltip="{{ 'COMMON.HOME' | translate }}"
+        mat-icon-button
+        (click)="chatService.layout.auth.goTo('/')"
+      >
+        <mat-icon svgIcon="home"></mat-icon>
+      </button>
+    </div>
+  </div>
+</section>

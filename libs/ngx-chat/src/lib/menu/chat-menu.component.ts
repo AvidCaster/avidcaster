@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+
+import { ChatMessageItem } from '../chat.model';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'fullerstack-chat-menu',
@@ -9,10 +12,21 @@ import { Subject } from 'rxjs';
 })
 export class ChatMenuComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
-  constructor(readonly logger: LoggerService) {}
+  chat: ChatMessageItem;
+
+  constructor(readonly logger: LoggerService, readonly chatService: ChatService) {}
 
   ngOnInit(): void {
     this.logger.debug('ChatMenuComponent initialized');
+    this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (chat) => {
+        this.chat = chat;
+      },
+    });
+  }
+
+  toggleDirection() {
+    this.chatService.setState({ isLtR: !this.chatService.state.isLtR });
   }
 
   ngOnDestroy(): void {
