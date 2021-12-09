@@ -1,5 +1,13 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -13,11 +21,17 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./chat-menu.component.scss'],
 })
 export class ChatMenuComponent implements OnInit, OnDestroy {
-  form: FormGroup;
+  $player: HTMLAudioElement;
+  @ViewChild('audioTag', { static: true }) set playerRef(ref: ElementRef<HTMLAudioElement>) {
+    this.$player = ref.nativeElement;
+  }
+  @Output() fireworksToggled = new EventEmitter<boolean>();
+  fireworksStart = false;
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
   currentFilter = ChatMessageFilterType.None;
   currentKeywords = '';
+  audioPlay = false;
 
   constructor(
     readonly chR: ChangeDetectorRef,
@@ -86,12 +100,29 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.setState({ isLtR: !this.chatService.state.isLtR });
   }
 
-  toggleFireworks() {
+  toggleFireworksFlag() {
     this.chatService.setState({ fireworksEnabled: !this.chatService.state.fireworksEnabled });
   }
 
-  toggleFireworksPlay() {
-    this.chatService.setState({ fireworksPlay: !this.chatService.state.fireworksPlay });
+  toggleFireworks() {
+    if (this.chatService.state.fireworksEnabled) {
+      this.fireworksStart = !this.fireworksStart;
+      this.fireworksToggled.emit(this.fireworksStart);
+    }
+  }
+
+  toggleAudioFlag() {
+    this.chatService.setState({ audioEnabled: !this.chatService.state.audioEnabled });
+  }
+
+  toggleAudioPlay() {
+    this.audioPlay = !this.audioPlay;
+    if (this.chatService.state.audioEnabled && this.audioPlay) {
+      this.$player.currentTime = 0;
+      this.$player.play();
+    } else {
+      this.$player.pause();
+    }
   }
 
   ngOnDestroy(): void {

@@ -67,9 +67,7 @@ const DefaultChatState = {
   isLtR: true,
   tags: [],
   audioEnabled: false,
-  audioPlay: false,
   fireworksEnabled: true,
-  fireworksPlay: false,
   keywords: [],
   filterOption: '',
 };

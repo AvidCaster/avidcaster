@@ -5,7 +5,7 @@
   <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
     <div class="chat-control">
       <div fxLayout="row" fxLayoutAlign="space-around center">
-        <fullerstack-chat-menu> </fullerstack-chat-menu>
+        <fullerstack-chat-menu (fireworksToggled)="setFireworksPlay($event)"> </fullerstack-chat-menu>
       </div>
     </div>
     <mat-divider></mat-divider>
@@ -13,7 +13,7 @@
       <div class="chat-selected">
         <fullerstack-chat-selected></fullerstack-chat-selected>
       </div>
-      <!-- <fullerstack-fireworks [action]="!!(chat?.donation || chat?.membership)" id="chat-fireworks"></fullerstack-fireworks> -->
+      <fullerstack-fireworks [action]="chatService.state.fireworksEnabled && fireworksStart" id="chat-fireworks"></fullerstack-fireworks>
     </div>
   </div>
 </div>

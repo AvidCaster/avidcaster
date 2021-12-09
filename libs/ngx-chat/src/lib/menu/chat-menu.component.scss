@@ -21,6 +21,10 @@ button {
   margin-left: -5px !important;
 }
 
+.chat-audio {
+  visibility: hidden;
+}
+
 [dir='rtl'] {
   .chat-filter-icon {
     margin-left: 0 !important;

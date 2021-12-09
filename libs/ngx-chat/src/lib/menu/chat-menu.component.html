@@ -42,26 +42,38 @@
     >
       <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
     </button>
-    <button class="chat-multi-button" mat-raised-button [color]="this.chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">
+    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">
       <div fxLayout="row" fxLayoutGap="30px">
         <mat-icon
-          [class.chat-icon-dim]="!this.chatService?.state?.fireworksEnabled"
+          [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
           matTooltipPosition="before"
           matTooltip="{{
-            (this.chatService?.state?.fireworksEnabled
-              ? this.chatService?.state?.fireworksPlay
-                ? 'FIREWORKS.START'
-                : 'FIREWORKS.STOP'
-              : ''
-            ) | translate
+            (chatService?.state?.fireworksEnabled ? (fireworksStart ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate
           }}"
           class="chat-icon-dim"
-          [svgIcon]="!this.chatService?.state?.fireworksEnabled || this.chatService?.state?.fireworksPlay ? 'firework-off' : 'firework'"
-          (click)="toggleFireworksPlay()"
+          [svgIcon]="!chatService?.state?.fireworksEnabled || fireworksStart ? 'firework-off' : 'firework'"
+          (click)="toggleFireworks()"
         ></mat-icon>
         <mat-icon
-          [svgIcon]="this.chatService?.state?.fireworksEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
-          (click)="toggleFireworks()"
+          [svgIcon]="chatService?.state?.fireworksEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
+          (click)="toggleFireworksFlag()"
+        ></mat-icon>
+      </div>
+    </button>
+    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.audioEnabled ? 'primary' : 'warn'">
+      <div fxLayout="row" fxLayoutGap="30px">
+        <mat-icon
+          [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
+          matTooltipPosition="before"
+          matTooltip="{{ (chatService?.state?.audioEnabled ? (audioPlay ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
+          [svgIcon]="!chatService?.state?.audioEnabled || audioPlay ? 'volume-off' : 'volume-high'"
+          (click)="toggleAudioPlay()"
+        ></mat-icon>
+        <mat-icon
+          matTooltipPosition="after"
+          matTooltip="{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}"
+          [svgIcon]="chatService?.state?.audioEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
+          (click)="toggleAudioFlag()"
         ></mat-icon>
       </div>
     </button>
@@ -94,3 +106,4 @@
     </button>
   </div>
 </div>
+<audio #audioTag preload="auto" src="./assets/audio/yelling-yay.mp3" class="chat-audio"></audio>

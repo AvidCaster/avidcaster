@@ -79,9 +79,7 @@ export interface ChatState {
   isLtR: boolean;
   tags: string[];
   audioEnabled: boolean;
-  audioPlay: boolean;
   fireworksEnabled: boolean;
-  fireworksPlay: boolean;
   keywords: string[];
   filterOption: string;
 }

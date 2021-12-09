@@ -22,6 +22,7 @@ import { ChatService } from '../chat.service';
 export class ChatOverlayComponent implements OnInit {
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
+  fireworksStart = false;
 
   constructor(
     readonly zone: NgZone,
@@ -44,6 +45,10 @@ export class ChatOverlayComponent implements OnInit {
         this.chR.detectChanges();
       },
     });
+  }
+
+  setFireworksPlay(start: boolean): void {
+    this.fireworksStart = start;
   }
 
   private storageSubscription() {
