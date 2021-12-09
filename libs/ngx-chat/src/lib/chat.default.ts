@@ -6,9 +6,10 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
-import { ChatConfig, ChatMessageItem, ChatState } from './chat.model';
+import { ChatConfig, ChatMessageFilterType, ChatMessageItem, ChatState } from './chat.model';
 
 /**
  * Default configuration - Layout module
@@ -96,4 +97,14 @@ const DefaultChatTest: ChatMessageItem = {
 
 export const defaultChatTest = (): ChatMessageItem => {
   return ldDeepClone(DefaultChatTest);
+};
+
+export const ChatFilterOptions: { [key: string]: string } = {
+  [ChatMessageFilterType.None]: _('FILTER.NONE'),
+  [ChatMessageFilterType.Host]: _('FILTER.HOST'),
+  [ChatMessageFilterType.Author]: _('FILTER.AUTHOR'),
+  [ChatMessageFilterType.Donation]: _('FILTER.DONATION'),
+  [ChatMessageFilterType.FilterBy]: _('FILTER.BY'),
+  [ChatMessageFilterType.FilterOut]: _('FILTER.OUT'),
+  [ChatMessageFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
 };

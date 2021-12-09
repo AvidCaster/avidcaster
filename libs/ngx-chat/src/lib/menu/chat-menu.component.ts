@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { LoggerService } from '@fullerstack/ngx-logger';
+import { getControl } from '@fullerstack/ngx-shared';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ChatMessageItem } from '../chat.model';
+import { ChatFilterOptions } from '../chat.default';
+import { ChatMessageFilterType, ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -11,18 +14,56 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./chat-menu.component.scss'],
 })
 export class ChatMenuComponent implements OnInit, OnDestroy {
+  form: FormGroup;
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
+  currentFilter = ChatMessageFilterType.None;
+  filterOptions = ChatFilterOptions;
 
-  constructor(readonly logger: LoggerService, readonly chatService: ChatService) {}
+  constructor(
+    readonly formBuilder: FormBuilder,
+    readonly logger: LoggerService,
+    readonly chatService: ChatService
+  ) {}
 
   ngOnInit(): void {
-    this.logger.debug('ChatMenuComponent initialized');
+    this.buildForm();
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
       },
     });
+    this.logger.debug('ChatMenuComponent initialized');
+  }
+
+  private buildForm() {
+    this.form = this.formBuilder.group({
+      filterText: [''],
+      filterSelect: [''],
+    });
+  }
+
+  isHighlight() {
+    return (
+      getControl('filterSelect')?.value === ChatMessageFilterType[ChatMessageFilterType.Highlight]
+    );
+  }
+
+  getFilterOptions(): string[] {
+    return Object.keys(ChatMessageFilterType).filter((key) => {
+      return typeof ChatMessageFilterType[key] === 'string';
+    });
+  }
+
+  getFilterName(filter: string): string {
+    let name = ChatMessageFilterType[filter];
+    name = this.filterOptions[name];
+    return name;
+  }
+
+  setFilter(filter: ChatMessageFilterType) {
+    this.currentFilter = filter;
+    // this.chatService.state.filter = filter;
   }
 
   toggleDirection() {

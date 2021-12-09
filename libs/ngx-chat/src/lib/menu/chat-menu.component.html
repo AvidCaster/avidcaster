@@ -10,6 +10,31 @@
       >
         <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
       </button>
+      <form [formGroup]="form" fxLayout="column" autocomplete="off" class="chat-filter-input">
+        <mat-form-field *ngIf="isHighlight() as isHighlight">
+          <mat-icon matSuffix [color]="isHighlight ? 'accent' : 'primary'" [svgIcon]="isHighlight ? 'flashlight' : 'filter'"></mat-icon>
+          <input
+            matInput
+            type="text"
+            formControlName="filterText"
+            placeholder="{{ (isHighlight ? 'CHAT.HIGHLIGHT_WORDS' : 'CHAT.FILTER_WORDS') | translate }}"
+          />
+        </mat-form-field>
+      </form>
+      <div fxFlex fxLayout fxLayoutAlign="start center" class="filter-option-dropdown">
+        <mat-form-field fxFlex="100">
+          <mat-select
+            placeholder="{{ 'FILTER.NONE' | translate }}"
+            #ctrl="ngModel"
+            [(ngModel)]="currentFilter"
+            (ngModelChange)="setFilter(currentFilter)"
+          >
+            <mat-option *ngFor="let filter of getFilterOptions()" [value]="filter">
+              {{ getFilterName(filter) | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     <div fxFlex></div>
     <div>

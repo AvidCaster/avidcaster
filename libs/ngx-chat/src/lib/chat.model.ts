@@ -85,3 +85,13 @@ export interface ChatState {
   words: string[];
   wordsAction: string;
 }
+
+export enum ChatMessageFilterType {
+  None = 'none',
+  Host = 'host',
+  Author = 'author',
+  Donation = 'donation',
+  FilterBy = 'filterBy',
+  FilterOut = 'filterOut',
+  Highlight = 'highlight',
+}
