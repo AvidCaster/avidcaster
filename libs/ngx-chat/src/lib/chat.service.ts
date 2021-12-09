@@ -329,6 +329,3 @@ export class ChatService {
     });
   }
 }
-function CHAT_OVERLAY_IFRAME(CHAT_OVERLAY_IFRAME: any) {
-  throw new Error('Function not implemented.');
-}
