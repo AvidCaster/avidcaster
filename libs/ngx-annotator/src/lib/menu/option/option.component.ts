@@ -8,8 +8,8 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '@fullerstack/ngx-auth';
+import { LayoutService } from '@fullerstack/ngx-layout';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
-import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
 import { AnnotatorColors } from '../../annotator.default';
@@ -27,16 +27,12 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
 
   constructor(
     readonly auth: AuthService,
-    readonly uix: UixService,
+    readonly layout: LayoutService,
     readonly annotation: AnnotatorService
   ) {}
 
   ngOnInit() {
     this.setMenuOverlayClass(this.annotation.state.bgColor);
-  }
-
-  navigate(url: string) {
-    this.auth.goTo(url);
   }
 
   get menuColorValues(): string[] {
@@ -82,11 +78,11 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
 
   setMenuOverlayClass(color: BackgroundColor) {
     if (color === '#000000') {
-      this.uix.removeClassFromBody('menu-background-white');
-      this.uix.addClassToBody('menu-background-black');
+      this.layout.uix.removeClassFromBody('menu-background-white');
+      this.layout.uix.addClassToBody('menu-background-black');
     } else {
-      this.uix.removeClassFromBody('menu-background-black');
-      this.uix.addClassToBody('menu-background-white');
+      this.layout.uix.removeClassFromBody('menu-background-black');
+      this.layout.uix.addClassToBody('menu-background-white');
     }
   }
 

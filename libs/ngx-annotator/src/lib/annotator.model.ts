@@ -7,7 +7,6 @@
  */
 
 export const ANNOTATOR_STORAGE_KEY = 'annotator';
-export const ANNOTATOR_URL = '/annotate';
 
 /**
  * Layout config declaration
