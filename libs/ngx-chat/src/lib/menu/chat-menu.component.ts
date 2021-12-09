@@ -86,6 +86,14 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.setState({ isLtR: !this.chatService.state.isLtR });
   }
 
+  toggleFireworks() {
+    this.chatService.setState({ fireworksEnabled: !this.chatService.state.fireworksEnabled });
+  }
+
+  toggleFireworksPlay() {
+    this.chatService.setState({ fireworksPlay: !this.chatService.state.fireworksPlay });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
