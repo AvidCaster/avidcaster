@@ -3,4 +3,4 @@
 
 yarn loc:generate
 yarn minify
-git add .
+git add README.md
