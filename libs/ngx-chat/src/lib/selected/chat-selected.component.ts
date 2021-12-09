@@ -5,18 +5,17 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {
-  CHAT_DEFAULT_AVATAR,
-  CHAT_TWITCH_DEFAULT_AVATAR,
-  CHAT_YOUTUBE_DEFAULT_AVATAR,
-  ChatMessageItem,
-  ChatService,
-} from '@fullerstack/ngx-chat';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ChatMessageHosts } from '../chat.model';
+import {
+  CHAT_DEFAULT_AVATAR,
+  CHAT_TWITCH_DEFAULT_AVATAR,
+  CHAT_YOUTUBE_DEFAULT_AVATAR,
+} from '../chat.default';
+import { ChatMessageHosts, ChatMessageItem } from '../chat.model';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'fullerstack-chat-selected',
