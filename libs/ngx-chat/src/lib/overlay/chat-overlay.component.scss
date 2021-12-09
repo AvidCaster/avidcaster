@@ -46,8 +46,11 @@
 }
 
 .chat-overlay {
-  padding: 0 76px;
   height: 100%;
+}
+
+.chat-selected {
+  padding: 0 50px;
 }
 
 .chat-selected-hide {
@@ -57,5 +60,5 @@
 #chat-fireworks {
   position: absolute;
   z-index: 10;
-  top: 5px;
+  top: 50px;
 }

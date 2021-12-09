@@ -10,7 +10,9 @@
     </div>
     <mat-divider></mat-divider>
     <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author" #fireworksContainer>
-      <fullerstack-chat-selected></fullerstack-chat-selected>
+      <div class="chat-selected">
+        <fullerstack-chat-selected></fullerstack-chat-selected>
+      </div>
       <fullerstack-fireworks
         [parentEl]="fireworksContainer"
         [action]="!!(chat?.donation || chat?.membership)"
