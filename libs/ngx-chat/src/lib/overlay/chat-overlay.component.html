@@ -9,15 +9,11 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author" #fireworksContainer>
+    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
       <div class="chat-selected">
         <fullerstack-chat-selected></fullerstack-chat-selected>
       </div>
-      <fullerstack-fireworks
-        [parentEl]="fireworksContainer"
-        [action]="!!(chat?.donation || chat?.membership)"
-        id="chat-fireworks"
-      ></fullerstack-fireworks>
+      <fullerstack-fireworks [action]="!!(chat?.donation || chat?.membership)" id="chat-fireworks"></fullerstack-fireworks>
     </div>
   </div>
 </div>
