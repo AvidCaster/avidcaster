@@ -15,7 +15,7 @@ export const DefaultFireworksOptions: FireworksOptions = {
   maxRockets: 3,
   numParticles: 100,
   explosionMinHeight: 0.2,
-  explosionMaxHeight: 0.9,
+  explosionMaxHeight: 0.8,
   explosionChance: 0.08,
   width: 400,
   height: 200,
