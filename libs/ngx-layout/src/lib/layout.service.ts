@@ -90,7 +90,6 @@ export class LayoutService implements OnDestroy {
     this.subAuthState();
     this.subStorage();
     this.subRouteChange();
-    this.subHeadlessRoutes();
     this.logger.info(`[${this.nameSpace}] LayoutService ready ...`);
   }
 
@@ -203,28 +202,21 @@ export class LayoutService implements OnDestroy {
           } else {
             this.routeReady = true;
           }
+
+          this.handleHeadlessRoutes();
         }
       },
     });
   }
 
-  private subHeadlessRoutes() {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          if (this.headlessPaths.includes(this.router.url)) {
-            this.setHeadless(true);
-          } else if (this.headlessPaths.includes(this.lastUrl)) {
-            this.setHeadless(false);
-          }
+  private handleHeadlessRoutes() {
+    if (this.headlessPaths.includes(this.router.url)) {
+      this.setHeadless(true);
+    } else if (this.headlessPaths.includes(this.lastUrl)) {
+      this.setHeadless(false);
+    }
 
-          this.lastUrl = this.router.url;
-        },
-      });
+    this.lastUrl = this.router.url;
   }
 
   setMenu(menuOpen: boolean) {

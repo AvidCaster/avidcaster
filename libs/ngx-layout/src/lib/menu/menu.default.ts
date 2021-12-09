@@ -14,8 +14,6 @@ export const layoutMenuTree: MenuItem[] = [
     name: _('COMMON.ANNOTATE'),
     icon: 'draw',
     link: '/annotate/draw',
-    fullscreen: true,
-    headless: true,
   },
   {
     name: _('CHAT.OVERLAY'),

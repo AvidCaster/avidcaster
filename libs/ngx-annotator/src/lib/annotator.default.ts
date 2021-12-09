@@ -78,5 +78,5 @@ export const defaultLine = (): Line => {
   return ldDeepClone(DefaultLine);
 };
 
-export const ANNOTATOR_DRAW_URL = '/annotate';
+export const ANNOTATOR_DRAW_URL = '/annotate/draw';
 export const ANNOTATOR_URL_FULLSCREEN_LIST = [ANNOTATOR_DRAW_URL];
