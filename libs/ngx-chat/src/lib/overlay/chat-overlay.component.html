@@ -3,15 +3,15 @@
     <fullerstack-chat-list></fullerstack-chat-list>
   </div>
   <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
-    <section class="chat-control">
+    <div class="chat-control">
       <div fxLayout="row" fxLayoutAlign="space-around center">
         <fullerstack-chat-menu> </fullerstack-chat-menu>
       </div>
-    </section>
+    </div>
     <mat-divider></mat-divider>
-    <section class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
+    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
       <fullerstack-chat-selected></fullerstack-chat-selected>
-    </section>
-    <fullerstack-fireworks [ngStyle]="{}" [action]="!!(chat?.donation || chat?.membership)" id="chat-fireworks"></fullerstack-fireworks>
+      <fullerstack-fireworks [ngStyle]="{}" [action]="!!(chat?.donation || chat?.membership)" id="chat-fireworks"></fullerstack-fireworks>
+    </div>
   </div>
 </div>
