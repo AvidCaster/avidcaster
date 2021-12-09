@@ -36,7 +36,6 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.logger.debug('Chat');
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
@@ -44,7 +43,14 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         this.chR.detectChanges();
       },
     });
-    this.logger.debug('Chat Selected');
+
+    this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.chR.detectChanges();
+      },
+    });
+
+    this.logger.debug('ChatSelectedComponent started ... ');
   }
 
   getHostImage(host: ChatMessageHosts): string {

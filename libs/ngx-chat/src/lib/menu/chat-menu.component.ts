@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -19,6 +20,7 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-menu',
   templateUrl: './chat-menu.component.html',
   styleUrls: ['./chat-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMenuComponent implements OnInit, OnDestroy {
   $player: HTMLAudioElement;

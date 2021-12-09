@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
 import { ChatService } from '../chat.service';
@@ -7,6 +14,7 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-list',
   templateUrl: './chat-list.component.html',
   styleUrls: ['./chat-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<boolean>();
