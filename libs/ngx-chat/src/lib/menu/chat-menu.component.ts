@@ -50,6 +50,13 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     return isHighlight;
   }
 
+  isFilter() {
+    const isFilter =
+      ChatMessageFilterType[this.currentFilter] !== ChatMessageFilterType.Highlight &&
+      ChatMessageFilterType[this.currentFilter] !== ChatMessageFilterType.None;
+    return isFilter;
+  }
+
   getFilterOptions(): string[] {
     return Object.keys(ChatMessageFilterType);
   }

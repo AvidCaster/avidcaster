@@ -17,7 +17,10 @@
       (ngModelChange)="setKeywords(currentKeywords)"
     />
     <div fxLayout="column" fxLayoutAlign="center">
-      <mat-icon [color]="isHighlight ? 'accent' : 'warn'" [svgIcon]="isHighlight ? 'flashlight' : 'filter'"></mat-icon>
+      <mat-icon
+        [color]="isHighlight ? 'accent' : 'warn'"
+        [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
+      ></mat-icon>
     </div>
 
     <select
