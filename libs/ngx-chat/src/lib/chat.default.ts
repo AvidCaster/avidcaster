@@ -70,8 +70,8 @@ const DefaultChatState = {
   audioPlay: false,
   fireworksEnabled: true,
   fireworksPlay: false,
-  words: [],
-  wordsAction: '',
+  keywords: [],
+  filterOption: '',
 };
 
 export const defaultChatState = (): ChatState => {

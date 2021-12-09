@@ -13,6 +13,7 @@ import { FireworksModule } from '@fullerstack/ngx-fireworks';
 import { I18nModule } from '@fullerstack/ngx-i18n';
 import { MaterialModule } from '@fullerstack/ngx-material';
 import { SharedModule } from '@fullerstack/ngx-shared';
+import { NgLetModule } from 'ng-let';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { chatRoutes } from './chat.routes';
@@ -34,7 +35,7 @@ import { ChatSetupComponent } from './setup/chat-setup.component';
     MarkdownModule.forChild(),
     I18nModule.forChild(),
     FireworksModule,
-    SharedModule,
+    NgLetModule,
   ],
   declarations: [
     ChatIframeComponent,

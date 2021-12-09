@@ -82,8 +82,8 @@ export interface ChatState {
   audioPlay: boolean;
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
-  words: string[];
-  wordsAction: string;
+  keywords: string[];
+  filterOption: string;
 }
 
 export enum ChatMessageFilterType {

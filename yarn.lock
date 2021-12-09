@@ -12739,6 +12739,13 @@ new-github-issue-url@0.2.1:
   resolved "https://registry.yarnpkg.com/new-github-issue-url/-/new-github-issue-url-0.2.1.tgz#e17be1f665a92de465926603e44b9f8685630c1d"
   integrity sha512-md4cGoxuT4T4d/HDOXbrUHkTKrp/vp+m3aOA7XXVYwNsUNMK49g3SQicTSeV5GIz/5QVGAeYRAOlyp9OvlgsYA==
 
+ng-let@^13.0.1:
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/ng-let/-/ng-let-13.0.1.tgz#87d994ca6afecd257ed4a5ae8347bf68748f7992"
+  integrity sha512-GdD6kKhQICi2g6CVOZ5zWaSFt6SXLU/hjFbVTnODqyKTX+XskQY+s1VBzLiEqKH2xBdw/qgHuKZMOzDkkuyUtA==
+  dependencies:
+    tslib "^2.0.0"
+
 ng-packagr@12.2.1:
   version "12.2.1"
   resolved "https://registry.yarnpkg.com/ng-packagr/-/ng-packagr-12.2.1.tgz#4a68f4bbee3394d7afcdd9fdf06794b219915bb1"

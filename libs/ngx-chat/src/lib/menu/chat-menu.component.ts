@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { getControl } from '@fullerstack/ngx-shared';
 import { Subject, takeUntil } from 'rxjs';
 
 import { ChatFilterOptions } from '../chat.default';
@@ -18,7 +17,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
   currentFilter = ChatMessageFilterType.None;
-  filterOptions = ChatFilterOptions;
+  currentKeywords = '';
 
   constructor(
     readonly formBuilder: FormBuilder,
@@ -27,7 +26,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.buildForm();
+    this.subState();
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
@@ -36,16 +35,18 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.logger.debug('ChatMenuComponent initialized');
   }
 
-  private buildForm() {
-    this.form = this.formBuilder.group({
-      filterText: [''],
+  subState() {
+    this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (state) => {
+        this.currentFilter = state.filterOption as ChatMessageFilterType;
+        this.currentKeywords = state.keywords.join(' ');
+      },
     });
   }
 
   isHighlight() {
     const isHighlight =
       ChatMessageFilterType[this.currentFilter] === ChatMessageFilterType.Highlight;
-    console.log('isHighlight', this.currentFilter, isHighlight);
     return isHighlight;
   }
 
@@ -55,13 +56,18 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   getFilterName(filter: string): string {
     let name = ChatMessageFilterType[filter];
-    name = this.filterOptions[name];
+    name = ChatFilterOptions[name];
     return name;
   }
 
-  setFilter(filter: ChatMessageFilterType) {
+  setFilterOption(filter: ChatMessageFilterType) {
     this.currentFilter = filter;
-    // this.chatService.state.filter = filter;
+    this.chatService.setState({ filterOption: filter });
+  }
+
+  setKeywords(keywords: string) {
+    this.currentKeywords = keywords;
+    this.chatService.setState({ keywords: keywords.split(' ').filter((word) => !!word) });
   }
 
   toggleDirection() {

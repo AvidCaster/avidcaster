@@ -1,303 +1,312 @@
 {
-  "APP.ABOUT": "در باره ما",
-  "APP.DESCRIPTION.ABOUT": "دربارهی ما",
-  "APP.DESCRIPTION.ACCOUNT_VERIFY": "تایید حساب",
-  "APP.DESCRIPTION.ANNOTATE": "حاشیه نویسی",
-  "APP.DESCRIPTION.EMAIL_CHANGE": "تغییر ایمیل مشخصات",
-  "APP.DESCRIPTION.EMAIL_CHANGE_REQUEST": "درخواست تغییر مشخصات ایمیل",
-  "APP.DESCRIPTION.FOREX": "مبادلات ارز خارجی، تبدیل ارز",
-  "APP.DESCRIPTION.HEADLINE": "پورتال تحقیقاتی بازار مالی آموزشی به سرمایه گذاران پیگیری، تجزیه و تحلیل و تصمیم گیری صحیح می دهد.",
-  "APP.DESCRIPTION.LANGUAGE_CHANGE": "تغییر زبان پروفایل",
-  "APP.DESCRIPTION.LOGIN": "ورود به حساب کاربری",
-  "APP.DESCRIPTION.NOT_FOUND": "خطای 404 یافت نشد",
-  "APP.DESCRIPTION.PASSWORD_CHANGE": "تغییر رمز عبور",
-  "APP.DESCRIPTION.PASSWORD_RENEW": "رمز عبور تجدید",
-  "APP.DESCRIPTION.PASSWORD_RESET_REQUEST": "درخواست تنظیم مجدد رمز عبور حساب",
-  "APP.DESCRIPTION.PROFILE_DELETE": "حساب خود را حذف کنید",
-  "APP.DESCRIPTION.PROFILE_UPDATE": "پروفایل خود را به روز نمائید",
-  "APP.DESCRIPTION.SIGNUP": "ثبت نام حساب",
-  "APP.HEADLINE": "افزایش جریان های زنده خود را",
-  "APP.LOGIN": "ورود",
-  "APP.SIGNUP": "ثبت نام",
-  "APP.SUB_HEADLINE": "Annotation - Chat Overlay - Map Overlay",
-  "BAD_USER_INPUT": "ورودی کاربر نامعتبر",
-  "CHAT.CLEAR": "پاک کردن چت",
-  "CHAT.DECLUTTER": "دکلتر",
-  "CHAT.DEFAULT_MESSAGE": "این یک چت نمونه با 😘 و ایموجی است تا ما می توانیم روکش پیام را آزمایش کنیم",
-  "CHAT.MIRROR": "",
-  "CHAT.MONITOR_DESC": "",
-  "CHAT.OVERLAY": "چت روکش",
-  "CHAT.OVERLAY_DESC": "روکش چت برای یوتیوب و پایین تر 3rd",
-  "CHAT.OVERVIEW_DESC": "",
-  "CHAT.RECLUTTER": "رکلتر",
-  "CHAT.SETUP_DESC": "",
-  "CHAT.TEST": "تست چت",
-  "COMMON.ABOUT": "در باره",
-  "COMMON.ACCOUNT": "حساب",
-  "COMMON.ACCOUNT.EMAIL": "حساب ایمیل",
-  "COMMON.ACCOUNT.EMAIL_CHANGE": "تغییر ایمیل حساب",
-  "COMMON.ACCOUNT.PASSWORD": "رمز عبور حساب کاربری",
-  "COMMON.ACCOUNT.VERIFY": "تایید حساب",
-  "COMMON.ACCOUNT_ACCESS": "دسترسی به حساب",
-  "COMMON.ACCOUNT_CREATE": "ایجاد حساب جدید",
-  "COMMON.ACCOUNT_DELETE": "خودتان را حذف کنید",
-  "COMMON.ACTIONS": "اقدامات",
-  "COMMON.ACTIVE_SESSIONS_RESET": "تنظیم مجدد تمام جلسات فعال",
-  "COMMON.ADMIN": "مدیر",
-  "COMMON.ALERT": "اگاهی",
-  "COMMON.ANALYZE": "تجزیه و تحلیل",
-  "COMMON.ANNOTATE": "حاشیه نویسی",
-  "COMMON.ANNOTATE.DESCRIPTION": "تخته نقاشی برای annotation",
-  "COMMON.ARE_YOU_SURE": "شما مطمئن هستید ؟",
-  "COMMON.BACKGROUND_COLOR": "رنگ زمینه",
-  "COMMON.BETA": "",
-  "COMMON.BLOG": "وبلاگ",
-  "COMMON.BONDS": "اوراق قرضه",
-  "COMMON.CHANGE": "تغییر دادن",
-  "COMMON.CLEAR_CHAT": "پاک کردن چت",
-  "COMMON.COLORS": "رنگ",
-  "COMMON.COLOR_PICKER": "رنگ پیکر",
-  "COMMON.COMPANY": "شرکت",
-  "COMMON.CONFIRMATION": "تائیدیه",
-  "COMMON.CONTACT": "تماس",
-  "COMMON.CONTACT_US": "تماس با ما",
-  "COMMON.CONTINUE": "ادامه هید",
-  "COMMON.CONVERT": "تبدیل",
-  "COMMON.COVERT_AMOUNT": "مقدار تبدیل",
-  "COMMON.CURRENCY_EXCHANGE": "تبدیل ارز",
-  "COMMON.CURRENT_EMAIL": "ایمیل فعلی شما",
-  "COMMON.CURSOR": "مکان نما",
-  "COMMON.DARK": "تم تاریک",
-  "COMMON.DELETE": "حذف",
-  "COMMON.DELETE_YOUR_ACCOUNT": "حساب کاربری خود را حذف کنید",
-  "COMMON.EMAIL": "پست الکترونیک",
-  "COMMON.EMAIL.CHANGE_REQUEST": "درخواست تغییر ایمیل",
-  "COMMON.EMAIL_CHANGE": "تغییر ایمیل",
-  "COMMON.ENROLMENT": "ثبت نام",
-  "COMMON.ERASER": "پاککن",
-  "COMMON.ERROR": "خطا",
-  "COMMON.ETFS": "ETFs",
-  "COMMON.FIRST_NAME": "نام کوچک",
-  "COMMON.FOREX": "فارکس",
-  "COMMON.FORGOT_PASSWORD": "رمز عبور را فراموش کردید ؟",
-  "COMMON.FROM_CURRENCY": "از ارز",
-  "COMMON.FULLSCREEN": "تمام صفحه",
-  "COMMON.GET_STARTED": "شروع کنید",
-  "COMMON.GITHUB": "",
-  "COMMON.HEADLINE": "عنوان",
-  "COMMON.HIDE_BUTTONS": "پنهان کردن دکمه ها",
-  "COMMON.HINT.MESSAGE.DETAIL": "جزئیات پیام شما",
-  "COMMON.HINT.MESSAGE.EMAIL": "یک ایمیل معتبر برای تماس با شما",
-  "COMMON.HINT.MESSAGE.NAME": "نام یا نام مستعار",
-  "COMMON.HINT.MESSAGE.SUBJECT": "عنوان پیام",
-  "COMMON.HOME": "خانه",
-  "COMMON.LANGUAGE": "زبان",
-  "COMMON.LANGUAGE_CHANGE": "تغییر زبان",
-  "COMMON.LAST_NAME": "نام خانوادگی",
-  "COMMON.LAST_UPDATE": "اخرین نرخ",
-  "COMMON.LATEST": "آخرین",
-  "COMMON.LEAVE_PAGE": "صفحه را ترک کنید",
-  "COMMON.LINE_COLOR": "رنگ خط",
-  "COMMON.LINE_WEIGHT": "وزن خط",
-  "COMMON.LOCAL_TIME": "به وقت محلی",
-  "COMMON.LOGIN": "ورود",
-  "COMMON.LOGOUT": "خروج",
-  "COMMON.MENU_ORIENTATION": "جهت",
-  "COMMON.MENU_POSITION": "موقعیت",
-  "COMMON.MESSAGE": "پیام",
-  "COMMON.MONITOR": "",
-  "COMMON.NAME": "نام",
-  "COMMON.NAVBAR.HIDE_ON_SCROLL": "پنهان شدن در پیمایش",
-  "COMMON.NAVBAR.MOVE_WITH_SCROLL": "حرکت با اسکرول",
-  "COMMON.NAVBAR.SHOW_ALWAYS": "همیشه نشان بده",
-  "COMMON.NAVBAR_MODE": "حالت Navbar",
-  "COMMON.NEW_EMAIL": "ایمیل جدید",
-  "COMMON.NO": "نه",
-  "COMMON.NOTIFICATION": "اطلاع",
-  "COMMON.NOTIFICATIONS": "اطلاعیه",
-  "COMMON.NOT_FOUND": "پیدا نشد",
-  "COMMON.OPTIONS": "گزینه ها",
-  "COMMON.OVERVIEW": "",
-  "COMMON.PASSWORD": "کلمه عبور",
-  "COMMON.PASSWORD.CHOOSE_NEW": "گذرواژه جدید را انتخاب کنید",
-  "COMMON.PASSWORD.RENEW": "رمز عبور جدید",
-  "COMMON.PASSWORD.RESET_REQUEST": "درخواست بازنشانی رمز عبور",
-  "COMMON.PASSWORD.SESSIONS_IGNORE": "جلسات فعال دیگر را تنظیم مجدد نکنید",
-  "COMMON.PASSWORD.TERMINATE_ALL_SESSIONS": "تنظیم مجدد تمام جلسات فعال",
-  "COMMON.PASSWORD_CHANGE": "تغییر رمز عبور",
-  "COMMON.PASSWORD_CONFIRMATION": "تایید رمز عبور",
-  "COMMON.PASSWORD_CURRENT": "رمز عبور فعلی",
-  "COMMON.PASSWORD_NEW": "رمز عبور جدید",
-  "COMMON.PERFORMANCE": "عملکرد",
-  "COMMON.PORTFOLIO": "نمونه کارها",
-  "COMMON.POSITION.BACKGROUND": "پس زمینه",
-  "COMMON.POSITION.BOTTOM_LEFT": "پایین چپ",
-  "COMMON.POSITION.BOTTOM_RIGHT": "پایین سمت راست",
-  "COMMON.POSITION.MENU": "منوی",
-  "COMMON.POSITION.REVERSE": "معکوس",
-  "COMMON.POSITION.TOP_LEFT": "بالا سمت چپ",
-  "COMMON.POSITION.TOP_RIGHT": "بالا سمت راست",
-  "COMMON.POSITION.VERTICAL": "عمودی",
-  "COMMON.PRIVACY": "سیاست حفظ حریم خصوصی",
-  "COMMON.PROFILE": "مشخصات",
-  "COMMON.PROFILE_DELETE": "حذف نمایه",
-  "COMMON.PROFILE_UPDATE": "بروزرسانی پروفایل",
-  "COMMON.PROFIT": "سود",
-  "COMMON.RATE": "نرخ",
-  "COMMON.RECOVERY": "بهبود",
-  "COMMON.REDO": "ازنو",
-  "COMMON.REFRESH": "نوسازی",
-  "COMMON.REQUEST_VERIFICATION_EMAIL": "ارسال مجدد تائیدیه",
-  "COMMON.RESOURCES": "منابع",
-  "COMMON.REVERSE": "معکوس",
-  "COMMON.SCREEN": "",
-  "COMMON.SEND_MESSAGE": "پیام فرستادن",
-  "COMMON.SESSION_RESET": "تنظیم مجدد جلسه",
-  "COMMON.SETTINGS": "تنظیمات",
-  "COMMON.SETUP": "",
-  "COMMON.SHOW_BUTTONS": "نمایش دکمه ها",
-  "COMMON.SIGNUP": "ثبت نام",
-  "COMMON.SOCIAL": "اجتماعی",
-  "COMMON.STOCKS": "سهام",
-  "COMMON.SUBJECT": "موضوع",
-  "COMMON.SUBSCRIPTION": "اشتراک، ابونمان",
-  "COMMON.TERMS_CONDITIONS": "شرایط و ضوابط",
-  "COMMON.TO_CURRENCY": "به ارز",
-  "COMMON.TRACK": "مسیر",
-  "COMMON.TRASH": "زباله",
-  "COMMON.TREND": "روند",
-  "COMMON.UNDO": "خنثیسازی",
-  "COMMON.UPDATE": "اطلاعات خود را به روز کن",
-  "COMMON.UPDATES": "به روز رسانی ها",
-  "COMMON.UPDATE_PROFILE": "بروزرسانی پروفایل",
-  "COMMON.UTC": "UTC",
-  "COMMON.VERIFICATION": "تایید",
-  "COMMON.VERIFY_YOUR_ACCOUNT": "حساب شما را تأیید کنید",
-  "COMMON.WISHLIST": "لیست علاقه مندی ها",
-  "COMMON.YAHOO_FINANCE": "یاهو مسکن",
-  "COMMON.YES": "بله",
-  "COMMON.YOUTUBE": "یوتیوب",
-  "CONFIRM.ACCOUNT_EMAIL": "لطفا ایمیل حساب خود را تأیید کنید",
-  "CONFIRM.ACCOUNT_PASSWORD": "رمز عبور حساب",
-  "CONFIRM.CURRENT_PASSWORD": "رمز عبور فعلی خود را تأیید کنید",
-  "CONFIRM.NEW_EMAIL": "لطفا ایمیل جدید خود را در زیر وارد کنید",
-  "ERROR.AUTH.EMAIL_CHANGE_INVALID_LINK": "لینک تغییر ایمیل نامعتبر یا منقضی شده",
-  "ERROR.AUTH.EMAIL_IN_USE": "ایمیل در حال استفاده است",
-  "ERROR.AUTH.FORBIDDEN": "دسترسی به دارایی های ممنوعه رد شد",
-  "ERROR.AUTH.INVALID_ACCESS_TOKEN": "نشانه دسترسی نامعتبر",
-  "ERROR.AUTH.INVALID_INACTIVE_USER": "کاربر نامعتبر یا غیر فعال",
-  "ERROR.AUTH.INVALID_OR_EXPIRED_SESSION": "جلسه منقضی شده نامعتبر",
-  "ERROR.AUTH.INVALID_OR_REMOTELY_TERMINATED_SESSION": "جلسه نامعتبر یا خاتمه یافته از راه دور",
-  "ERROR.AUTH.INVALID_PASSWORD": "رمز عبور نامعتبر",
-  "ERROR.AUTH.INVALID_USER_OR_PASSWORD": "کاربر نامعتبر یا رمز عبور بد",
-  "ERROR.AUTH.LOGIN": "ورود ناموفق بود ایمیل ناشناخته یا گذرواژه بد",
-  "ERROR.AUTH.LOGOUT": "خروج نشد",
-  "ERROR.AUTH.MISSING_ACCESS_TOKEN": "نشانه دسترسی از دست رفته",
-  "ERROR.AUTH.PASSWORD_RESET_INVALID_LINK": "لینک تنظیم مجدد رمز عبور نامعتبر یا منقضی شده",
-  "ERROR.AUTH.REFRESH": "نوشتن مجوز تأیید اعتبار نتوانست",
-  "ERROR.AUTH.SIGNUP": "ثبت نام ناموفق بود اطلاعات نامعتبر یا خطای سرور",
-  "ERROR.AUTH.UNAUTHORIZED": "درخواست غیر مجاز، جلسه نامعتبر یا منقضی شده",
-  "ERROR.AUTH.USERNAME_IN_USE": "نام کاربری در کاربر است",
-  "ERROR.AUTH.VERIFY": "موفق به تأیید کاربر نشد",
-  "ERROR.AUTH.VERIFY_INVALID_LINK": "لینک تأیید کاربر نامعتبر یا منقضی شده",
-  "ERROR.CONTACT.MESSAGE.SENT": "پیغام ارسال نشد",
-  "ERROR.CURRENCIES.QUERY": "درخواست ارزها انجام نشد",
-  "ERROR.CURRENCY.QUERY": "درخواست ارز انجام نشد",
-  "ERROR.RATE.QUERY": "نرخ پرس و جو ناکام شد",
-  "ERROR.RATES.QUERY": "نرخ پرس و جو ناکام شد",
-  "ERROR.SERVER": "اتصال به سرور یا خطای سرور نشد",
-  "ERROR.SERVER.THROTTLE": "درخواست های بیش از حد بسیاری",
-  "ERROR.USER.DELETE": "کاربر حذف نشد",
-  "ERROR.USER.EMAIL_CHANGE": "تغییر ایمیل تغییر نشد",
-  "ERROR.USER.EMAIL_CHANGE_REQUEST": "درخواست تغییر ایمیل نشد",
-  "ERROR.USER.FETCH": "نمیتواند پروفایل کاربری را بیرون بیاورد",
-  "ERROR.USER.LANGUAGE_CHANGE": "تغییر زبان تغییر نشد",
-  "ERROR.USER.PASSWORD_CHANGE": "تغییر رمز عبور نتوانسته است",
-  "ERROR.USER.PASSWORD_RENEW": "گذرواژه تنظیم نشد",
-  "ERROR.USER.PASSWORD_RESET": "بازنشانی گذرواژه انجام نشد",
-  "ERROR.USER.PASSWORD_RESET_VERIFY": "تأیید پیوند بازنشانی گذرواژه نشد",
-  "ERROR.USER.UPDATE": "آپلود پروفایل کاربر بهروزرسانی نشد",
-  "ERROR.USER.VERIFY": "تأیید کاربر نتوانست",
-  "ERROR.USER.VERIFY_INVALID_LINK": "موفق به تأیید کاربر نشد.  لینک نامعتبر یا منقضی شده",
-  "ERROR.USER.VERIFY_REQUEST": "درخواست تأیید ارسال نشد",
-  "FIREWORKS.DISABLE": "آتش بازی غیر فعال",
-  "FIREWORKS.ENABLE": "آتش بازی فعال",
-  "FIREWORKS.START": "آتش بازی شروع",
-  "FIREWORKS.STOP": "آتش بازی توقف",
-  "INFO.ACCOUNT_LANGUAGE": "زبان ارجح حساب شما",
-  "INFO.ACTIVE_SESSIONS_RESET": "تنظیم مجدد جلسات فعال در مورد نگرانی های امنیتی",
-  "INFO.CONTACT_MESSAGE_SENT": "ما ایمیل شما را دریافت کرده ایم با این حال، ما نمی توانیم به تمام پیام ها پاسخ دهیم. اما ما سعی خواهیم کرد!",
-  "INFO.EMAIL.CHANGE_SUCCESS": "ایمیل تغییر کرده است",
-  "INFO.NEW_EMAIL_REQUEST_SENT": "ما برای فعال کردن آدرس ایمیل خود، دستورالعمل خود را ارسال کردیم",
-  "INFO.PASSWORD.PASSWORD_RENEW": "رمز عبور جدید ذخیره شده",
-  "INFO.PASSWORD.RENEW_INSTRUCTION": "لطفا یک رمز عبور جدید انتخاب کنید",
-  "INFO.PASSWORD.RENEW_SUCCESS": "رمز عبور جدید شما ذخیره شده است، لطفا برای ورود به حساب کاربری خود وارد شوید",
-  "INFO.PASSWORD.RESET_SUCCESS": "ما دستورالعمل تنظیم مجدد رمز عبور را به ایمیل حساب شما ارسال کرده ایم",
-  "INFO.USER.EMAIL_CHANGE_PROGRESS": "فعال سازی ایمیل در حال انجام است",
-  "INFO.VERIFY_REQUEST_SENT": "ما دستورالعملهای تأیید را به ایمیل ایمیل شما ارسال کردیم",
-  "PITCH.ANNOTATE.DESCRIPTION": "",
-  "PITCH.ANNOTATE.TITLE": "",
-  "PITCH.OVERLAY.DESCRIPTION": "",
-  "PITCH.OVERLAY.TITLE": "",
-  "PITCH.OVERLAY_ADMIN.DESCRIPTION": "",
-  "PITCH.OVERLAY_ADMIN.TITLE": "",
-  "PITCH.PLATFORMS.DESCRIPTION": "",
-  "PITCH.PLATFORMS.TITLE": "",
-  "SOCIAL.FACEBOOK": "Facebook",
-  "SOCIAL.TWITTER": "Twitter",
-  "SUCCESS.AUTH.LOGIN": "شما وارد شده اید",
-  "SUCCESS.AUTH.LOGOUT": "شما خارج شده اید",
-  "SUCCESS.AUTH.REFRESH": "فکس تایید هویت تازه است",
-  "SUCCESS.AUTH.SIGNUP": "حساب کاربری ایجاد شد. ایمیل خود را برای تایید ایمیل بررسی کنید",
-  "SUCCESS.CONTACT.MESSAGE.SENT": "پیغام فرستاده شد",
-  "SUCCESS.CURRENCIES.QUERY": "ارزهای به دست آمده",
-  "SUCCESS.CURRENCY.QUERY": "جفت ارز",
-  "SUCCESS.RATE.QUERY": "نرخ تخفیف",
-  "SUCCESS.RATES.QUERY": "نرخ برآورد شده",
-  "SUCCESS.USER.DELETE": "نمایه کاربر حذف شد",
-  "SUCCESS.USER.EMAIL_CHANGE": "ایمیل کاربر تغییر کرده است",
-  "SUCCESS.USER.EMAIL_CHANGE_REQUEST": "پیوند تایید در ایمیل جدید خود را بررسی کنید",
-  "SUCCESS.USER.FETCH": "نمایه کاربر وارد شد",
-  "SUCCESS.USER.LANGUAGE_CHANGE": "زبان کاربر تغییر کرده است",
-  "SUCCESS.USER.PASSWORD_CHANGE": "رمز عبور کاربر تغییر کرده است",
-  "SUCCESS.USER.PASSWORD_RENEW": "رمز عبور کاربر ذخیره شده است",
-  "SUCCESS.USER.PASSWORD_RESET": "درخواست بازنشانی رمز عبور ارسال شد",
-  "SUCCESS.USER.PASSWORD_RESET_VERIFY": "درخواست مجدد رمز عبور معتبر است",
-  "SUCCESS.USER.UPDATE": "پروفایل کاربری به روز شد",
-  "SUCCESS.USER.VERIFY": "حساب کاربری تأیید شده است",
-  "SUCCESS.USER.VERIFY_REQUEST": "درخواست تأیید ارسال شد",
-  "TERMS.DISCLAIMER.DESCRIPTION": "",
-  "TERMS.DISCLAIMER.TITLE": "",
-  "TERMS.PRIVACY.DESCRIPTION": "",
-  "TERMS.PRIVACY.TITLE": "",
-  "TERMS.TERMS.DESCRIPTION": "",
-  "TERMS.TERMS.TITLE": "",
-  "VALIDATION.EMAIL_IN_USE": "ایمیل در حال حاضر در حال استفاده",
-  "VALIDATION.EMAIL_NOT_FOUND": "ایمیل یافت نشد",
-  "VALIDATION.INCORRECT_PASSWORD": "رمز عبور اشتباه است",
-  "VALIDATION.INPUT_NOT_AS_EXPECTED": "ورودی با مقدار مورد نظر منطبق نبود",
-  "VALIDATION.INPUT_SHOULD_DIFFER": "ورودی نامعتبر است، یک مقدار متفاوت را انتخاب کنید",
-  "VALIDATION.INVALID_CREDIT_CARD": "شماره کارت اعتباری نامعتبر است",
-  "VALIDATION.INVALID_EMAIL": "آدرس ایمیل نامعتبر است",
-  "VALIDATION.INVALID_FORMAT": "فرمت ورودی نامعتبر است",
-  "VALIDATION.INVALID_FULL_NAME": "نام کامل باید شامل نام و نام خانوادگی باشد",
-  "VALIDATION.INVALID_INPUT": "ورودی نامعتبر",
-  "VALIDATION.INVALID_NUMBER": "عدد نامعتبر",
-  "VALIDATION.INVALID_PASSWORD": "رمز عبور نامعتبر. حداقل 6 حرف و باید حاوی عدد باشد",
-  "VALIDATION.INVALID_PASSWORD_CONFIRMATION": "هر دو کلمه عبور باید یکسان باشند",
-  "VALIDATION.MAXIMUM_LENGTH": "حداکثر طول {{__value__}}",
-  "VALIDATION.MINIMUM_LENGTH": "حداقل طول {{__value__}} است",
-  "VALIDATION.NEGATIVE_NUMBER": "ارزش باید غیر منفی باشد",
-  "VALIDATION.NON_ZERO": "مقدار باید صفر باشد",
-  "VALIDATION.NOT_ACCOUNT_EMAIL": "لطفا ایمیل حساب خود را وارد کنید",
-  "VALIDATION.REQUIRED": "این فیلد مورد نیاز است",
-  "VALIDATION.SERVER_ERROR": "خطای سرور",
-  "VALIDATION.SHORT_FIRST_NAME": "نام خیلی کوتاه است",
-  "VALIDATION.SHORT_LAST_NAME": "نام خانوادگی خیلی کوتاه است",
-  "WARN.DISCARD_CHANGES_ACTION": "درباره تغییرات خود را رد کنید",
-  "WARN.INVALID_PASSWORD_RESET_LINK": "لینک بازنشانی رمز عبور منقضی شده است لطفا دوباره درخواست کنید",
-  "WARN.IRREVERSIBLE_ACTION": "لطفا توجه داشته باشید که این عمل قابل لغو نیست",
-  "WARN.UNVERIFIED_ACCOUNT": "حساب تایید نشده است برخی از ویژگیها ممکن است نیاز به تأیید اعتبار داشته باشند",
-  "WARN.USER.EMAIL_CHANGE.FAILURE": "تغییر ایمیل ایمیل حساب کاربری نشد",
-  "WARN.USER.VERIFICATION_FAILURE": "تأیید کاربر نتوانست"
+	"APP.ABOUT": "در باره ما",
+	"APP.DESCRIPTION.ABOUT": "دربارهی ما",
+	"APP.DESCRIPTION.ACCOUNT_VERIFY": "تایید حساب",
+	"APP.DESCRIPTION.ANNOTATE": "حاشیه نویسی",
+	"APP.DESCRIPTION.EMAIL_CHANGE": "تغییر ایمیل مشخصات",
+	"APP.DESCRIPTION.EMAIL_CHANGE_REQUEST": "درخواست تغییر مشخصات ایمیل",
+	"APP.DESCRIPTION.FOREX": "مبادلات ارز خارجی، تبدیل ارز",
+	"APP.DESCRIPTION.HEADLINE": "پورتال تحقیقاتی بازار مالی آموزشی به سرمایه گذاران پیگیری، تجزیه و تحلیل و تصمیم گیری صحیح می دهد.",
+	"APP.DESCRIPTION.LANGUAGE_CHANGE": "تغییر زبان پروفایل",
+	"APP.DESCRIPTION.LOGIN": "ورود به حساب کاربری",
+	"APP.DESCRIPTION.NOT_FOUND": "خطای 404 یافت نشد",
+	"APP.DESCRIPTION.PASSWORD_CHANGE": "تغییر رمز عبور",
+	"APP.DESCRIPTION.PASSWORD_RENEW": "رمز عبور تجدید",
+	"APP.DESCRIPTION.PASSWORD_RESET_REQUEST": "درخواست تنظیم مجدد رمز عبور حساب",
+	"APP.DESCRIPTION.PROFILE_DELETE": "حساب خود را حذف کنید",
+	"APP.DESCRIPTION.PROFILE_UPDATE": "پروفایل خود را به روز نمائید",
+	"APP.DESCRIPTION.SIGNUP": "ثبت نام حساب",
+	"APP.HEADLINE": "افزایش جریان های زنده خود را",
+	"APP.LOGIN": "ورود",
+	"APP.SIGNUP": "ثبت نام",
+	"APP.SUB_HEADLINE": "Annotation - Chat Overlay - Map Overlay",
+	"BAD_USER_INPUT": "ورودی کاربر نامعتبر",
+	"CHAT.CLEAR": "پاک کردن چت",
+	"CHAT.DECLUTTER": "دکلتر",
+	"CHAT.DEFAULT_MESSAGE": "این یک چت نمونه با 😘 و ایموجی است تا ما می توانیم روکش پیام را آزمایش کنیم",
+	"CHAT.KEYWORDS": "",
+	"CHAT.MIRROR": "",
+	"CHAT.MONITOR_DESC": "",
+	"CHAT.OVERLAY": "چت روکش",
+	"CHAT.OVERLAY_DESC": "روکش چت برای یوتیوب و پایین تر 3rd",
+	"CHAT.OVERVIEW_DESC": "",
+	"CHAT.RECLUTTER": "رکلتر",
+	"CHAT.SETUP_DESC": "",
+	"CHAT.TEST": "تست چت",
+	"COMMON.ABOUT": "در باره",
+	"COMMON.ACCOUNT": "حساب",
+	"COMMON.ACCOUNT.EMAIL": "حساب ایمیل",
+	"COMMON.ACCOUNT.EMAIL_CHANGE": "تغییر ایمیل حساب",
+	"COMMON.ACCOUNT.PASSWORD": "رمز عبور حساب کاربری",
+	"COMMON.ACCOUNT.VERIFY": "تایید حساب",
+	"COMMON.ACCOUNT_ACCESS": "دسترسی به حساب",
+	"COMMON.ACCOUNT_CREATE": "ایجاد حساب جدید",
+	"COMMON.ACCOUNT_DELETE": "خودتان را حذف کنید",
+	"COMMON.ACTIONS": "اقدامات",
+	"COMMON.ACTIVE_SESSIONS_RESET": "تنظیم مجدد تمام جلسات فعال",
+	"COMMON.ADMIN": "مدیر",
+	"COMMON.ALERT": "اگاهی",
+	"COMMON.ANALYZE": "تجزیه و تحلیل",
+	"COMMON.ANNOTATE": "حاشیه نویسی",
+	"COMMON.ANNOTATE.DESCRIPTION": "تخته نقاشی برای annotation",
+	"COMMON.ARE_YOU_SURE": "شما مطمئن هستید ؟",
+	"COMMON.BACKGROUND_COLOR": "رنگ زمینه",
+	"COMMON.BETA": "",
+	"COMMON.BLOG": "وبلاگ",
+	"COMMON.BONDS": "اوراق قرضه",
+	"COMMON.CHANGE": "تغییر دادن",
+	"COMMON.CLEAR_CHAT": "پاک کردن چت",
+	"COMMON.COLORS": "رنگ",
+	"COMMON.COLOR_PICKER": "رنگ پیکر",
+	"COMMON.COMPANY": "شرکت",
+	"COMMON.CONFIRMATION": "تائیدیه",
+	"COMMON.CONTACT": "تماس",
+	"COMMON.CONTACT_US": "تماس با ما",
+	"COMMON.CONTINUE": "ادامه هید",
+	"COMMON.CONVERT": "تبدیل",
+	"COMMON.COVERT_AMOUNT": "مقدار تبدیل",
+	"COMMON.CURRENCY_EXCHANGE": "تبدیل ارز",
+	"COMMON.CURRENT_EMAIL": "ایمیل فعلی شما",
+	"COMMON.CURSOR": "مکان نما",
+	"COMMON.DARK": "تم تاریک",
+	"COMMON.DELETE": "حذف",
+	"COMMON.DELETE_YOUR_ACCOUNT": "حساب کاربری خود را حذف کنید",
+	"COMMON.EMAIL": "پست الکترونیک",
+	"COMMON.EMAIL.CHANGE_REQUEST": "درخواست تغییر ایمیل",
+	"COMMON.EMAIL_CHANGE": "تغییر ایمیل",
+	"COMMON.ENROLMENT": "ثبت نام",
+	"COMMON.ERASER": "پاککن",
+	"COMMON.ERROR": "خطا",
+	"COMMON.ETFS": "ETFs",
+	"COMMON.FIRST_NAME": "نام کوچک",
+	"COMMON.FOREX": "فارکس",
+	"COMMON.FORGOT_PASSWORD": "رمز عبور را فراموش کردید ؟",
+	"COMMON.FROM_CURRENCY": "از ارز",
+	"COMMON.FULLSCREEN": "تمام صفحه",
+	"COMMON.GET_STARTED": "شروع کنید",
+	"COMMON.GITHUB": "",
+	"COMMON.HEADLINE": "عنوان",
+	"COMMON.HIDE_BUTTONS": "پنهان کردن دکمه ها",
+	"COMMON.HINT.MESSAGE.DETAIL": "جزئیات پیام شما",
+	"COMMON.HINT.MESSAGE.EMAIL": "یک ایمیل معتبر برای تماس با شما",
+	"COMMON.HINT.MESSAGE.NAME": "نام یا نام مستعار",
+	"COMMON.HINT.MESSAGE.SUBJECT": "عنوان پیام",
+	"COMMON.HOME": "خانه",
+	"COMMON.LANGUAGE": "زبان",
+	"COMMON.LANGUAGE_CHANGE": "تغییر زبان",
+	"COMMON.LAST_NAME": "نام خانوادگی",
+	"COMMON.LAST_UPDATE": "اخرین نرخ",
+	"COMMON.LATEST": "آخرین",
+	"COMMON.LEAVE_PAGE": "صفحه را ترک کنید",
+	"COMMON.LINE_COLOR": "رنگ خط",
+	"COMMON.LINE_WEIGHT": "وزن خط",
+	"COMMON.LOCAL_TIME": "به وقت محلی",
+	"COMMON.LOGIN": "ورود",
+	"COMMON.LOGOUT": "خروج",
+	"COMMON.MENU_ORIENTATION": "جهت",
+	"COMMON.MENU_POSITION": "موقعیت",
+	"COMMON.MESSAGE": "پیام",
+	"COMMON.MONITOR": "",
+	"COMMON.NAME": "نام",
+	"COMMON.NAVBAR.HIDE_ON_SCROLL": "پنهان شدن در پیمایش",
+	"COMMON.NAVBAR.MOVE_WITH_SCROLL": "حرکت با اسکرول",
+	"COMMON.NAVBAR.SHOW_ALWAYS": "همیشه نشان بده",
+	"COMMON.NAVBAR_MODE": "حالت Navbar",
+	"COMMON.NEW_EMAIL": "ایمیل جدید",
+	"COMMON.NO": "نه",
+	"COMMON.NOTIFICATION": "اطلاع",
+	"COMMON.NOTIFICATIONS": "اطلاعیه",
+	"COMMON.NOT_FOUND": "پیدا نشد",
+	"COMMON.OPTIONS": "گزینه ها",
+	"COMMON.OVERVIEW": "",
+	"COMMON.PASSWORD": "کلمه عبور",
+	"COMMON.PASSWORD.CHOOSE_NEW": "گذرواژه جدید را انتخاب کنید",
+	"COMMON.PASSWORD.RENEW": "رمز عبور جدید",
+	"COMMON.PASSWORD.RESET_REQUEST": "درخواست بازنشانی رمز عبور",
+	"COMMON.PASSWORD.SESSIONS_IGNORE": "جلسات فعال دیگر را تنظیم مجدد نکنید",
+	"COMMON.PASSWORD.TERMINATE_ALL_SESSIONS": "تنظیم مجدد تمام جلسات فعال",
+	"COMMON.PASSWORD_CHANGE": "تغییر رمز عبور",
+	"COMMON.PASSWORD_CONFIRMATION": "تایید رمز عبور",
+	"COMMON.PASSWORD_CURRENT": "رمز عبور فعلی",
+	"COMMON.PASSWORD_NEW": "رمز عبور جدید",
+	"COMMON.PERFORMANCE": "عملکرد",
+	"COMMON.PORTFOLIO": "نمونه کارها",
+	"COMMON.POSITION.BACKGROUND": "پس زمینه",
+	"COMMON.POSITION.BOTTOM_LEFT": "پایین چپ",
+	"COMMON.POSITION.BOTTOM_RIGHT": "پایین سمت راست",
+	"COMMON.POSITION.MENU": "منوی",
+	"COMMON.POSITION.REVERSE": "معکوس",
+	"COMMON.POSITION.TOP_LEFT": "بالا سمت چپ",
+	"COMMON.POSITION.TOP_RIGHT": "بالا سمت راست",
+	"COMMON.POSITION.VERTICAL": "عمودی",
+	"COMMON.PRIVACY": "سیاست حفظ حریم خصوصی",
+	"COMMON.PROFILE": "مشخصات",
+	"COMMON.PROFILE_DELETE": "حذف نمایه",
+	"COMMON.PROFILE_UPDATE": "بروزرسانی پروفایل",
+	"COMMON.PROFIT": "سود",
+	"COMMON.RATE": "نرخ",
+	"COMMON.RECOVERY": "بهبود",
+	"COMMON.REDO": "ازنو",
+	"COMMON.REFRESH": "نوسازی",
+	"COMMON.REQUEST_VERIFICATION_EMAIL": "ارسال مجدد تائیدیه",
+	"COMMON.RESOURCES": "منابع",
+	"COMMON.REVERSE": "معکوس",
+	"COMMON.SCREEN": "",
+	"COMMON.SEND_MESSAGE": "پیام فرستادن",
+	"COMMON.SESSION_RESET": "تنظیم مجدد جلسه",
+	"COMMON.SETTINGS": "تنظیمات",
+	"COMMON.SETUP": "",
+	"COMMON.SHOW_BUTTONS": "نمایش دکمه ها",
+	"COMMON.SIGNUP": "ثبت نام",
+	"COMMON.SOCIAL": "اجتماعی",
+	"COMMON.STOCKS": "سهام",
+	"COMMON.SUBJECT": "موضوع",
+	"COMMON.SUBSCRIPTION": "اشتراک، ابونمان",
+	"COMMON.TERMS_CONDITIONS": "شرایط و ضوابط",
+	"COMMON.TO_CURRENCY": "به ارز",
+	"COMMON.TRACK": "مسیر",
+	"COMMON.TRASH": "زباله",
+	"COMMON.TREND": "روند",
+	"COMMON.UNDO": "خنثیسازی",
+	"COMMON.UPDATE": "اطلاعات خود را به روز کن",
+	"COMMON.UPDATES": "به روز رسانی ها",
+	"COMMON.UPDATE_PROFILE": "بروزرسانی پروفایل",
+	"COMMON.UTC": "UTC",
+	"COMMON.VERIFICATION": "تایید",
+	"COMMON.VERIFY_YOUR_ACCOUNT": "حساب شما را تأیید کنید",
+	"COMMON.WISHLIST": "لیست علاقه مندی ها",
+	"COMMON.YAHOO_FINANCE": "یاهو مسکن",
+	"COMMON.YES": "بله",
+	"COMMON.YOUTUBE": "یوتیوب",
+	"CONFIRM.ACCOUNT_EMAIL": "لطفا ایمیل حساب خود را تأیید کنید",
+	"CONFIRM.ACCOUNT_PASSWORD": "رمز عبور حساب",
+	"CONFIRM.CURRENT_PASSWORD": "رمز عبور فعلی خود را تأیید کنید",
+	"CONFIRM.NEW_EMAIL": "لطفا ایمیل جدید خود را در زیر وارد کنید",
+	"ERROR.AUTH.EMAIL_CHANGE_INVALID_LINK": "لینک تغییر ایمیل نامعتبر یا منقضی شده",
+	"ERROR.AUTH.EMAIL_IN_USE": "ایمیل در حال استفاده است",
+	"ERROR.AUTH.FORBIDDEN": "دسترسی به دارایی های ممنوعه رد شد",
+	"ERROR.AUTH.INVALID_ACCESS_TOKEN": "نشانه دسترسی نامعتبر",
+	"ERROR.AUTH.INVALID_INACTIVE_USER": "کاربر نامعتبر یا غیر فعال",
+	"ERROR.AUTH.INVALID_OR_EXPIRED_SESSION": "جلسه منقضی شده نامعتبر",
+	"ERROR.AUTH.INVALID_OR_REMOTELY_TERMINATED_SESSION": "جلسه نامعتبر یا خاتمه یافته از راه دور",
+	"ERROR.AUTH.INVALID_PASSWORD": "رمز عبور نامعتبر",
+	"ERROR.AUTH.INVALID_USER_OR_PASSWORD": "کاربر نامعتبر یا رمز عبور بد",
+	"ERROR.AUTH.LOGIN": "ورود ناموفق بود ایمیل ناشناخته یا گذرواژه بد",
+	"ERROR.AUTH.LOGOUT": "خروج نشد",
+	"ERROR.AUTH.MISSING_ACCESS_TOKEN": "نشانه دسترسی از دست رفته",
+	"ERROR.AUTH.PASSWORD_RESET_INVALID_LINK": "لینک تنظیم مجدد رمز عبور نامعتبر یا منقضی شده",
+	"ERROR.AUTH.REFRESH": "نوشتن مجوز تأیید اعتبار نتوانست",
+	"ERROR.AUTH.SIGNUP": "ثبت نام ناموفق بود اطلاعات نامعتبر یا خطای سرور",
+	"ERROR.AUTH.UNAUTHORIZED": "درخواست غیر مجاز، جلسه نامعتبر یا منقضی شده",
+	"ERROR.AUTH.USERNAME_IN_USE": "نام کاربری در کاربر است",
+	"ERROR.AUTH.VERIFY": "موفق به تأیید کاربر نشد",
+	"ERROR.AUTH.VERIFY_INVALID_LINK": "لینک تأیید کاربر نامعتبر یا منقضی شده",
+	"ERROR.CONTACT.MESSAGE.SENT": "پیغام ارسال نشد",
+	"ERROR.CURRENCIES.QUERY": "درخواست ارزها انجام نشد",
+	"ERROR.CURRENCY.QUERY": "درخواست ارز انجام نشد",
+	"ERROR.RATE.QUERY": "نرخ پرس و جو ناکام شد",
+	"ERROR.RATES.QUERY": "نرخ پرس و جو ناکام شد",
+	"ERROR.SERVER": "اتصال به سرور یا خطای سرور نشد",
+	"ERROR.SERVER.THROTTLE": "درخواست های بیش از حد بسیاری",
+	"ERROR.USER.DELETE": "کاربر حذف نشد",
+	"ERROR.USER.EMAIL_CHANGE": "تغییر ایمیل تغییر نشد",
+	"ERROR.USER.EMAIL_CHANGE_REQUEST": "درخواست تغییر ایمیل نشد",
+	"ERROR.USER.FETCH": "نمیتواند پروفایل کاربری را بیرون بیاورد",
+	"ERROR.USER.LANGUAGE_CHANGE": "تغییر زبان تغییر نشد",
+	"ERROR.USER.PASSWORD_CHANGE": "تغییر رمز عبور نتوانسته است",
+	"ERROR.USER.PASSWORD_RENEW": "گذرواژه تنظیم نشد",
+	"ERROR.USER.PASSWORD_RESET": "بازنشانی گذرواژه انجام نشد",
+	"ERROR.USER.PASSWORD_RESET_VERIFY": "تأیید پیوند بازنشانی گذرواژه نشد",
+	"ERROR.USER.UPDATE": "آپلود پروفایل کاربر بهروزرسانی نشد",
+	"ERROR.USER.VERIFY": "تأیید کاربر نتوانست",
+	"ERROR.USER.VERIFY_INVALID_LINK": "موفق به تأیید کاربر نشد.  لینک نامعتبر یا منقضی شده",
+	"ERROR.USER.VERIFY_REQUEST": "درخواست تأیید ارسال نشد",
+	"FILTER.AUTHOR": "",
+	"FILTER.BY": "",
+	"FILTER.CHOICE": "",
+	"FILTER.DONATION": "",
+	"FILTER.HIGHLIGHT": "",
+	"FILTER.HOST": "",
+	"FILTER.NONE": "",
+	"FILTER.OUT": "",
+	"FIREWORKS.DISABLE": "آتش بازی غیر فعال",
+	"FIREWORKS.ENABLE": "آتش بازی فعال",
+	"FIREWORKS.START": "آتش بازی شروع",
+	"FIREWORKS.STOP": "آتش بازی توقف",
+	"INFO.ACCOUNT_LANGUAGE": "زبان ارجح حساب شما",
+	"INFO.ACTIVE_SESSIONS_RESET": "تنظیم مجدد جلسات فعال در مورد نگرانی های امنیتی",
+	"INFO.CONTACT_MESSAGE_SENT": "ما ایمیل شما را دریافت کرده ایم با این حال، ما نمی توانیم به تمام پیام ها پاسخ دهیم. اما ما سعی خواهیم کرد!",
+	"INFO.EMAIL.CHANGE_SUCCESS": "ایمیل تغییر کرده است",
+	"INFO.NEW_EMAIL_REQUEST_SENT": "ما برای فعال کردن آدرس ایمیل خود، دستورالعمل خود را ارسال کردیم",
+	"INFO.PASSWORD.PASSWORD_RENEW": "رمز عبور جدید ذخیره شده",
+	"INFO.PASSWORD.RENEW_INSTRUCTION": "لطفا یک رمز عبور جدید انتخاب کنید",
+	"INFO.PASSWORD.RENEW_SUCCESS": "رمز عبور جدید شما ذخیره شده است، لطفا برای ورود به حساب کاربری خود وارد شوید",
+	"INFO.PASSWORD.RESET_SUCCESS": "ما دستورالعمل تنظیم مجدد رمز عبور را به ایمیل حساب شما ارسال کرده ایم",
+	"INFO.USER.EMAIL_CHANGE_PROGRESS": "فعال سازی ایمیل در حال انجام است",
+	"INFO.VERIFY_REQUEST_SENT": "ما دستورالعملهای تأیید را به ایمیل ایمیل شما ارسال کردیم",
+	"PITCH.ANNOTATE.DESCRIPTION": "",
+	"PITCH.ANNOTATE.TITLE": "",
+	"PITCH.OVERLAY.DESCRIPTION": "",
+	"PITCH.OVERLAY.TITLE": "",
+	"PITCH.OVERLAY_ADMIN.DESCRIPTION": "",
+	"PITCH.OVERLAY_ADMIN.TITLE": "",
+	"PITCH.PLATFORMS.DESCRIPTION": "",
+	"PITCH.PLATFORMS.TITLE": "",
+	"SOCIAL.FACEBOOK": "Facebook",
+	"SOCIAL.TWITTER": "Twitter",
+	"SUCCESS.AUTH.LOGIN": "شما وارد شده اید",
+	"SUCCESS.AUTH.LOGOUT": "شما خارج شده اید",
+	"SUCCESS.AUTH.REFRESH": "فکس تایید هویت تازه است",
+	"SUCCESS.AUTH.SIGNUP": "حساب کاربری ایجاد شد. ایمیل خود را برای تایید ایمیل بررسی کنید",
+	"SUCCESS.CONTACT.MESSAGE.SENT": "پیغام فرستاده شد",
+	"SUCCESS.CURRENCIES.QUERY": "ارزهای به دست آمده",
+	"SUCCESS.CURRENCY.QUERY": "جفت ارز",
+	"SUCCESS.RATE.QUERY": "نرخ تخفیف",
+	"SUCCESS.RATES.QUERY": "نرخ برآورد شده",
+	"SUCCESS.USER.DELETE": "نمایه کاربر حذف شد",
+	"SUCCESS.USER.EMAIL_CHANGE": "ایمیل کاربر تغییر کرده است",
+	"SUCCESS.USER.EMAIL_CHANGE_REQUEST": "پیوند تایید در ایمیل جدید خود را بررسی کنید",
+	"SUCCESS.USER.FETCH": "نمایه کاربر وارد شد",
+	"SUCCESS.USER.LANGUAGE_CHANGE": "زبان کاربر تغییر کرده است",
+	"SUCCESS.USER.PASSWORD_CHANGE": "رمز عبور کاربر تغییر کرده است",
+	"SUCCESS.USER.PASSWORD_RENEW": "رمز عبور کاربر ذخیره شده است",
+	"SUCCESS.USER.PASSWORD_RESET": "درخواست بازنشانی رمز عبور ارسال شد",
+	"SUCCESS.USER.PASSWORD_RESET_VERIFY": "درخواست مجدد رمز عبور معتبر است",
+	"SUCCESS.USER.UPDATE": "پروفایل کاربری به روز شد",
+	"SUCCESS.USER.VERIFY": "حساب کاربری تأیید شده است",
+	"SUCCESS.USER.VERIFY_REQUEST": "درخواست تأیید ارسال شد",
+	"TERMS.DISCLAIMER.DESCRIPTION": "",
+	"TERMS.DISCLAIMER.TITLE": "",
+	"TERMS.PRIVACY.DESCRIPTION": "",
+	"TERMS.PRIVACY.TITLE": "",
+	"TERMS.TERMS.DESCRIPTION": "",
+	"TERMS.TERMS.TITLE": "",
+	"VALIDATION.EMAIL_IN_USE": "ایمیل در حال حاضر در حال استفاده",
+	"VALIDATION.EMAIL_NOT_FOUND": "ایمیل یافت نشد",
+	"VALIDATION.INCORRECT_PASSWORD": "رمز عبور اشتباه است",
+	"VALIDATION.INPUT_NOT_AS_EXPECTED": "ورودی با مقدار مورد نظر منطبق نبود",
+	"VALIDATION.INPUT_SHOULD_DIFFER": "ورودی نامعتبر است، یک مقدار متفاوت را انتخاب کنید",
+	"VALIDATION.INVALID_CREDIT_CARD": "شماره کارت اعتباری نامعتبر است",
+	"VALIDATION.INVALID_EMAIL": "آدرس ایمیل نامعتبر است",
+	"VALIDATION.INVALID_FORMAT": "فرمت ورودی نامعتبر است",
+	"VALIDATION.INVALID_FULL_NAME": "نام کامل باید شامل نام و نام خانوادگی باشد",
+	"VALIDATION.INVALID_INPUT": "ورودی نامعتبر",
+	"VALIDATION.INVALID_NUMBER": "عدد نامعتبر",
+	"VALIDATION.INVALID_PASSWORD": "رمز عبور نامعتبر. حداقل 6 حرف و باید حاوی عدد باشد",
+	"VALIDATION.INVALID_PASSWORD_CONFIRMATION": "هر دو کلمه عبور باید یکسان باشند",
+	"VALIDATION.MAXIMUM_LENGTH": "حداکثر طول {{__value__}}",
+	"VALIDATION.MINIMUM_LENGTH": "حداقل طول {{__value__}} است",
+	"VALIDATION.NEGATIVE_NUMBER": "ارزش باید غیر منفی باشد",
+	"VALIDATION.NON_ZERO": "مقدار باید صفر باشد",
+	"VALIDATION.NOT_ACCOUNT_EMAIL": "لطفا ایمیل حساب خود را وارد کنید",
+	"VALIDATION.REQUIRED": "این فیلد مورد نیاز است",
+	"VALIDATION.SERVER_ERROR": "خطای سرور",
+	"VALIDATION.SHORT_FIRST_NAME": "نام خیلی کوتاه است",
+	"VALIDATION.SHORT_LAST_NAME": "نام خانوادگی خیلی کوتاه است",
+	"WARN.DISCARD_CHANGES_ACTION": "درباره تغییرات خود را رد کنید",
+	"WARN.INVALID_PASSWORD_RESET_LINK": "لینک بازنشانی رمز عبور منقضی شده است لطفا دوباره درخواست کنید",
+	"WARN.IRREVERSIBLE_ACTION": "لطفا توجه داشته باشید که این عمل قابل لغو نیست",
+	"WARN.UNVERIFIED_ACCOUNT": "حساب تایید نشده است برخی از ویژگیها ممکن است نیاز به تأیید اعتبار داشته باشند",
+	"WARN.USER.EMAIL_CHANGE.FAILURE": "تغییر ایمیل ایمیل حساب کاربری نشد",
+	"WARN.USER.VERIFICATION_FAILURE": "تأیید کاربر نتوانست"
 }
