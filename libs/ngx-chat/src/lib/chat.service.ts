@@ -23,7 +23,7 @@ import { DeepReadonly } from 'ts-essentials';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
-  CHAT_OVERLAY_SCREEN_URL,
+  CHAT_IFRAME_URL,
   CHAT_STATE_STORAGE_KEY,
   CHAT_STORAGE_KEY,
   CHAT_STORAGE_KEY_OVERLAY_REQUEST,
@@ -306,7 +306,7 @@ export class ChatService {
             this.awaitOverlayResponse = undefined;
           } else if (
             event.key === CHAT_STATE_STORAGE_KEY &&
-            this.router.url.includes(CHAT_OVERLAY_SCREEN_URL)
+            !this.router.url.includes(CHAT_IFRAME_URL)
           ) {
             const storageState = sanitizeJsonStringOrObject<ChatState>(event?.newValue);
             const state = this.sanitizeState(storageState);
@@ -327,4 +327,7 @@ export class ChatService {
       );
     });
   }
+}
+function CHAT_OVERLAY_IFRAME(CHAT_OVERLAY_IFRAME: any) {
+  throw new Error('Function not implemented.');
 }
