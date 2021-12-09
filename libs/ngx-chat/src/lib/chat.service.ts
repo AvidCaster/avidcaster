@@ -24,6 +24,7 @@ import { v4 as uuid_v4 } from 'uuid';
 
 import {
   CHAT_IFRAME_URL,
+  CHAT_OVERLAY_SCREEN_URL,
   CHAT_STATE_STORAGE_KEY,
   CHAT_STORAGE_KEY,
   CHAT_STORAGE_KEY_OVERLAY_REQUEST,
@@ -288,7 +289,7 @@ export class ChatService {
 
   openOverlayScreen() {
     this.layout.uix.window.open(
-      '/chat/overlay/screen',
+      CHAT_OVERLAY_SCREEN_URL,
       '_blank',
       'width=1200,height=720,left=100,top=100'
     );
