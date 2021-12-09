@@ -26,7 +26,7 @@
 }
 .chat-selected-image-fields .chat-host-image img {
   width: 49px;
-  margin-left: 95px;
+  margin-left: 106px;
 }
 
 .chat-selected-author-img img {
@@ -47,8 +47,8 @@
 #chat-special-animation {
   position: absolute;
   z-index: 4;
-  left: 166px;
-  top: 134px;
+  left: 177px;
+  top: 135px;
   background-size: 80px 80px;
   background-position: center;
   width: 60px;
@@ -121,5 +121,15 @@
 
   .chat-selected-donation span {
     margin-right: 10px;
+  }
+
+  .chat-selected-image-fields .chat-host-image img {
+    margin-left: 0px;
+    margin-right: 106px;
+  }
+
+  #chat-special-animation {
+    right: 177px;
+    left: unset;
   }
 }
