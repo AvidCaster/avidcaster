@@ -1,15 +1,15 @@
 <div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div fxLayout="row" fxLayoutGap="5px" *ngLet="isHighlight() as isHighlight">
     <button
-      [class.chat-icon-dim]="chat?.author"
-      [class.chat-cursor-default]="chat?.author"
       mat-raised-button
-      color="primary"
-      (click)="chatService.loadTestChat()"
+      [class.yt-cursor-default]="!chat?.author"
+      matTooltipPosition="before"
+      matTooltip="{{ 'CHAT.CLEAR' | translate }}"
+      color="warn"
+      (click)="clearMessage()"
     >
-      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="message-draw"></mat-icon>
+      <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
     </button>
-
     <input
       type="text"
       placeholder="{{ 'CHAT.KEYWORDS' | translate }}"
@@ -32,16 +32,6 @@
       <option *ngFor="let filter of getFilterOptions()" [value]="filter">{{ getFilterName(filter) | translate }}</option>
     </select>
 
-    <button
-      mat-raised-button
-      [class.yt-cursor-default]="!chat?.author"
-      matTooltipPosition="before"
-      matTooltip="{{ 'CHAT.CLEAR' | translate }}"
-      color="warn"
-      (click)="clearMessage()"
-    >
-      <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
-    </button>
     <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">
       <div fxLayout="row" fxLayoutGap="30px">
         <mat-icon

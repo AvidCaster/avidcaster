@@ -12,12 +12,23 @@
       <img [src]="chat?.avatarUrl" />
       <mat-icon [svgIcon]="chat?.host" [color]="getHostColor(chat?.host)"></mat-icon>
     </div>
+
     <div class="chat-item-author" fxLayout="column" fxLayoutAlign="center">{{ chat?.author }}</div>
-    <div fxLayout="column" fxLayoutAlign="center">|</div>
+
+    <div *ngIf="chat?.donation" fxLayout="column" fxLayoutAlign="center">
+      <mat-icon svgIcon="hand-coin" color="accent"></mat-icon>
+    </div>
     <div *ngIf="chat?.donation" class="chat-item-donation" fxLayout="column" fxLayoutAlign="center">{{ chat?.donation }}</div>
-    <div *ngIf="chat?.donation" fxLayout="column" fxLayoutAlign="center">|</div>
+
+    <div *ngIf="chat?.membership" fxLayout="column" fxLayoutAlign="center">
+      <mat-icon svgIcon="account-multiple-plus-outline" color="accent"></mat-icon>
+    </div>
     <div *ngIf="chat?.membership" class="chat-item-membership" fxLayout="column" fxLayoutAlign="center">{{ chat?.membership }}</div>
-    <div *ngIf="chat?.membership" fxLayout="column" fxLayoutAlign="center">|</div>
+
+    <div fxLayout="column" fxLayoutAlign="center">
+      <mat-icon svgIcon="message-reply-text-outline" color="primary"></mat-icon>
+    </div>
+
     <div class="chat-item-message" fxLayout="column" fxLayoutAlign="center">
       <span [innerHtml]="chat?.html || chat?.message"></span>
     </div>
