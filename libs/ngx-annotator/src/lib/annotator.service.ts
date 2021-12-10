@@ -6,8 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   ApplicationConfig,
   ConfigService,
@@ -44,6 +44,7 @@ export class AnnotatorService implements OnDestroy {
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
   state: DeepReadonly<AnnotatorState> = defaultAnnotatorState();
   stateSub$: Observable<AnnotatorState>;
+  private onStorageOb$: Observable<Event>;
   private undoObs$ = new Subject<void>();
   private redoObs$ = new Subject<void>();
   private trashObs$ = new Subject<void>();
@@ -55,6 +56,7 @@ export class AnnotatorService implements OnDestroy {
 
   constructor(
     readonly router: Router,
+    readonly zone: NgZone,
     readonly system: SystemService,
     readonly layout: LayoutService,
     readonly store: StoreService,
@@ -67,6 +69,8 @@ export class AnnotatorService implements OnDestroy {
       this.config.options,
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
+
+    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
 
     this.claimSlice();
     this.subState();
@@ -137,17 +141,22 @@ export class AnnotatorService implements OnDestroy {
   }
 
   private subStorage() {
-    addEventListener(
-      'storage',
-      (event) => {
-        if (event.key === ANNOTATOR_STORAGE_KEY) {
-          const storageState = sanitizeJsonStringOrObject<AnnotatorState>(event.newValue);
-          const state = this.sanitizeState(storageState);
-          this.setState({ ...defaultAnnotatorState(), ...state });
-        }
-      },
-      false
-    );
+    this.zone.runOutsideAngular(() => {
+      this.onStorageOb$
+        .pipe(
+          filter((event: StorageEvent) => event.key === ANNOTATOR_STORAGE_KEY),
+          takeUntil(this.destroy$)
+        )
+        .subscribe({
+          next: (event: StorageEvent) => {
+            const storageState = sanitizeJsonStringOrObject<AnnotatorState>(event.newValue);
+            const state = this.sanitizeState(storageState);
+            this.zone.run(() => {
+              this.setState({ ...defaultAnnotatorState(), ...state });
+            });
+          },
+        });
+    });
   }
 
   setState(newState: Partial<AnnotatorState>) {

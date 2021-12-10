@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 
 import { CHAT_STORAGE_KEY_OVERLAY_REQUEST } from '../chat.default';
 import { ChatMessageItem } from '../chat.model';
@@ -20,9 +20,9 @@ import { ChatService } from '../chat.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatOverlayComponent implements OnInit {
+  private onStorageOb$: Observable<Event>;
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
-  fireworksStart = false;
 
   constructor(
     readonly zone: NgZone,
@@ -30,7 +30,9 @@ export class ChatOverlayComponent implements OnInit {
     readonly elR: ElementRef,
     readonly logger: LoggerService,
     readonly chatService: ChatService
-  ) {}
+  ) {
+    this.onStorageOb$ = fromEvent(this.chatService.layout.uix.window, 'storage');
+  }
 
   ngOnInit(): void {
     console.log('ChatOverlayComponent.ngOnInit');
@@ -47,23 +49,20 @@ export class ChatOverlayComponent implements OnInit {
     });
   }
 
-  setFireworksPlay(start: boolean): void {
-    this.fireworksStart = start;
-  }
-
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
-      addEventListener(
-        'storage',
-        (event) => {
-          if (event.key === CHAT_STORAGE_KEY_OVERLAY_REQUEST) {
+      this.onStorageOb$
+        .pipe(
+          filter((event: StorageEvent) => event.key === CHAT_STORAGE_KEY_OVERLAY_REQUEST),
+          takeUntil(this.destroy$)
+        )
+        .subscribe({
+          next: () => {
             this.logger.info('ChatOverlayComponent: Overlay Response Sent; Focusing');
             this.chatService.broadcastNewChatOverlayResponse();
             this.chatService.layout.uix.window.focus();
-          }
-        },
-        false
-      );
+          },
+        });
     });
   }
 }
