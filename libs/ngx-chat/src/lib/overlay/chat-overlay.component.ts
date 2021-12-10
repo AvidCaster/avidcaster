@@ -10,7 +10,6 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 
 import { CHAT_STORAGE_KEY_OVERLAY_REQUEST } from '../chat.default';
-import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
