@@ -123,6 +123,7 @@ export const ChatFilterOptions = {
   [ChatMessageFilterType.Host]: _('FILTER.HOST'),
   [ChatMessageFilterType.Author]: _('FILTER.AUTHOR'),
   [ChatMessageFilterType.Donation]: _('FILTER.DONATION'),
+  [ChatMessageFilterType.Membership]: _('FILTER.MEMBERSHIP'),
   [ChatMessageFilterType.FilterBy]: _('FILTER.BY'),
   [ChatMessageFilterType.FilterOut]: _('FILTER.OUT'),
   [ChatMessageFilterType.Highlight]: _('FILTER.HIGHLIGHT'),

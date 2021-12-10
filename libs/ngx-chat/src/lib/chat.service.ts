@@ -371,6 +371,9 @@ export class ChatService implements OnDestroy {
       case ChatMessageFilterType.Donation: {
         return chat?.donation ? chat : undefined;
       }
+      case ChatMessageFilterType.Membership: {
+        return chat?.membership ? chat : undefined;
+      }
       case ChatMessageFilterType.FilterBy: {
         return this.state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
       }

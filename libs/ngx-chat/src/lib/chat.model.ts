@@ -93,6 +93,7 @@ export enum ChatMessageFilterType {
   Host = 'host',
   Author = 'author',
   Donation = 'donation',
+  Membership = 'membership',
   FilterBy = 'filterBy',
   FilterOut = 'filterOut',
   Highlight = 'highlight',
