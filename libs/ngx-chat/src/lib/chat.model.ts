@@ -57,6 +57,7 @@ export interface ChatMessageItem extends ChatMessage {
   prefix?: string;
   streamId?: string;
   viewed?: boolean;
+  highlighted?: boolean;
 }
 
 export interface ChatMessageData {

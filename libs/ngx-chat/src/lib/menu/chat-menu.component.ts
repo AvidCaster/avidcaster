@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 
 import { ChatFilterOptions } from '../chat.default';
 import { ChatMessageFilterType, ChatMessageItem } from '../chat.model';
@@ -30,6 +30,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   @Output() fireworksToggled = new EventEmitter<boolean>();
   fireworksStart = false;
   private destroy$ = new Subject<boolean>();
+  private keywordsOb$ = new Subject<string>();
   chat: ChatMessageItem;
   currentFilter = ChatMessageFilterType.None;
   currentKeywords = '';
@@ -43,12 +44,21 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subState();
+
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
         this.chR.detectChanges();
       },
     });
+
+    this.keywordsOb$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe({
+      next: (keywords) => {
+        this.currentKeywords = keywords;
+        this.chatService.setState({ keywords: keywords.split(' ').filter((word) => !!word) });
+      },
+    });
+
     this.logger.debug('ChatMenuComponent initialized');
   }
 
@@ -90,8 +100,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   setKeywords(keywords: string) {
-    this.currentKeywords = keywords;
-    this.chatService.setState({ keywords: keywords.split(' ').filter((word) => !!word) });
+    this.keywordsOb$.next(keywords);
   }
 
   clearMessage() {

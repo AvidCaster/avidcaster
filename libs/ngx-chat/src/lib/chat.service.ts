@@ -40,6 +40,7 @@ import {
   ChatMessageDirection,
   ChatMessageDownstreamAction,
   ChatMessageEvent,
+  ChatMessageFilterType,
   ChatMessageHostReady,
   ChatMessageHosts,
   ChatMessageItem,
@@ -155,6 +156,7 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
           localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
+          this.chatListOb$.next(this.filterChatList([...this.chatListOb$.value]));
         },
       });
   }
@@ -322,12 +324,72 @@ export class ChatService implements OnDestroy {
             const chat = JSON.parse(event.newValue);
             setTimeout(() => localStorage.removeItem(event.key), 0);
             this.handleMessageBuffer();
-            this.chatListOb$.next([...this.chatListOb$.value, chat]);
+            this.chatListOb$.next([...this.chatListOb$.value, ...this.filterChatList([chat])]);
           }
         },
         false
       );
     });
+  }
+
+  private filterChatList(chatList: ChatMessageItem[]): ChatMessageItem[] {
+    switch (ChatMessageFilterType[this.state.filterOption]) {
+      case ChatMessageFilterType.Host: {
+        if (this.state.keywords.length) {
+          chatList = chatList.filter((chat) => {
+            return this.state.keywords.some(
+              (word) => chat.host.toLowerCase() === word.toLowerCase()
+            );
+          });
+        }
+        break;
+      }
+      case ChatMessageFilterType.Author: {
+        if (this.state.keywords.length) {
+          chatList = chatList.filter((chat) => {
+            return this.state.keywords.some((word) => chat.author.includes(word));
+          });
+        }
+        break;
+      }
+      case ChatMessageFilterType.Donation: {
+        chatList = chatList.filter((chat) => chat.donation);
+        break;
+      }
+      case ChatMessageFilterType.FilterBy: {
+        if (this.state.keywords.length) {
+          chatList = chatList.filter((chat) => {
+            return this.state.keywords.some((word) => chat.message.includes(word));
+          });
+        }
+        break;
+      }
+      case ChatMessageFilterType.FilterOut: {
+        if (this.state.keywords.length) {
+          chatList = chatList.filter((chat) => {
+            return !this.state.keywords.some((word) => chat.message.includes(word));
+          });
+        }
+        break;
+      }
+      case ChatMessageFilterType.Highlight: {
+        if (this.state.keywords.length) {
+          chatList = chatList.map((chat) => {
+            if (this.state.keywords.some((word) => chat.message.includes(word))) {
+              chat.highlighted = true;
+            } else {
+              chat.highlighted = false;
+            }
+            return chat;
+          });
+        }
+        break;
+      }
+      case ChatMessageFilterType.None:
+      default:
+        break;
+    }
+    return chatList;
   }
 
   ngOnDestroy() {
