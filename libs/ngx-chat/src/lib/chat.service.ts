@@ -40,13 +40,13 @@ import {
   ChatMessageDirection,
   ChatMessageDownstreamAction,
   ChatMessageEvent,
-  ChatMessageFilterType,
   ChatMessageHostReady,
   ChatMessageHosts,
   ChatMessageItem,
   ChatMessageUpstreamAction,
   ChatState,
 } from './chat.model';
+import { filterChatMessageItem } from './util/chat.util';
 import { parseTwitchChat } from './util/chat.util.twitch';
 import { parseYouTubeChat } from './util/chat.util.youtube';
 
@@ -343,9 +343,9 @@ export class ChatService implements OnDestroy {
     this.handleMessageBuffer(chat);
 
     let filteredList = this.chatListOb$.getValue();
-    const filteredChat = this.filterChat(chat);
+    const filteredChat = filterChatMessageItem(chat, this.state as ChatState);
     if (filteredChat) {
-      filteredList = [...filteredList, this.filterChat(chat)];
+      filteredList = [...filteredList, filteredChat];
     }
 
     this.zone.run(() => {
@@ -358,46 +358,9 @@ export class ChatService implements OnDestroy {
     });
   }
 
-  private filterChat(chat: ChatMessageItem): ChatMessageItem | undefined {
-    switch (ChatMessageFilterType[this.state.filterOption]) {
-      case ChatMessageFilterType.Host: {
-        return this.state.keywords?.some((word) => chat.host.toLowerCase() === word.toLowerCase())
-          ? chat
-          : undefined;
-      }
-      case ChatMessageFilterType.Author: {
-        return this.state.keywords?.some((word) => chat.author.includes(word)) ? chat : undefined;
-      }
-      case ChatMessageFilterType.Donation: {
-        return chat?.donation ? chat : undefined;
-      }
-      case ChatMessageFilterType.Membership: {
-        return chat?.membership ? chat : undefined;
-      }
-      case ChatMessageFilterType.FilterBy: {
-        return this.state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
-      }
-      case ChatMessageFilterType.FilterOut: {
-        return !this.state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
-      }
-      case ChatMessageFilterType.Highlight: {
-        if (this.state.keywords?.some((word) => chat.message.includes(word))) {
-          chat.highlighted = true;
-        } else {
-          chat.highlighted = false;
-        }
-        return chat;
-      }
-      case ChatMessageFilterType.None:
-      default:
-        break;
-    }
-    return chat;
-  }
-
   private filterChatList(): ChatMessageItem[] {
     const chatList = this.chatBufferList
-      ?.map((chat) => this.filterChat(chat))
+      ?.map((chat) => filterChatMessageItem(chat, this.state as ChatState))
       .filter((chat) => !!chat);
 
     return chatList;
