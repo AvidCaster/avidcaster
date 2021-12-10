@@ -70,7 +70,7 @@ export class ChatService implements OnDestroy {
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
-  bufferDepth = 200;
+  bufferSize = 200;
   awaitOverlayResponse = undefined;
 
   constructor(
@@ -272,14 +272,6 @@ export class ChatService implements OnDestroy {
     }, 1000);
   }
 
-  private handleMessageBuffer(chat: ChatMessageItem) {
-    const chatList = this.chatBufferList;
-    if (chatList.length > this.bufferDepth) {
-      this.chatBufferList.shift();
-    }
-    this.chatBufferList.push(chat);
-  }
-
   broadcastNewChatOverlayRequest() {
     const key = CHAT_STORAGE_KEY_OVERLAY_REQUEST;
     localStorage.setItem(key, JSON.stringify({ from: 'iframe' }));
@@ -323,6 +315,14 @@ export class ChatService implements OnDestroy {
     });
   }
 
+  // keep the last x messages as per buffer size
+  private handleMessageBuffer(chat: ChatMessageItem) {
+    this.chatBufferList.unshift(chat);
+    if (this.chatBufferList.length > this.bufferSize) {
+      this.chatBufferList.length = this.bufferSize;
+    }
+  }
+
   private handleNewOverlayResponseEvent() {
     // no one is listening, we can safely open a new overlay screen
     this.logger.info('Overlay response received');
@@ -339,15 +339,23 @@ export class ChatService implements OnDestroy {
   }
 
   private handleNewMessageFromIframe(event: StorageEvent) {
-    const chat = JSON.parse(event.newValue);
+    const chat = JSON.parse(event?.newValue);
     this.handleMessageBuffer(chat);
-    const filteredList = this.filterChatList();
-    if (filteredList?.length && this.state.autoScrollEnabled) {
-      this.chatListOb$.next(filteredList);
-      if (this.state.ffEnabled) {
-        this.chatSelected(filteredList[filteredList.length - 1]);
-      }
+
+    let filteredList = this.chatListOb$.getValue();
+    const filteredChat = this.filterChat(chat);
+    if (filteredChat) {
+      filteredList = [...filteredList, this.filterChat(chat)];
     }
+
+    this.zone.run(() => {
+      if (filteredList?.length && this.state.autoScrollEnabled) {
+        this.chatListOb$.next(filteredList);
+        if (this.state.ffEnabled) {
+          this.chatSelected(filteredList[filteredList.length - 1]);
+        }
+      }
+    });
   }
 
   private filterChat(chat: ChatMessageItem): ChatMessageItem | undefined {
