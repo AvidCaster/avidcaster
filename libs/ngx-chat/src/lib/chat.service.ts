@@ -59,6 +59,7 @@ export class ChatService implements OnDestroy {
   stateSub$: Observable<ChatState>;
   private destroy$ = new Subject<boolean>();
   private onMessageOb$: Observable<Event>;
+  private chatBufferList: ChatMessageItem[] = [];
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
   private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
@@ -68,8 +69,7 @@ export class ChatService implements OnDestroy {
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
-  buffer = 200;
-  bufferOffset = 50;
+  bufferDepth = 200;
   awaitOverlayResponse = undefined;
 
   constructor(
@@ -156,7 +156,7 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
           localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
-          this.chatListOb$.next(this.filterChatList(this.chatListOb$.value));
+          this.chatListOb$.next(this.filterChatList());
         },
       });
   }
@@ -270,11 +270,12 @@ export class ChatService implements OnDestroy {
     }, 1000);
   }
 
-  private handleMessageBuffer() {
-    const chatList = this.chatListOb$.value;
-    if (chatList.length > this.buffer + this.bufferOffset) {
-      this.chatListOb$.next(chatList.slice(0, this.buffer));
+  private handleMessageBuffer(chat: ChatMessageItem) {
+    const chatList = this.chatBufferList;
+    if (chatList.length > this.bufferDepth) {
+      this.chatBufferList.shift();
     }
+    this.chatBufferList.push(chat);
   }
 
   broadcastNewChatOverlayRequest() {
@@ -323,11 +324,13 @@ export class ChatService implements OnDestroy {
           } else if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
             const chat = JSON.parse(event.newValue);
             setTimeout(() => localStorage.removeItem(event.key), 0);
-            this.handleMessageBuffer();
-            const newList = [...this.chatListOb$.value, ...this.filterChatList([chat])];
-            this.chatListOb$.next(newList);
-            if (this.state.ffEnabled && newList?.length && this.state.autoScrollEnabled) {
-              this.chatSelected(newList[newList.length - 1]);
+            this.handleMessageBuffer(chat);
+            const filteredList = this.filterChatList();
+            if (filteredList?.length && this.state.autoScrollEnabled) {
+              this.chatListOb$.next(filteredList);
+              if (this.state.ffEnabled) {
+                this.chatSelected(filteredList[filteredList.length - 1]);
+              }
             }
           }
         },
@@ -336,7 +339,8 @@ export class ChatService implements OnDestroy {
     });
   }
 
-  private filterChatList(chatList: ChatMessageItem[]): ChatMessageItem[] {
+  private filterChatList(): ChatMessageItem[] {
+    let chatList = this.chatBufferList;
     switch (ChatMessageFilterType[this.state.filterOption]) {
       case ChatMessageFilterType.Host: {
         if (this.state.keywords.length) {
