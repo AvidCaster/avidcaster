@@ -17,8 +17,6 @@ import { MarkdownModule } from 'ngx-markdown';
 import { OverlayComponent } from './overlay/overlay.component';
 import { ytChatRoutes } from './ytchat.routes';
 import { YTChatService } from './ytchat.service';
-import { OverviewComponent } from './overview/overview.component';
-import { SetupComponent } from './setup/setup.component';
 
 @NgModule({
   imports: [
@@ -30,7 +28,7 @@ import { SetupComponent } from './setup/setup.component';
     FireworksModule,
   ],
   exports: [OverlayComponent],
-  declarations: [OverlayComponent, OverviewComponent, SetupComponent],
+  declarations: [OverlayComponent],
   providers: [YTChatService],
 })
 export class YTChatModule {}

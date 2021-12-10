@@ -50,12 +50,7 @@
           },
           {
             "glob": "**/*.md",
-            "input": "libs/ngx-ytchat/src/lib/overview",
-            "output": "assets/md"
-          },
-          {
-            "glob": "**/*.md",
-            "input": "libs/ngx-ytchat/src/lib/setup",
+            "input": "libs/ngx-chat/src/lib",
             "output": "assets/md"
           }
         ],
@@ -65,6 +60,7 @@
           "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
         ],
         "scripts": [
+          "node_modules/jquery/dist/jquery.min.js",
           "node_modules/marked/lib/marked.js",
           "node_modules/prismjs/prism.js",
           "node_modules/prismjs/components/prism-javascript.min.js",

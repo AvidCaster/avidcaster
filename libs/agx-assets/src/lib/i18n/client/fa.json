@@ -24,10 +24,14 @@
   "CHAT.CLEAR": "پاک کردن چت",
   "CHAT.DECLUTTER": "دکلتر",
   "CHAT.DEFAULT_MESSAGE": "این یک چت نمونه با 😘 و ایموجی است تا ما می توانیم روکش پیام را آزمایش کنیم",
+  "CHAT.KEYWORDS": "",
   "CHAT.MIRROR": "",
+  "CHAT.MONITOR_DESC": "",
   "CHAT.OVERLAY": "چت روکش",
   "CHAT.OVERLAY_DESC": "روکش چت برای یوتیوب و پایین تر 3rd",
+  "CHAT.OVERVIEW_DESC": "",
   "CHAT.RECLUTTER": "رکلتر",
+  "CHAT.SETUP_DESC": "",
   "CHAT.TEST": "تست چت",
   "COMMON.ABOUT": "در باره",
   "COMMON.ACCOUNT": "حساب",
@@ -47,6 +51,7 @@
   "COMMON.ANNOTATE.DESCRIPTION": "تخته نقاشی برای annotation",
   "COMMON.ARE_YOU_SURE": "شما مطمئن هستید ؟",
   "COMMON.BACKGROUND_COLOR": "رنگ زمینه",
+  "COMMON.BETA": "",
   "COMMON.BLOG": "وبلاگ",
   "COMMON.BONDS": "اوراق قرضه",
   "COMMON.CHANGE": "تغییر دادن",
@@ -101,6 +106,7 @@
   "COMMON.MENU_ORIENTATION": "جهت",
   "COMMON.MENU_POSITION": "موقعیت",
   "COMMON.MESSAGE": "پیام",
+  "COMMON.MONITOR": "",
   "COMMON.NAME": "نام",
   "COMMON.NAVBAR.HIDE_ON_SCROLL": "پنهان شدن در پیمایش",
   "COMMON.NAVBAR.MOVE_WITH_SCROLL": "حرکت با اسکرول",
@@ -112,6 +118,7 @@
   "COMMON.NOTIFICATIONS": "اطلاعیه",
   "COMMON.NOT_FOUND": "پیدا نشد",
   "COMMON.OPTIONS": "گزینه ها",
+  "COMMON.OVERVIEW": "",
   "COMMON.PASSWORD": "کلمه عبور",
   "COMMON.PASSWORD.CHOOSE_NEW": "گذرواژه جدید را انتخاب کنید",
   "COMMON.PASSWORD.RENEW": "رمز عبور جدید",
@@ -144,9 +151,11 @@
   "COMMON.REQUEST_VERIFICATION_EMAIL": "ارسال مجدد تائیدیه",
   "COMMON.RESOURCES": "منابع",
   "COMMON.REVERSE": "معکوس",
+  "COMMON.SCREEN": "",
   "COMMON.SEND_MESSAGE": "پیام فرستادن",
   "COMMON.SESSION_RESET": "تنظیم مجدد جلسه",
   "COMMON.SETTINGS": "تنظیمات",
+  "COMMON.SETUP": "",
   "COMMON.SHOW_BUTTONS": "نمایش دکمه ها",
   "COMMON.SIGNUP": "ثبت نام",
   "COMMON.SOCIAL": "اجتماعی",
@@ -212,6 +221,14 @@
   "ERROR.USER.VERIFY": "تأیید کاربر نتوانست",
   "ERROR.USER.VERIFY_INVALID_LINK": "موفق به تأیید کاربر نشد.  لینک نامعتبر یا منقضی شده",
   "ERROR.USER.VERIFY_REQUEST": "درخواست تأیید ارسال نشد",
+  "FILTER.AUTHOR": "",
+  "FILTER.BY": "",
+  "FILTER.CHOICE": "",
+  "FILTER.DONATION": "",
+  "FILTER.HIGHLIGHT": "",
+  "FILTER.HOST": "",
+  "FILTER.NONE": "",
+  "FILTER.OUT": "",
   "FIREWORKS.DISABLE": "آتش بازی غیر فعال",
   "FIREWORKS.ENABLE": "آتش بازی فعال",
   "FIREWORKS.START": "آتش بازی شروع",

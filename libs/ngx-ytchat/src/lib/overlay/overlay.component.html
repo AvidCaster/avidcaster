@@ -3,11 +3,11 @@
     <div fxLayout="row" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxLayoutGap="10px">
         <button
-          [class.yt-icon-dim]="data?.authorName"
-          [class.yt-cursor-default]="data?.authorName"
+          [class.yt-icon-dim]="data?.author"
+          [class.yt-cursor-default]="data?.author"
           mat-raised-button
           color="primary"
-          (click)="testMessage()"
+          (click)="ytchatService.testMessage()"
         >
           <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="chat-plus-outline"></mat-icon>
         </button>
@@ -38,13 +38,13 @@
         </div>
         <button
           mat-raised-button
-          [class.yt-cursor-default]="!data?.authorName"
+          [class.yt-cursor-default]="!data?.author"
           matTooltipPosition="before"
           matTooltip="{{ 'CHAT.CLEAR' | translate }}"
           color="warn"
           (click)="clearMessage()"
         >
-          <mat-icon [class.yt-icon-dim]="!data?.authorName" svgIcon="trash-can-outline"></mat-icon>
+          <mat-icon [class.yt-icon-dim]="!data?.author" svgIcon="trash-can-outline"></mat-icon>
         </button>
         <button class="yt-multi-button" mat-raised-button [color]="fwEnabled ? 'primary' : 'warn'">
           <div fxLayout="row" fxLayoutGap="30px">
@@ -108,23 +108,25 @@
     </div>
   </section>
   <mat-divider></mat-divider>
-  <section class="yt-overlay" *ngIf="data?.authorName">
+  <section class="yt-overlay" *ngIf="data?.author">
     <div class="yt-inner-box" fxLayout="row" [@slideIn]="slideInState">
       <div class="yt-image-fields" fxLayout="column">
-        <div class="yt-author-img"><img width="160" height="160" src="{{ data?.authorImage }}" /></div>
+        <div class="yt-author-img">
+          <img width="160" height="160" src="{{ data?.avatarUrl }}" (error)="onImageError($event)" />
+        </div>
       </div>
       <div class="yt-text-fields" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="row" class="yt-author">
-            <span>{{ data?.authorName }}</span>
-            <span *ngIf="data?.donation" class="yt-donation">
+            <span><mat-icon [svgIcon]="data?.host"></mat-icon>{{ data?.author }}</span>
+            <span *ngIf="data?.purchaseAmount" class="yt-donation">
               <span>🌺</span>
-              <span>{{ data?.donation }}</span>
+              <span>{{ data?.purchaseAmount }}</span>
               <span>🌺</span>
             </span>
           </div>
         </div>
-        <div class="yt-message" [innerHtml]="data?.message"></div>
+        <div class="yt-message" [innerHtml]="data?.html || data?.message"></div>
       </div>
     </div>
   </section>

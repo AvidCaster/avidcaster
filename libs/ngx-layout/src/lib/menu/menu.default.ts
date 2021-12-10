@@ -14,8 +14,6 @@ export const layoutMenuTree: MenuItem[] = [
     name: _('COMMON.ANNOTATE'),
     icon: 'draw',
     link: '/annotate/draw',
-    fullscreen: true,
-    headless: true,
   },
   {
     name: _('CHAT.OVERLAY'),
@@ -24,20 +22,18 @@ export const layoutMenuTree: MenuItem[] = [
       {
         name: _('COMMON.OVERVIEW'),
         icon: 'magnify-expand',
-        link: '/chat/overview',
+        link: '/chat/overlay/overview',
       },
       {
         name: _('COMMON.SETUP'),
         icon: 'cog',
-        link: '/chat/setup',
+        link: '/chat/overlay/setup',
       },
-      // {
-      //   name: _('CHAT.OVERLAY'),
-      //   icon: 'youtube',
-      //   link: 'chat/youtube/overlay',
-      //   fullscreen: true,
-      //   headless: true,
-      // },
+      {
+        name: _('COMMON.SCREEN'),
+        icon: 'fit-to-screen',
+        link: '/chat/overlay/screen',
+      },
     ],
   },
 ];

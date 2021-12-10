@@ -23,10 +23,14 @@ import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } fr
 import { EMPTY, Observable, Subject, filter, fromEvent, merge, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
-import { defaultAnnotatorConfig, defaultAnnotatorState, defaultLine } from './annotator.default';
+import {
+  ANNOTATOR_URL_FULLSCREEN_LIST,
+  defaultAnnotatorConfig,
+  defaultAnnotatorState,
+  defaultLine,
+} from './annotator.default';
 import {
   ANNOTATOR_STORAGE_KEY,
-  ANNOTATOR_URL,
   AnnotatorState,
   Line,
   LineAttributes,
@@ -64,11 +68,11 @@ export class AnnotatorService implements OnDestroy {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
-    this.subRouteChange();
     this.claimSlice();
     this.subState();
     this.subStorage();
     this.initState();
+    this.layout.registerHeadlessPath(ANNOTATOR_URL_FULLSCREEN_LIST);
     this.logger.info(`[${this.nameSpace}] AnnotatorService ready ...`);
   }
 
@@ -111,24 +115,6 @@ export class AnnotatorService implements OnDestroy {
       appName: this.options.appName,
       eraser: false,
     });
-  }
-
-  private subRouteChange() {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          if (this.router.url?.startsWith(ANNOTATOR_URL)) {
-            this.layout.setHeadless(true);
-          } else if (this.lastUrl?.startsWith(ANNOTATOR_URL)) {
-            this.layout.setHeadless(false);
-          }
-          this.lastUrl = this.router.url;
-        },
-      });
   }
 
   /**

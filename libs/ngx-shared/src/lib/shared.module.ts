@@ -27,7 +27,7 @@ import { ProgressService } from './service/progress/progress.service';
 import { ValidationService } from './service/validation/validation.service';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MaterialModule, I18nModule],
+  imports: [CommonModule, RouterModule, MaterialModule, I18nModule.forChild()],
   declarations: [
     AlertComponent,
     CardComponent,

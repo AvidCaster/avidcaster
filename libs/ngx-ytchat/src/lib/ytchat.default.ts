@@ -1,7 +1,17 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
-import { YTChatConfig, YTChatPayload } from './ytchat.model';
+import { YTChatConfig, YTChatInfo, YTChatObserver } from './ytchat.model';
+
+export const CHAT_STORAGE_KEY = 'avidcaster-chat';
 
 export const MAX_CHAT_MESSAGES_LENGTH = 40;
 
@@ -16,16 +26,14 @@ export const defaultYTChatConfig = (): YTChatConfig => {
   return ldDeepClone(DefaultYTChatConfig);
 };
 
-export const defaultYTChatMessage = (): YTChatPayload => {
-  const message = _('CHAT.DEFAULT_MESSAGE');
+export const defaultYTChatMessage = (): YTChatInfo => {
+  const html = _('CHAT.DEFAULT_MESSAGE');
 
   return ldDeepClone({
-    donation: '$100.00',
-    authorName: 'Mike Tyson',
-    authorImage: './assets/images/misc/avatar-default.png',
-    authorBadge: './assets/images/misc/avatar-default.png',
-    message,
-    membership: '',
+    author: 'Mike Tyson',
+    avatarUrl: './assets/images/misc/avatar-default-red.png',
+    html,
+    purchaseAmount: '$100.00',
   });
 };
 
@@ -34,3 +42,15 @@ export const YTCHAT_CSS_FILE_NAME = 'ytchat.ext.css';
 
 export const YTCHAT_JS_MIN_FILE_NAME = 'ytchat.ext.min.js';
 export const YTCHAT_CSS_MIN_FILE_NAME = 'ytchat.ext.min.css';
+
+export const YTChatObserverDefault: YTChatObserver = {
+  container: '#item-list.yt-live-chat-renderer',
+  selectors: [
+    'yt-live-chat-text-message-renderer',
+    'yt-live-chat-paid-message-renderer',
+    'yt-live-chat-membership-item-renderer',
+    'yt-live-chat-paid-sticker-renderer',
+  ],
+};
+
+export const YTChatIframeContainer = 'yt-live-chat-app';

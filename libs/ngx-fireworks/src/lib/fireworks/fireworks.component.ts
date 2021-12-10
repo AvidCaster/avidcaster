@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject, takeUntil } from 'rxjs';
@@ -31,6 +39,7 @@ export class FireworksComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.canvasEl = this.canvas?.nativeElement;
+
     this.ctx = this.canvasEl.getContext('2d');
     this.fireworks.init(this.canvasEl, this.ctx);
     this.resizeCanvas();

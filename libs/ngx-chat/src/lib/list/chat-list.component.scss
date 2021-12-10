@@ -1,0 +1,22 @@
+#chat-list {
+  padding-right: 0;
+  height: 100%;
+  z-index: 1;
+  padding-bottom: 20px;
+}
+
+.enable-manual-scroll {
+  overflow-y: scroll !important;
+}
+
+.chat-item {
+  cursor: pointer;
+}
+
+.chat-pause {
+  z-index: 2;
+  text-align: center;
+  bottom: 39vh;
+  left: 50vw;
+  position: fixed;
+}

@@ -1,0 +1,23 @@
+{
+  "projectType": "library",
+  "root": "libs/ngx-chat",
+  "sourceRoot": "libs/ngx-chat/src",
+  "prefix": "fullerstack",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ngx-chat"],
+      "options": {
+        "jestConfig": "libs/ngx-chat/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/ngx-chat/src/**/*.ts", "libs/ngx-chat/src/**/*.html"]
+      }
+    }
+  },
+  "tags": ["lib:libs/ngx-chat", "scope:ngx-feature"]
+}

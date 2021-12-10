@@ -1,0 +1,134 @@
+.chat-selected-author {
+  background: #ffb300;
+  font-size: 2.8rem;
+  padding: 4px;
+  padding-right: 16px;
+  padding-bottom: 0px;
+  border-radius: 15px;
+  margin-left: -100px;
+  margin-top: -1px;
+  font-weight: bolder;
+  padding-left: 108px;
+  overflow: hidden;
+  color: #222222 !important;
+  display: inline-block;
+}
+
+.chat-selected-author .mat-icon {
+  height: 48px;
+  width: 48px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.chat-selected-image-fields .chat-host-image {
+  margin-top: -49px;
+}
+.chat-selected-image-fields .chat-host-image img {
+  width: 49px;
+  margin-left: 106px;
+}
+
+.chat-selected-author-img img {
+  background: #ffb300;
+  border-radius: 50%;
+  border: 5px solid #ffb300;
+}
+
+@keyframes play-rotate {
+  0% {
+    -webkit-transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+#chat-special-animation {
+  position: absolute;
+  z-index: 4;
+  background-size: 80px 80px;
+  background-position: center;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  pointer-events: none;
+  animation: play-rotate 1s linear infinite;
+  -webkit-animation: play-rotate 1s linear infinite;
+  -moz-animation: play-rotate 1s linear infinite;
+  -ms-animation: play-rotate 1s linear infinite;
+  display: block;
+  margin-left: 100px;
+  margin-top: -56px;
+}
+
+.chat-selected-donation {
+  font-weight: bolder;
+}
+
+.chat-selected-donation span {
+  margin-left: 10px;
+}
+
+.chat-selected-message {
+  background: #222;
+  font-size: 40px;
+  margin-left: -101px;
+  margin-top: 4px;
+  border-radius: 15px;
+  min-height: 38px;
+  max-height: 173px;
+  overflow: hidden;
+  padding: 8px 14px 14px 110px;
+}
+
+::ng-deep .chat-selected-message img {
+  width: 36px !important;
+  height: 36px !important;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+.chat-selected-image-fields {
+  z-index: 2;
+}
+
+.chat-selected-text-fields {
+  margin-top: 1px;
+  z-index: 1;
+}
+
+.chat-selected-message .chat-selected-emoji-img {
+  width: 27px;
+  height: 27px;
+  margin: -1px 2px 1px;
+  vertical-align: middle;
+}
+
+[dir='rtl'] {
+  .chat-selected-author {
+    margin-right: -98px;
+    padding-right: 106px;
+    padding-left: 16px;
+  }
+
+  .chat-selected-message {
+    padding: 8px 110px 14px 14px;
+    margin-right: -101px;
+    margin-left: 0px;
+  }
+
+  .chat-selected-donation span {
+    margin-right: 10px;
+  }
+
+  .chat-selected-image-fields .chat-host-image img {
+    margin-left: 0px;
+    margin-right: 106px;
+  }
+
+  #chat-special-animation {
+    margin-right: 100px;
+  }
+}

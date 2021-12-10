@@ -37,10 +37,17 @@
   margin-left: -100px;
   margin-top: -1px;
   font-weight: bolder;
-  padding-left: 109px;
+  padding-left: 100px;
   overflow: hidden;
   color: #222222 !important;
   display: inline-block;
+}
+
+.yt-author .mat-icon {
+  height: 48px;
+  width: 48px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .yt-author-img img {
@@ -70,9 +77,10 @@
 }
 
 ::ng-deep .yt-message img {
-  width: 36px;
+  width: 36px !important;
   text-align: center;
   vertical-align: middle;
+  border-radius: 50%;
 }
 
 .yt-image-fields {

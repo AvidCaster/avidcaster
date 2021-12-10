@@ -1,4 +1,12 @@
-import { Injectable } from '@angular/core';
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
+import { Injectable, NgZone } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   ApplicationConfig,
@@ -11,28 +19,32 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
 import { SystemService } from '@fullerstack/ngx-system';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith } from 'lodash-es';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, filter, take, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
-import { defaultYTChatConfig } from './ytchat.default';
-import { YTCHAT_URL_FULLSCREEN } from './ytchat.model';
+import { CHAT_STORAGE_KEY, defaultYTChatConfig, defaultYTChatMessage } from './ytchat.default';
+import { YTCHAT_URL_FULLSCREEN, YTChatInfo, YTChatPayloadSouthBound } from './ytchat.model';
+import { parseChat } from './ytchat.util.parse';
 
 @Injectable()
 export class YTChatService {
   private nameSpace = 'CHAT';
   private claimId: string;
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
+  private chatInfoObs$ = new BehaviorSubject<YTChatInfo>({});
+  chatInfo$ = this.chatInfoObs$.asObservable();
   private destroy$ = new Subject<boolean>();
   private lastUrl: string;
 
   constructor(
+    readonly zone: NgZone,
     readonly router: Router,
     readonly system: SystemService,
     readonly config: ConfigService,
-    readonly layout: LayoutService,
     readonly store: StoreService,
     readonly logger: LoggerService,
-    readonly i18n: I18nService
+    readonly i18n: I18nService,
+    readonly layout: LayoutService
   ) {
     this.options = ldMergeWith(
       ldDeepClone({ layout: defaultYTChatConfig() }),
@@ -40,11 +52,12 @@ export class YTChatService {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
-    this.subRouteChange();
+    this.changeRouteSubscription();
+    this.storageSubscription();
     this.logger.info(`[${this.nameSpace}] ChatOverlay ready ...`);
   }
 
-  private subRouteChange() {
+  private changeRouteSubscription() {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -60,5 +73,62 @@ export class YTChatService {
           this.lastUrl = this.router.url;
         },
       });
+  }
+
+  private async cleanData(data: YTChatPayloadSouthBound) {
+    const chatEl = this.layout.uix.window.document.createElement('div');
+    chatEl.innerHTML = data.html;
+    let info = parseChat(chatEl, data.tagName);
+
+    if (!info?.message && info?.purchaseAmount) {
+      info.message = '🎉😊🎉';
+    }
+
+    if (!info?.message && info?.messageType) {
+      info.message = info.messageType;
+    }
+
+    if (info?.author.length) {
+      if (info?.message) {
+        this.i18n.translate
+          .get(info?.message)
+          .pipe(take(1), takeUntil(this.destroy$))
+          .subscribe((message: string) => {
+            info = {
+              ...info,
+              message,
+              avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default-red.png',
+            };
+          });
+      } else {
+        info = {
+          ...info,
+          avatarUrl: info.avatarUrl || './assets/images/misc/avatar-default-red.png',
+        };
+      }
+    }
+    console.log(JSON.stringify(info, null, 4));
+    this.chatInfoObs$.next(info);
+  }
+
+  testMessage() {
+    this.chatInfoObs$.next(defaultYTChatMessage());
+  }
+
+  private storageSubscription() {
+    this.zone.runOutsideAngular(() => {
+      addEventListener(
+        'storage',
+        (event) => {
+          if (event.key.startsWith(CHAT_STORAGE_KEY)) {
+            // const chat = JSON.parse(event.newValue);
+            // setTimeout(() => localStorage.removeItem(event.key), 0);
+            // this.chatInfoObs$.next(chat);
+            // console.log(JSON.stringify(chat, null, 4));
+          }
+        },
+        false
+      );
+    });
   }
 }

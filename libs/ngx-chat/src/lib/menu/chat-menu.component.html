@@ -1,0 +1,109 @@
+<div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+  <div fxLayout="row" fxLayoutGap="5px" *ngLet="isHighlight() as isHighlight">
+    <button
+      [class.chat-icon-dim]="chat?.author"
+      [class.chat-cursor-default]="chat?.author"
+      mat-raised-button
+      color="primary"
+      (click)="chatService.loadTestChat()"
+    >
+      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.TEST' | translate }}" svgIcon="message-draw"></mat-icon>
+    </button>
+
+    <input
+      type="text"
+      placeholder="{{ 'CHAT.KEYWORDS' | translate }}"
+      [(ngModel)]="currentKeywords"
+      (ngModelChange)="setKeywords(currentKeywords)"
+    />
+    <div fxLayout="column" fxLayoutAlign="center" class="chat-filter-icon">
+      <mat-icon
+        [color]="isHighlight ? 'accent' : 'warn'"
+        [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
+      ></mat-icon>
+    </div>
+
+    <select
+      name="{{ getFilterName(currentFilter) | translate }}"
+      id="filter-options"
+      [(ngModel)]="currentFilter"
+      (ngModelChange)="setFilterOption(currentFilter)"
+    >
+      <option *ngFor="let filter of getFilterOptions()" [value]="filter">{{ getFilterName(filter) | translate }}</option>
+    </select>
+
+    <button
+      mat-raised-button
+      [class.yt-cursor-default]="!chat?.author"
+      matTooltipPosition="before"
+      matTooltip="{{ 'CHAT.CLEAR' | translate }}"
+      color="warn"
+      (click)="clearMessage()"
+    >
+      <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
+    </button>
+    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">
+      <div fxLayout="row" fxLayoutGap="30px">
+        <mat-icon
+          [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
+          matTooltipPosition="before"
+          matTooltip="{{
+            (chatService?.state?.fireworksEnabled ? (fireworksStart ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate
+          }}"
+          class="chat-icon-dim"
+          [svgIcon]="!chatService?.state?.fireworksEnabled || fireworksStart ? 'firework-off' : 'firework'"
+          (click)="toggleFireworks()"
+        ></mat-icon>
+        <mat-icon
+          [svgIcon]="chatService?.state?.fireworksEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
+          (click)="toggleFireworksFlag()"
+        ></mat-icon>
+      </div>
+    </button>
+    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.audioEnabled ? 'primary' : 'warn'">
+      <div fxLayout="row" fxLayoutGap="30px">
+        <mat-icon
+          [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
+          matTooltipPosition="before"
+          matTooltip="{{ (chatService?.state?.audioEnabled ? (audioPlay ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
+          [svgIcon]="!chatService?.state?.audioEnabled || audioPlay ? 'volume-off' : 'volume-high'"
+          (click)="toggleAudioPlay()"
+        ></mat-icon>
+        <mat-icon
+          matTooltipPosition="after"
+          matTooltip="{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}"
+          [svgIcon]="chatService?.state?.audioEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
+          (click)="toggleAudioFlag()"
+        ></mat-icon>
+      </div>
+    </button>
+  </div>
+  <div fxFlex></div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}"
+      mat-icon-button
+      (click)="toggleDirection()"
+    >
+      <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
+    </button>
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ (chatService.layout.state.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
+      mat-icon-button
+      (click)="chatService.layout.toggleFullscreen()"
+    >
+      <mat-icon [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
+    </button>
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ 'COMMON.HOME' | translate }}"
+      mat-icon-button
+      (click)="chatService.layout.auth.goTo('/')"
+    >
+      <mat-icon svgIcon="home"></mat-icon>
+    </button>
+  </div>
+</div>
+<audio #audioTag preload="auto" src="./assets/audio/yelling-yay.mp3" class="chat-audio"></audio>

@@ -1,0 +1,64 @@
+#chat-outer-box {
+  position: relative;
+  display: block !important;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-family: Helvetica, Geneva, Verdana, Arial, sans-serif;
+}
+
+#chat-list-box {
+  position: relative;
+  display: block !important;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  width: 100vw;
+  min-height: calc(66.66vh - 40px) !important;
+  height: calc(66.66vh - 40px) !important;
+}
+
+#chat-overlay-box {
+  position: fixed;
+  display: block !important;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  min-width: 100vw;
+  width: 100%;
+  min-height: calc(33.33vh + 40px) !important;
+  height: calc(33.33vh + 40px) !important;
+  background: #000;
+  color: #fff;
+}
+
+.chat-control {
+  top: 2px;
+  padding: 5px;
+  margin-bottom: 15px !important;
+}
+
+.mat-divider {
+  border-top-color: #fff;
+  margin-bottom: 5px !important;
+  margin-top: -15px;
+}
+
+.chat-overlay {
+  height: 100%;
+}
+
+.chat-selected {
+  padding: 0 50px;
+}
+
+.chat-selected-hide {
+  visibility: hidden;
+}
+
+#chat-fireworks {
+  position: absolute;
+  z-index: 10;
+  top: 50px;
+}

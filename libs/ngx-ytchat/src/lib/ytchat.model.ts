@@ -7,8 +7,8 @@
  */
 
 export const YTCHAT_STORAGE_KEY = 'ytchat';
-export const YTCHAT_URL_FULLSCREEN = '/chat/youtube/overlay';
-
+export const YTCHAT_URL_FULLSCREEN = '/chat/overlay/screen';
+export const YTCHAT_DEFAULT_AVATAR_URL = './assets/images/misc/avatar-default-red.png';
 /**
  * Layout config declaration
  */
@@ -27,34 +27,42 @@ export interface YTChatState {
   signature: string;
 }
 
-export interface YTChatPayload {
-  donation?: string;
-  authorName?: string;
-  authorImage?: string;
-  authorBadge?: string;
-  message?: string;
-  membership?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [id: string]: any;
-}
-
-export type YTChatMessageDataType =
-  | 'avidcaster-overlay-north-bound'
-  | 'avidcaster-overlay-south-bound';
-export type YTChatMessageAction =
-  | 'append-script'
-  | 'append-style'
-  | 'declutter'
-  | 'reclutter'
-  | 'process-words'
-  | 'fullscreen'
-  | 'navigate'
-  | 'yt-chat';
-
+export type YTChatMessageDataType = 'avidcaster-chat-north-bound' | 'avidcaster-chat-south-bound';
+export type YTChatMessageAction = 'fullscreen' | 'navigate' | 'observe';
 export type YTChatWordAction = 'highlight' | 'filter';
+export type YTChatMessageType =
+  | 'text-message'
+  | 'paid-message'
+  | 'paid-sticker'
+  | 'membership-item';
+
+export type YTChatPayloadSouthBound = {
+  tagName: string;
+  html: string;
+};
 
 export interface YTChatMessageData {
   type: YTChatMessageDataType;
   action: YTChatMessageAction;
-  payload?: YTChatPayload;
+  payload?: YTChatPayloadSouthBound | any;
 }
+
+export interface YTChatObserver {
+  container: string;
+  selectors: string[];
+}
+
+export type YTChatInfo = {
+  host?: string;
+  author?: string;
+  authorType?: string;
+  message?: string;
+  donation?: string;
+  messageType?: YTChatMessageType;
+  html?: string;
+  avatarUrl?: string;
+  stickerUrl?: string;
+  backgroundColor?: string;
+  purchaseAmount?: string;
+  action?: YTChatWordAction;
+};

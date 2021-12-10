@@ -92,7 +92,8 @@
                   "scope:ngx-data",
                   "scope:ngx-util",
                   "scope:ngx-shared",
-                  "scope:ngx-ui"
+                  "scope:ngx-ui",
+                  "scope:ngx-i18n"
                 ]
               },
               {

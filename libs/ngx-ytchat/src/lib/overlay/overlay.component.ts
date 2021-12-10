@@ -1,20 +1,27 @@
+/**
+ * @license
+ * Copyright Neekware Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by a proprietary notice
+ * that can be found at http://neekware.com/license/PRI.html
+ */
+
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@fullerstack/ngx-auth';
 import { I18nService } from '@fullerstack/ngx-i18n';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
-import { Subject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
+import { MAX_CHAT_MESSAGES_LENGTH } from '../ytchat.default';
 import {
-  MAX_CHAT_MESSAGES_LENGTH,
-  YTCHAT_CSS_FILE_NAME,
-  YTCHAT_CSS_MIN_FILE_NAME,
-  YTCHAT_JS_FILE_NAME,
-  YTCHAT_JS_MIN_FILE_NAME,
-  defaultYTChatMessage,
-} from '../ytchat.default';
-import { YTChatMessageData, YTChatPayload, YTChatWordAction } from '../ytchat.model';
+  YTCHAT_DEFAULT_AVATAR_URL,
+  YTChatInfo,
+  YTChatMessageData,
+  YTChatWordAction,
+} from '../ytchat.model';
 import { YTChatService } from '../ytchat.service';
 
 @Component({
@@ -28,9 +35,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
   @ViewChild('audioTag') set playerRef(ref: ElementRef<HTMLAudioElement>) {
     this.$player = ref.nativeElement;
   }
+
   private destroy$ = new Subject<boolean>();
   maxLength = MAX_CHAT_MESSAGES_LENGTH;
-  data: YTChatPayload = {};
+  data: YTChatInfo = {};
   slideInState = 0;
   currentLanguage;
   ltr = true;
@@ -45,6 +53,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   audioEnable = false;
 
   constructor(
+    readonly sanitizer: DomSanitizer,
     readonly formBuilder: FormBuilder,
     readonly i18n: I18nService,
     readonly auth: AuthService,
@@ -53,37 +62,14 @@ export class OverlayComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.appendScript();
-    this.appendStyle();
-
     this.buildForm();
 
-    this.uix.window.addEventListener(
-      'message',
-      (event) => {
-        if (event.data.type === 'avidcaster-overlay-south-bound') {
-          switch (event.data.action) {
-            case 'yt-chat':
-              this.setData(event.data?.payload as YTChatMessageData);
-              break;
-            default:
-              break;
-          }
-        }
-      },
-      false
-    );
+    this.setDataInfoSubscription();
+    this.keywordFilterSubscription();
+  }
 
-    this.form.valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.wordsList = value?.words
-          .split(' ')
-          ?.map((words) => words.trim())
-          .filter((words) => words.length > 0);
-
-        this.processWords();
-      });
+  onImageError(event) {
+    event.target.src = YTCHAT_DEFAULT_AVATAR_URL;
   }
 
   private buildForm() {
@@ -92,89 +78,71 @@ export class OverlayComponent implements OnInit, OnDestroy {
     });
   }
 
-  private appendScript() {
-    const baseUrl = this.uix.window?.location?.origin;
-    const scriptFile = this.ytchatService.options.production
-      ? YTCHAT_JS_MIN_FILE_NAME
-      : YTCHAT_JS_FILE_NAME;
-    const data = {
-      type: 'avidcaster-overlay-north-bound',
-      action: 'append-script',
-      payload: {
-        url: `${baseUrl}/assets/code/${scriptFile}`,
-      },
-    };
-
-    this.uix.window.parent.postMessage(data, '*');
+  private keywordFilterSubscription() {
+    this.form.valueChanges
+      .pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.wordsList = value?.words
+          .split(' ')
+          .map((word: string) => word.trim().toLowerCase())
+          .filter((words) => words.length > 0);
+      });
   }
 
-  private appendStyle() {
-    const baseUrl = this.uix.window?.location?.origin;
-    const styleFile = this.ytchatService.options.production
-      ? YTCHAT_CSS_MIN_FILE_NAME
-      : YTCHAT_CSS_FILE_NAME;
-    const data = {
-      type: 'avidcaster-overlay-north-bound',
-      action: 'append-style',
-      payload: {
-        url: `${baseUrl}/assets/code/${styleFile}`,
-      },
-    };
+  private setDataInfoSubscription() {
+    this.ytchatService.chatInfo$
+      .pipe(
+        filter((data) => !!data?.author?.length),
+        filter((data) => {
+          if (this.wordsList.length < 1) {
+            return true;
+          }
 
-    this.uix.window.parent.postMessage(data, '*');
-  }
+          const chatWords = data?.message
+            .replace(/<[^>]*>/g, '')
+            .toLowerCase()
+            .replace(/\s\s+/g, ' ')
+            .trim()
+            .split(' ');
+          const matched = chatWords.filter((value) => this.wordsList.includes(value)).length > 0;
 
-  setData(data?: YTChatPayload) {
-    if (!data?.message && data?.donation) {
-      data.message = '🎉😊🎉';
-    }
-
-    if (!data?.message && data?.membership) {
-      data.message = data.membership;
-    }
-
-    if (data?.authorName.length) {
-      this.slideInState++;
-      if (data?.message) {
-        this.i18n.translate
-          .get(data?.message)
-          .pipe(take(1), takeUntil(this.destroy$))
-          .subscribe((message: string) => {
-            this.data = {
-              ...data,
-              message,
-              authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
-            };
-          });
-      } else {
-        this.data = {
-          ...data,
-          authorImage: data.authorImage || './assets/images/misc/avatar-default.png',
-        };
-      }
-
-      if (this.data.donation || this.data.membership) {
-        this.setFireworks(true);
-        this.setAudio(true);
-      } else {
-        this.setFireworks(false);
-        this.setAudio(false);
-      }
-    } else {
-      this.data = {};
-      this.setFireworks(false);
-      this.setAudio(false);
-    }
+          switch (this.wordsAction) {
+            case 'highlight':
+              if (matched) {
+                data.action = this.wordsAction;
+              }
+              return true;
+            case 'filter':
+              if (matched) {
+                data.action = this.wordsAction;
+              }
+              return matched;
+            default:
+              return false;
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((data) => {
+        this.data = data;
+        if (data?.author?.length) {
+          if (this.data.purchaseAmount || this.data.messageType) {
+            this.setFireworks(true);
+            this.setAudio(true);
+          } else {
+            this.setFireworks(false);
+            this.setAudio(false);
+          }
+        } else {
+          this.data = {};
+          this.setFireworks(false);
+          this.setAudio(false);
+        }
+      });
   }
 
   clearMessage() {
-    this.setData();
-  }
-
-  testMessage() {
-    if (!this.data?.authorName) {
-      this.setData(defaultYTChatMessage());
-    }
+    this.data = {};
   }
 
   setAudio(start: boolean) {
@@ -226,7 +194,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
   toggleCleanChat() {
     this.cleanEnabled = !this.cleanEnabled;
     const data = {
-      type: 'avidcaster-overlay-north-bound',
+      type: 'avidcaster-chat-north-bound',
       action: this.cleanEnabled ? 'declutter' : 'reclutter',
     };
 
@@ -241,24 +209,13 @@ export class OverlayComponent implements OnInit, OnDestroy {
         this.wordsAction = 'highlight';
       }
     }
-
-    const data = {
-      type: 'avidcaster-overlay-north-bound',
-      action: 'process-words',
-      payload: {
-        words: this.wordsList,
-        action: this.wordsAction,
-      },
-    };
-
-    this.uix.window.parent.postMessage(data, '*');
   }
 
   toggleFullscreen() {
     if (this.uix.inIframe) {
       this.isFullscreen = !this.isFullscreen;
       const data = {
-        type: 'avidcaster-overlay-north-bound',
+        type: 'avidcaster-chat-north-bound',
         action: 'fullscreen',
         payload: {
           fullscreen: this.isFullscreen,
@@ -278,7 +235,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     if (this.uix.inIframe) {
       const baseUrl = this.uix.window?.location?.origin;
       const data: YTChatMessageData = {
-        type: 'avidcaster-overlay-north-bound',
+        type: 'avidcaster-chat-north-bound',
         action: 'navigate',
         payload: {
           url: `${baseUrl}${url}`,

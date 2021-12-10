@@ -1,0 +1,19 @@
+<div id="chat-outer-box" fxLayout="column" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+  <div id="chat-list-box" fxLayout="row">
+    <fullerstack-chat-list></fullerstack-chat-list>
+  </div>
+  <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
+    <div class="chat-control">
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <fullerstack-chat-menu (fireworksToggled)="setFireworksPlay($event)"> </fullerstack-chat-menu>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
+      <div class="chat-selected">
+        <fullerstack-chat-selected></fullerstack-chat-selected>
+      </div>
+      <fullerstack-fireworks [action]="chatService.state.fireworksEnabled && fireworksStart" id="chat-fireworks"></fullerstack-fireworks>
+    </div>
+  </div>
+</div>

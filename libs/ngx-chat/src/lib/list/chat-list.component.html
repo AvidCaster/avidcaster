@@ -1,0 +1,13 @@
+<div id="chat-list" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+  <div *ngFor="let chat of chatService.chatList$ | async; let idx = index" class="chat-item">
+    <fullerstack-chat-item *ngIf="chat?.author && (chat?.html || chat?.message)" class="chat-item" [chat]="chat"></fullerstack-chat-item>
+  </div>
+</div>
+<div class="chat-pause" fxLayout="row" fxLayoutGap="5px">
+  <button mat-mini-fab color="accent" [disabled]="!autoScrollEnabled" (click)="toggleAutoScroll()">
+    <mat-icon svgIcon="pause"></mat-icon>
+  </button>
+  <button mat-mini-fab color="accent" [disabled]="autoScrollEnabled" (click)="toggleAutoScroll()">
+    <mat-icon svgIcon="arrow-down"></mat-icon>
+  </button>
+</div>
