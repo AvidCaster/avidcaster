@@ -81,6 +81,7 @@ export interface ChatState {
   tags: string[];
   audioEnabled: boolean;
   fireworksEnabled: boolean;
+  fireworksPlay: boolean;
   keywords: string[];
   filterOption: string;
   ffEnabled: boolean;

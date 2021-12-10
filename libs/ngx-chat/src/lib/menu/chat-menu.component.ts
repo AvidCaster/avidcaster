@@ -3,10 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
@@ -27,8 +25,6 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   @ViewChild('audioTag', { static: true }) set playerRef(ref: ElementRef<HTMLAudioElement>) {
     this.$player = ref.nativeElement;
   }
-  @Output() fireworksToggled = new EventEmitter<boolean>();
-  fireworksStart = false;
   private destroy$ = new Subject<boolean>();
   private keywordsOb$ = new Subject<string>();
   chat: ChatMessageItem;
@@ -117,10 +113,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   toggleFireworks() {
-    if (this.chatService.state.fireworksEnabled) {
-      this.fireworksStart = !this.fireworksStart;
-      this.fireworksToggled.emit(this.fireworksStart);
-    }
+    this.chatService.setState({ fireworksPlay: !this.chatService.state.fireworksPlay });
   }
 
   toggleAudioFlag() {

@@ -5,7 +5,7 @@
   <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
     <div class="chat-control">
       <div fxLayout="row" fxLayoutAlign="space-around center">
-        <fullerstack-chat-menu (fireworksToggled)="setFireworksPlay($event)"> </fullerstack-chat-menu>
+        <fullerstack-chat-menu> </fullerstack-chat-menu>
       </div>
     </div>
     <mat-divider></mat-divider>
@@ -15,7 +15,7 @@
       </div>
       <fullerstack-fireworks
         *ngIf="chatService.state.fireworksEnabled"
-        [action]="fireworksStart"
+        [action]="chatService.state.fireworksPlay"
         id="chat-fireworks"
       ></fullerstack-fireworks>
     </div>

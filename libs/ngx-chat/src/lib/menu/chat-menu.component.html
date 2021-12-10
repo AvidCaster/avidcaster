@@ -38,10 +38,11 @@
           [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
           matTooltipPosition="before"
           matTooltip="{{
-            (chatService?.state?.fireworksEnabled ? (fireworksStart ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate
+            (chatService?.state?.fireworksEnabled ? (chatService?.state?.fireworksPlay ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '')
+              | translate
           }}"
           class="chat-icon-dim"
-          [svgIcon]="!chatService?.state?.fireworksEnabled || fireworksStart ? 'firework-off' : 'firework'"
+          [svgIcon]="!chatService?.state?.fireworksEnabled || chatService?.state?.fireworksPlay ? 'firework-off' : 'firework'"
           (click)="toggleFireworks()"
         ></mat-icon>
         <mat-icon

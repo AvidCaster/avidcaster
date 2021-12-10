@@ -70,6 +70,8 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
       return `./assets/images/misc/spin-orange-2x.png`;
     } else if (chat?.membership) {
       return `./assets/images/misc/spin-green-2x.png`;
+    } else if (this.chatService.state.fireworksEnabled && this.chatService.state.fireworksPlay) {
+      return `./assets/images/misc/spin-orange-2x.png`;
     }
 
     return '';
