@@ -1,5 +1,5 @@
-<div id="chat-list" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
-  <div *ngFor="let chat of chatService.chatList$ | async; let idx = index" class="chat-item">
+<div id="chat-list" *ngLet="chatService.chatList$ | async as chatList" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+  <div *ngFor="let chat of chatList; let idx = index" class="chat-item">
     <fullerstack-chat-item
       *ngIf="chat?.author && (chat?.html || chat?.message)"
       [class.chat-highlighted]="chat?.highlighted"
@@ -7,9 +7,7 @@
       [chat]="chat"
     ></fullerstack-chat-item>
   </div>
-  <div class="chat-item">
-    <fullerstack-chat-item class="chat-item" [chat]="welcomeChat"></fullerstack-chat-item>
-  </div>
+  <fullerstack-chat-item *ngIf="chatList?.length < 1" class="chat-item" [chat]="welcomeChat"></fullerstack-chat-item>
 </div>
 <div class="chat-pause" fxLayout="row" fxLayoutGap="5px">
   <button mat-mini-fab color="accent" [disabled]="!chatService.state.autoScrollEnabled" (click)="toggleAutoScroll()">
