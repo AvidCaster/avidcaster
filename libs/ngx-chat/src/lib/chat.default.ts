@@ -59,6 +59,7 @@ export const CHAT_STORAGE_KEY_OVERLAY_RESPONSE = `${CHAT_STORAGE_KEY}-overlay-re
 export const CHAT_YOUTUBE_DEFAULT_AVATAR = './assets/images/misc/avatar-default-youtube.png';
 export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-twitch.png';
 export const CHAT_DEFAULT_AVATAR = './assets/images/misc/avatar-default-red.png';
+export const CHAT_DEFAULT_LOGO = './assets/images/misc/avidcaster-chat-x128.png';
 
 export const CHAT_STATE_STORAGE_KEY = 'avidcaster-chat-state';
 
@@ -95,6 +96,23 @@ const DefaultChatTest: ChatMessageItem = {
 
 export const defaultChatTest = (): ChatMessageItem => {
   return ldDeepClone(DefaultChatTest);
+};
+
+/**
+ * Default configuration - Layout module
+ */
+const WelcomeChat: ChatMessageItem = {
+  author: 'AvidCaster',
+  message: 'Welcome to AvidCaster chat overlay!',
+  html: 'Welcome to AvidCaster chat overlay!',
+  avatarUrl: CHAT_DEFAULT_LOGO,
+  messageType: 'welcome-message',
+  streamId: 'avidcaster',
+  prefix: 'avidcaster',
+};
+
+export const welcomeChat = (): ChatMessageItem => {
+  return ldDeepClone(WelcomeChat);
 };
 
 export const ChatFilterOptions = {

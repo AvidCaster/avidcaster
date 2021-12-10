@@ -156,7 +156,7 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
           localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
-          this.chatListOb$.next(this.filterChatList([...this.chatListOb$.value]));
+          this.chatListOb$.next(this.filterChatList(this.chatListOb$.value));
         },
       });
   }

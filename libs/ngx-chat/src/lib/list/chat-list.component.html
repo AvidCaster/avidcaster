@@ -7,6 +7,9 @@
       [chat]="chat"
     ></fullerstack-chat-item>
   </div>
+  <div class="chat-item">
+    <fullerstack-chat-item class="chat-item" [chat]="welcomeChat"></fullerstack-chat-item>
+  </div>
 </div>
 <div class="chat-pause" fxLayout="row" fxLayoutGap="5px">
   <button mat-mini-fab color="accent" [disabled]="!autoScrollEnabled" (click)="toggleAutoScroll()">

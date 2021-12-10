@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
+import { welcomeChat } from '../chat.default';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -19,6 +20,7 @@ import { ChatService } from '../chat.service';
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<boolean>();
   autoScrollEnabled = true;
+  welcomeChat = welcomeChat();
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -34,8 +36,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
     this.chatService.chatList$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: () => {
         if (this.autoScrollEnabled) {
-          this.scrollToBottom();
-          this.cdR.detectChanges();
+          setTimeout(() => this.cdR.detectChanges(), 0);
+          setTimeout(() => this.scrollToBottom(), 100);
         }
       },
     });
