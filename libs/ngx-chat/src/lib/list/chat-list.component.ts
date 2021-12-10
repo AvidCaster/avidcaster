@@ -19,7 +19,6 @@ import { ChatService } from '../chat.service';
 })
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<boolean>();
-  autoScrollEnabled = true;
   welcomeChat = welcomeChat();
 
   constructor(
@@ -35,7 +34,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   updateChatList(): void {
     this.chatService.chatList$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: () => {
-        if (this.autoScrollEnabled) {
+        if (this.chatService.state.autoScrollEnabled) {
           setTimeout(() => this.cdR.detectChanges(), 0);
           setTimeout(() => this.scrollToBottom(), 100);
         }
@@ -59,11 +58,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleAutoScroll(): void {
-    this.autoScrollEnabled = !this.autoScrollEnabled;
-    if (!this.autoScrollEnabled) {
-      this.scrollToBottom();
-    }
+  toggleAutoScroll() {
+    this.chatService.setState({ autoScrollEnabled: !this.chatService.state.autoScrollEnabled });
   }
 
   ngOnDestroy(): void {

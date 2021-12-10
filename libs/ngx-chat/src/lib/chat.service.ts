@@ -326,7 +326,7 @@ export class ChatService implements OnDestroy {
             this.handleMessageBuffer();
             const newList = [...this.chatListOb$.value, ...this.filterChatList([chat])];
             this.chatListOb$.next(newList);
-            if (this.state.ffEnabled && newList?.length) {
+            if (this.state.ffEnabled && newList?.length && this.state.autoScrollEnabled) {
               this.chatSelected(newList[newList.length - 1]);
             }
           }

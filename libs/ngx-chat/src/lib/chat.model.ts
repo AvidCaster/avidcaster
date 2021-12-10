@@ -84,6 +84,7 @@ export interface ChatState {
   keywords: string[];
   filterOption: string;
   ffEnabled: boolean;
+  autoScrollEnabled: boolean;
 }
 
 export enum ChatMessageFilterType {

@@ -72,6 +72,7 @@ const DefaultChatState = {
   keywords: [],
   filterOption: '',
   ffEnabled: false,
+  autoScrollEnabled: true,
 };
 
 export const defaultChatState = (): ChatState => {
