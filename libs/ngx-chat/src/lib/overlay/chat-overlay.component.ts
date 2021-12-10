@@ -22,7 +22,6 @@ import { ChatService } from '../chat.service';
 export class ChatOverlayComponent implements OnInit {
   private onStorageOb$: Observable<Event>;
   private destroy$ = new Subject<boolean>();
-  chat: ChatMessageItem;
 
   constructor(
     readonly zone: NgZone,
@@ -42,8 +41,7 @@ export class ChatOverlayComponent implements OnInit {
 
   selectedChatSubscription(): void {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (chatItem: ChatMessageItem) => {
-        this.chat = chatItem;
+      next: () => {
         this.chR.markForCheck();
       },
     });
