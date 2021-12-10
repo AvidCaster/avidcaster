@@ -9,11 +9,15 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div class="chat-overlay" [class.chat-selected-hide]="!chat?.author">
-      <div class="chat-selected">
+    <div class="chat-overlay">
+      <div class="chat-selected" [class.chat-selected-hide]="!chat?.author">
         <fullerstack-chat-selected></fullerstack-chat-selected>
       </div>
-      <fullerstack-fireworks [action]="chatService.state.fireworksEnabled && fireworksStart" id="chat-fireworks"></fullerstack-fireworks>
+      <fullerstack-fireworks
+        *ngIf="chatService.state.fireworksEnabled"
+        [action]="fireworksStart"
+        id="chat-fireworks"
+      ></fullerstack-fireworks>
     </div>
   </div>
 </div>

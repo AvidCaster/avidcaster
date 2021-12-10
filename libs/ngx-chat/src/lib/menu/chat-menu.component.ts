@@ -48,7 +48,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
-        this.chR.detectChanges();
+        this.chR.markForCheck();
       },
     });
 
@@ -67,6 +67,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
       next: (state) => {
         this.currentFilter = state.filterOption as ChatMessageFilterType;
         this.currentKeywords = state.keywords.join(' ');
+        this.chR.detectChanges();
       },
     });
   }
