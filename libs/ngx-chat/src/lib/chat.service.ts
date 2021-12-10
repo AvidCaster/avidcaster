@@ -59,6 +59,7 @@ export class ChatService implements OnDestroy {
   stateSub$: Observable<ChatState>;
   private destroy$ = new Subject<boolean>();
   private onMessageOb$: Observable<Event>;
+  private onStorageOb$: Observable<Event>;
   private chatBufferList: ChatMessageItem[] = [];
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
@@ -90,7 +91,8 @@ export class ChatService implements OnDestroy {
     this.subState();
     this.initState();
 
-    this.onMessageOb$ = fromEvent(window, 'message');
+    this.onMessageOb$ = fromEvent(this.layout.uix.window, 'message');
+    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
 
     this.southBoundSubscription();
     this.setNorthBoundReadyPing();
@@ -304,99 +306,89 @@ export class ChatService implements OnDestroy {
 
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
-      addEventListener(
-        'storage',
-        (event) => {
+      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
+        next: (event: StorageEvent) => {
           if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
-            // no one is listening, we can safely open the overlay screen
-            this.logger.info('Overlay response received');
-            clearTimeout(this.awaitOverlayResponse);
-            this.awaitOverlayResponse = undefined;
+            this.handleNewOverlayResponseEvent();
           } else if (
             event.key === CHAT_STATE_STORAGE_KEY &&
             !this.router.url.includes(CHAT_IFRAME_URL)
           ) {
-            const storageState = sanitizeJsonStringOrObject<ChatState>(event?.newValue);
-            const state = this.sanitizeState(storageState);
-            if (state.signature !== this.state.signature) {
-              this.setState({ ...defaultChatState(), ...state });
-            }
+            this.handleNewStateEvent(event);
           } else if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
-            const chat = JSON.parse(event.newValue);
-            setTimeout(() => localStorage.removeItem(event.key), 0);
-            this.handleMessageBuffer(chat);
-            const filteredList = this.filterChatList();
-            if (filteredList?.length && this.state.autoScrollEnabled) {
-              this.chatListOb$.next(filteredList);
-              if (this.state.ffEnabled) {
-                this.chatSelected(filteredList[filteredList.length - 1]);
-              }
-            }
+            this.handleNewMessageFromIframe(event);
           }
         },
-        false
-      );
+      });
     });
   }
 
-  private filterChatList(): ChatMessageItem[] {
-    let chatList = this.chatBufferList;
+  private handleNewOverlayResponseEvent() {
+    // no one is listening, we can safely open a new overlay screen
+    this.logger.info('Overlay response received');
+    clearTimeout(this.awaitOverlayResponse);
+    this.awaitOverlayResponse = undefined;
+  }
+
+  private handleNewStateEvent(event: StorageEvent) {
+    const storageState = sanitizeJsonStringOrObject<ChatState>(event?.newValue);
+    const state = this.sanitizeState(storageState);
+    if (state.signature !== this.state.signature) {
+      this.setState({ ...defaultChatState(), ...state });
+    }
+  }
+
+  private handleNewMessageFromIframe(event: StorageEvent) {
+    const chat = JSON.parse(event.newValue);
+    this.handleMessageBuffer(chat);
+    const filteredList = this.filterChatList();
+    if (filteredList?.length && this.state.autoScrollEnabled) {
+      this.chatListOb$.next(filteredList);
+      if (this.state.ffEnabled) {
+        this.chatSelected(filteredList[filteredList.length - 1]);
+      }
+    }
+  }
+
+  private filterChat(chat: ChatMessageItem): ChatMessageItem | undefined {
     switch (ChatMessageFilterType[this.state.filterOption]) {
       case ChatMessageFilterType.Host: {
-        if (this.state.keywords.length) {
-          chatList = chatList.filter((chat) => {
-            return this.state.keywords.some(
-              (word) => chat.host.toLowerCase() === word.toLowerCase()
-            );
-          });
-        }
-        break;
+        return this.state.keywords?.some((word) => chat.host.toLowerCase() === word.toLowerCase())
+          ? chat
+          : undefined;
       }
       case ChatMessageFilterType.Author: {
-        if (this.state.keywords.length) {
-          chatList = chatList.filter((chat) => {
-            return this.state.keywords.some((word) => chat.author.includes(word));
-          });
-        }
-        break;
+        return this.state.keywords?.some((word) => chat.author.includes(word)) ? chat : undefined;
       }
       case ChatMessageFilterType.Donation: {
-        chatList = chatList.filter((chat) => chat.donation);
-        break;
+        return chat?.donation ? chat : undefined;
       }
       case ChatMessageFilterType.FilterBy: {
-        if (this.state.keywords.length) {
-          chatList = chatList.filter((chat) => {
-            return this.state.keywords.some((word) => chat.message.includes(word));
-          });
-        }
-        break;
+        return this.state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
       }
       case ChatMessageFilterType.FilterOut: {
-        if (this.state.keywords.length) {
-          chatList = chatList.filter((chat) => {
-            return !this.state.keywords.some((word) => chat.message.includes(word));
-          });
-        }
-        break;
+        return !this.state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
       }
       case ChatMessageFilterType.Highlight: {
-        if (this.state.keywords.length) {
-          chatList = chatList.map((chat) => {
-            if (this.state.keywords.some((word) => chat.message.includes(word))) {
-              chat.highlighted = true;
-            } else {
-              chat.highlighted = false;
-            }
-            return chat;
-          });
+        if (this.state.keywords?.some((word) => chat.message.includes(word))) {
+          chat.highlighted = true;
+        } else {
+          chat.highlighted = false;
         }
-        break;
+        return chat;
       }
       case ChatMessageFilterType.None:
       default:
         break;
     }
+    return chat;
+  }
+
+  private filterChatList(): ChatMessageItem[] {
+    const chatList = this.chatBufferList
+      ?.map((chat) => this.filterChat(chat))
+      .filter((chat) => !!chat);
+
     return chatList;
   }
 
