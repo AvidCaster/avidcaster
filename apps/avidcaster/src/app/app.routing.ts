@@ -34,6 +34,11 @@ export const AppRoutes: Routes = [
     redirectTo: 'home',
   },
   {
+    path: 'ytchat/overlay',
+    pathMatch: 'full',
+    redirectTo: 'chat/iframe',
+  },
+  {
     path: 'home',
     component: HomeComponent,
     data: {
