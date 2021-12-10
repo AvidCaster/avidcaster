@@ -136,6 +136,10 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleFastForward() {
+    this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();

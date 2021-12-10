@@ -39,7 +39,9 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
-        this.slideInState++;
+        if (!this.chatService.state.ffEnabled) {
+          this.slideInState++;
+        }
         this.chR.detectChanges();
       },
     });

@@ -21,6 +21,11 @@ button {
   margin-left: -5px !important;
 }
 
+::ng-deep .mat-raised-button {
+  padding-right: 9px !important;
+  padding-left: 9px !important;
+}
+
 .chat-audio {
   visibility: hidden;
 }

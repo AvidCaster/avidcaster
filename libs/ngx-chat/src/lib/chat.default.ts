@@ -71,6 +71,7 @@ const DefaultChatState = {
   fireworksEnabled: true,
   keywords: [],
   filterOption: '',
+  ffEnabled: false,
 };
 
 export const defaultChatState = (): ChatState => {

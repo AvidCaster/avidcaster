@@ -33,7 +33,7 @@
     </select>
 
     <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">
-      <div fxLayout="row" fxLayoutGap="30px">
+      <div fxLayout="row" fxLayoutGap="15px">
         <mat-icon
           [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
           matTooltipPosition="before"
@@ -51,7 +51,7 @@
       </div>
     </button>
     <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.audioEnabled ? 'primary' : 'warn'">
-      <div fxLayout="row" fxLayoutGap="30px">
+      <div fxLayout="row" fxLayoutGap="15px">
         <mat-icon
           [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
           matTooltipPosition="before"
@@ -64,6 +64,22 @@
           matTooltip="{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}"
           [svgIcon]="chatService?.state?.audioEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
           (click)="toggleAudioFlag()"
+        ></mat-icon>
+      </div>
+    </button>
+    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.ffEnabled ? 'primary' : 'warn'">
+      <div fxLayout="row" fxLayoutGap="15px">
+        <mat-icon
+          [class.chat-icon-dim]="!chatService?.state?.ffEnabled"
+          matTooltipPosition="before"
+          matTooltip="{{ (chatService?.state?.ffEnabled ? 'CHAT.FF_DISABLED' : 'CHAT.FF_ENABLED') | translate }}"
+          svgIcon="fast-forward"
+        ></mat-icon>
+        <mat-icon
+          matTooltipPosition="after"
+          matTooltip="{{ (chatService?.state?.ffEnabled ? 'CHAT.FF_DISABLED' : 'CHAT.FF_ENABLED') | translate }}"
+          [svgIcon]="chatService?.state?.ffEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
+          (click)="toggleFastForward()"
         ></mat-icon>
       </div>
     </button>

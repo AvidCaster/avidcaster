@@ -324,7 +324,11 @@ export class ChatService implements OnDestroy {
             const chat = JSON.parse(event.newValue);
             setTimeout(() => localStorage.removeItem(event.key), 0);
             this.handleMessageBuffer();
-            this.chatListOb$.next([...this.chatListOb$.value, ...this.filterChatList([chat])]);
+            const newList = [...this.chatListOb$.value, ...this.filterChatList([chat])];
+            this.chatListOb$.next(newList);
+            if (this.state.ffEnabled && newList?.length) {
+              this.chatSelected(newList[newList.length - 1]);
+            }
           }
         },
         false

@@ -83,6 +83,7 @@ export interface ChatState {
   fireworksEnabled: boolean;
   keywords: string[];
   filterOption: string;
+  ffEnabled: boolean;
 }
 
 export enum ChatMessageFilterType {
