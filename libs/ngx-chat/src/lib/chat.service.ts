@@ -46,7 +46,7 @@ import {
   ChatMessageUpstreamAction,
   ChatState,
 } from './chat.model';
-import { filterChatMessageItem } from './util/chat.util';
+import { filterChatMessageItem, openOverlayWindowScreen } from './util/chat.util';
 import { parseTwitchChat } from './util/chat.util.twitch';
 import { parseYouTubeChat } from './util/chat.util.youtube';
 
@@ -277,7 +277,7 @@ export class ChatService implements OnDestroy {
     localStorage.setItem(key, JSON.stringify({ from: 'iframe' }));
     setTimeout(() => localStorage.removeItem(key), 0);
     this.awaitOverlayResponse = setTimeout(() => {
-      this.openOverlayScreen();
+      openOverlayWindowScreen(this.layout.uix.window);
       this.awaitOverlayResponse = undefined;
     }, 1000);
   }
@@ -286,14 +286,6 @@ export class ChatService implements OnDestroy {
     const key = CHAT_STORAGE_KEY_OVERLAY_RESPONSE;
     localStorage.setItem(key, JSON.stringify({ from: 'overlay' }));
     setTimeout(() => localStorage.removeItem(key), 0);
-  }
-
-  openOverlayScreen() {
-    this.layout.uix.window.open(
-      CHAT_OVERLAY_SCREEN_URL,
-      '_blank',
-      'width=1200,height=720,left=100,top=100'
-    );
   }
 
   private storageSubscription() {

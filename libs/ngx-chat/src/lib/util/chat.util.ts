@@ -6,7 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { ChatSupportedSites } from '../chat.default';
+import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import { ChatMessageFilterType, ChatMessageItem, ChatState } from '../chat.model';
 
 export const isSiteSupported = (site: string): boolean => {
@@ -64,4 +64,22 @@ export const filterChatMessageItem = (
       break;
   }
   return chat;
+};
+
+/**
+ * Open a window to the chat overlay screen
+ * @param targetWindow window object
+ * @param width width of the window
+ * @param height high of the window
+ */
+export const openOverlayWindowScreen = (
+  targetWindow: Window,
+  width = '1280',
+  height = '720'
+): void => {
+  targetWindow.open(
+    CHAT_OVERLAY_SCREEN_URL,
+    '_blank',
+    `width=${width},height=${height},left=100,top=100`
+  );
 };
