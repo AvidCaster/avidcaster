@@ -10,7 +10,7 @@
     </div>
     <mat-divider></mat-divider>
     <div class="chat-overlay">
-      <div class="chat-selected" [class.chat-selected-hide]="!chat?.author">
+      <div class="chat-selected" [class.chat-selected-hide]="!(chatService.chatSelected$ | async)?.author">
         <fullerstack-chat-selected></fullerstack-chat-selected>
       </div>
       <fullerstack-fireworks

@@ -42,6 +42,6 @@ export class ChatItemComponent {
   onClick(): void {
     this.chat.viewed = true;
     this.chatService.chatSelected(this.chat);
-    this.cdR.detectChanges();
+    this.cdR.markForCheck();
   }
 }

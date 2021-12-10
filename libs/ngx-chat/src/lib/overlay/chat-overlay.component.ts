@@ -44,7 +44,7 @@ export class ChatOverlayComponent implements OnInit {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
-        this.chR.detectChanges();
+        this.chR.markForCheck();
       },
     });
   }

@@ -42,13 +42,13 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         if (!this.chatService.state.ffEnabled) {
           this.slideInState++;
         }
-        this.chR.detectChanges();
+        this.chR.markForCheck();
       },
     });
 
     this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.chR.detectChanges();
+        this.chR.markForCheck();
       },
     });
 
