@@ -47,7 +47,7 @@ export class ChatIframeService implements OnDestroy {
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
-
+  windowObj: Window;
   awaitOverlayResponse = undefined;
 
   constructor(
@@ -58,8 +58,9 @@ export class ChatIframeService implements OnDestroy {
     readonly logger: LoggerService,
     readonly layout: LayoutService
   ) {
-    this.onMessageOb$ = fromEvent(this.layout.uix.window, 'message');
-    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
+    this.windowObj = this.layout.uix.window;
+    this.onMessageOb$ = fromEvent(this.windowObj, 'message');
+    this.onStorageOb$ = fromEvent(this.windowObj, 'storage');
 
     this.southBoundSubscription();
     this.setNorthBoundReadyPing();
@@ -70,8 +71,8 @@ export class ChatIframeService implements OnDestroy {
   }
 
   private broadcastMessage(key: string, value: string) {
-    localStorage.setItem(key, value);
-    localStorage.removeItem(key);
+    this.windowObj.localStorage.setItem(key, value);
+    this.windowObj.localStorage.removeItem(key);
   }
 
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
@@ -155,7 +156,7 @@ export class ChatIframeService implements OnDestroy {
       action: ChatMessageUpstreamAction.ping,
     };
 
-    this.layout.uix.window.parent.postMessage(data, '*');
+    this.windowObj.parent.postMessage(data, '*');
   }
 
   private setNorthBoundSelector(host: ChatMessageHosts) {
@@ -165,7 +166,7 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].observer,
     };
 
-    this.layout.uix.window.parent.postMessage(data, '*');
+    this.windowObj.parent.postMessage(data, '*');
   }
 
   private setNorthBoundIframe(host: ChatMessageHosts) {
@@ -175,7 +176,7 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].iframe,
     };
 
-    this.layout.uix.window.parent.postMessage(data, '*');
+    this.windowObj.parent.postMessage(data, '*');
     setTimeout(() => {
       this.setNorthBoundSelector(host);
     }, 1000);
@@ -185,7 +186,7 @@ export class ChatIframeService implements OnDestroy {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponse = setTimeout(() => {
-      openOverlayWindowScreen(this.layout.uix.window);
+      openOverlayWindowScreen(this.windowObj);
       this.awaitOverlayResponse = undefined;
     }, 1000);
   }
