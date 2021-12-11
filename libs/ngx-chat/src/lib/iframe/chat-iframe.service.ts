@@ -64,6 +64,7 @@ export class ChatIframeService implements OnDestroy {
     this.southBoundSubscription();
     this.setNorthBoundReadyPing();
     this.storageSubscription();
+    this.chatStateSubscription();
 
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
@@ -76,6 +77,15 @@ export class ChatIframeService implements OnDestroy {
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
     this.broadcastMessage(key, JSON.stringify(chat));
+  }
+
+  private chatStateSubscription(): void {
+    const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
+    stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (state: ChatState) => {
+        this.state = state;
+      },
+    });
   }
 
   private southBoundSubscription() {
