@@ -9,7 +9,13 @@
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
-import { ChatConfig, ChatMessageFilterType, ChatMessageItem, ChatState } from './chat.model';
+import {
+  ChatConfig,
+  ChatMessageFilterType,
+  ChatMessageItem,
+  ChatMessageSecondaryFilterType,
+  ChatState,
+} from './chat.model';
 
 /**
  * Default configuration - Layout module
@@ -66,12 +72,12 @@ export const CHAT_STATE_STORAGE_KEY = 'avidcaster-chat-state';
 const DefaultChatState = {
   signature: '',
   isLtR: true,
-  tags: [],
   audioEnabled: false,
   fireworksEnabled: true,
   fireworksPlay: false,
   keywords: [],
   filterOption: '',
+  secondaryFilterOption: '',
   ffEnabled: false,
   autoScrollEnabled: true,
 };
@@ -127,6 +133,16 @@ export const ChatFilterOptions = {
   [ChatMessageFilterType.FilterBy]: _('FILTER.BY'),
   [ChatMessageFilterType.FilterOut]: _('FILTER.OUT'),
   [ChatMessageFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
+};
+
+export const ChatSecondaryFilterOptions = {
+  [ChatMessageSecondaryFilterType.None]: _('FILTER.NONE'),
+  [ChatMessageSecondaryFilterType.MiniumWordOne]: _('FILTER.MINIUM_WORD_ONE'),
+  [ChatMessageSecondaryFilterType.MiniumWordTwo]: _('FILTER.MINIUM_WORD_TWO'),
+  [ChatMessageSecondaryFilterType.MiniumWordThree]: _('FILTER.MINIUM_WORD_THREE'),
+  [ChatMessageSecondaryFilterType.StartWithQ]: _('FILTER.START_WITH_Q'),
+  [ChatMessageSecondaryFilterType.StartWithA]: _('FILTER.START_WITH_A'),
+  [ChatMessageSecondaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
 };
 
 export const CHAT_MESSAGE_BUFFER_SIZE = 100;

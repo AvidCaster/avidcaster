@@ -10,8 +10,12 @@ import {
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 
-import { ChatFilterOptions } from '../chat.default';
-import { ChatMessageFilterType, ChatMessageItem } from '../chat.model';
+import { ChatFilterOptions, ChatSecondaryFilterOptions } from '../chat.default';
+import {
+  ChatMessageFilterType,
+  ChatMessageItem,
+  ChatMessageSecondaryFilterType,
+} from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -29,8 +33,10 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   private keywordsOb$ = new Subject<string>();
   chat: ChatMessageItem;
   currentFilter = ChatMessageFilterType.None;
+  currentSecondaryFilter = ChatMessageSecondaryFilterType.None;
   currentKeywords = '';
   audioPlay = false;
+  currentMinWords = 0;
 
   constructor(
     readonly chR: ChangeDetectorRef,
@@ -62,6 +68,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         this.currentFilter = state.filterOption as ChatMessageFilterType;
+        this.currentSecondaryFilter = state.secondaryFilterOption as ChatMessageSecondaryFilterType;
         this.currentKeywords = state.keywords.join(' ');
         this.chR.markForCheck();
       },
@@ -98,6 +105,21 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   setKeywords(keywords: string) {
     this.keywordsOb$.next(keywords);
+  }
+
+  getSecondaryFilterOptions(): string[] {
+    return Object.keys(ChatMessageSecondaryFilterType);
+  }
+
+  getSecondaryFilterName(filter: string): string {
+    let name = ChatMessageSecondaryFilterType[filter];
+    name = ChatSecondaryFilterOptions[name];
+    return name;
+  }
+
+  setSecondaryFilterOption(filter: ChatMessageSecondaryFilterType) {
+    this.currentSecondaryFilter = filter;
+    this.chatService.setState({ secondaryFilterOption: filter });
   }
 
   clearMessage() {

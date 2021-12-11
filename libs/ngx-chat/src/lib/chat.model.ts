@@ -78,12 +78,12 @@ export enum ChatMessageFilter {}
 export interface ChatState {
   signature: string;
   isLtR: boolean;
-  tags: string[];
   audioEnabled: boolean;
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
   filterOption: string;
+  secondaryFilterOption: string;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
 }
@@ -97,4 +97,14 @@ export enum ChatMessageFilterType {
   FilterBy = 'filterBy',
   FilterOut = 'filterOut',
   Highlight = 'highlight',
+}
+
+export enum ChatMessageSecondaryFilterType {
+  None = 'none',
+  MiniumWordOne = 'atLeastOneWord',
+  MiniumWordTwo = 'atLeastTwoWords',
+  MiniumWordThree = 'atLeastThreeWords',
+  StartWithQ = 'startWithQ',
+  StartWithA = 'startWithA',
+  StartWithFrom = 'startWithFrom',
 }

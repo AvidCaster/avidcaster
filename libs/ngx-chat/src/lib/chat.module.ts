@@ -12,7 +12,6 @@ import { RouterModule } from '@angular/router';
 import { FireworksModule } from '@fullerstack/ngx-fireworks';
 import { I18nModule } from '@fullerstack/ngx-i18n';
 import { MaterialModule } from '@fullerstack/ngx-material';
-import { SharedModule } from '@fullerstack/ngx-shared';
 import { NgLetModule } from 'ng-let';
 import { MarkdownModule } from 'ngx-markdown';
 
