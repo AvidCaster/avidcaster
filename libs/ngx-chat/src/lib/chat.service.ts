@@ -17,7 +17,12 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
-import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
+import {
+  cloneDeep as ldDeepClone,
+  isEqual as ldIsEqual,
+  mergeWith as ldMergeWith,
+  pick as ldPick,
+} from 'lodash-es';
 import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
@@ -134,7 +139,6 @@ export class ChatService implements OnDestroy {
    */
   private subState() {
     this.stateSub$ = this.store.select$<ChatState>(this.nameSpace);
-
     this.stateSub$
       .pipe(
         filter((state) => !!state),
@@ -150,7 +154,7 @@ export class ChatService implements OnDestroy {
               this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY)
             );
 
-            const hasStateChanged = currentStateInStorage.signature !== newState.signature;
+            const hasStateChanged = !ldIsEqual(currentStateInStorage, newState);
             if (hasStateChanged) {
               this.windowObj.localStorage.setItem(
                 CHAT_STORAGE_STATE_KEY,
