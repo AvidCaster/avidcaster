@@ -54,6 +54,7 @@ export class ChatService implements OnDestroy {
   chatSelected$ = this.chatSelectedOb$.asObservable();
   prefix: string;
   awaitOverlayResponse = undefined;
+  windowObj: Window;
 
   constructor(
     readonly zone: NgZone,
@@ -68,6 +69,8 @@ export class ChatService implements OnDestroy {
       this.config.options,
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
+
+    this.windowObj = this.layout.uix.window;
 
     this.claimSlice();
     this.subState();
@@ -117,7 +120,7 @@ export class ChatService implements OnDestroy {
    * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
-    const storageState = localStorage.getItem(CHAT_STORAGE_STATE_KEY);
+    const storageState = this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
     const state = this.sanitizeState(storageState);
     this.store.setState(this.claimId, state);
   }
@@ -144,12 +147,15 @@ export class ChatService implements OnDestroy {
 
           if (!this.isRunningInIframeContext) {
             const currentStateInStorage = this.sanitizeState(
-              localStorage.getItem(CHAT_STORAGE_STATE_KEY)
+              this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY)
             );
 
             const hasStateChanged = currentStateInStorage.signature !== newState.signature;
             if (hasStateChanged) {
-              localStorage.setItem(CHAT_STORAGE_STATE_KEY, JSON.stringify(signObject(this.state)));
+              this.windowObj.localStorage.setItem(
+                CHAT_STORAGE_STATE_KEY,
+                JSON.stringify(signObject(this.state))
+              );
             }
           }
         },
@@ -176,8 +182,8 @@ export class ChatService implements OnDestroy {
   }
 
   broadcastMessage(key: string, value: string) {
-    localStorage.setItem(key, value);
-    localStorage.removeItem(key);
+    this.windowObj.localStorage.setItem(key, value);
+    this.windowObj.localStorage.removeItem(key);
   }
 
   broadcastNewChatOverlayResponse() {
@@ -250,9 +256,9 @@ export class ChatService implements OnDestroy {
 
   cleanupBroadcastMessage() {
     // remove local storage message items
-    Object.entries(localStorage).map(([key]) => {
+    Object.entries(this.windowObj.localStorage).map(([key]) => {
       if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
-        localStorage.removeItem(key);
+        this.windowObj.localStorage.removeItem(key);
       }
     });
   }
