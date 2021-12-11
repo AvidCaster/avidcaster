@@ -108,7 +108,7 @@
       matTooltipPosition="after"
       matTooltip="{{ (chatService.layout.state.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
       mat-icon-button
-      (click)="chatService.layout.toggleFullscreen()"
+      (click)="toggleFullscreen()"
     >
       <mat-icon [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
     </button>

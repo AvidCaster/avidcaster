@@ -167,6 +167,7 @@ export class ChatService implements OnDestroy {
     this.store.setState(this.claimId, {
       ...this.state,
       ...newState,
+      iframePaused: false,
     });
   }
 
@@ -261,6 +262,16 @@ export class ChatService implements OnDestroy {
       if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
         this.windowObj.localStorage.removeItem(key);
       }
+    });
+  }
+
+  pauseIframe(iframePaused: boolean) {
+    // spacial case for iframe pause, we talk to store directly
+    // everything else must go through this.setState()
+    // to ensure we never fall into a paused state, unless in fullscreen transition
+    this.store.setState(this.claimId, {
+      ...this.state,
+      iframePaused,
     });
   }
 

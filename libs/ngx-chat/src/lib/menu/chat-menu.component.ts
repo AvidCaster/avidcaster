@@ -156,6 +156,16 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
   }
 
+  toggleFullscreen() {
+    this.chatService.pauseIframe(true);
+    setTimeout(() => {
+      this.chatService.layout.toggleFullscreen();
+    }, 100);
+    setTimeout(() => {
+      this.chatService.pauseIframe(false);
+    }, 1000);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();

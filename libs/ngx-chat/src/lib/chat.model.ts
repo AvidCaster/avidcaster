@@ -86,6 +86,7 @@ export interface ChatState {
   filterOption: string;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
+  iframePaused: boolean;
 }
 
 export enum ChatMessageFilterType {

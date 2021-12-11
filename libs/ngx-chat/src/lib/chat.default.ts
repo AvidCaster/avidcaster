@@ -81,6 +81,7 @@ const DefaultChatState = {
   primaryFilterOption: '',
   ffEnabled: false,
   autoScrollEnabled: true,
+  iframePaused: false,
 };
 
 export const defaultChatState = (): ChatState => {

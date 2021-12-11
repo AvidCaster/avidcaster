@@ -113,24 +113,28 @@ export class ChatIframeService implements OnDestroy {
             case ChatMessageDownstreamAction.chat:
               switch (data.host) {
                 case 'youtube': {
-                  const chat = parseYouTubeChat(data);
-                  if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                    chat.streamId = this.streamId;
-                    chat.timestamp = new Date().getTime();
-                    chat.prefix = this.prefix || this.streamId;
-                    this.broadcastNewChatMessage(data.host, chat);
-                    // console.log(JSON.stringify(chat, null, 4));
+                  if (!this.state.iframePaused) {
+                    const chat = parseYouTubeChat(data);
+                    if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
+                      chat.streamId = this.streamId;
+                      chat.timestamp = new Date().getTime();
+                      chat.prefix = this.prefix || this.streamId;
+                      this.broadcastNewChatMessage(data.host, chat);
+                      // console.log(JSON.stringify(chat, null, 4));
+                    }
                   }
                   break;
                 }
                 case 'twitch': {
-                  const chat = parseTwitchChat(data);
-                  if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                    chat.streamId = this.streamId;
-                    chat.timestamp = new Date().getTime();
-                    chat.prefix = this.prefix || this.streamId;
-                    this.broadcastNewChatMessage(data.host, chat);
-                    // console.log(JSON.stringify(chat, null, 4));
+                  if (!this.state.iframePaused) {
+                    const chat = parseTwitchChat(data);
+                    if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
+                      chat.streamId = this.streamId;
+                      chat.timestamp = new Date().getTime();
+                      chat.prefix = this.prefix || this.streamId;
+                      this.broadcastNewChatMessage(data.host, chat);
+                      // console.log(JSON.stringify(chat, null, 4));
+                    }
                   }
                   break;
                 }
