@@ -24,6 +24,7 @@ import { v4 as uuid_v4 } from 'uuid';
 
 import {
   CHAT_IFRAME_URL,
+  CHAT_MESSAGE_BUFFER_SIZE,
   CHAT_STATE_STORAGE_KEY,
   CHAT_STORAGE_KEY,
   CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
@@ -58,7 +59,6 @@ export class ChatService implements OnDestroy {
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
   prefix: string;
-  bufferSize = 200;
   awaitOverlayResponse = undefined;
 
   constructor(
@@ -196,8 +196,8 @@ export class ChatService implements OnDestroy {
   // keep the last x messages as per buffer size
   private handleMessageBuffer(chat: ChatMessageItem) {
     this.chatBufferList.unshift(chat);
-    if (this.chatBufferList.length > this.bufferSize) {
-      this.chatBufferList.length = this.bufferSize;
+    if (this.chatBufferList.length > CHAT_MESSAGE_BUFFER_SIZE) {
+      this.chatBufferList.length = CHAT_MESSAGE_BUFFER_SIZE;
     }
   }
 

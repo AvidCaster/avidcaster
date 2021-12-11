@@ -128,3 +128,5 @@ export const ChatFilterOptions = {
   [ChatMessageFilterType.FilterOut]: _('FILTER.OUT'),
   [ChatMessageFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
 };
+
+export const CHAT_MESSAGE_BUFFER_SIZE = 100;
