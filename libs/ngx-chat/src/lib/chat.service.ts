@@ -24,9 +24,10 @@ import { DeepReadonly } from 'ts-essentials';
 import {
   CHAT_IFRAME_URL,
   CHAT_MESSAGE_BUFFER_SIZE,
-  CHAT_STATE_STORAGE_KEY,
-  CHAT_STORAGE_KEY,
-  CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
+  CHAT_STORAGE_BROADCAST_KEY_PREFIX,
+  CHAT_STORAGE_MESSAGE_KEY,
+  CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
+  CHAT_STORAGE_STATE_KEY,
   CHAT_URL_FULLSCREEN_LIST,
   defaultChatConfig,
   defaultChatState,
@@ -72,7 +73,9 @@ export class ChatService implements OnDestroy {
     this.subState();
     this.initState();
 
-    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
+    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage').pipe(
+      filter((event: StorageEvent) => !!event?.newValue)
+    );
 
     this.storageSubscription();
 
@@ -112,7 +115,7 @@ export class ChatService implements OnDestroy {
    * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
-    const storageState = localStorage.getItem(CHAT_STATE_STORAGE_KEY);
+    const storageState = localStorage.getItem(CHAT_STORAGE_STATE_KEY);
     const state = this.sanitizeState(storageState);
     this.store.setState(this.claimId, {
       ...state,
@@ -137,7 +140,7 @@ export class ChatService implements OnDestroy {
           this.state = { ...defaultChatState(), ...newState };
           this.chatListOb$.next(this.filterChatList());
           if (!this.router.url.includes(CHAT_IFRAME_URL)) {
-            localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
+            localStorage.setItem(CHAT_STORAGE_STATE_KEY, JSON.stringify(signObject(this.state)));
           }
         },
       });
@@ -163,7 +166,7 @@ export class ChatService implements OnDestroy {
   }
 
   broadcastNewChatOverlayResponse() {
-    const key = CHAT_STORAGE_KEY_OVERLAY_RESPONSE;
+    const key = CHAT_STORAGE_OVERLAY_RESPONSE_KEY;
     localStorage.setItem(key, JSON.stringify({ from: 'overlay' }));
     setTimeout(() => localStorage.removeItem(key), 0);
   }
@@ -172,9 +175,9 @@ export class ChatService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STATE_STORAGE_KEY) {
+          if (event.key === CHAT_STORAGE_STATE_KEY) {
             this.handleNewStateEvent(event);
-          } else if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
+          } else if (event.key.startsWith(CHAT_STORAGE_MESSAGE_KEY)) {
             this.handleNewMessageFromIframe(event);
           }
         },
@@ -232,7 +235,7 @@ export class ChatService implements OnDestroy {
 
     // remove local storage message items
     Object.entries(localStorage).map(([key]) => {
-      if (key.startsWith(CHAT_STORAGE_KEY)) {
+      if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
         localStorage.removeItem(key);
       }
     });

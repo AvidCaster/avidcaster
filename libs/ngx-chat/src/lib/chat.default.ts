@@ -58,16 +58,17 @@ export const CHAT_IFRAME_URL = '/chat/iframe';
 export const CHAT_OVERLAY_SCREEN_URL = '/chat/overlay/screen';
 export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_OVERLAY_SCREEN_URL];
 
-export const CHAT_STORAGE_KEY = 'avidcaster-chat-message';
-export const CHAT_STORAGE_KEY_OVERLAY_REQUEST = `${CHAT_STORAGE_KEY}-overlay-request`;
-export const CHAT_STORAGE_KEY_OVERLAY_RESPONSE = `${CHAT_STORAGE_KEY}-overlay-response`;
+export const CHAT_STORAGE_KEY_PREFIX = 'avidcaster-chat';
+export const CHAT_STORAGE_BROADCAST_KEY_PREFIX = `${CHAT_STORAGE_KEY_PREFIX}-broadcast`;
+export const CHAT_STORAGE_MESSAGE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-message`;
+export const CHAT_STORAGE_OVERLAY_REQUEST_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-request`;
+export const CHAT_STORAGE_OVERLAY_RESPONSE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-response`;
+export const CHAT_STORAGE_STATE_KEY = `${CHAT_STORAGE_KEY_PREFIX}-storage-state`;
 
 export const CHAT_YOUTUBE_DEFAULT_AVATAR = './assets/images/misc/avatar-default-youtube.png';
 export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-twitch.png';
 export const CHAT_DEFAULT_AVATAR = './assets/images/misc/avatar-default-red.png';
 export const CHAT_DEFAULT_LOGO = './assets/images/misc/avidcaster-chat-x128.png';
-
-export const CHAT_STATE_STORAGE_KEY = 'avidcaster-chat-state';
 
 const DefaultChatState = {
   signature: '',

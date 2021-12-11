@@ -9,7 +9,7 @@ import {
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 
-import { CHAT_STORAGE_KEY_OVERLAY_REQUEST } from '../chat.default';
+import { CHAT_STORAGE_OVERLAY_REQUEST_KEY } from '../chat.default';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -29,7 +29,9 @@ export class ChatOverlayComponent implements OnInit {
     readonly logger: LoggerService,
     readonly chatService: ChatService
   ) {
-    this.onStorageOb$ = fromEvent(this.chatService.layout.uix.window, 'storage');
+    this.onStorageOb$ = fromEvent(this.chatService.layout.uix.window, 'storage').pipe(
+      filter((event: StorageEvent) => !!event.newValue)
+    );
   }
 
   ngOnInit(): void {
@@ -48,18 +50,15 @@ export class ChatOverlayComponent implements OnInit {
 
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
-      this.onStorageOb$
-        .pipe(
-          filter((event: StorageEvent) => event.key === CHAT_STORAGE_KEY_OVERLAY_REQUEST),
-          takeUntil(this.destroy$)
-        )
-        .subscribe({
-          next: () => {
-            this.logger.info('ChatOverlayComponent: Overlay Response Sent; Focusing');
+      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
+        next: (event: StorageEvent) => {
+          if (event.key === CHAT_STORAGE_OVERLAY_REQUEST_KEY) {
             this.chatService.broadcastNewChatOverlayResponse();
             this.chatService.layout.uix.window.focus();
-          },
-        });
+            this.logger.info('ChatOverlayComponent: Overlay Response Sent; Grabbing Focus!');
+          }
+        },
+      });
     });
   }
 }

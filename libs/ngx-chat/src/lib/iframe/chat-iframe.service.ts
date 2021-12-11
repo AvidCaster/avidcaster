@@ -16,9 +16,9 @@ import { BehaviorSubject, Observable, Subject, fromEvent, takeUntil } from 'rxjs
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
-  CHAT_STORAGE_KEY,
-  CHAT_STORAGE_KEY_OVERLAY_REQUEST,
-  CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
+  CHAT_STORAGE_MESSAGE_KEY,
+  CHAT_STORAGE_OVERLAY_REQUEST_KEY,
+  CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   ChatSupportedSites,
 } from '../chat.default';
 import {
@@ -70,7 +70,7 @@ export class ChatIframeService implements OnDestroy {
   }
 
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
-    const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
+    const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
     localStorage.setItem(key, JSON.stringify(chat));
     setTimeout(() => localStorage.removeItem(key), 0);
   }
@@ -164,7 +164,7 @@ export class ChatIframeService implements OnDestroy {
   }
 
   broadcastNewChatOverlayRequest() {
-    const key = CHAT_STORAGE_KEY_OVERLAY_REQUEST;
+    const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     localStorage.setItem(key, JSON.stringify({ from: 'iframe' }));
     setTimeout(() => localStorage.removeItem(key), 0);
     this.awaitOverlayResponse = setTimeout(() => {
@@ -177,7 +177,7 @@ export class ChatIframeService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
+          if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
             this.handleNewOverlayResponseEvent();
           }
         },
