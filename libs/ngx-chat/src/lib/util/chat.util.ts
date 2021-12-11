@@ -7,7 +7,12 @@
  */
 
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
-import { ChatMessageFilterType, ChatMessageItem, ChatState } from '../chat.model';
+import {
+  ChatMessageFilterType,
+  ChatMessageItem,
+  ChatMessagePrimaryFilterType,
+  ChatState,
+} from '../chat.model';
 
 export const isSiteSupported = (site: string): boolean => {
   return Object.keys(ChatSupportedSites).includes(site);
@@ -72,6 +77,50 @@ export const filterChatMessageItem = (
         chat.highlighted = false;
       }
       return chat;
+    }
+    case ChatMessageFilterType.None:
+    default:
+      break;
+  }
+  return chat;
+};
+
+/**
+ * Give a chat message item (iframe), return it if it matches the filters, or return undefined
+ * @param chat incoming chat message
+ * @param state chat state
+ * @returns chat message item or undefined
+ */
+export const primaryFilterChatMessageItem = (
+  chat: ChatMessageItem,
+  state: ChatState
+): ChatMessageItem | undefined => {
+  switch (ChatMessagePrimaryFilterType[state.primaryFilterOption]) {
+    case ChatMessagePrimaryFilterType.MiniumWordOne: {
+      return chat?.message?.split(' ')?.length >= 1 ? chat : undefined;
+    }
+    case ChatMessagePrimaryFilterType.MiniumWordTwo: {
+      return chat?.message?.split(' ').length >= 2 ? chat : undefined;
+    }
+    case ChatMessagePrimaryFilterType.MiniumWordThree: {
+      return chat?.message.split(' ')?.length >= 3 ? chat : undefined;
+    }
+    case ChatMessagePrimaryFilterType.StartWithQ: {
+      return chat?.message?.toUpperCase().startsWith('Q:')
+        ? chat
+        : chat?.message?.toUpperCase().startsWith('QA:')
+        ? chat
+        : undefined;
+    }
+    case ChatMessagePrimaryFilterType.StartWithA: {
+      return chat?.message?.toUpperCase().startsWith('A:') ? chat : undefined;
+    }
+    case ChatMessagePrimaryFilterType.StartWithFrom: {
+      return chat?.message?.toUpperCase().startsWith('FROM:')
+        ? chat
+        : chat?.message?.toUpperCase().startsWith('HELLO FROM')
+        ? chat
+        : undefined;
     }
     case ChatMessageFilterType.None:
     default:

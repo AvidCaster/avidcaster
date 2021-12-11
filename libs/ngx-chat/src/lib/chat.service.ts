@@ -20,7 +20,6 @@ import { StoreService } from '@fullerstack/ngx-store';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
 import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
-import { v4 as uuid_v4 } from 'uuid';
 
 import {
   CHAT_IFRAME_URL,
@@ -33,13 +32,7 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import {
-  ChatMessage,
-  ChatMessageHostReady,
-  ChatMessageHosts,
-  ChatMessageItem,
-  ChatState,
-} from './chat.model';
+import { ChatMessageHostReady, ChatMessageItem, ChatState } from './chat.model';
 import { filterChatMessageItem } from './util/chat.util';
 
 @Injectable()
@@ -142,8 +135,10 @@ export class ChatService implements OnDestroy {
       .subscribe({
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
-          localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
           this.chatListOb$.next(this.filterChatList());
+          if (!this.router.url.includes(CHAT_IFRAME_URL)) {
+            localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
+          }
         },
       });
   }
@@ -167,12 +162,6 @@ export class ChatService implements OnDestroy {
     this.chatSelectedOb$.next(undefined);
   }
 
-  private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
-    const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
-    localStorage.setItem(key, JSON.stringify(chat));
-    setTimeout(() => localStorage.removeItem(key), 0);
-  }
-
   broadcastNewChatOverlayResponse() {
     const key = CHAT_STORAGE_KEY_OVERLAY_RESPONSE;
     localStorage.setItem(key, JSON.stringify({ from: 'overlay' }));
@@ -183,7 +172,7 @@ export class ChatService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STATE_STORAGE_KEY && !this.router.url.includes(CHAT_IFRAME_URL)) {
+          if (event.key === CHAT_STATE_STORAGE_KEY) {
             this.handleNewStateEvent(event);
           } else if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
             this.handleNewMessageFromIframe(event);
