@@ -9,6 +9,7 @@ import {
 import { Subject, takeUntil } from 'rxjs';
 
 import { welcomeChat } from '../chat.default';
+import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -29,6 +30,10 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateChatList();
+  }
+
+  trackById(index: number, chat: ChatMessageItem) {
+    return chat?.id;
   }
 
   updateChatList(): void {

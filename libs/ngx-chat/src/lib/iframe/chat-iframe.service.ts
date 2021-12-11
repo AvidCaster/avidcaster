@@ -22,12 +22,12 @@ import {
   ChatSupportedSites,
 } from '../chat.default';
 import {
-  ChatMessage,
   ChatMessageDirection,
   ChatMessageDownstreamAction,
   ChatMessageEvent,
   ChatMessageHostReady,
   ChatMessageHosts,
+  ChatMessageItem,
   ChatMessageUpstreamAction,
   ChatState,
 } from '../chat.model';
@@ -77,8 +77,12 @@ export class ChatIframeService implements OnDestroy {
     this.windowObj.localStorage.removeItem(key);
   }
 
-  private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
+  private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessageItem) {
     const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
+    chat.id = uuid_v4();
+    chat.streamId = this.streamId;
+    chat.timestamp = new Date().getTime();
+    chat.prefix = this.prefix || this.streamId;
     this.broadcastMessage(key, JSON.stringify(chat));
   }
 
@@ -116,9 +120,6 @@ export class ChatIframeService implements OnDestroy {
                   if (!this.state.iframePaused) {
                     const chat = parseYouTubeChat(data);
                     if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                      chat.streamId = this.streamId;
-                      chat.timestamp = new Date().getTime();
-                      chat.prefix = this.prefix || this.streamId;
                       this.broadcastNewChatMessage(data.host, chat);
                       // console.log(JSON.stringify(chat, null, 4));
                     }
@@ -129,9 +130,6 @@ export class ChatIframeService implements OnDestroy {
                   if (!this.state.iframePaused) {
                     const chat = parseTwitchChat(data);
                     if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                      chat.streamId = this.streamId;
-                      chat.timestamp = new Date().getTime();
-                      chat.prefix = this.prefix || this.streamId;
                       this.broadcastNewChatMessage(data.host, chat);
                       // console.log(JSON.stringify(chat, null, 4));
                     }

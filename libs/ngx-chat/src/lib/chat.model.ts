@@ -53,6 +53,7 @@ export interface ChatMessage {
 }
 
 export interface ChatMessageItem extends ChatMessage {
+  id?: string;
   timestamp?: number;
   prefix?: string;
   streamId?: string;

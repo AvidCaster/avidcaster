@@ -1,5 +1,5 @@
 <div id="chat-list" *ngLet="chatService.chatList$ | async as chatList" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
-  <div *ngFor="let chat of chatList; let idx = index" class="chat-item">
+  <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index" class="chat-item">
     <fullerstack-chat-item
       *ngIf="chat?.author && (chat?.html || chat?.message)"
       [class.chat-highlighted]="chat?.highlighted"
