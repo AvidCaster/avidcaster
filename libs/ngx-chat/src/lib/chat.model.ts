@@ -82,8 +82,8 @@ export interface ChatState {
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
+  primaryFilterOption: string;
   filterOption: string;
-  secondaryFilterOption: string;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
 }
@@ -99,7 +99,7 @@ export enum ChatMessageFilterType {
   Highlight = 'highlight',
 }
 
-export enum ChatMessageSecondaryFilterType {
+export enum ChatMessagePrimaryFilterType {
   None = 'none',
   MiniumWordOne = 'atLeastOneWord',
   MiniumWordTwo = 'atLeastTwoWords',

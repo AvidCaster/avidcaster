@@ -32,12 +32,18 @@ export const filterChatMessageItem = (
 ): ChatMessageItem | undefined => {
   switch (ChatMessageFilterType[state.filterOption]) {
     case ChatMessageFilterType.Host: {
-      return state.keywords?.some((word) => chat.host.toLowerCase() === word.toLowerCase())
+      return state.keywords.length < 1
+        ? chat
+        : state.keywords?.some((word) => chat.host.toLowerCase() === word.toLowerCase())
         ? chat
         : undefined;
     }
     case ChatMessageFilterType.Author: {
-      return state.keywords?.some((word) => chat.author.includes(word)) ? chat : undefined;
+      return state.keywords.length < 1
+        ? chat
+        : state.keywords?.some((word) => chat.author.includes(word))
+        ? chat
+        : undefined;
     }
     case ChatMessageFilterType.Donation: {
       return chat?.donation ? chat : undefined;
@@ -46,10 +52,18 @@ export const filterChatMessageItem = (
       return chat?.membership ? chat : undefined;
     }
     case ChatMessageFilterType.FilterBy: {
-      return state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
+      return state.keywords.length < 1
+        ? chat
+        : state.keywords?.some((word) => chat.message.includes(word))
+        ? chat
+        : undefined;
     }
     case ChatMessageFilterType.FilterOut: {
-      return !state.keywords?.some((word) => chat.message.includes(word)) ? chat : undefined;
+      return state.keywords.length < 1
+        ? chat
+        : !state.keywords?.some((word) => chat.message.includes(word))
+        ? chat
+        : undefined;
     }
     case ChatMessageFilterType.Highlight: {
       if (state.keywords?.some((word) => chat.message.includes(word))) {

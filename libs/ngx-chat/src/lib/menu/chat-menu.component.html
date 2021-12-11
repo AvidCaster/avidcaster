@@ -33,12 +33,12 @@
     </select>
 
     <select
-      name="{{ getSecondaryFilterName(currentSecondaryFilter) | translate }}"
+      name="{{ getPrimaryFilterName(currentPrimaryFilter) | translate }}"
       id="filter-options"
-      [(ngModel)]="currentSecondaryFilter"
-      (ngModelChange)="setSecondaryFilterOption(currentSecondaryFilter)"
+      [(ngModel)]="currentPrimaryFilter"
+      (ngModelChange)="setPrimaryFilterOption(currentPrimaryFilter)"
     >
-      <option *ngFor="let filter of getSecondaryFilterOptions()" [value]="filter">{{ getSecondaryFilterName(filter) | translate }}</option>
+      <option *ngFor="let filter of getPrimaryFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
     </select>
 
     <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">

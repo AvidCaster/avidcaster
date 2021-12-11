@@ -10,11 +10,11 @@ import {
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 
-import { ChatFilterOptions, ChatSecondaryFilterOptions } from '../chat.default';
+import { ChatFilterOptions, ChatPrimaryFilterOptions } from '../chat.default';
 import {
   ChatMessageFilterType,
   ChatMessageItem,
-  ChatMessageSecondaryFilterType,
+  ChatMessagePrimaryFilterType,
 } from '../chat.model';
 import { ChatService } from '../chat.service';
 
@@ -33,7 +33,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   private keywordsOb$ = new Subject<string>();
   chat: ChatMessageItem;
   currentFilter = ChatMessageFilterType.None;
-  currentSecondaryFilter = ChatMessageSecondaryFilterType.None;
+  currentPrimaryFilter = ChatMessagePrimaryFilterType.None;
   currentKeywords = '';
   audioPlay = false;
   currentMinWords = 0;
@@ -68,7 +68,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         this.currentFilter = state.filterOption as ChatMessageFilterType;
-        this.currentSecondaryFilter = state.secondaryFilterOption as ChatMessageSecondaryFilterType;
+        this.currentPrimaryFilter = state.primaryFilterOption as ChatMessagePrimaryFilterType;
         this.currentKeywords = state.keywords.join(' ');
         this.chR.markForCheck();
       },
@@ -107,19 +107,19 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.keywordsOb$.next(keywords);
   }
 
-  getSecondaryFilterOptions(): string[] {
-    return Object.keys(ChatMessageSecondaryFilterType);
+  getPrimaryFilterOptions(): string[] {
+    return Object.keys(ChatMessagePrimaryFilterType);
   }
 
-  getSecondaryFilterName(filter: string): string {
-    let name = ChatMessageSecondaryFilterType[filter];
-    name = ChatSecondaryFilterOptions[name];
+  getPrimaryFilterName(filter: string): string {
+    let name = ChatMessagePrimaryFilterType[filter];
+    name = ChatPrimaryFilterOptions[name];
     return name;
   }
 
-  setSecondaryFilterOption(filter: ChatMessageSecondaryFilterType) {
-    this.currentSecondaryFilter = filter;
-    this.chatService.setState({ secondaryFilterOption: filter });
+  setPrimaryFilterOption(filter: ChatMessagePrimaryFilterType) {
+    this.currentPrimaryFilter = filter;
+    this.chatService.setState({ primaryFilterOption: filter });
   }
 
   clearMessage() {
