@@ -119,11 +119,7 @@ export class ChatService implements OnDestroy {
   private initState() {
     const storageState = localStorage.getItem(CHAT_STORAGE_STATE_KEY);
     const state = this.sanitizeState(storageState);
-    this.store.setState(this.claimId, {
-      ...state,
-      appName: this.options.appName,
-      eraser: false,
-    });
+    this.store.setState(this.claimId, state);
   }
 
   get isRunningInIframeContext(): boolean {

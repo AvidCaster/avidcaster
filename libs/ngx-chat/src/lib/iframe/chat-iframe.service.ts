@@ -12,7 +12,7 @@ import { ConfigService } from '@fullerstack/ngx-config';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
-import { BehaviorSubject, Observable, Subject, fromEvent, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
@@ -81,11 +81,16 @@ export class ChatIframeService implements OnDestroy {
 
   private chatStateSubscription(): void {
     const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
-    stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (state: ChatState) => {
-        this.state = state;
-      },
-    });
+    stateSub$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state: ChatState) => {
+          this.state = state;
+        },
+      });
   }
 
   private southBoundSubscription() {
