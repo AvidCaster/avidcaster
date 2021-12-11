@@ -1,8 +1,8 @@
-# AvidCaster `YouTube` Chat Overlay <img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png">
+# AvidCaster Chat Overlay <img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png">
 
 ## `Description`
 
-[Avidcaster](/) `YouTube` feature works with YouTube in providing a low-cost lower-third video chat overlay.
+Avidcaster feature works with live stream hosts in providing a low-cost lower-third video chat overlay.
 
 ## `Overview`
 
@@ -11,7 +11,7 @@
 The following image is what the end user sees on a YouTube Live Video stream with chat overlay.
 
 <p align="center">
-<img src="./assets/images/howto/OverlayViewer.png" alt="Viewer Overlay" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/Overlay.png" alt="Viewer Overlay" style="margin: 0 auto; width:100%;"/>
 </p>
 
 <br/>

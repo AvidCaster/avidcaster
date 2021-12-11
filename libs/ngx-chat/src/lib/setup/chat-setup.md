@@ -2,68 +2,38 @@
 
 ## `Description`
 
-[Avidcaster](/) chat overlay feature works with `chrome extensions` in providing a low-cost lower-third video chat overlay.
+`Avidcaster` chat overlay feature works with `chrome extensions` in providing a low-cost lower-third video chat overlay.
+
+Supported chats: `YouTube` & `Twitch`.
 
 ## Chrome Extension
 
 ## `Installation`
 
-To enable the chat overlay, head over to chrome store and install the <a href="https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld" target="_blank">user javascript and css</a> extension from <a href="https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld" target="_blank">here</a>.
+Install the <a href="https://chrome.google.com/webstore/detail/avidcaster-chat-overlay/hjccfhnlacfanigjnfngjmeekjmnajng" target="_blank">Avidcaster Overlay Chat</a> extension.
 
-The following image is the chrome extension download page for `User Javascript and Css`.
+## `Open YouTube Chat Overlay - Popup`
 
-<p>
-<img src="./assets/images/howto/UserJsCss.png" style="margin: 0 auto; width:100%;"/>
-</p>
-
-<br/>
-
-## `Verify Installation and Pinned`
-
-The following image is the icon of `User JS and CSS` chrome extension `pinned`, and setup.
-
-<p>
-<img src="./assets/images/howto/UserJsCssExtConfig.png" style="margin: 0 auto; width:100%;"/>
-</p>
-
-## `YouTube Chat Overlay Config`
-
-The following image is the chrome extension ready for the first `profile`.
-
-<p>
-<img src="./assets/images/howto/ExtYouTubeConfig.png" style="margin: 0 auto; width:100%;"/>
-</p>
-
-## `YouTube Chat Overlay - Create Profile`
-
-The following image is the chrome extension configured for `YouTube`.
-
-<p>
-<img src="./assets/images/howto/OverlayProfile.png"  style="margin: 0 auto; width:100%;"/>
-</p>
-
-## `YouTube Chat Overlay - Copy Logic`
-
-Copy the code from <a href="/assets/code/chat.overlay.min.js" target="_blank">here</a> and paste it in the profile you just created, in the "Copy Javascript Code Here" box and click "save" as per the following image.
-
-<p>
-<img src="./assets/images/howto/AvidCasterOverlayLogic.png" style="margin: 0 auto; width:100%;"/>
-</p>
-
-## `YouTube Chat Overlay - Popup`
-
-Open a YouTube chat that is being streamed live and click on the Popup Chat button, as per the following image.
+Open a your live YouTube stream and click on the Popup Chat button, as per the following image.
 
 <p>
 <img src="./assets/images/howto/YoutubeChatPopup.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
-## `YouTube Chat Overlay - Popup`
+## `Open AvidCaster Chat Overlay - Popup`
 
-Avidcaster Chat Overlay Admin - Control which chat be shown, enable/disable fireworks and Yay! audio.
+Click on "Open Overlay" as per the following image.
 
 <p>
-<img src="./assets/images/howto/YoutubeOverlayChat.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/OpenOverlay.png" style="margin: 0 auto; width:100%;"/>
+</p>
+
+## `View AvidCaster Chat Overlay Admin `
+
+Overlay window will pop out as per the following image.
+
+<p>
+<img src="./assets/images/howto/OverlayAdmin.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
 ## `YouTube Chat Overlay - Video Switcher Setup`
@@ -82,5 +52,5 @@ Play with the mask, clip/grain to fine tune as per your liking.
 YouTube Chat Overlay in action - Now go impress your audience.
 
 <p>
-<img src="./assets/images/howto/OverlayViewer.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/Overlay.png" style="margin: 0 auto; width:100%;"/>
 </p>
