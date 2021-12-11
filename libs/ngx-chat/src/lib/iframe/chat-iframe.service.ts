@@ -97,7 +97,7 @@ export class ChatIframeService implements OnDestroy {
                     chat.timestamp = new Date().getTime();
                     chat.prefix = this.prefix || this.streamId;
                     this.broadcastNewChatMessage(data.host, chat);
-                    console.log(JSON.stringify(chat, null, 4));
+                    // console.log(JSON.stringify(chat, null, 4));
                   }
                   break;
                 }
