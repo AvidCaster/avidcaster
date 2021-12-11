@@ -12,13 +12,13 @@ import { ConfigService } from '@fullerstack/ngx-config';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
-import { BehaviorSubject, Observable, Subject, fromEvent, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
-  CHAT_STORAGE_KEY,
-  CHAT_STORAGE_KEY_OVERLAY_REQUEST,
-  CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
+  CHAT_STORAGE_MESSAGE_KEY,
+  CHAT_STORAGE_OVERLAY_REQUEST_KEY,
+  CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   ChatSupportedSites,
 } from '../chat.default';
 import {
@@ -31,7 +31,6 @@ import {
   ChatMessageUpstreamAction,
   ChatState,
 } from '../chat.model';
-import { ChatService } from '../chat.service';
 import { openOverlayWindowScreen, primaryFilterChatMessageItem } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
@@ -40,15 +39,18 @@ import { parseYouTubeChat } from '../util/chat.util.youtube';
 export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
+  private state: ChatState;
   private onMessageOb$: Observable<Event>;
   private onStorageOb$: Observable<Event>;
   private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
+  private overlayReadyOb$ = new Subject<boolean>();
+  overlayReady$ = this.overlayReadyOb$.asObservable();
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
-
-  awaitOverlayResponse = undefined;
+  windowObj: Window;
+  awaitOverlayResponseTimeoutHandler = undefined;
 
   constructor(
     readonly zone: NgZone,
@@ -56,23 +58,42 @@ export class ChatIframeService implements OnDestroy {
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
-    readonly layout: LayoutService,
-    readonly chatService: ChatService
+    readonly layout: LayoutService
   ) {
-    this.onMessageOb$ = fromEvent(this.layout.uix.window, 'message');
-    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
+    this.windowObj = this.layout.uix.window;
+    this.onMessageOb$ = fromEvent(this.windowObj, 'message');
+    this.onStorageOb$ = fromEvent(this.windowObj, 'storage');
 
     this.southBoundSubscription();
     this.setNorthBoundReadyPing();
     this.storageSubscription();
+    this.chatStateSubscription();
 
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
 
+  private broadcastMessage(key: string, value: string) {
+    this.windowObj.localStorage.setItem(key, value);
+    this.windowObj.localStorage.removeItem(key);
+  }
+
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
-    const key = `${CHAT_STORAGE_KEY}-${host}-${uuid_v4()}`;
-    localStorage.setItem(key, JSON.stringify(chat));
-    setTimeout(() => localStorage.removeItem(key), 0);
+    const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
+    this.broadcastMessage(key, JSON.stringify(chat));
+  }
+
+  private chatStateSubscription(): void {
+    const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
+    stateSub$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state: ChatState) => {
+          this.state = state;
+        },
+      });
   }
 
   private southBoundSubscription() {
@@ -93,7 +114,7 @@ export class ChatIframeService implements OnDestroy {
               switch (data.host) {
                 case 'youtube': {
                   const chat = parseYouTubeChat(data);
-                  if (primaryFilterChatMessageItem(chat, this.chatService.state as ChatState)) {
+                  if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
                     chat.streamId = this.streamId;
                     chat.timestamp = new Date().getTime();
                     chat.prefix = this.prefix || this.streamId;
@@ -104,7 +125,7 @@ export class ChatIframeService implements OnDestroy {
                 }
                 case 'twitch': {
                   const chat = parseTwitchChat(data);
-                  if (primaryFilterChatMessageItem(chat, this.chatService.state as ChatState)) {
+                  if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
                     chat.streamId = this.streamId;
                     chat.timestamp = new Date().getTime();
                     chat.prefix = this.prefix || this.streamId;
@@ -137,7 +158,7 @@ export class ChatIframeService implements OnDestroy {
       action: ChatMessageUpstreamAction.ping,
     };
 
-    this.layout.uix.window.parent.postMessage(data, '*');
+    this.windowObj.parent.postMessage(data, '*');
   }
 
   private setNorthBoundSelector(host: ChatMessageHosts) {
@@ -147,7 +168,7 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].observer,
     };
 
-    this.layout.uix.window.parent.postMessage(data, '*');
+    this.windowObj.parent.postMessage(data, '*');
   }
 
   private setNorthBoundIframe(host: ChatMessageHosts) {
@@ -157,19 +178,19 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].iframe,
     };
 
-    this.layout.uix.window.parent.postMessage(data, '*');
+    this.windowObj.parent.postMessage(data, '*');
     setTimeout(() => {
       this.setNorthBoundSelector(host);
     }, 1000);
   }
 
   broadcastNewChatOverlayRequest() {
-    const key = CHAT_STORAGE_KEY_OVERLAY_REQUEST;
-    localStorage.setItem(key, JSON.stringify({ from: 'iframe' }));
-    setTimeout(() => localStorage.removeItem(key), 0);
-    this.awaitOverlayResponse = setTimeout(() => {
-      openOverlayWindowScreen(this.layout.uix.window);
-      this.awaitOverlayResponse = undefined;
+    const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
+    this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
+    this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
+      openOverlayWindowScreen(this.windowObj);
+      this.awaitOverlayResponseTimeoutHandler = undefined;
+      this.overlayReadyOb$.next(true);
     }, 1000);
   }
 
@@ -177,7 +198,7 @@ export class ChatIframeService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_KEY_OVERLAY_RESPONSE) {
+          if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
             this.handleNewOverlayResponseEvent();
           }
         },
@@ -187,8 +208,9 @@ export class ChatIframeService implements OnDestroy {
 
   private handleNewOverlayResponseEvent() {
     // no one is listening, we can safely open a new overlay screen
-    clearTimeout(this.awaitOverlayResponse);
-    this.awaitOverlayResponse = undefined;
+    clearTimeout(this.awaitOverlayResponseTimeoutHandler);
+    this.awaitOverlayResponseTimeoutHandler = undefined;
+    this.overlayReadyOb$.next(true);
     this.logger.info('Overlay response received');
   }
 

@@ -17,16 +17,22 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
-import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
+import {
+  cloneDeep as ldDeepClone,
+  isEqual as ldIsEqual,
+  mergeWith as ldMergeWith,
+  pick as ldPick,
+} from 'lodash-es';
 import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import {
   CHAT_IFRAME_URL,
   CHAT_MESSAGE_BUFFER_SIZE,
-  CHAT_STATE_STORAGE_KEY,
-  CHAT_STORAGE_KEY,
-  CHAT_STORAGE_KEY_OVERLAY_RESPONSE,
+  CHAT_STORAGE_BROADCAST_KEY_PREFIX,
+  CHAT_STORAGE_MESSAGE_KEY,
+  CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
+  CHAT_STORAGE_STATE_KEY,
   CHAT_URL_FULLSCREEN_LIST,
   defaultChatConfig,
   defaultChatState,
@@ -47,12 +53,10 @@ export class ChatService implements OnDestroy {
   private chatBufferList: ChatMessageItem[] = [];
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
-  private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
-  hostReady$ = this.hostReadyOb$.asObservable();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
   prefix: string;
-  awaitOverlayResponse = undefined;
+  windowObj: Window;
 
   constructor(
     readonly zone: NgZone,
@@ -68,11 +72,17 @@ export class ChatService implements OnDestroy {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
+    this.windowObj = this.layout.uix.window;
+
     this.claimSlice();
     this.subState();
     this.initState();
 
-    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
+    this.cleanupBroadcastMessage();
+
+    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage').pipe(
+      filter((event: StorageEvent) => !!event?.newValue)
+    );
 
     this.storageSubscription();
 
@@ -112,13 +122,13 @@ export class ChatService implements OnDestroy {
    * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
-    const storageState = localStorage.getItem(CHAT_STATE_STORAGE_KEY);
+    const storageState = this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
     const state = this.sanitizeState(storageState);
-    this.store.setState(this.claimId, {
-      ...state,
-      appName: this.options.appName,
-      eraser: false,
-    });
+    this.store.setState(this.claimId, state);
+  }
+
+  get isRunningInIframeContext(): boolean {
+    return this.router.url.includes(CHAT_IFRAME_URL);
   }
 
   /**
@@ -126,7 +136,6 @@ export class ChatService implements OnDestroy {
    */
   private subState() {
     this.stateSub$ = this.store.select$<ChatState>(this.nameSpace);
-
     this.stateSub$
       .pipe(
         filter((state) => !!state),
@@ -136,8 +145,19 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
           this.chatListOb$.next(this.filterChatList());
-          if (!this.router.url.includes(CHAT_IFRAME_URL)) {
-            localStorage.setItem(CHAT_STATE_STORAGE_KEY, JSON.stringify(signObject(this.state)));
+
+          if (!this.isRunningInIframeContext) {
+            const currentStateInStorage = this.sanitizeState(
+              this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY)
+            );
+
+            const hasStateChanged = !ldIsEqual(currentStateInStorage, newState);
+            if (hasStateChanged) {
+              this.windowObj.localStorage.setItem(
+                CHAT_STORAGE_STATE_KEY,
+                JSON.stringify(signObject(this.state))
+              );
+            }
           }
         },
       });
@@ -162,20 +182,28 @@ export class ChatService implements OnDestroy {
     this.chatSelectedOb$.next(undefined);
   }
 
+  broadcastMessage(key: string, value: string) {
+    this.windowObj.localStorage.setItem(key, value);
+    this.windowObj.localStorage.removeItem(key);
+  }
+
   broadcastNewChatOverlayResponse() {
-    const key = CHAT_STORAGE_KEY_OVERLAY_RESPONSE;
-    localStorage.setItem(key, JSON.stringify({ from: 'overlay' }));
-    setTimeout(() => localStorage.removeItem(key), 0);
+    const key = CHAT_STORAGE_OVERLAY_RESPONSE_KEY;
+    this.broadcastMessage(key, JSON.stringify({ from: 'overlay' }));
   }
 
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STATE_STORAGE_KEY) {
-            this.handleNewStateEvent(event);
-          } else if (event.key.startsWith(CHAT_STORAGE_KEY) && event?.newValue) {
-            this.handleNewMessageFromIframe(event);
+          const isChatState = event.key === CHAT_STORAGE_STATE_KEY;
+          if (isChatState) {
+            return this.handleNewStateEvent(event);
+          }
+
+          const isMessageBroadcast = event.key.startsWith(CHAT_STORAGE_MESSAGE_KEY);
+          if (isMessageBroadcast) {
+            return this.handleNewMessageFromIframe(event);
           }
         },
       });
@@ -202,20 +230,21 @@ export class ChatService implements OnDestroy {
     const chat = JSON.parse(event?.newValue);
     this.handleMessageBuffer(chat);
 
-    let filteredList = this.chatListOb$.getValue();
+    let currentChatList = this.chatListOb$.getValue();
     const filteredChat = filterChatMessageItem(chat, this.state as ChatState);
     if (filteredChat) {
-      filteredList = [...filteredList, filteredChat];
+      currentChatList = [...currentChatList, filteredChat];
     }
 
-    this.zone.run(() => {
-      if (filteredList?.length && this.state.autoScrollEnabled) {
-        this.chatListOb$.next(filteredList);
-        if (this.state.ffEnabled) {
-          this.chatSelected(filteredList[filteredList.length - 1]);
-        }
+    const shouldEmitListUpdateEvent = currentChatList?.length && this.state.autoScrollEnabled;
+    if (shouldEmitListUpdateEvent) {
+      this.zone.run(() => this.chatListOb$.next(currentChatList));
+
+      const shouldEmitSelectedChatEvent = this.state.ffEnabled;
+      if (shouldEmitSelectedChatEvent) {
+        this.chatSelected(currentChatList[currentChatList.length - 1]);
       }
-    });
+    }
   }
 
   private filterChatList(): ChatMessageItem[] {
@@ -226,15 +255,18 @@ export class ChatService implements OnDestroy {
     return chatList;
   }
 
+  cleanupBroadcastMessage() {
+    // remove local storage message items
+    Object.entries(this.windowObj.localStorage).map(([key]) => {
+      if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
+        this.windowObj.localStorage.removeItem(key);
+      }
+    });
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
-
-    // remove local storage message items
-    Object.entries(localStorage).map(([key]) => {
-      if (key.startsWith(CHAT_STORAGE_KEY)) {
-        localStorage.removeItem(key);
-      }
-    });
+    this.cleanupBroadcastMessage();
   }
 }

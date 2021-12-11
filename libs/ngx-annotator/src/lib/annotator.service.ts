@@ -39,6 +39,7 @@ import {
 
 @Injectable()
 export class AnnotatorService implements OnDestroy {
+  private windowObj: Window;
   private nameSpace = 'ANNOTATOR';
   private claimId: string;
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
@@ -70,6 +71,7 @@ export class AnnotatorService implements OnDestroy {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
+    this.windowObj = this.layout.uix.window;
     this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
 
     this.claimSlice();
@@ -112,7 +114,7 @@ export class AnnotatorService implements OnDestroy {
    * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
-    const storageState = localStorage.getItem(ANNOTATOR_STORAGE_KEY);
+    const storageState = this.windowObj.localStorage.getItem(ANNOTATOR_STORAGE_KEY);
     const state = this.sanitizeState(storageState);
     this.store.setState(this.claimId, {
       ...state,
@@ -135,7 +137,10 @@ export class AnnotatorService implements OnDestroy {
       .subscribe({
         next: (newState) => {
           this.state = { ...defaultAnnotatorState(), ...newState };
-          localStorage.setItem(ANNOTATOR_STORAGE_KEY, JSON.stringify(signObject(this.state)));
+          this.windowObj.localStorage.setItem(
+            ANNOTATOR_STORAGE_KEY,
+            JSON.stringify(signObject(this.state))
+          );
         },
       });
   }

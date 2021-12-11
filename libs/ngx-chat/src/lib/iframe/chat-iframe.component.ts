@@ -28,6 +28,7 @@ import { ChatIframeService } from './chat-iframe.service';
 })
 export class ChatIframeComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+  overlayOpenRequestInProgress = false;
 
   constructor(
     readonly cdRef: ChangeDetectorRef,
@@ -38,11 +39,12 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hostReadySubscription();
+    this.overlayReadySubscription();
     this.logger.info('Chat monitoring started!');
   }
 
   hostReadySubscription() {
-    this.chatService.hostReady$.pipe(takeUntil(this.destroy$)).subscribe({
+    this.chatIframeService.hostReady$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.logger.info('Host ready!');
         this.cdRef.detectChanges();
@@ -50,7 +52,18 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
     });
   }
 
+  overlayReadySubscription() {
+    this.chatIframeService.overlayReady$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.overlayOpenRequestInProgress = false;
+        this.logger.info('Overlay ready!');
+        this.cdRef.detectChanges();
+      },
+    });
+  }
+
   openOverlay() {
+    this.overlayOpenRequestInProgress = true;
     this.chatIframeService.broadcastNewChatOverlayRequest();
   }
 
