@@ -126,6 +126,10 @@ export class ChatService implements OnDestroy {
     });
   }
 
+  get isRunningInIframeContext(): boolean {
+    return this.router.url.includes(CHAT_IFRAME_URL);
+  }
+
   /**
    * Subscribe to Layout state changes
    */
@@ -142,8 +146,7 @@ export class ChatService implements OnDestroy {
           this.state = { ...defaultChatState(), ...newState };
           this.chatListOb$.next(this.filterChatList());
 
-          const isRunningInIframeContext = this.router.url.includes(CHAT_IFRAME_URL);
-          if (!isRunningInIframeContext) {
+          if (!this.isRunningInIframeContext) {
             const currentStateInStorage = this.sanitizeState(
               localStorage.getItem(CHAT_STORAGE_STATE_KEY)
             );
@@ -190,8 +193,8 @@ export class ChatService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          const isStateState = event.key === CHAT_STORAGE_STATE_KEY;
-          if (isStateState) {
+          const isChatState = event.key === CHAT_STORAGE_STATE_KEY;
+          if (isChatState) {
             return this.handleNewStateEvent(event);
           }
 

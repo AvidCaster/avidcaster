@@ -31,7 +31,6 @@ import {
   ChatMessageUpstreamAction,
   ChatState,
 } from '../chat.model';
-import { ChatService } from '../chat.service';
 import { openOverlayWindowScreen, primaryFilterChatMessageItem } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
@@ -40,6 +39,7 @@ import { parseYouTubeChat } from '../util/chat.util.youtube';
 export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
+  private state: ChatState;
   private onMessageOb$: Observable<Event>;
   private onStorageOb$: Observable<Event>;
   private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
@@ -56,8 +56,7 @@ export class ChatIframeService implements OnDestroy {
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
-    readonly layout: LayoutService,
-    readonly chatService: ChatService
+    readonly layout: LayoutService
   ) {
     this.onMessageOb$ = fromEvent(this.layout.uix.window, 'message');
     this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
@@ -69,9 +68,14 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
 
+  private broadcastMessage(key: string, value: string) {
+    localStorage.setItem(key, value);
+    localStorage.removeItem(key);
+  }
+
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
-    this.chatService.broadcastMessage(key, JSON.stringify(chat));
+    this.broadcastMessage(key, JSON.stringify(chat));
   }
 
   private southBoundSubscription() {
@@ -92,7 +96,7 @@ export class ChatIframeService implements OnDestroy {
               switch (data.host) {
                 case 'youtube': {
                   const chat = parseYouTubeChat(data);
-                  if (primaryFilterChatMessageItem(chat, this.chatService.state as ChatState)) {
+                  if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
                     chat.streamId = this.streamId;
                     chat.timestamp = new Date().getTime();
                     chat.prefix = this.prefix || this.streamId;
@@ -103,7 +107,7 @@ export class ChatIframeService implements OnDestroy {
                 }
                 case 'twitch': {
                   const chat = parseTwitchChat(data);
-                  if (primaryFilterChatMessageItem(chat, this.chatService.state as ChatState)) {
+                  if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
                     chat.streamId = this.streamId;
                     chat.timestamp = new Date().getTime();
                     chat.prefix = this.prefix || this.streamId;
@@ -164,7 +168,7 @@ export class ChatIframeService implements OnDestroy {
 
   broadcastNewChatOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
-    this.chatService.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
+    this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponse = setTimeout(() => {
       openOverlayWindowScreen(this.layout.uix.window);
       this.awaitOverlayResponse = undefined;

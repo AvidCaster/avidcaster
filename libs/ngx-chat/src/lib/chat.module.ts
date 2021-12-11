@@ -46,6 +46,6 @@ import { ChatSetupComponent } from './setup/chat-setup.component';
     ChatSelectedComponent,
     ChatMenuComponent,
   ],
-  providers: [ChatService],
+  providers: [],
 })
 export class ChatModule {}

@@ -17,6 +17,7 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-overlay.component.html',
   styleUrls: ['./chat-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ChatService],
 })
 export class ChatOverlayComponent implements OnInit {
   private onStorageOb$: Observable<Event>;
