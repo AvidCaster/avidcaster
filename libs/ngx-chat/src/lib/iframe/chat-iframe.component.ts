@@ -17,12 +17,14 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, takeUntil } from 'rxjs';
 
 import { ChatService } from '../chat.service';
+import { ChatIframeService } from './chat-iframe.service';
 
 @Component({
   selector: 'fullerstack-chat-iframe',
   templateUrl: './chat-iframe.component.html',
   styleUrls: ['./chat-iframe.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ChatIframeService],
 })
 export class ChatIframeComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -30,7 +32,8 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
   constructor(
     readonly cdRef: ChangeDetectorRef,
     readonly logger: LoggerService,
-    readonly chatService: ChatService
+    readonly chatService: ChatService,
+    readonly chatIframeService: ChatIframeService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +51,7 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
   }
 
   openOverlay() {
-    this.chatService.broadcastNewChatOverlayRequest();
+    this.chatIframeService.broadcastNewChatOverlayRequest();
   }
 
   homeUrl(url: string) {

@@ -1,4 +1,5 @@
 <div id="chat-iframe-monitor">
   <button (click)="openOverlay()">Open Overlay</button>
-  <span *ngIf="chatService.streamId"> ( {{ chatService.streamId }} )</span>
+  <button (click)="showStreamId()">Show Stream ID</button>
+  <span *ngIf="chatIframeService.streamId"> ( {{ chatIframeService.streamId }} )</span>
 </div>
