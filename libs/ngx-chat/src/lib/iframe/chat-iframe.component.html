@@ -1,5 +1,7 @@
-<div id="chat-iframe-monitor">
-  <button (click)="openOverlay()">Open Overlay</button>
-  <button (click)="showStreamId()">Show Stream ID</button>
-  <span *ngIf="chatIframeService.streamId"> ( {{ chatIframeService.streamId }} )</span>
+<div id="chat-iframe-monitor" fxLayout="row" fxLayoutGap="10px">
+  <div><button (click)="openOverlay()">Open Overlay</button></div>
+  <div *ngIf="chatIframeService.streamId">( {{ chatIframeService.streamId }} )</div>
+  <div *ngIf="overlayOpenRequestInProgress">
+    <mat-spinner class="chat-iframe-spinner" color="accent" [diameter]="20"></mat-spinner>
+  </div>
 </div>

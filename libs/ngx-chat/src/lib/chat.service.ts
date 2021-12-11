@@ -53,12 +53,9 @@ export class ChatService implements OnDestroy {
   private chatBufferList: ChatMessageItem[] = [];
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
-  private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
-  hostReady$ = this.hostReadyOb$.asObservable();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
   prefix: string;
-  awaitOverlayResponse = undefined;
   windowObj: Window;
 
   constructor(

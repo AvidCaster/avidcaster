@@ -44,11 +44,13 @@ export class ChatIframeService implements OnDestroy {
   private onStorageOb$: Observable<Event>;
   private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
+  private overlayReadyOb$ = new Subject<boolean>();
+  overlayReady$ = this.overlayReadyOb$.asObservable();
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
   windowObj: Window;
-  awaitOverlayResponse = undefined;
+  awaitOverlayResponseTimeoutHandler = undefined;
 
   constructor(
     readonly zone: NgZone,
@@ -185,9 +187,10 @@ export class ChatIframeService implements OnDestroy {
   broadcastNewChatOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
-    this.awaitOverlayResponse = setTimeout(() => {
+    this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
       openOverlayWindowScreen(this.windowObj);
-      this.awaitOverlayResponse = undefined;
+      this.awaitOverlayResponseTimeoutHandler = undefined;
+      this.overlayReadyOb$.next(true);
     }, 1000);
   }
 
@@ -205,8 +208,9 @@ export class ChatIframeService implements OnDestroy {
 
   private handleNewOverlayResponseEvent() {
     // no one is listening, we can safely open a new overlay screen
-    clearTimeout(this.awaitOverlayResponse);
-    this.awaitOverlayResponse = undefined;
+    clearTimeout(this.awaitOverlayResponseTimeoutHandler);
+    this.awaitOverlayResponseTimeoutHandler = undefined;
+    this.overlayReadyOb$.next(true);
     this.logger.info('Overlay response received');
   }
 
