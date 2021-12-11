@@ -33,7 +33,12 @@ export const AppRoutes: Routes = [
     pathMatch: 'full',
     redirectTo: 'home',
   },
-
+  {
+    // keep this redirect till chrome extension is fixed
+    path: 'ytchat/overlay',
+    pathMatch: 'full',
+    redirectTo: 'chat/iframe',
+  },
   {
     path: 'home',
     component: HomeComponent,
