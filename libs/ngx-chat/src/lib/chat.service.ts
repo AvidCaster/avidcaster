@@ -38,7 +38,7 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import { ChatMessageHostReady, ChatMessageItem, ChatState } from './chat.model';
+import { ChatMessageItem, ChatState } from './chat.model';
 import { filterChatMessageItem } from './util/chat.util';
 
 @Injectable()
