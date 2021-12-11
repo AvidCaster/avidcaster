@@ -147,4 +147,4 @@ export const ChatPrimaryFilterOptions = {
   [ChatMessagePrimaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
 };
 
-export const CHAT_MESSAGE_BUFFER_SIZE = 100;
+export const CHAT_MESSAGE_BUFFER_SIZE = 50;
