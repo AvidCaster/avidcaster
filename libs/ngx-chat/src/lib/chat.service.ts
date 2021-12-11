@@ -141,8 +141,17 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
           this.chatListOb$.next(this.filterChatList());
-          if (!this.router.url.includes(CHAT_IFRAME_URL)) {
-            localStorage.setItem(CHAT_STORAGE_STATE_KEY, JSON.stringify(signObject(this.state)));
+
+          const isRunningInIframeContext = this.router.url.includes(CHAT_IFRAME_URL);
+          if (!isRunningInIframeContext) {
+            const currentStateInStorage = this.sanitizeState(
+              localStorage.getItem(CHAT_STORAGE_STATE_KEY)
+            );
+
+            const hasStateChanged = currentStateInStorage.signature !== newState.signature;
+            if (hasStateChanged) {
+              localStorage.setItem(CHAT_STORAGE_STATE_KEY, JSON.stringify(signObject(this.state)));
+            }
           }
         },
       });
@@ -181,10 +190,14 @@ export class ChatService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_STATE_KEY) {
-            this.handleNewStateEvent(event);
-          } else if (event.key.startsWith(CHAT_STORAGE_MESSAGE_KEY)) {
-            this.handleNewMessageFromIframe(event);
+          const isStateState = event.key === CHAT_STORAGE_STATE_KEY;
+          if (isStateState) {
+            return this.handleNewStateEvent(event);
+          }
+
+          const isMessageBroadcast = event.key.startsWith(CHAT_STORAGE_MESSAGE_KEY);
+          if (isMessageBroadcast) {
+            return this.handleNewMessageFromIframe(event);
           }
         },
       });
@@ -211,20 +224,21 @@ export class ChatService implements OnDestroy {
     const chat = JSON.parse(event?.newValue);
     this.handleMessageBuffer(chat);
 
-    let filteredList = this.chatListOb$.getValue();
+    let currentChatList = this.chatListOb$.getValue();
     const filteredChat = filterChatMessageItem(chat, this.state as ChatState);
     if (filteredChat) {
-      filteredList = [...filteredList, filteredChat];
+      currentChatList = [...currentChatList, filteredChat];
     }
 
-    this.zone.run(() => {
-      if (filteredList?.length && this.state.autoScrollEnabled) {
-        this.chatListOb$.next(filteredList);
-        if (this.state.ffEnabled) {
-          this.chatSelected(filteredList[filteredList.length - 1]);
-        }
+    const shouldEmitListUpdateEvent = currentChatList?.length && this.state.autoScrollEnabled;
+    if (shouldEmitListUpdateEvent) {
+      this.zone.run(() => this.chatListOb$.next(currentChatList));
+
+      const shouldEmitSelectedChatEvent = this.state.ffEnabled;
+      if (shouldEmitSelectedChatEvent) {
+        this.chatSelected(currentChatList[currentChatList.length - 1]);
       }
-    });
+    }
   }
 
   private filterChatList(): ChatMessageItem[] {
