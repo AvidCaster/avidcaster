@@ -25,7 +25,6 @@ import { SharedModule } from '@fullerstack/ngx-shared';
 import { StoreModule } from '@fullerstack/ngx-store';
 import { UixModule } from '@fullerstack/ngx-uix';
 import { UserModule } from '@fullerstack/ngx-user';
-import { YTChatModule } from '@fullerstack/ngx-ytchat';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { environment } from '../environments/environment';
@@ -90,7 +89,6 @@ import { UserVerifyComponent } from './pages/user-verify/user-verify.component';
     UixModule,
     LayoutModule,
     AnnotatorModule,
-    YTChatModule,
   ],
   providers: [...httpInterceptorProvidersOrderedList],
 

@@ -2,6 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn loc:generate
-yarn minify
 git add README.md
-git add tools/extensions/*.min.*

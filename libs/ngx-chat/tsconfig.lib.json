@@ -10,9 +10,5 @@
     "lib": ["dom", "es2018"]
   },
   "exclude": ["src/test-setup.ts", "**/*.spec.ts"],
-  "include": [
-    "**/*.ts",
-    "../ngx-ytchat/src/lib/chat.util.twitch.q.ts",
-    "../ngx-ytchat/src/lib/chat.util.youtube.q.ts"
-  ]
+  "include": ["**/*.ts"]
 }

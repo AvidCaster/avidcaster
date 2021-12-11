@@ -77,12 +77,7 @@
     "electron": "./node_modules/.bin/electron",
     "nx:el": "node ./node_modules/@nrwl/cli/bin/nx.js",
     "build:el": "yarn build --configuration=electron --baseHref=./ ",
-    "load:el": "yarn electron .",
-    "<--------- [ chrome extension ] ------->": "chrome extension",
-    "minify:js:chat": "./node_modules/.bin/uglifyjs tools/extensions/chat.overlay.js -o tools/extensions/chat.overlay.min.js",
-    "minify:js:ytchat": "./node_modules/.bin/uglifyjs tools/extensions/ytchat.ext.js -o tools/extensions/ytchat.ext.min.js",
-    "minify:css:ytchat": "./node_modules/.bin/css-minify -f tools/extensions/ytchat.ext.css -o tools/extensions",
-    "minify": "yarn minify:js:chat && yarn minify:js:ytchat && yarn minify:css:ytchat"
+    "load:el": "yarn electron ."
   },
   "prisma": {
     "seed": "ts-node ./apps/api/src/prisma/seed.ts"
