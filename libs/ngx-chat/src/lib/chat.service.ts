@@ -73,6 +73,8 @@ export class ChatService implements OnDestroy {
     this.subState();
     this.initState();
 
+    this.cleanupBroadcastMessage();
+
     this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage').pipe(
       filter((event: StorageEvent) => !!event?.newValue)
     );
@@ -165,10 +167,14 @@ export class ChatService implements OnDestroy {
     this.chatSelectedOb$.next(undefined);
   }
 
+  broadcastMessage(key: string, value: string) {
+    localStorage.setItem(key, value);
+    localStorage.removeItem(key);
+  }
+
   broadcastNewChatOverlayResponse() {
     const key = CHAT_STORAGE_OVERLAY_RESPONSE_KEY;
-    localStorage.setItem(key, JSON.stringify({ from: 'overlay' }));
-    setTimeout(() => localStorage.removeItem(key), 0);
+    this.broadcastMessage(key, JSON.stringify({ from: 'overlay' }));
   }
 
   private storageSubscription() {
@@ -229,15 +235,18 @@ export class ChatService implements OnDestroy {
     return chatList;
   }
 
-  ngOnDestroy() {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-
+  cleanupBroadcastMessage() {
     // remove local storage message items
     Object.entries(localStorage).map(([key]) => {
       if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
         localStorage.removeItem(key);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+    this.cleanupBroadcastMessage();
   }
 }

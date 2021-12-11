@@ -71,8 +71,7 @@ export class ChatIframeService implements OnDestroy {
 
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessage) {
     const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
-    localStorage.setItem(key, JSON.stringify(chat));
-    setTimeout(() => localStorage.removeItem(key), 0);
+    this.chatService.broadcastMessage(key, JSON.stringify(chat));
   }
 
   private southBoundSubscription() {
@@ -165,8 +164,7 @@ export class ChatIframeService implements OnDestroy {
 
   broadcastNewChatOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
-    localStorage.setItem(key, JSON.stringify({ from: 'iframe' }));
-    setTimeout(() => localStorage.removeItem(key), 0);
+    this.chatService.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponse = setTimeout(() => {
       openOverlayWindowScreen(this.layout.uix.window);
       this.awaitOverlayResponse = undefined;
