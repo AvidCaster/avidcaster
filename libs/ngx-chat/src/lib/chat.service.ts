@@ -48,7 +48,7 @@ export class ChatService implements OnDestroy {
   private claimId: string;
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
   state: DeepReadonly<ChatState> = defaultChatState();
-  stateSub$: Observable<ChatState>;
+  state$: Observable<ChatState>;
   private destroy$ = new Subject<boolean>();
   private chatBufferList: ChatMessageItem[] = [];
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
@@ -134,8 +134,8 @@ export class ChatService implements OnDestroy {
    * Subscribe to Layout state changes
    */
   private subState() {
-    this.stateSub$ = this.store.select$<ChatState>(this.nameSpace);
-    this.stateSub$
+    this.state$ = this.store.select$<ChatState>(this.nameSpace);
+    this.state$
       .pipe(
         filter((state) => !!state),
         takeUntil(this.destroy$)

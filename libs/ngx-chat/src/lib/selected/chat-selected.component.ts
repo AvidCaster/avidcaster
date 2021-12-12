@@ -46,7 +46,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.chR.markForCheck();
       },
