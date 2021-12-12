@@ -41,8 +41,6 @@ export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
   private state: ChatState;
-  private onMessageOb$: Observable<Event>;
-  private onStorageOb$: Observable<Event>;
   private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
@@ -99,7 +97,7 @@ export class ChatIframeService implements OnDestroy {
 
   private southBoundSubscription() {
     this.zone.runOutsideAngular(() => {
-      this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
+      this.uix.onMessage$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
         const data = event.data as ChatMessageEvent;
         if (data.type === ChatMessageDirection.SouthBound) {
           switch (data.action) {
@@ -195,7 +193,7 @@ export class ChatIframeService implements OnDestroy {
 
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
-      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
+      this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
           if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
             this.handleNewOverlayResponseEvent();

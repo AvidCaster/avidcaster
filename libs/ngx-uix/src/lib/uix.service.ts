@@ -17,14 +17,7 @@ import {
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { MaterialService } from '@fullerstack/ngx-material';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith } from 'lodash-es';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  distinctUntilChanged,
-  filter,
-  fromEvent,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject, distinctUntilChanged, fromEvent } from 'rxjs';
 import * as fullscreen from 'screenfull';
 import { DeepReadonly } from 'ts-essentials';
 
@@ -43,6 +36,7 @@ export class UixService implements OnDestroy {
     .pipe(distinctUntilChanged((prev, curr) => prev.x === curr.x && prev.y === curr.y));
   private destroy$ = new Subject<boolean>();
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
+  onMessage$: Observable<Event>;
   onStorage$: Observable<Event>;
   onClose$: Observable<Event>;
 
@@ -64,6 +58,7 @@ export class UixService implements OnDestroy {
     this.window = this.document.defaultView;
     this.onStorage$ = fromEvent(this.window, 'storage');
     this.onClose$ = fromEvent(this.window, 'beforeunload');
+    this.onMessage$ = fromEvent(this.window, 'message');
 
     this.initFullscreen();
     this.InitResizeListener();
