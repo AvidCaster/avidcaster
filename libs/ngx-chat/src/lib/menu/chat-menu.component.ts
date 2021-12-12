@@ -65,7 +65,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   subState() {
-    this.chatService.stateSub$.pipe(takeUntil(this.destroy$)).subscribe({
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         this.currentFilter = state.filterOption as ChatMessageFilterType;
         this.currentPrimaryFilter = state.primaryFilterOption as ChatMessagePrimaryFilterType;

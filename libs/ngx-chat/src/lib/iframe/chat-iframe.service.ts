@@ -12,10 +12,12 @@ import { ConfigService } from '@fullerstack/ngx-config';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
-import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { UixService } from '@fullerstack/ngx-uix';
+import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
+  CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE,
   CHAT_STORAGE_MESSAGE_KEY,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
@@ -40,17 +42,15 @@ export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
   private state: ChatState;
-  private onMessageOb$: Observable<Event>;
-  private onStorageOb$: Observable<Event>;
   private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
   overlayReady$ = this.overlayReadyOb$.asObservable();
+  awaitOverlayResponseTimeoutHandler = undefined;
+  dispatchedChatMessageIds: string[] = [];
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
-  windowObj: Window;
-  awaitOverlayResponseTimeoutHandler = undefined;
 
   constructor(
     readonly zone: NgZone,
@@ -58,23 +58,26 @@ export class ChatIframeService implements OnDestroy {
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
+    readonly uix: UixService,
     readonly layout: LayoutService
   ) {
-    this.windowObj = this.layout.uix.window;
-    this.onMessageOb$ = fromEvent(this.windowObj, 'message');
-    this.onStorageOb$ = fromEvent(this.windowObj, 'storage');
+    this.clearDispatchedChatMessages();
 
-    this.southBoundSubscription();
-    this.setNorthBoundReadyPing();
-    this.storageSubscription();
-    this.chatStateSubscription();
+    this.subOnMessage();
+    this.subOnStorage();
+    this.subChatState();
+
+    this.pingNorthBoundHost();
 
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
 
-  private broadcastMessage(key: string, value: string) {
-    this.windowObj.localStorage.setItem(key, value);
-    this.windowObj.localStorage.removeItem(key);
+  private storageBroadcast(key: string, value: string) {
+    this.uix.localStorage.setItem(key, value);
+    this.dispatchedChatMessageIds.push(key);
+    if (this.dispatchedChatMessageIds?.length > CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE) {
+      this.clearDispatchedChatMessages();
+    }
   }
 
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessageItem) {
@@ -83,10 +86,10 @@ export class ChatIframeService implements OnDestroy {
     chat.streamId = this.streamId;
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
-    this.broadcastMessage(key, JSON.stringify(chat));
+    this.storageBroadcast(key, JSON.stringify(chat));
   }
 
-  private chatStateSubscription(): void {
+  private subChatState(): void {
     const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
     stateSub$
       .pipe(
@@ -100,9 +103,9 @@ export class ChatIframeService implements OnDestroy {
       });
   }
 
-  private southBoundSubscription() {
+  private subOnMessage() {
     this.zone.runOutsideAngular(() => {
-      this.onMessageOb$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
+      this.uix.onMessage$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
         const data = event.data as ChatMessageEvent;
         if (data.type === ChatMessageDirection.SouthBound) {
           switch (data.action) {
@@ -154,13 +157,13 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info(`Observer is ready for ${this.currentHost}`);
   }
 
-  private setNorthBoundReadyPing() {
+  private pingNorthBoundHost() {
     const data = {
       type: ChatMessageDirection.NorthBound,
       action: ChatMessageUpstreamAction.ping,
     };
 
-    this.windowObj.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   private setNorthBoundSelector(host: ChatMessageHosts) {
@@ -170,7 +173,7 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].observer,
     };
 
-    this.windowObj.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   private setNorthBoundIframe(host: ChatMessageHosts) {
@@ -180,28 +183,28 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].iframe,
     };
 
-    this.windowObj.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
     setTimeout(() => {
       this.setNorthBoundSelector(host);
     }, 1000);
   }
 
-  broadcastNewChatOverlayRequest() {
+  broadcastOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
-    this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
+    this.storageBroadcast(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
-      openOverlayWindowScreen(this.windowObj);
+      openOverlayWindowScreen(this.uix.window);
       this.awaitOverlayResponseTimeoutHandler = undefined;
       this.overlayReadyOb$.next(true);
     }, 1000);
   }
 
-  private storageSubscription() {
+  private subOnStorage() {
     this.zone.runOutsideAngular(() => {
-      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
+      this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
           if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
-            this.handleNewOverlayResponseEvent();
+            return this.handleNewOverlayResponseEvent();
           }
         },
       });
@@ -216,8 +219,16 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info('Overlay response received');
   }
 
+  private clearDispatchedChatMessages() {
+    this.dispatchedChatMessageIds?.map((key) => {
+      this.uix.localStorage.removeItem(key);
+    });
+    this.dispatchedChatMessageIds = [];
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.clearDispatchedChatMessages();
   }
 }
