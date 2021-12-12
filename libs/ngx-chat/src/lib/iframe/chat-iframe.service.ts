@@ -61,16 +61,18 @@ export class ChatIframeService implements OnDestroy {
     readonly uix: UixService,
     readonly layout: LayoutService
   ) {
-    this.southBoundSubscription();
-    this.setNorthBoundReadyPing();
-    this.storageSubscription();
-    this.chatStateSubscription();
     this.clearDispatchedChatMessages();
+
+    this.subOnMessage();
+    this.subOnStorage();
+    this.subChatState();
+
+    this.pingNorthBoundHost();
 
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
 
-  private broadcastMessage(key: string, value: string) {
+  private storageBroadcast(key: string, value: string) {
     this.uix.localStorage.setItem(key, value);
     this.dispatchedChatMessageIds.push(key);
     if (this.dispatchedChatMessageIds?.length > CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE) {
@@ -84,10 +86,10 @@ export class ChatIframeService implements OnDestroy {
     chat.streamId = this.streamId;
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
-    this.broadcastMessage(key, JSON.stringify(chat));
+    this.storageBroadcast(key, JSON.stringify(chat));
   }
 
-  private chatStateSubscription(): void {
+  private subChatState(): void {
     const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
     stateSub$
       .pipe(
@@ -101,7 +103,7 @@ export class ChatIframeService implements OnDestroy {
       });
   }
 
-  private southBoundSubscription() {
+  private subOnMessage() {
     this.zone.runOutsideAngular(() => {
       this.uix.onMessage$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
         const data = event.data as ChatMessageEvent;
@@ -155,7 +157,7 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info(`Observer is ready for ${this.currentHost}`);
   }
 
-  private setNorthBoundReadyPing() {
+  private pingNorthBoundHost() {
     const data = {
       type: ChatMessageDirection.NorthBound,
       action: ChatMessageUpstreamAction.ping,
@@ -187,9 +189,9 @@ export class ChatIframeService implements OnDestroy {
     }, 1000);
   }
 
-  broadcastNewChatOverlayRequest() {
+  broadcastOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
-    this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
+    this.storageBroadcast(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
       openOverlayWindowScreen(this.uix.window);
       this.awaitOverlayResponseTimeoutHandler = undefined;
@@ -197,7 +199,7 @@ export class ChatIframeService implements OnDestroy {
     }, 1000);
   }
 
-  private storageSubscription() {
+  private subOnStorage() {
     this.zone.runOutsideAngular(() => {
       this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {

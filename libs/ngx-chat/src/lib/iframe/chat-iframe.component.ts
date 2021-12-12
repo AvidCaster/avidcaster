@@ -6,13 +6,7 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -23,7 +17,6 @@ import { ChatIframeService } from './chat-iframe.service';
   selector: 'fullerstack-chat-iframe',
   templateUrl: './chat-iframe.component.html',
   styleUrls: ['./chat-iframe.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ChatIframeService],
 })
 export class ChatIframeComponent implements OnInit, OnDestroy {
@@ -38,33 +31,33 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.hostReadySubscription();
-    this.overlayReadySubscription();
+    this.subHostReady();
+    this.subOverlayReady();
     this.logger.info('Chat monitoring started!');
   }
 
-  hostReadySubscription() {
+  subHostReady() {
     this.chatIframeService.hostReady$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.logger.info('Host ready!');
-        this.cdRef.detectChanges();
+        this.cdRef.markForCheck();
       },
     });
   }
 
-  overlayReadySubscription() {
+  subOverlayReady() {
     this.chatIframeService.overlayReady$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.overlayOpenRequestInProgress = false;
         this.logger.info('Overlay ready!');
-        this.cdRef.detectChanges();
+        this.cdRef.markForCheck();
       },
     });
   }
 
   openOverlay() {
     this.overlayOpenRequestInProgress = true;
-    this.chatIframeService.broadcastNewChatOverlayRequest();
+    this.chatIframeService.broadcastOverlayRequest();
   }
 
   homeUrl(url: string) {

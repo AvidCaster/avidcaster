@@ -35,18 +35,22 @@ export const filterChatMessageItem = (
   chat: ChatMessageItem,
   state: ChatState
 ): ChatMessageItem | undefined => {
+  if (!chat || !chat?.message) {
+    return undefined;
+  }
+
   switch (ChatMessageFilterType[state.filterOption]) {
     case ChatMessageFilterType.Host: {
       return state.keywords.length < 1
         ? chat
-        : state.keywords?.some((word) => chat.host.toLowerCase() === word.toLowerCase())
+        : state.keywords?.some((word) => chat?.host.toLowerCase() === word.toLowerCase())
         ? chat
         : undefined;
     }
     case ChatMessageFilterType.Author: {
       return state.keywords.length < 1
         ? chat
-        : state.keywords?.some((word) => chat.author.includes(word))
+        : state.keywords?.some((word) => chat?.author.includes(word))
         ? chat
         : undefined;
     }
@@ -59,19 +63,19 @@ export const filterChatMessageItem = (
     case ChatMessageFilterType.FilterBy: {
       return state.keywords.length < 1
         ? chat
-        : state.keywords?.some((word) => chat.message.includes(word))
+        : state.keywords?.some((word) => chat?.message.includes(word))
         ? chat
         : undefined;
     }
     case ChatMessageFilterType.FilterOut: {
       return state.keywords.length < 1
         ? chat
-        : !state.keywords?.some((word) => chat.message.includes(word))
+        : !state.keywords?.some((word) => chat?.message.includes(word))
         ? chat
         : undefined;
     }
     case ChatMessageFilterType.Highlight: {
-      if (state.keywords?.some((word) => chat.message.includes(word))) {
+      if (state.keywords?.some((word) => chat?.message.includes(word))) {
         chat.highlighted = true;
       } else {
         chat.highlighted = false;
@@ -95,6 +99,10 @@ export const primaryFilterChatMessageItem = (
   chat: ChatMessageItem,
   state: ChatState
 ): ChatMessageItem | undefined => {
+  if (!chat || !chat?.message) {
+    return undefined;
+  }
+
   switch (ChatMessagePrimaryFilterType[state.primaryFilterOption]) {
     case ChatMessagePrimaryFilterType.MiniumWordOne: {
       return chat?.message?.split(' ')?.length >= 1 ? chat : undefined;
