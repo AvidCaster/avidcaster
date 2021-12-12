@@ -12,7 +12,8 @@ import { ConfigService } from '@fullerstack/ngx-config';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
-import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { UixService } from '@fullerstack/ngx-uix';
+import { BehaviorSubject, Observable, Subject, filter, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
@@ -46,11 +47,10 @@ export class ChatIframeService implements OnDestroy {
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
   overlayReady$ = this.overlayReadyOb$.asObservable();
+  awaitOverlayResponseTimeoutHandler = undefined;
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
-  windowObj: Window;
-  awaitOverlayResponseTimeoutHandler = undefined;
 
   constructor(
     readonly zone: NgZone,
@@ -58,12 +58,9 @@ export class ChatIframeService implements OnDestroy {
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
+    readonly uix: UixService,
     readonly layout: LayoutService
   ) {
-    this.windowObj = this.layout.uix.window;
-    this.onMessageOb$ = fromEvent(this.windowObj, 'message');
-    this.onStorageOb$ = fromEvent(this.windowObj, 'storage');
-
     this.southBoundSubscription();
     this.setNorthBoundReadyPing();
     this.storageSubscription();
@@ -73,8 +70,8 @@ export class ChatIframeService implements OnDestroy {
   }
 
   private broadcastMessage(key: string, value: string) {
-    this.windowObj.localStorage.setItem(key, value);
-    this.windowObj.localStorage.removeItem(key);
+    this.uix.localStorage.setItem(key, value);
+    this.uix.localStorage.removeItem(key);
   }
 
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessageItem) {
@@ -160,7 +157,7 @@ export class ChatIframeService implements OnDestroy {
       action: ChatMessageUpstreamAction.ping,
     };
 
-    this.windowObj.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   private setNorthBoundSelector(host: ChatMessageHosts) {
@@ -170,7 +167,7 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].observer,
     };
 
-    this.windowObj.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
   }
 
   private setNorthBoundIframe(host: ChatMessageHosts) {
@@ -180,7 +177,7 @@ export class ChatIframeService implements OnDestroy {
       payload: ChatSupportedSites[host].iframe,
     };
 
-    this.windowObj.parent.postMessage(data, '*');
+    this.uix.window.parent.postMessage(data, '*');
     setTimeout(() => {
       this.setNorthBoundSelector(host);
     }, 1000);
@@ -190,7 +187,7 @@ export class ChatIframeService implements OnDestroy {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     this.broadcastMessage(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
-      openOverlayWindowScreen(this.windowObj);
+      openOverlayWindowScreen(this.uix.window);
       this.awaitOverlayResponseTimeoutHandler = undefined;
       this.overlayReadyOb$.next(true);
     }, 1000);

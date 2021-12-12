@@ -17,6 +17,7 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
+import { UixService } from '@fullerstack/ngx-uix';
 import {
   cloneDeep as ldDeepClone,
   isEqual as ldIsEqual,
@@ -49,14 +50,12 @@ export class ChatService implements OnDestroy {
   state: DeepReadonly<ChatState> = defaultChatState();
   stateSub$: Observable<ChatState>;
   private destroy$ = new Subject<boolean>();
-  private onStorageOb$: Observable<Event>;
   private chatBufferList: ChatMessageItem[] = [];
   private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
   chatList$ = this.chatListOb$.asObservable();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
   prefix: string;
-  windowObj: Window;
 
   constructor(
     readonly zone: NgZone,
@@ -64,6 +63,7 @@ export class ChatService implements OnDestroy {
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
+    readonly uix: UixService,
     readonly layout: LayoutService
   ) {
     this.options = ldMergeWith(
@@ -72,17 +72,11 @@ export class ChatService implements OnDestroy {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
-    this.windowObj = this.layout.uix.window;
-
     this.claimSlice();
     this.subState();
     this.initState();
 
     this.cleanupBroadcastMessage();
-
-    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage').pipe(
-      filter((event: StorageEvent) => !!event?.newValue)
-    );
 
     this.storageSubscription();
 
@@ -94,7 +88,7 @@ export class ChatService implements OnDestroy {
    * Claim Auth state:slice
    */
   private claimSlice() {
-    if (!this.options?.layout?.logState) {
+    if (!this.options?.chat?.logState) {
       this.claimId = this.store.claimSlice(this.nameSpace);
     } else {
       this.claimId = this.store.claimSlice(this.nameSpace, this.logger.debug.bind(this.logger));
@@ -122,7 +116,7 @@ export class ChatService implements OnDestroy {
    * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
-    const storageState = this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
+    const storageState = this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
     const state = this.sanitizeState(storageState);
     this.store.setState(this.claimId, state);
   }
@@ -148,12 +142,12 @@ export class ChatService implements OnDestroy {
 
           if (!this.isRunningInIframeContext) {
             const currentStateInStorage = this.sanitizeState(
-              this.windowObj.localStorage.getItem(CHAT_STORAGE_STATE_KEY)
+              this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY)
             );
 
             const hasStateChanged = !ldIsEqual(currentStateInStorage, newState);
             if (hasStateChanged) {
-              this.windowObj.localStorage.setItem(
+              this.uix.localStorage.setItem(
                 CHAT_STORAGE_STATE_KEY,
                 JSON.stringify(signObject(this.state))
               );
@@ -184,8 +178,8 @@ export class ChatService implements OnDestroy {
   }
 
   broadcastMessage(key: string, value: string) {
-    this.windowObj.localStorage.setItem(key, value);
-    this.windowObj.localStorage.removeItem(key);
+    this.uix.localStorage.setItem(key, value);
+    this.uix.localStorage.removeItem(key);
   }
 
   broadcastNewChatOverlayResponse() {
@@ -195,7 +189,7 @@ export class ChatService implements OnDestroy {
 
   private storageSubscription() {
     this.zone.runOutsideAngular(() => {
-      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
+      this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
           const isChatState = event.key === CHAT_STORAGE_STATE_KEY;
           if (isChatState) {
@@ -258,9 +252,9 @@ export class ChatService implements OnDestroy {
 
   cleanupBroadcastMessage() {
     // remove local storage message items
-    Object.entries(this.windowObj.localStorage).map(([key]) => {
+    Object.entries(this.uix.localStorage).map(([key]) => {
       if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
-        this.windowObj.localStorage.removeItem(key);
+        this.uix.localStorage.removeItem(key);
       }
     });
   }

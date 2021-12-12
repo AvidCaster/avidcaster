@@ -19,6 +19,7 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
 import { SystemService } from '@fullerstack/ngx-system';
+import { UixService } from '@fullerstack/ngx-uix';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
 import { EMPTY, Observable, Subject, filter, fromEvent, merge, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
@@ -39,7 +40,6 @@ import {
 
 @Injectable()
 export class AnnotatorService implements OnDestroy {
-  private windowObj: Window;
   private nameSpace = 'ANNOTATOR';
   private claimId: string;
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
@@ -58,21 +58,19 @@ export class AnnotatorService implements OnDestroy {
   constructor(
     readonly router: Router,
     readonly zone: NgZone,
-    readonly system: SystemService,
-    readonly layout: LayoutService,
     readonly store: StoreService,
     readonly config: ConfigService,
     readonly logger: LoggerService,
-    readonly i18n: I18nService
+    readonly i18n: I18nService,
+    readonly system: SystemService,
+    readonly uix: UixService,
+    readonly layout: LayoutService
   ) {
     this.options = ldMergeWith(
       ldDeepClone({ layout: defaultAnnotatorConfig() }),
       this.config.options,
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
-
-    this.windowObj = this.layout.uix.window;
-    this.onStorageOb$ = fromEvent(this.layout.uix.window, 'storage');
 
     this.claimSlice();
     this.subState();
@@ -114,7 +112,7 @@ export class AnnotatorService implements OnDestroy {
    * Initialize Layout state, flatten state, remove any array and object values
    */
   private initState() {
-    const storageState = this.windowObj.localStorage.getItem(ANNOTATOR_STORAGE_KEY);
+    const storageState = this.uix.localStorage.getItem(ANNOTATOR_STORAGE_KEY);
     const state = this.sanitizeState(storageState);
     this.store.setState(this.claimId, {
       ...state,
@@ -137,7 +135,7 @@ export class AnnotatorService implements OnDestroy {
       .subscribe({
         next: (newState) => {
           this.state = { ...defaultAnnotatorState(), ...newState };
-          this.windowObj.localStorage.setItem(
+          this.uix.localStorage.setItem(
             ANNOTATOR_STORAGE_KEY,
             JSON.stringify(signObject(this.state))
           );
