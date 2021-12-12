@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { Subject, takeUntil, throttleTime } from 'rxjs';
 
 import {
   CHAT_DEFAULT_AVATAR,
@@ -36,7 +36,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.chatService.chatSelected$.pipe(debounceTime(150), takeUntil(this.destroy$)).subscribe({
+    this.chatService.chatSelected$.pipe(throttleTime(1000), takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
         if (!this.chatService.state.ffEnabled) {
