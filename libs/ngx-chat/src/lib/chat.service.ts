@@ -24,12 +24,12 @@ import {
   mergeWith as ldMergeWith,
   pick as ldPick,
 } from 'lodash-es';
-import { BehaviorSubject, Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, takeUntil } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import {
   CHAT_IFRAME_URL,
-  CHAT_MESSAGE_BUFFER_SIZE,
+  CHAT_MESSAGE_LIST_BUFFER_SIZE,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
   CHAT_STORAGE_MESSAGE_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
@@ -81,6 +81,11 @@ export class ChatService implements OnDestroy {
     this.storageSubscription();
 
     this.layout.registerHeadlessPath(CHAT_URL_FULLSCREEN_LIST);
+
+    this.uix.onClose$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.cleanupBroadcastMessage();
+    });
+
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
   }
 
@@ -208,8 +213,8 @@ export class ChatService implements OnDestroy {
   // keep the last x messages as per buffer size
   private handleMessageBuffer(chat: ChatMessageItem) {
     this.chatBufferList.unshift(chat);
-    if (this.chatBufferList.length > CHAT_MESSAGE_BUFFER_SIZE) {
-      this.chatBufferList.length = CHAT_MESSAGE_BUFFER_SIZE;
+    if (this.chatBufferList.length > CHAT_MESSAGE_LIST_BUFFER_SIZE) {
+      this.chatBufferList.length = CHAT_MESSAGE_LIST_BUFFER_SIZE;
     }
   }
 
@@ -250,15 +255,6 @@ export class ChatService implements OnDestroy {
     return chatList;
   }
 
-  cleanupBroadcastMessage() {
-    // remove local storage message items
-    Object.entries(this.uix.localStorage).map(([key]) => {
-      if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
-        this.uix.localStorage.removeItem(key);
-      }
-    });
-  }
-
   pauseIframe(iframePaused: boolean) {
     // spacial case for iframe pause, we talk to store directly
     // everything else must go through this.setState()
@@ -266,6 +262,15 @@ export class ChatService implements OnDestroy {
     this.store.setState(this.claimId, {
       ...this.state,
       iframePaused,
+    });
+  }
+
+  cleanupBroadcastMessage() {
+    // remove local storage message items
+    Object.entries(this.uix.localStorage).forEach(([key]) => {
+      if (key.startsWith(CHAT_STORAGE_BROADCAST_KEY_PREFIX)) {
+        this.uix.localStorage.removeItem(key);
+      }
     });
   }
 

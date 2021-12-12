@@ -13,10 +13,11 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
-import { BehaviorSubject, Observable, Subject, filter, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
+  CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE,
   CHAT_STORAGE_MESSAGE_KEY,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
@@ -46,6 +47,7 @@ export class ChatIframeService implements OnDestroy {
   private overlayReadyOb$ = new Subject<boolean>();
   overlayReady$ = this.overlayReadyOb$.asObservable();
   awaitOverlayResponseTimeoutHandler = undefined;
+  dispatchedChatMessageIds: string[] = [];
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
@@ -63,13 +65,17 @@ export class ChatIframeService implements OnDestroy {
     this.setNorthBoundReadyPing();
     this.storageSubscription();
     this.chatStateSubscription();
+    this.clearDispatchedChatMessages();
 
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
 
   private broadcastMessage(key: string, value: string) {
     this.uix.localStorage.setItem(key, value);
-    this.uix.localStorage.removeItem(key);
+    this.dispatchedChatMessageIds.push(key);
+    if (this.dispatchedChatMessageIds?.length > CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE) {
+      this.clearDispatchedChatMessages();
+    }
   }
 
   private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessageItem) {
@@ -196,7 +202,7 @@ export class ChatIframeService implements OnDestroy {
       this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
           if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
-            this.handleNewOverlayResponseEvent();
+            return this.handleNewOverlayResponseEvent();
           }
         },
       });
@@ -211,8 +217,16 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info('Overlay response received');
   }
 
+  private clearDispatchedChatMessages() {
+    this.dispatchedChatMessageIds?.map((key) => {
+      this.uix.localStorage.removeItem(key);
+    });
+    this.dispatchedChatMessageIds = [];
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.clearDispatchedChatMessages();
   }
 }
