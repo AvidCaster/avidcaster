@@ -163,7 +163,7 @@ export class ChatService implements OnDestroy {
 
   updateChatInDb(id: string, chat: ChatMessageItem): void {
     const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
-    this.chatDb.collection(dbDocKey).doc({ id: 1 }).set(chat);
+    this.chatDb.collection(dbDocKey).doc({ id }).set(chat);
   }
 
   /**
