@@ -1,6 +1,6 @@
 {
   "name": "fullerstack",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "author": "Val Neekman",
   "repository": {
@@ -132,6 +132,7 @@
     "jquery": "^3.6.0",
     "js-base64": "3.7.2",
     "jsonwebtoken": "8.5.1",
+    "localbase": "^0.7.5",
     "lodash-es": "4.17.21",
     "mustache": "4.2.0",
     "ng-let": "^13.0.1",
