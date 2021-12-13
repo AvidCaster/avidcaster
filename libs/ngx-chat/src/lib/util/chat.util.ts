@@ -137,6 +137,20 @@ export const primaryFilterChatMessageItem = (
   return chat;
 };
 
+export const skipFilters = (chat: ChatMessageItem, state: ChatState): boolean => {
+  switch (ChatMessageFilterType[state.filterOption]) {
+    case ChatMessageFilterType.Membership:
+    case ChatMessageFilterType.Donation:
+      if (chat?.donation || chat?.membership) {
+        return true;
+      }
+      break;
+    default:
+      break;
+  }
+  return false;
+};
+
 /**
  * Open a window to the chat overlay screen
  * @param targetWindow window object

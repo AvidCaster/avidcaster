@@ -33,7 +33,7 @@ import {
   ChatMessageUpstreamAction,
   ChatState,
 } from '../chat.model';
-import { openOverlayWindowScreen, primaryFilterChatMessageItem } from '../util/chat.util';
+import { openOverlayWindowScreen } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
 
@@ -129,20 +129,16 @@ export class ChatIframeService implements OnDestroy {
                   case 'youtube': {
                     if (!this.state.iframePaused) {
                       const chat = parseYouTubeChat(data);
-                      if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                        this.addNewChatMessageToDb(data.host, chat);
-                        // console.log(JSON.stringify(chat, null, 4));
-                      }
+                      this.addNewChatMessageToDb(data.host, chat);
+                      // console.log(JSON.stringify(chat, null, 4));
                     }
                     break;
                   }
                   case 'twitch': {
                     if (!this.state.iframePaused) {
                       const chat = parseTwitchChat(data);
-                      if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                        this.addNewChatMessageToDb(data.host, chat);
-                        // console.log(JSON.stringify(chat, null, 4));
-                      }
+                      this.addNewChatMessageToDb(data.host, chat);
+                      // console.log(JSON.stringify(chat, null, 4));
                     }
                     break;
                   }

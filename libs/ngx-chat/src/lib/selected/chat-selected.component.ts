@@ -36,7 +36,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.chatService.chatSelected$.pipe(throttleTime(1000), takeUntil(this.destroy$)).subscribe({
+    this.chatService.chatSelected$.pipe(throttleTime(100), takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
         if (!this.chatService.state.ffEnabled) {

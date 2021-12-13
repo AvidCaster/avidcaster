@@ -51,7 +51,7 @@ import {
   defaultChatTest,
 } from './chat.default';
 import { ChatMessageItem, ChatState } from './chat.model';
-import { filterChatMessageItem } from './util/chat.util';
+import { filterChatMessageItem, primaryFilterChatMessageItem } from './util/chat.util';
 
 @Injectable()
 export class ChatService implements OnDestroy {
@@ -99,7 +99,7 @@ export class ChatService implements OnDestroy {
       this.cleanupBroadcastMessage();
     });
 
-    this.initIndexedDB();
+    this.subIndexedDb();
 
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
   }
@@ -107,7 +107,7 @@ export class ChatService implements OnDestroy {
   /**
    * Create an IndexedDB
    */
-  private initIndexedDB() {
+  private subIndexedDb() {
     this.chatDb = new Localbase(this.nameSpace);
     this.chatDb.config.debug = false;
 
@@ -117,9 +117,12 @@ export class ChatService implements OnDestroy {
           switchMap(() => this.chatDb.collection(CHAT_DB_MESSAGE_KEY).get()),
           filter(({ length }) => length && length !== this.chatDbLastSize),
           map((chats: ChatMessageItem[]) => this.pruneDb(chats)),
-          map((chats: ChatMessageItem[]) =>
-            chats.map((chat) => filterChatMessageItem(chat, this.state as ChatState))
-          ),
+          map((chats: ChatMessageItem[]) => {
+            return chats.map((chat) => primaryFilterChatMessageItem(chat, this.state as ChatState));
+          }),
+          map((chats: ChatMessageItem[]) => {
+            return chats.map((chat) => filterChatMessageItem(chat, this.state as ChatState));
+          }),
           takeUntil(this.destroy$)
         )
         .subscribe({
@@ -197,7 +200,6 @@ export class ChatService implements OnDestroy {
       .subscribe({
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
-          this.chatListOb$.next(this.filterChatList());
 
           if (!this.isRunningInIframeContext) {
             const currentStateInStorage = this.sanitizeState(
@@ -263,14 +265,6 @@ export class ChatService implements OnDestroy {
     if (state.signature !== this.state.signature) {
       this.setState({ ...defaultChatState(), ...state });
     }
-  }
-
-  private filterChatList(): ChatMessageItem[] {
-    const chatList = this.chatBufferList
-      ?.map((chat) => filterChatMessageItem(chat, this.state as ChatState))
-      .filter((chat) => !!chat);
-
-    return chatList;
   }
 
   pauseIframe(iframePaused: boolean) {
