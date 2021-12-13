@@ -18,7 +18,6 @@ import { BehaviorSubject, Subject, filter, takeUntil, throttleTime } from 'rxjs'
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
-  CHAT_DB_MESSAGE_KEY,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   ChatSupportedSites,
@@ -33,7 +32,7 @@ import {
   ChatMessageUpstreamAction,
   ChatState,
 } from '../chat.model';
-import { openOverlayWindowScreen } from '../util/chat.util';
+import { getIndexedDbDocKey, openOverlayWindowScreen, storageBroadcast } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
 
@@ -81,17 +80,14 @@ export class ChatIframeService implements OnDestroy {
     this.chatDb.config.debug = false;
   }
 
-  localStorageBroadcast(key: string, value: string) {
-    this.uix.localStorage.setItem(key, value);
-    this.uix.localStorage.removeItem(key);
-  }
-
   private addNewChatMessageToDb(host: ChatMessageHosts, chat: ChatMessageItem) {
     chat.id = uuid_v4();
     chat.streamId = this.streamId;
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
-    this.chatDb.collection(CHAT_DB_MESSAGE_KEY).add(chat);
+
+    const docKey = getIndexedDbDocKey(this.state as ChatState);
+    this.chatDb.collection(docKey).add(chat);
   }
 
   private subChatState(): void {
@@ -194,7 +190,7 @@ export class ChatIframeService implements OnDestroy {
 
   broadcastOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
-    this.localStorageBroadcast(key, JSON.stringify({ from: 'iframe' }));
+    storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
       openOverlayWindowScreen(this.uix.window);
       this.awaitOverlayResponseTimeoutHandler = undefined;

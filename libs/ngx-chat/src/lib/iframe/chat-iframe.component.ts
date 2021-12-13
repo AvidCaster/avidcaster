@@ -40,7 +40,7 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
     this.chatIframeService.hostReady$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.logger.info('Host ready!');
-        this.cdRef.markForCheck();
+        this.cdRef.detectChanges();
       },
     });
   }
@@ -50,7 +50,7 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
       next: () => {
         this.overlayOpenRequestInProgress = false;
         this.logger.info('Overlay ready!');
-        this.cdRef.markForCheck();
+        this.cdRef.detectChanges();
       },
     });
   }
@@ -63,10 +63,6 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
   homeUrl(url: string) {
     const baseUrl = this.chatService.layout.uix.window?.location?.origin;
     return `${baseUrl}${url}`;
-  }
-
-  showStreamId() {
-    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {

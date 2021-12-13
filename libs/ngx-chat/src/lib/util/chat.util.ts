@@ -6,7 +6,13 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
+import {
+  CHAT_DB_MESSAGE_DONATION_KEY,
+  CHAT_DB_MESSAGE_KEY,
+  CHAT_DB_MESSAGE_MEMBERSHIP_KEY,
+  CHAT_OVERLAY_SCREEN_URL,
+  ChatSupportedSites,
+} from '../chat.default';
 import {
   ChatMessageFilterType,
   ChatMessageItem,
@@ -137,18 +143,16 @@ export const primaryFilterChatMessageItem = (
   return chat;
 };
 
-export const skipFilters = (chat: ChatMessageItem, state: ChatState): boolean => {
+export const getIndexedDbDocKey = (state: ChatState): string => {
   switch (ChatMessageFilterType[state.filterOption]) {
-    case ChatMessageFilterType.Membership:
     case ChatMessageFilterType.Donation:
-      if (chat?.donation || chat?.membership) {
-        return true;
-      }
-      break;
+      return CHAT_DB_MESSAGE_DONATION_KEY;
+    case ChatMessageFilterType.Membership:
+      return CHAT_DB_MESSAGE_MEMBERSHIP_KEY;
     default:
       break;
   }
-  return false;
+  return CHAT_DB_MESSAGE_KEY;
 };
 
 /**
@@ -167,4 +171,9 @@ export const openOverlayWindowScreen = (
     '_blank',
     `width=${width},height=${height},left=100,top=100`
   );
+};
+
+export const storageBroadcast = (storageObj: Storage, key: string, value: string): void => {
+  storageObj?.setItem(key, value);
+  storageObj?.removeItem(key);
 };

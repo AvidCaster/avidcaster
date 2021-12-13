@@ -51,7 +51,12 @@ import {
   defaultChatTest,
 } from './chat.default';
 import { ChatMessageItem, ChatState } from './chat.model';
-import { filterChatMessageItem, primaryFilterChatMessageItem } from './util/chat.util';
+import {
+  filterChatMessageItem,
+  getIndexedDbDocKey,
+  primaryFilterChatMessageItem,
+  storageBroadcast,
+} from './util/chat.util';
 
 @Injectable()
 export class ChatService implements OnDestroy {
@@ -114,8 +119,13 @@ export class ChatService implements OnDestroy {
     if (!this.isRunningInIframeContext) {
       interval(100)
         .pipe(
-          switchMap(() => this.chatDb.collection(CHAT_DB_MESSAGE_KEY).get()),
-          filter(({ length }) => length && length !== this.chatDbLastSize),
+          switchMap(() => {
+            const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
+            return this.chatDb.collection(dbDocKey).get();
+          }),
+          filter(
+            (chats: ChatMessageItem[]) => chats?.length && chats?.length !== this.chatDbLastSize
+          ),
           map((chats: ChatMessageItem[]) => this.pruneDb(chats)),
           map((chats: ChatMessageItem[]) => {
             return chats.map((chat) => primaryFilterChatMessageItem(chat, this.state as ChatState));
@@ -144,6 +154,16 @@ export class ChatService implements OnDestroy {
       });
     }
     return chats.slice(-1 * CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE);
+  }
+
+  async getChatFromDb(id: string): Promise<ChatMessageItem> {
+    const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
+    return await this.chatDb.collection(dbDocKey).doc({ id }).get();
+  }
+
+  updateChatInDb(id: string, chat: ChatMessageItem): void {
+    const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
+    this.chatDb.collection(dbDocKey).doc({ id: 1 }).set(chat);
   }
 
   /**
@@ -227,6 +247,10 @@ export class ChatService implements OnDestroy {
   }
 
   chatSelected(chat: ChatMessageItem) {
+    if (this.getChatFromDb(chat.id)) {
+      chat.viewed = true;
+      this.updateChatInDb(chat.id, chat);
+    }
     this.chatSelectedOb$.next(chat);
   }
 
@@ -238,14 +262,9 @@ export class ChatService implements OnDestroy {
     this.chatSelectedOb$.next(undefined);
   }
 
-  localStorageBroadcast(key: string, value: string) {
-    this.uix.localStorage.setItem(key, value);
-    this.uix.localStorage.removeItem(key);
-  }
-
   broadcastNewChatOverlayResponse() {
     const key = CHAT_STORAGE_OVERLAY_RESPONSE_KEY;
-    this.localStorageBroadcast(key, JSON.stringify({ from: 'overlay' }));
+    storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'overlay' }));
   }
 
   private storageSubscription() {

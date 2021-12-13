@@ -33,7 +33,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   trackById(index: number, chat: ChatMessageItem) {
-    return chat?.id;
+    return `${index}-${chat?.id}`;
   }
 
   updateChatList(): void {
