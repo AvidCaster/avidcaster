@@ -13,12 +13,12 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
-import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs';
+import Localbase from 'localbase';
+import { BehaviorSubject, Subject, filter, takeUntil, throttleTime } from 'rxjs';
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
-  CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE,
-  CHAT_STORAGE_MESSAGE_KEY,
+  CHAT_DB_MESSAGE_KEY,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   ChatSupportedSites,
@@ -48,6 +48,7 @@ export class ChatIframeService implements OnDestroy {
   overlayReady$ = this.overlayReadyOb$.asObservable();
   awaitOverlayResponseTimeoutHandler = undefined;
   dispatchedChatMessageIds: string[] = [];
+  chatDb: Localbase;
   currentHost: ChatMessageHosts;
   streamId: string;
   prefix: string;
@@ -61,7 +62,7 @@ export class ChatIframeService implements OnDestroy {
     readonly uix: UixService,
     readonly layout: LayoutService
   ) {
-    this.clearDispatchedChatMessages();
+    this.initIndexedDB();
 
     this.subOnMessage();
     this.subOnStorage();
@@ -72,21 +73,25 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info(`[${this.nameSpace}] ChatIframeService ready ...`);
   }
 
-  private storageBroadcast(key: string, value: string) {
-    this.uix.localStorage.setItem(key, value);
-    this.dispatchedChatMessageIds.push(key);
-    if (this.dispatchedChatMessageIds?.length > CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE) {
-      this.clearDispatchedChatMessages();
-    }
+  /**
+   * Create an IndexedDB
+   */
+  private initIndexedDB() {
+    this.chatDb = new Localbase(this.nameSpace);
+    this.chatDb.config.debug = false;
   }
 
-  private broadcastNewChatMessage(host: ChatMessageHosts, chat: ChatMessageItem) {
-    const key = `${CHAT_STORAGE_MESSAGE_KEY}-${host}-${uuid_v4()}`;
+  localStorageBroadcast(key: string, value: string) {
+    this.uix.localStorage.setItem(key, value);
+    this.uix.localStorage.removeItem(key);
+  }
+
+  private addNewChatMessageToDb(host: ChatMessageHosts, chat: ChatMessageItem) {
     chat.id = uuid_v4();
     chat.streamId = this.streamId;
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
-    this.storageBroadcast(key, JSON.stringify(chat));
+    this.chatDb.collection(CHAT_DB_MESSAGE_KEY).add(chat);
   }
 
   private subChatState(): void {
@@ -105,50 +110,52 @@ export class ChatIframeService implements OnDestroy {
 
   private subOnMessage() {
     this.zone.runOutsideAngular(() => {
-      this.uix.onMessage$.pipe(takeUntil(this.destroy$)).subscribe((event: MessageEvent) => {
-        const data = event.data as ChatMessageEvent;
-        if (data.type === ChatMessageDirection.SouthBound) {
-          switch (data.action) {
-            case ChatMessageDownstreamAction.pong:
-              this.currentHost = data.host;
-              this.streamId = data.streamId;
-              this.setNorthBoundIframe(this.currentHost);
-              break;
-            case ChatMessageDownstreamAction.ready:
-              this.setNorthBoundObserverReady(this.currentHost);
-              break;
-            case ChatMessageDownstreamAction.chat:
-              switch (data.host) {
-                case 'youtube': {
-                  if (!this.state.iframePaused) {
-                    const chat = parseYouTubeChat(data);
-                    if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                      this.broadcastNewChatMessage(data.host, chat);
-                      // console.log(JSON.stringify(chat, null, 4));
+      this.uix.onMessage$
+        .pipe(throttleTime(10), takeUntil(this.destroy$))
+        .subscribe((event: MessageEvent) => {
+          const data = event.data as ChatMessageEvent;
+          if (data.type === ChatMessageDirection.SouthBound) {
+            switch (data.action) {
+              case ChatMessageDownstreamAction.pong:
+                this.currentHost = data.host;
+                this.streamId = data.streamId;
+                this.setNorthBoundIframe(this.currentHost);
+                break;
+              case ChatMessageDownstreamAction.ready:
+                this.setNorthBoundObserverReady(this.currentHost);
+                break;
+              case ChatMessageDownstreamAction.chat:
+                switch (data.host) {
+                  case 'youtube': {
+                    if (!this.state.iframePaused) {
+                      const chat = parseYouTubeChat(data);
+                      if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
+                        this.addNewChatMessageToDb(data.host, chat);
+                        // console.log(JSON.stringify(chat, null, 4));
+                      }
                     }
+                    break;
                   }
-                  break;
-                }
-                case 'twitch': {
-                  if (!this.state.iframePaused) {
-                    const chat = parseTwitchChat(data);
-                    if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
-                      this.broadcastNewChatMessage(data.host, chat);
-                      // console.log(JSON.stringify(chat, null, 4));
+                  case 'twitch': {
+                    if (!this.state.iframePaused) {
+                      const chat = parseTwitchChat(data);
+                      if (primaryFilterChatMessageItem(chat, this.state as ChatState)) {
+                        this.addNewChatMessageToDb(data.host, chat);
+                        // console.log(JSON.stringify(chat, null, 4));
+                      }
                     }
+                    break;
                   }
-                  break;
+                  default:
+                    console.log(`Unknown host: ${data.host}`);
+                    break;
                 }
-                default:
-                  console.log(`Unknown host: ${data.host}`);
-                  break;
-              }
-              break;
-            default:
-              break;
+                break;
+              default:
+                break;
+            }
           }
-        }
-      });
+        });
     });
   }
 
@@ -191,7 +198,7 @@ export class ChatIframeService implements OnDestroy {
 
   broadcastOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
-    this.storageBroadcast(key, JSON.stringify({ from: 'iframe' }));
+    this.localStorageBroadcast(key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
       openOverlayWindowScreen(this.uix.window);
       this.awaitOverlayResponseTimeoutHandler = undefined;
@@ -219,16 +226,8 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info('Overlay response received');
   }
 
-  private clearDispatchedChatMessages() {
-    this.dispatchedChatMessageIds?.map((key) => {
-      this.uix.localStorage.removeItem(key);
-    });
-    this.dispatchedChatMessageIds = [];
-  }
-
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.clearDispatchedChatMessages();
   }
 }

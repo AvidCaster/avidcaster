@@ -58,9 +58,10 @@ export const CHAT_IFRAME_URL = '/chat/iframe';
 export const CHAT_OVERLAY_SCREEN_URL = '/chat/overlay/screen';
 export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_OVERLAY_SCREEN_URL];
 
+export const CHAT_DB_MESSAGE_KEY = 'messages';
+
 export const CHAT_STORAGE_KEY_PREFIX = 'avidcaster-chat';
 export const CHAT_STORAGE_BROADCAST_KEY_PREFIX = `${CHAT_STORAGE_KEY_PREFIX}-broadcast`;
-export const CHAT_STORAGE_MESSAGE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-message`;
 export const CHAT_STORAGE_MESSAGE_HEARTBEAT_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-heartbeat`;
 export const CHAT_STORAGE_OVERLAY_REQUEST_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-request`;
 export const CHAT_STORAGE_OVERLAY_RESPONSE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-response`;
@@ -149,6 +150,7 @@ export const ChatPrimaryFilterOptions = {
   [ChatMessagePrimaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
 };
 
+// chat buffer to display
 export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 50;
-export const CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE = 50;
-export const CHAT_MESSAGE_IFRAME_HEARTBEAT_IN_SECONDS = 5 * 1000;
+// extra buffer not to display but to delay delete
+export const CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE = 25;
