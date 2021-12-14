@@ -119,7 +119,7 @@ export class ChatIframeService implements OnDestroy {
   // iframe process is responsible and since we may have multiple chats
   // we randomize the pruning to avoid all iframe processes from pruning at once
   private async pruneDb(collection: ChatDbCollectionType) {
-    const doRemove = Math.random() <= 0.2;
+    const doRemove = Math.random() * 100 <= 20;
     if (doRemove) {
       const chatIds = (await this.chatDb.collection(collection).get())
         .map((chat: ChatMessageItem) => chat.id)
@@ -131,7 +131,10 @@ export class ChatIframeService implements OnDestroy {
           try {
             await this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
           } catch (e) {
-            this.logger.error(`Error pruning ${collection}`, e);
+            this.logger.debug(
+              `Error pruning ${collection}, the other iframe may have called delete`,
+              e
+            );
           }
         });
         this.logger.debug(
