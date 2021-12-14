@@ -110,3 +110,9 @@ export enum ChatMessagePrimaryFilterType {
   StartWithA = 'startWithA',
   StartWithFrom = 'startWithFrom',
 }
+
+export enum ChatDbCollectionType {
+  Regular = 'regular',
+  Donation = 'donation',
+  Membership = 'membership',
+}

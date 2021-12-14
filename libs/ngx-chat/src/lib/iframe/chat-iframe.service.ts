@@ -18,11 +18,15 @@ import { BehaviorSubject, Subject, filter, takeUntil, throttleTime } from 'rxjs'
 import { v4 as uuid_v4 } from 'uuid';
 
 import {
+  CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE,
+  CHAT_MESSAGE_LIST_BUFFER_SIZE,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   ChatSupportedSites,
+  defaultChatTest,
 } from '../chat.default';
 import {
+  ChatDbCollectionType,
   ChatMessageDirection,
   ChatMessageDownstreamAction,
   ChatMessageEvent,
@@ -80,14 +84,41 @@ export class ChatIframeService implements OnDestroy {
     this.chatDb.config.debug = false;
   }
 
-  private addNewChatMessageToDb(host: ChatMessageHosts, chat: ChatMessageItem) {
+  private async pruneDb(collection: ChatDbCollectionType) {
+    const doRemove = Math.random() <= 0.2;
+    if (doRemove) {
+      const chatIds = (await this.chatDb.collection(collection).get())
+        .map((chat: ChatMessageItem) => chat.id)
+        .filter((id: string) => !!id);
+
+      if (chatIds.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
+        chatIds.slice(0, CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE).map(async ({ id }) => {
+          await this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
+        });
+        this.logger.debug(
+          `[${this.nameSpace}] pruneDb: ${CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE} from ${chatIds.length}`
+        );
+      }
+    }
+  }
+
+  private async addNewChatMessageToDb(host: ChatMessageHosts, chat: ChatMessageItem) {
     chat.id = uuid_v4();
     chat.streamId = this.streamId;
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
 
-    const docKey = getIndexedDbDocKey(this.state as ChatState);
-    this.chatDb.collection(docKey).add(chat);
+    let collectionKey = ChatDbCollectionType.Regular;
+    if (chat.donation) {
+      collectionKey = ChatDbCollectionType.Donation;
+    } else if (chat.membership) {
+      collectionKey = ChatDbCollectionType.Membership;
+    }
+
+    this.pruneDb(collectionKey);
+
+    await this.chatDb.collection(collectionKey).add(chat);
+    this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
   }
 
   private subChatState(): void {

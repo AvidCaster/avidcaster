@@ -38,7 +38,6 @@ import {
 import { DeepReadonly } from 'ts-essentials';
 
 import {
-  CHAT_DB_MESSAGE_KEY,
   CHAT_IFRAME_URL,
   CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE,
   CHAT_MESSAGE_LIST_BUFFER_SIZE,
@@ -50,7 +49,7 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import { ChatMessageItem, ChatState } from './chat.model';
+import { ChatDbCollectionType, ChatMessageItem, ChatState } from './chat.model';
 import {
   filterChatMessageItem,
   getIndexedDbDocKey,
@@ -150,7 +149,7 @@ export class ChatService implements OnDestroy {
   private pruneDb(chats: ChatMessageItem[]): ChatMessageItem[] {
     if (chats.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
       chats.slice(0, CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE).map(({ id }) => {
-        this.chatDb.collection(CHAT_DB_MESSAGE_KEY).doc({ id }).delete();
+        this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
       });
     }
     return chats.slice(-1 * CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE);

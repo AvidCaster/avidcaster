@@ -58,10 +58,6 @@ export const CHAT_IFRAME_URL = '/chat/iframe';
 export const CHAT_OVERLAY_SCREEN_URL = '/chat/overlay/screen';
 export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_OVERLAY_SCREEN_URL];
 
-export const CHAT_DB_MESSAGE_KEY = 'messages';
-export const CHAT_DB_MESSAGE_MEMBERSHIP_KEY = 'messages-membership';
-export const CHAT_DB_MESSAGE_DONATION_KEY = 'messages-donation';
-
 export const CHAT_STORAGE_KEY_PREFIX = 'avidcaster-chat';
 export const CHAT_STORAGE_BROADCAST_KEY_PREFIX = `${CHAT_STORAGE_KEY_PREFIX}-broadcast`;
 export const CHAT_STORAGE_MESSAGE_HEARTBEAT_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-heartbeat`;

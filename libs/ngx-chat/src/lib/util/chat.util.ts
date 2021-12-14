@@ -6,14 +6,9 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import {
-  CHAT_DB_MESSAGE_DONATION_KEY,
-  CHAT_DB_MESSAGE_KEY,
-  CHAT_DB_MESSAGE_MEMBERSHIP_KEY,
-  CHAT_OVERLAY_SCREEN_URL,
-  ChatSupportedSites,
-} from '../chat.default';
-import {
+  ChatDbCollectionType,
   ChatMessageFilterType,
   ChatMessageItem,
   ChatMessagePrimaryFilterType,
@@ -146,13 +141,13 @@ export const primaryFilterChatMessageItem = (
 export const getIndexedDbDocKey = (state: ChatState): string => {
   switch (ChatMessageFilterType[state.filterOption]) {
     case ChatMessageFilterType.Donation:
-      return CHAT_DB_MESSAGE_DONATION_KEY;
+      return ChatDbCollectionType.Donation;
     case ChatMessageFilterType.Membership:
-      return CHAT_DB_MESSAGE_MEMBERSHIP_KEY;
+      return ChatDbCollectionType.Membership;
     default:
       break;
   }
-  return CHAT_DB_MESSAGE_KEY;
+  return ChatDbCollectionType.Regular;
 };
 
 /**
