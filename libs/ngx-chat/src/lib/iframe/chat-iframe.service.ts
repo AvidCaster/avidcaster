@@ -13,9 +13,7 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
-import Localbase from 'localbase';
 import { BehaviorSubject, Subject, filter, takeUntil, throttleTime } from 'rxjs';
-import { v4 as uuid_v4 } from 'uuid';
 
 import {
   CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE,
@@ -25,16 +23,17 @@ import {
   ChatSupportedSites,
 } from '../chat.default';
 import {
-  ChatDbCollectionType,
+  ChatDbTableType,
+  ChatDownstreamAction,
+  ChatHostReady,
+  ChatHosts,
   ChatMessageDirection,
-  ChatMessageDownstreamAction,
   ChatMessageEvent,
-  ChatMessageHostReady,
-  ChatMessageHosts,
   ChatMessageItem,
-  ChatMessageUpstreamAction,
   ChatState,
+  ChatUpstreamAction,
 } from '../chat.model';
+import { chatDb } from '../util/chat.db';
 import { openOverlayWindowScreen, storageBroadcast } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
@@ -44,14 +43,13 @@ export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
   private state: ChatState;
-  private hostReadyOb$ = new BehaviorSubject<ChatMessageHostReady>({ ready: false });
+  private hostReadyOb$ = new BehaviorSubject<ChatHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
   overlayReady$ = this.overlayReadyOb$.asObservable();
   awaitOverlayResponseTimeoutHandler = undefined;
   dispatchedChatMessageIds: string[] = [];
-  chatDb: Localbase;
-  currentHost: ChatMessageHosts;
+  currentHost: ChatHosts;
   streamId: string;
   prefix: string;
 
@@ -64,8 +62,6 @@ export class ChatIframeService implements OnDestroy {
     readonly uix: UixService,
     readonly layout: LayoutService
   ) {
-    this.initIndexedDB();
-
     this.subOnMessage();
     this.subOnStorage();
     this.subChatState();
@@ -107,48 +103,25 @@ export class ChatIframeService implements OnDestroy {
     });
   }
 
-  /**
-   * Create an IndexedDB
-   */
-  private initIndexedDB() {
-    this.chatDb = new Localbase(this.nameSpace);
-    this.chatDb.config.debug = false;
-  }
-
   // prune the db to keep it from growing too large
   // iframe process is responsible and since we may have multiple chats
   // we randomize the pruning to avoid all iframe processes from pruning at once
-  private async pruneDb(collectionType: ChatDbCollectionType) {
-    let randomizeRemove = Math.random() * 100 <= 10;
-    switch (collectionType) {
-      case ChatDbCollectionType.Membership:
-        randomizeRemove = Math.random() * 100 <= 5;
-        break;
-      case ChatDbCollectionType.Donation:
-        randomizeRemove = Math.random() * 100 <= 2;
-        break;
-      case ChatDbCollectionType.Regular:
-      default:
-        break;
-    }
+  private async pruneDb(chat: ChatMessageItem) {
+    const randomizeRemove = Math.random() * 100 <= 10;
 
     if (randomizeRemove) {
-      // get ids in reverse order
-      const chatIds = (await this.chatDb.collection(collectionType).get())
-        .map((chat: ChatMessageItem) => chat.id)
-        .filter((id: string) => !!id);
-
-      // remove the first X ids, which is removing the oldest
-      if (chatIds.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
-        chatIds
-          .reverse()
-          .slice(CHAT_MESSAGE_LIST_BUFFER_SIZE)
-          .map(async (id: string) => {
-            await this.chatDb.collection(collectionType).doc({ id }).delete();
-          });
-
-        this.logger.debug(`[${this.nameSpace}] pruneDb: total was: ${chatIds.length}`);
+      let dbTable = ChatDbTableType.Message;
+      if (chat.membership) {
+        dbTable = ChatDbTableType.Membership;
+      } else if (chat.donation) {
+        dbTable = ChatDbTableType.Donation;
       }
+
+      await chatDb.pruneMessageTable(
+        dbTable,
+        CHAT_MESSAGE_LIST_BUFFER_SIZE,
+        CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE
+      );
     }
   }
 
@@ -157,23 +130,14 @@ export class ChatIframeService implements OnDestroy {
    * @param host the host of the message, e.g. twitch, youtube
    * @param chat the chat message
    */
-  private async addNewChatMessageToDb(host: ChatMessageHosts, chat: ChatMessageItem) {
-    chat.id = uuid_v4();
+  private async addNewChatMessageToDb(host: ChatHosts, chat: ChatMessageItem) {
     chat.streamId = this.streamId;
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
 
-    let collectionType = ChatDbCollectionType.Regular;
-    if (chat.donation) {
-      collectionType = ChatDbCollectionType.Donation;
-    } else if (chat.membership) {
-      collectionType = ChatDbCollectionType.Membership;
-    }
-
-    await this.chatDb.collection(collectionType).add(chat);
-    // this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
-
-    this.pruneDb(collectionType);
+    await chatDb.addMessage(chat);
+    this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
+    this.pruneDb(chat);
   }
 
   /**
@@ -188,15 +152,15 @@ export class ChatIframeService implements OnDestroy {
           const data = event.data as ChatMessageEvent;
           if (data.type === ChatMessageDirection.SouthBound) {
             switch (data.action) {
-              case ChatMessageDownstreamAction.pong:
+              case ChatDownstreamAction.pong:
                 this.currentHost = data.host;
                 this.streamId = data.streamId;
                 this.setNorthBoundIframe(this.currentHost);
                 break;
-              case ChatMessageDownstreamAction.ready:
+              case ChatDownstreamAction.ready:
                 this.setNorthBoundObserverReady(this.currentHost);
                 break;
-              case ChatMessageDownstreamAction.chat:
+              case ChatDownstreamAction.chat:
                 switch (data.host) {
                   case 'youtube': {
                     if (!this.state.iframePaused) {
@@ -231,7 +195,7 @@ export class ChatIframeService implements OnDestroy {
    * We have heard from overlay process, we get ready to process messages
    * @param host the host of the message, e.g. twitch, youtube
    */
-  private setNorthBoundObserverReady(host: ChatMessageHosts) {
+  private setNorthBoundObserverReady(host: ChatHosts) {
     this.hostReadyOb$.next({ host, ready: true });
     this.logger.info(`Observer is ready for ${this.currentHost}`);
   }
@@ -242,7 +206,7 @@ export class ChatIframeService implements OnDestroy {
   private pingNorthBoundHost() {
     const data = {
       type: ChatMessageDirection.NorthBound,
-      action: ChatMessageUpstreamAction.ping,
+      action: ChatUpstreamAction.ping,
     };
 
     this.uix.window.parent.postMessage(data, '*');
@@ -252,10 +216,10 @@ export class ChatIframeService implements OnDestroy {
    * Let the host know what to latch onto and send down to us
    * @param host the host of the message, e.g. twitch, youtube
    */
-  private setNorthBoundSelector(host: ChatMessageHosts) {
+  private setNorthBoundSelector(host: ChatHosts) {
     const data = {
       type: ChatMessageDirection.NorthBound,
-      action: ChatMessageUpstreamAction.observe,
+      action: ChatUpstreamAction.observe,
       payload: ChatSupportedSites[host].observer,
     };
 
@@ -267,10 +231,10 @@ export class ChatIframeService implements OnDestroy {
    * Let the host know where to attached the new copy of the iframe to, and remove the old one
    * @param host the host of the message, e.g. twitch, youtube
    */
-  private setNorthBoundIframe(host: ChatMessageHosts) {
+  private setNorthBoundIframe(host: ChatHosts) {
     const data = {
       type: ChatMessageDirection.NorthBound,
-      action: ChatMessageUpstreamAction.iframe,
+      action: ChatUpstreamAction.iframe,
       payload: ChatSupportedSites[host].iframe,
     };
 

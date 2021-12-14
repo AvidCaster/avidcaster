@@ -18,24 +18,14 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
-import Localbase from 'localbase';
+import { liveQuery } from 'dexie';
 import {
   cloneDeep as ldDeepClone,
   isEqual as ldIsEqual,
   mergeWith as ldMergeWith,
   pick as ldPick,
 } from 'lodash-es';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  filter,
-  from,
-  interval,
-  map,
-  switchMap,
-  takeUntil,
-} from 'rxjs';
+import { Observable, Subject, filter, map, switchMap, takeUntil, tap } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import {
@@ -48,10 +38,10 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import { ChatDbCollectionType, ChatMessageItem, ChatState } from './chat.model';
+import { ChatMessageFilterType, ChatMessageItem, ChatState } from './chat.model';
+import { chatDb } from './util/chat.db';
 import {
   filterChatMessageItem,
-  getIndexedDbDocKey,
   primaryFilterChatMessageItem,
   storageBroadcast,
 } from './util/chat.util';
@@ -64,14 +54,9 @@ export class ChatService implements OnDestroy {
   state: DeepReadonly<ChatState> = defaultChatState();
   state$: Observable<ChatState>;
   private destroy$ = new Subject<boolean>();
-  private chatBufferList: ChatMessageItem[] = [];
-  private chatListOb$ = new BehaviorSubject<ChatMessageItem[]>([]);
-  chatList$ = this.chatListOb$.asObservable();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
-  chatDb: Localbase;
-  chatDbLastSize = 0;
-  prefix: string;
+  chatTable$: Observable<ChatMessageItem[]>;
 
   constructor(
     readonly zone: NgZone,
@@ -102,67 +87,34 @@ export class ChatService implements OnDestroy {
       this.cleanupBroadcastMessage();
     });
 
-    this.subIndexedDb();
-    this.dropDbCollections();
-
+    this.subToTables();
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
   }
 
-  /**
-   * Drop all collections in the DB on start
-   */
-  private dropDbCollections() {
-    [
-      ChatDbCollectionType.Regular,
-      ChatDbCollectionType.Membership,
-      ChatDbCollectionType.Donation,
-    ].forEach((collectionType) => {
-      this.chatDb.collection(collectionType).delete();
-    });
-  }
-
-  /**
-   * Create an IndexedDB
-   */
-  private subIndexedDb() {
-    this.chatDb = new Localbase(this.nameSpace);
-    this.chatDb.config.debug = false;
-
-    if (!this.isRunningInIframeContext) {
-      interval(100)
-        .pipe(
-          switchMap(() =>
-            from(this.chatDb.collection(getIndexedDbDocKey(this.state as ChatState)).get())
-          ),
-          filter((chats: ChatMessageItem[]) => !!chats?.length),
-          map((chats: ChatMessageItem[]) => {
-            return chats.map((chat) => {
-              const filteredChat = primaryFilterChatMessageItem(chat, this.state as ChatState);
-              return filterChatMessageItem(filteredChat, this.state as ChatState);
-            });
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe({
-          next: (chats: ChatMessageItem[]) => {
-            this.chatListOb$.next(chats);
-            const shouldEmitSelectedChatEvent = this.state.ffEnabled;
-            if (shouldEmitSelectedChatEvent) {
-              this.chatSelected(chats[chats.length - 1]);
-            }
-          },
+  private subToTables() {
+    this.chatTable$ = this.state$.pipe(
+      switchMap((state) => {
+        switch (ChatMessageFilterType[state.filterOption]) {
+          case ChatMessageFilterType.Donation:
+            return liveQuery(() => chatDb.table('donation').toArray());
+          case ChatMessageFilterType.Membership:
+            return liveQuery(() => chatDb.table('membership').toArray());
+          default:
+            return liveQuery(() => chatDb.table('message').toArray());
+        }
+      }),
+      map((chats: ChatMessageItem[]) => {
+        return chats.map((chat) => {
+          const filteredChat = primaryFilterChatMessageItem(chat, this.state as ChatState);
+          return filterChatMessageItem(filteredChat, this.state as ChatState);
         });
-    }
-  }
-
-  async getChatFromDb(id: string): Promise<ChatMessageItem> {
-    const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
-    return await this.chatDb.collection(dbDocKey).doc({ id }).get();
-  }
-
-  updateChatInDb(id: string, chat: ChatMessageItem): void {
-    const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
-    this.chatDb.collection(dbDocKey).doc({ id }).set(chat);
+      }),
+      tap((chats: ChatMessageItem[]) => {
+        if (this.state.ffEnabled) {
+          this.chatSelected(chats[chats.length - 1]);
+        }
+      })
+    ) as Observable<ChatMessageItem[]>;
   }
 
   /**
@@ -247,10 +199,8 @@ export class ChatService implements OnDestroy {
 
   chatSelected(chat: ChatMessageItem) {
     if (chat?.id) {
-      if (this.getChatFromDb(chat.id)) {
-        chat.viewed = true;
-        this.updateChatInDb(chat.id, chat);
-      }
+      chat.viewed = true;
+      chatDb.updateMessage(chat);
       this.chatSelectedOb$.next(chat);
     }
   }

@@ -92,7 +92,7 @@ export const defaultChatState = (): ChatState => {
  * Default configuration - Layout module
  */
 const DefaultChatTest: ChatMessageItem = {
-  id: '1234334455',
+  id: 1,
   author: 'Mike Tyson',
   message: 'My dog loves lives loves his bag, same one since puppy',
   html: 'My dog loves lives loves his bag, same one since puppy',

@@ -16,20 +16,20 @@ export interface ChatConfig {
   [id: string]: any;
 }
 
-export type ChatMessageHosts = 'youtube' | 'twitch';
+export type ChatHosts = 'youtube' | 'twitch';
 
-export interface ChatMessageHostReady {
-  host?: ChatMessageHosts;
+export interface ChatHostReady {
+  host?: ChatHosts;
   ready: boolean;
 }
 
-export enum ChatMessageDownstreamAction {
+export enum ChatDownstreamAction {
   pong = 'pong',
   chat = 'chat',
   ready = 'ready',
 }
 
-export enum ChatMessageUpstreamAction {
+export enum ChatUpstreamAction {
   iframe = 'iframe',
   ping = 'ping',
   observe = 'observe',
@@ -40,8 +40,14 @@ export enum ChatMessageDirection {
   SouthBound = 'avidcaster-chat-south-bound',
 }
 
+export enum ChatDbTableType {
+  Message = 'message',
+  Donation = 'donation',
+  Membership = 'membership',
+}
+
 export interface ChatMessage {
-  host?: ChatMessageHosts;
+  host?: ChatHosts;
   author?: string;
   avatarUrl?: string;
   badgeUrl?: string;
@@ -53,7 +59,7 @@ export interface ChatMessage {
 }
 
 export interface ChatMessageItem extends ChatMessage {
-  id?: string;
+  id?: number;
   timestamp?: number;
   prefix?: string;
   streamId?: string;
@@ -68,9 +74,9 @@ export interface ChatMessageData {
 
 export interface ChatMessageEvent {
   type: ChatMessageDirection;
-  host: ChatMessageHosts;
+  host: ChatHosts;
   streamId: string;
-  action: ChatMessageUpstreamAction | ChatMessageDownstreamAction;
+  action: ChatUpstreamAction | ChatDownstreamAction;
   payload: ChatMessageData;
 }
 
@@ -109,10 +115,4 @@ export enum ChatMessagePrimaryFilterType {
   StartWithQ = 'startWithQ',
   StartWithA = 'startWithA',
   StartWithFrom = 'startWithFrom',
-}
-
-export enum ChatDbCollectionType {
-  Regular = 'regular',
-  Donation = 'donation',
-  Membership = 'membership',
 }

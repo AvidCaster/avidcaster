@@ -37,7 +37,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   updateChatList(): void {
-    this.chatService.chatList$.pipe(takeUntil(this.destroyed$)).subscribe({
+    this.chatService.chatTable$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: () => {
         if (this.chatService.state.autoScrollEnabled) {
           setTimeout(() => this.cdR.markForCheck(), 0);

@@ -8,7 +8,6 @@
 
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import {
-  ChatDbCollectionType,
   ChatMessageFilterType,
   ChatMessageItem,
   ChatMessagePrimaryFilterType,
@@ -138,17 +137,17 @@ export const primaryFilterChatMessageItem = (
   return chat;
 };
 
-export const getIndexedDbDocKey = (state: ChatState): string => {
-  switch (ChatMessageFilterType[state.filterOption]) {
-    case ChatMessageFilterType.Donation:
-      return ChatDbCollectionType.Donation;
-    case ChatMessageFilterType.Membership:
-      return ChatDbCollectionType.Membership;
-    default:
-      break;
-  }
-  return ChatDbCollectionType.Regular;
-};
+// export const getIndexedDbDocKey = (state: ChatState): string => {
+//   switch (ChatMessageFilterType[state.filterOption]) {
+//     case ChatMessageFilterType.Donation:
+//       return ChatDbCollectionType.Donation;
+//     case ChatMessageFilterType.Membership:
+//       return ChatDbCollectionType.Membership;
+//     default:
+//       break;
+//   }
+//   return ChatDbCollectionType.Regular;
+// };
 
 /**
  * Open a window to the chat overlay screen
