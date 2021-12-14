@@ -30,6 +30,7 @@ import {
   Observable,
   Subject,
   filter,
+  from,
   interval,
   map,
   switchMap,
@@ -39,8 +40,6 @@ import { DeepReadonly } from 'ts-essentials';
 
 import {
   CHAT_IFRAME_URL,
-  CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE,
-  CHAT_MESSAGE_LIST_BUFFER_SIZE,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   CHAT_STORAGE_STATE_KEY,
@@ -104,8 +103,22 @@ export class ChatService implements OnDestroy {
     });
 
     this.subIndexedDb();
+    this.dropDbCollections();
 
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
+  }
+
+  /**
+   * Drop all collections in the DB on start
+   */
+  private dropDbCollections() {
+    [
+      ChatDbCollectionType.Regular,
+      ChatDbCollectionType.Membership,
+      ChatDbCollectionType.Donation,
+    ].forEach((collectionType) => {
+      this.chatDb.collection(collectionType).delete();
+    });
   }
 
   /**
@@ -119,7 +132,7 @@ export class ChatService implements OnDestroy {
       interval(100)
         .pipe(
           switchMap(() =>
-            this.chatDb.collection(getIndexedDbDocKey(this.state as ChatState)).get()
+            from(this.chatDb.collection(getIndexedDbDocKey(this.state as ChatState)).get())
           ),
           filter((chats: ChatMessageItem[]) => !!chats?.length),
           map((chats: ChatMessageItem[]) => {
