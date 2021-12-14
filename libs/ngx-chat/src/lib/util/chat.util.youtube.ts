@@ -24,7 +24,12 @@ const getAuthor = ($obj: JQuery<Node[]>): string => {
 const getAvatarUrl = ($obj: JQuery<Node[]>): string => {
   return tryGet(() => {
     const el = $obj.find('#img');
-    return el.attr('src').replace('s32', 's256').replace('s64', 's256').replace(/ +/g, ' ').trim();
+    return el
+      .attr('src')
+      .replace('=s32', '=s256')
+      .replace('=s64', '=s256')
+      .replace(/ +/g, ' ')
+      .trim();
   }, CHAT_YOUTUBE_DEFAULT_AVATAR);
 };
 
