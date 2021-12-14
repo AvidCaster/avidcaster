@@ -123,10 +123,11 @@ export class ChatIframeService implements OnDestroy {
     if (doRemove) {
       const chatIds = (await this.chatDb.collection(collection).get())
         .map((chat: ChatMessageItem) => chat.id)
-        .filter((id: string) => !!id);
+        .filter((id: string) => !!id)
+        .reverse();
 
       if (chatIds.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
-        chatIds.slice(0, CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE).map(async ({ id }) => {
+        chatIds.slice(CHAT_MESSAGE_LIST_BUFFER_SIZE).map(async ({ id }) => {
           await this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
         });
         this.logger.debug(
