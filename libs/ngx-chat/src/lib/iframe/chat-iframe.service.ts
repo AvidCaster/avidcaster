@@ -112,31 +112,27 @@ export class ChatIframeService implements OnDestroy {
    */
   private initIndexedDB() {
     this.chatDb = new Localbase(this.nameSpace);
-    this.chatDb.config.debug = false;
+    // this.chatDb.config.debug = false;
   }
 
   // prune the db to keep it from growing too large
   // iframe process is responsible and since we may have multiple chats
   // we randomize the pruning to avoid all iframe processes from pruning at once
-  private async pruneDb(collection: ChatDbCollectionType) {
+  private async pruneDb(collectionType: ChatDbCollectionType) {
     const doRemove = Math.random() * 100 <= 20;
     if (doRemove) {
-      const chatIds = (await this.chatDb.collection(collection).get())
+      // get ids in reverse order
+      const chatIds = (await this.chatDb.collection(collectionType).get())
         .map((chat: ChatMessageItem) => chat.id)
         .filter((id: string) => !!id)
         .reverse();
 
+      // remove the first X ids, removing the oldest
       if (chatIds.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
-        chatIds.slice(CHAT_MESSAGE_LIST_BUFFER_SIZE).map(async ({ id }) => {
-          try {
-            await this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
-          } catch (e) {
-            this.logger.debug(
-              `Error pruning ${collection}, the other iframe may have called delete`,
-              e
-            );
-          }
+        chatIds.slice(CHAT_MESSAGE_LIST_BUFFER_SIZE).map(async (id: string) => {
+          await this.chatDb.collection(collectionType).doc({ id }).delete();
         });
+
         this.logger.debug(
           `[${this.nameSpace}] pruneDb: ${CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE} from ${chatIds.length}`
         );
@@ -155,17 +151,17 @@ export class ChatIframeService implements OnDestroy {
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
 
-    let collectionKey = ChatDbCollectionType.Regular;
+    let collectionType = ChatDbCollectionType.Regular;
     if (chat.donation) {
-      collectionKey = ChatDbCollectionType.Donation;
+      collectionType = ChatDbCollectionType.Donation;
     } else if (chat.membership) {
-      collectionKey = ChatDbCollectionType.Membership;
+      collectionType = ChatDbCollectionType.Membership;
     }
 
-    this.pruneDb(collectionKey);
+    await this.chatDb.collection(collectionType).add(chat);
+    // this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
 
-    await this.chatDb.collection(collectionKey).add(chat);
-    this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
+    this.pruneDb(collectionType);
   }
 
   /**
