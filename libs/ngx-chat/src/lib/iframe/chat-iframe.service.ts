@@ -128,7 +128,11 @@ export class ChatIframeService implements OnDestroy {
 
       if (chatIds.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
         chatIds.slice(CHAT_MESSAGE_LIST_BUFFER_SIZE).map(async ({ id }) => {
-          await this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
+          try {
+            await this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
+          } catch (e) {
+            this.logger.error(`Error pruning ${collection}`, e);
+          }
         });
         this.logger.debug(
           `[${this.nameSpace}] pruneDb: ${CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE} from ${chatIds.length}`
