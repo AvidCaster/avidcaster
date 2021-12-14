@@ -118,19 +118,15 @@ export class ChatService implements OnDestroy {
     if (!this.isRunningInIframeContext) {
       interval(100)
         .pipe(
-          switchMap(() => {
-            const dbDocKey = getIndexedDbDocKey(this.state as ChatState);
-            return this.chatDb.collection(dbDocKey).get();
-          }),
-          filter(
-            (chats: ChatMessageItem[]) => chats?.length && chats?.length !== this.chatDbLastSize
+          switchMap(() =>
+            this.chatDb.collection(getIndexedDbDocKey(this.state as ChatState)).get()
           ),
-          map((chats: ChatMessageItem[]) => this.pruneDb(chats)),
+          filter((chats: ChatMessageItem[]) => !!chats?.length),
           map((chats: ChatMessageItem[]) => {
-            return chats.map((chat) => primaryFilterChatMessageItem(chat, this.state as ChatState));
-          }),
-          map((chats: ChatMessageItem[]) => {
-            return chats.map((chat) => filterChatMessageItem(chat, this.state as ChatState));
+            return chats.map((chat) => {
+              const filteredChat = primaryFilterChatMessageItem(chat, this.state as ChatState);
+              return filterChatMessageItem(filteredChat, this.state as ChatState);
+            });
           }),
           takeUntil(this.destroy$)
         )
@@ -144,15 +140,6 @@ export class ChatService implements OnDestroy {
           },
         });
     }
-  }
-
-  private pruneDb(chats: ChatMessageItem[]): ChatMessageItem[] {
-    if (chats.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
-      chats.slice(0, CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE).map(({ id }) => {
-        this.chatDb.collection(ChatDbCollectionType.Regular).doc({ id }).delete();
-      });
-    }
-    return chats.slice(-1 * CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE);
   }
 
   async getChatFromDb(id: string): Promise<ChatMessageItem> {
@@ -246,11 +233,13 @@ export class ChatService implements OnDestroy {
   }
 
   chatSelected(chat: ChatMessageItem) {
-    if (this.getChatFromDb(chat.id)) {
-      chat.viewed = true;
-      this.updateChatInDb(chat.id, chat);
+    if (chat?.id) {
+      if (this.getChatFromDb(chat.id)) {
+        chat.viewed = true;
+        this.updateChatInDb(chat.id, chat);
+      }
+      this.chatSelectedOb$.next(chat);
     }
-    this.chatSelectedOb$.next(chat);
   }
 
   loadTestChat() {

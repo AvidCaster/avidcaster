@@ -119,23 +119,35 @@ export class ChatIframeService implements OnDestroy {
   // iframe process is responsible and since we may have multiple chats
   // we randomize the pruning to avoid all iframe processes from pruning at once
   private async pruneDb(collectionType: ChatDbCollectionType) {
-    const doRemove = Math.random() * 100 <= 20;
-    if (doRemove) {
+    let randomizeRemove = Math.random() * 100 <= 10;
+    switch (collectionType) {
+      case ChatDbCollectionType.Membership:
+        randomizeRemove = Math.random() * 100 <= 5;
+        break;
+      case ChatDbCollectionType.Donation:
+        randomizeRemove = Math.random() * 100 <= 2;
+        break;
+      case ChatDbCollectionType.Regular:
+      default:
+        break;
+    }
+
+    if (randomizeRemove) {
       // get ids in reverse order
       const chatIds = (await this.chatDb.collection(collectionType).get())
         .map((chat: ChatMessageItem) => chat.id)
-        .filter((id: string) => !!id)
-        .reverse();
+        .filter((id: string) => !!id);
 
-      // remove the first X ids, removing the oldest
+      // remove the first X ids, which is removing the oldest
       if (chatIds.length >= CHAT_MESSAGE_LIST_BUFFER_SIZE + CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE) {
-        chatIds.slice(CHAT_MESSAGE_LIST_BUFFER_SIZE).map(async (id: string) => {
-          await this.chatDb.collection(collectionType).doc({ id }).delete();
-        });
+        chatIds
+          .reverse()
+          .slice(CHAT_MESSAGE_LIST_BUFFER_SIZE)
+          .map(async (id: string) => {
+            await this.chatDb.collection(collectionType).doc({ id }).delete();
+          });
 
-        this.logger.debug(
-          `[${this.nameSpace}] pruneDb: ${CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE} from ${chatIds.length}`
-        );
+        this.logger.debug(`[${this.nameSpace}] pruneDb: total was: ${chatIds.length}`);
       }
     }
   }
