@@ -39,7 +39,7 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import { ChatMessageFilterType, ChatMessageItem, ChatState } from './chat.model';
+import { ChatMessageFilterType, ChatMessageItem, ChatMessageType, ChatState } from './chat.model';
 import { chatDb } from './util/chat.db';
 import {
   filterChatMessageItem,
@@ -90,38 +90,6 @@ export class ChatService implements OnDestroy {
 
     this.subToTables();
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
-  }
-
-  private subToTables() {
-    this.chatTable$ = this.state$.pipe(
-      switchMap((state) => {
-        switch (ChatMessageFilterType[state.filterOption]) {
-          case ChatMessageFilterType.Donation:
-            return liveQuery(() =>
-              chatDb.table('donation').limit(CHAT_MESSAGE_LIST_DISPLAY_LIMIT).toArray()
-            );
-          case ChatMessageFilterType.Membership:
-            return liveQuery(() =>
-              chatDb.table('membership').limit(CHAT_MESSAGE_LIST_DISPLAY_LIMIT).toArray()
-            );
-          default:
-            return liveQuery(() =>
-              chatDb.table('message').limit(CHAT_MESSAGE_LIST_DISPLAY_LIMIT).toArray()
-            );
-        }
-      }),
-      map((chats: ChatMessageItem[]) => {
-        return chats.map((chat) => {
-          const filteredChat = primaryFilterChatMessageItem(chat, this.state as ChatState);
-          return filterChatMessageItem(filteredChat, this.state as ChatState);
-        });
-      }),
-      tap((chats: ChatMessageItem[]) => {
-        if (this.state.ffEnabled) {
-          this.chatSelected(chats[chats.length - 1]);
-        }
-      })
-    ) as Observable<ChatMessageItem[]>;
   }
 
   /**
@@ -204,9 +172,37 @@ export class ChatService implements OnDestroy {
     });
   }
 
+  private subToTables() {
+    this.chatTable$ = this.state$.pipe(
+      switchMap((state) => {
+        switch (ChatMessageFilterType[state.filterOption]) {
+          case ChatMessageFilterType.Donation:
+            return chatDb.liveQuery(ChatMessageType.Donation, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+          case ChatMessageFilterType.Membership:
+            return chatDb.liveQuery(ChatMessageType.Membership, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+          default:
+            return chatDb.liveQuery(ChatMessageType.Common, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+        }
+      }),
+      map((chats: ChatMessageItem[]) => {
+        return chats.map((chat) => {
+          const filteredChat = primaryFilterChatMessageItem(chat, this.state as ChatState);
+          return filterChatMessageItem(filteredChat, this.state as ChatState);
+        });
+      }),
+      tap((chats: ChatMessageItem[]) => {
+        if (this.state.ffEnabled) {
+          this.chatSelected(chats[chats.length - 1]);
+        }
+      })
+    ) as Observable<ChatMessageItem[]>;
+  }
+
   chatSelected(chat: ChatMessageItem) {
     if (chat?.id) {
-      chat.viewed = true;
+      if (!this.state.ffEnabled) {
+        chat.viewed = true;
+      }
       chatDb.updateMessage(chat);
       this.chatSelectedOb$.next(chat);
     }

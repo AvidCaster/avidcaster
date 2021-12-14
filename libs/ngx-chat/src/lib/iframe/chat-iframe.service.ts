@@ -23,13 +23,13 @@ import {
   ChatSupportedSites,
 } from '../chat.default';
 import {
-  ChatDbTableType,
   ChatDownstreamAction,
   ChatHostReady,
   ChatHosts,
   ChatMessageDirection,
   ChatMessageEvent,
   ChatMessageItem,
+  ChatMessageType,
   ChatState,
   ChatUpstreamAction,
 } from '../chat.model';
@@ -110,16 +110,16 @@ export class ChatIframeService implements OnDestroy {
     const randomizeRemove = Math.random() * 100 <= 10;
 
     if (randomizeRemove) {
-      let dbTable = ChatDbTableType.Message;
+      let dbTable = ChatMessageType.Common;
       if (chat.membership) {
-        dbTable = ChatDbTableType.Membership;
+        dbTable = ChatMessageType.Membership;
       } else if (chat.donation) {
-        dbTable = ChatDbTableType.Donation;
+        dbTable = ChatMessageType.Donation;
       }
 
       await chatDb.pruneMessageTable(
-        dbTable,
         CHAT_MESSAGE_LIST_BUFFER_SIZE,
+        dbTable,
         CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE
       );
     }

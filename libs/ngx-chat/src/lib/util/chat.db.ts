@@ -1,104 +1,70 @@
 import Dexie from 'dexie';
 
-import { welcomeChat } from '../chat.default';
-import { ChatDbTableType, ChatMessageItem } from '../chat.model';
+import { ChatMessageItem, ChatMessageType } from '../chat.model';
 
 export class ChatDB extends Dexie {
   constructor() {
     super('AvidCasterChatDB');
     this.version(3).stores({
-      message: '++id',
-      donation: '++id',
-      membership: '++id',
+      [ChatMessageType.Common]: '++id',
+      [ChatMessageType.Donation]: '++id',
+      [ChatMessageType.Membership]: '++id',
     });
-    this.on('populate', () => this.populate());
-  }
-
-  async populate() {
-    await chatDb.table('message').add(welcomeChat());
   }
 
   /**
-   * Add a new chat message to the specific table, and the message table
+   * Add a new chat message to the specific table
    * @param chat chat message item
    */
-  async addMessage(chat: ChatMessageItem) {
-    if (chat.donation) {
-      await this.table('donation').add(chat);
-    } else if (chat.membership) {
-      await this.table('membership').add(chat);
-    }
-
-    // now add it to the main message table
-    await this.table('message').add(chat);
+  async addMessage(chat: ChatMessageItem, tableType = ChatMessageType.Common) {
+    await this.table(tableType).add(chat);
   }
 
   /**
-   * Update a chat message in the specified table, and the message table
+   * Update a chat message in the specified table
    * @param chat chat to update
    */
-  async updateMessage(chat: ChatMessageItem) {
-    if (chat.donation) {
-      await this.table('donation').update(chat.id, chat);
-    } else if (chat.membership) {
-      await this.table('membership').update(chat.id, chat);
-    } else {
-      await this.table('message').update(chat.id, chat);
-    }
+  async updateMessage(chat: ChatMessageItem, tableType = ChatMessageType.Common) {
+    await this.table(tableType).add(chat);
   }
 
-  async deleteMessage(chat: ChatMessageItem) {
-    if (chat.donation) {
-      return await this.table('donation').add(chat?.id);
-    } else if (chat.membership) {
-      return await this.table('membership').add(chat?.id);
-    }
-    return await this.table('message').add(chat?.id);
+  async deleteMessage(chat: ChatMessageItem, tableType = ChatMessageType.Common) {
+    await this.table(tableType).delete(chat?.id);
   }
 
-  async deleteMessages(tableType: ChatDbTableType, ids: number[]) {
-    let tableName = 'message';
-    switch (tableType) {
-      case ChatDbTableType.Donation:
-        tableName = 'donation';
-        break;
-      case ChatDbTableType.Membership:
-        tableName = 'membership';
-        break;
-    }
-
-    ids?.map(async (id) => await this.table(tableName).delete(id));
+  async deleteMessages(ids: number[], tableType = ChatMessageType.Common) {
+    ids?.map(async (id) => await this.table(tableType).delete(id));
   }
 
-  async pruneMessageTable(tableType: ChatDbTableType, listSize: number, offset = 25) {
-    let tableName = 'message';
-    switch (tableType) {
-      case ChatDbTableType.Donation:
-        tableName = 'donation';
-        break;
-      case ChatDbTableType.Membership:
-        tableName = 'membership';
-        break;
-    }
-    const count = await chatDb.table(tableName).count();
+  async pruneMessageTable(listSize: number, tableType: ChatMessageType, offset = 25) {
+    const count = await chatDb.table(tableType).count();
     if (count >= listSize + offset) {
       const chats = await chatDb
-        .table(tableName)
+        .table(tableType)
         .orderBy(':id')
         .reverse()
         .offset(listSize)
         .toArray();
-      chats?.map(async (chat) => await chatDb.table(tableName).delete(chat.id));
+      chats?.map(async (chat) => await chatDb.table(tableType).delete(chat.id));
     }
   }
 
   async resetDatabase() {
-    await chatDb.transaction('rw', 'messageTable', 'messageLists', () => {
-      this.table('message').clear();
-      this.table('donation').clear();
-      this.table('membership').clear();
-      this.populate();
-    });
+    await chatDb.transaction(
+      'rw',
+      ChatMessageType.Common,
+      ChatMessageType.Donation,
+      ChatMessageType.Membership,
+      () => {
+        this.table(ChatMessageType.Common).clear();
+        this.table(ChatMessageType.Donation).clear();
+        this.table(ChatMessageType.Membership).clear();
+      }
+    );
+  }
+
+  liveQuery(tableType: ChatMessageType, limit: number) {
+    return this.table(tableType).limit(limit).toArray();
   }
 }
 

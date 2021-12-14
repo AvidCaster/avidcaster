@@ -10,7 +10,7 @@ import { tryGet } from '@fullerstack/agx-util';
 import * as $ from 'jquery';
 
 import { CHAT_TWITCH_DEFAULT_AVATAR } from '../chat.default';
-import { ChatMessage, ChatMessageEvent, ChatMessageItem } from '../chat.model';
+import { ChatMessage, ChatMessageEvent, ChatMessageItem, ChatMessageType } from '../chat.model';
 
 const getAuthor = ($obj: JQuery<Node[]>): string => {
   return tryGet(() => {
@@ -86,7 +86,7 @@ const parseCommonElements = (el: JQuery<Node[]>): ChatMessage => {
     avatarUrl: getAvatarUrl(el),
     badgeUrl: getBadgeUrl(el),
     donation: getPurchaseAmount(el),
-    messageType: 'text-message',
+    messageType: ChatMessageType.Common,
   };
 };
 

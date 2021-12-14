@@ -40,8 +40,8 @@ export enum ChatMessageDirection {
   SouthBound = 'avidcaster-chat-south-bound',
 }
 
-export enum ChatDbTableType {
-  Message = 'message',
+export enum ChatMessageType {
+  Common = 'common',
   Donation = 'donation',
   Membership = 'membership',
 }
@@ -55,7 +55,7 @@ export interface ChatMessage {
   html?: string;
   donation?: string;
   membership?: string;
-  messageType?: string;
+  messageType?: ChatMessageType;
 }
 
 export interface ChatMessageItem extends ChatMessage {

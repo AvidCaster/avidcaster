@@ -10,7 +10,7 @@ import { tryGet } from '@fullerstack/agx-util';
 import * as $ from 'jquery';
 
 import { CHAT_YOUTUBE_DEFAULT_AVATAR } from '../chat.default';
-import { ChatMessage, ChatMessageEvent, ChatMessageItem } from '../chat.model';
+import { ChatMessage, ChatMessageEvent, ChatMessageItem, ChatMessageType } from '../chat.model';
 import { includesEmoji } from './chat.util';
 
 const getAuthor = ($obj: JQuery<Node[]>): string => {
@@ -97,19 +97,19 @@ const parseCommonElements = (el: JQuery<Node[]>): ChatMessage => {
     avatarUrl: getAvatarUrl(el),
     badgeUrl: getBadgeUrl(el),
     donation: getPurchaseAmount(el),
-    messageType: 'text-message',
+    messageType: ChatMessageType.Common,
   };
 };
 
 const parsePaidMessage = (el: JQuery<Node[]>): ChatMessage => {
   const params = parseCommonElements(el);
-  params.messageType = 'paid-message';
+  params.messageType = ChatMessageType.Donation;
   return params;
 };
 
 const parsePaidSticker = (el: JQuery<Node[]>): ChatMessage => {
   const params = parseCommonElements(el);
-  params.messageType = 'paid-sticker';
+  params.messageType = ChatMessageType.Donation;
   return params;
 };
 
@@ -125,7 +125,7 @@ const parseMembershipItem = (el: JQuery<Node[]>): ChatMessage => {
     params.html = tryGet(() => el.find('#header-subtext').html().replace(/ +/g, ' ').trim(), '');
   }
 
-  params.messageType = 'membership-item';
+  params.messageType = ChatMessageType.Membership;
   return params;
 };
 

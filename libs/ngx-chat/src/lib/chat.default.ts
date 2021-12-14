@@ -14,6 +14,7 @@ import {
   ChatMessageFilterType,
   ChatMessageItem,
   ChatMessagePrimaryFilterType,
+  ChatMessageType,
   ChatState,
 } from './chat.model';
 
@@ -99,7 +100,7 @@ const DefaultChatTest: ChatMessageItem = {
   avatarUrl: CHAT_YOUTUBE_DEFAULT_AVATAR,
   badgeUrl: '',
   donation: '$100',
-  messageType: 'text-message',
+  messageType: ChatMessageType.Donation,
   host: 'youtube',
   streamId: 'NfG9ApM_yTE',
   timestamp: 1639013100520,
@@ -118,7 +119,7 @@ const WelcomeChat: ChatMessageItem = {
   message: 'Welcome to AvidCaster chat overlay!',
   html: 'Welcome to AvidCaster chat overlay!',
   avatarUrl: CHAT_DEFAULT_LOGO,
-  messageType: 'welcome-message',
+  messageType: ChatMessageType.Common,
   streamId: 'avidcaster',
   prefix: 'avidcaster',
 };
