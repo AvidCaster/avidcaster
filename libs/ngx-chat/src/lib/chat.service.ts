@@ -30,6 +30,7 @@ import { DeepReadonly } from 'ts-essentials';
 
 import {
   CHAT_IFRAME_URL,
+  CHAT_MESSAGE_LIST_DISPLAY_LIMIT,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   CHAT_STORAGE_STATE_KEY,
@@ -96,11 +97,17 @@ export class ChatService implements OnDestroy {
       switchMap((state) => {
         switch (ChatMessageFilterType[state.filterOption]) {
           case ChatMessageFilterType.Donation:
-            return liveQuery(() => chatDb.table('donation').toArray());
+            return liveQuery(() =>
+              chatDb.table('donation').limit(CHAT_MESSAGE_LIST_DISPLAY_LIMIT).toArray()
+            );
           case ChatMessageFilterType.Membership:
-            return liveQuery(() => chatDb.table('membership').toArray());
+            return liveQuery(() =>
+              chatDb.table('membership').limit(CHAT_MESSAGE_LIST_DISPLAY_LIMIT).toArray()
+            );
           default:
-            return liveQuery(() => chatDb.table('message').toArray());
+            return liveQuery(() =>
+              chatDb.table('message').limit(CHAT_MESSAGE_LIST_DISPLAY_LIMIT).toArray()
+            );
         }
       }),
       map((chats: ChatMessageItem[]) => {

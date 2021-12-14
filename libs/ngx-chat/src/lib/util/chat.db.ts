@@ -18,22 +18,33 @@ export class ChatDB extends Dexie {
     await chatDb.table('message').add(welcomeChat());
   }
 
+  /**
+   * Add a new chat message to the specific table, and the message table
+   * @param chat chat message item
+   */
   async addMessage(chat: ChatMessageItem) {
     if (chat.donation) {
-      return await this.table('donation').add(chat);
+      await this.table('donation').add(chat);
     } else if (chat.membership) {
-      return await this.table('membership').add(chat);
+      await this.table('membership').add(chat);
     }
-    return await this.table('message').add(chat);
+
+    // now add it to the main message table
+    await this.table('message').add(chat);
   }
 
+  /**
+   * Update a chat message in the specified table, and the message table
+   * @param chat chat to update
+   */
   async updateMessage(chat: ChatMessageItem) {
     if (chat.donation) {
-      return await this.table('donation').update(chat.id, chat);
+      await this.table('donation').update(chat.id, chat);
     } else if (chat.membership) {
-      return await this.table('membership').update(chat.id, chat);
+      await this.table('membership').update(chat.id, chat);
+    } else {
+      await this.table('message').update(chat.id, chat);
     }
-    return await this.table('message').update(chat.id, chat);
   }
 
   async deleteMessage(chat: ChatMessageItem) {

@@ -148,7 +148,9 @@ export const ChatPrimaryFilterOptions = {
   [ChatMessagePrimaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
 };
 
-// chat buffer to display
-export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 50;
-// extra buffer not to display but to delay delete
+// chat display limit (visible / scrollable)
+export const CHAT_MESSAGE_LIST_DISPLAY_LIMIT = 50;
+// chat buffer, to keep
+export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 100;
+// extra buffer offset, allow buffer size to grow before trimming it
 export const CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE = 25;
