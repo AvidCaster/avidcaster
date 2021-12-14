@@ -18,7 +18,6 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
-import { liveQuery } from 'dexie';
 import {
   cloneDeep as ldDeepClone,
   isEqual as ldIsEqual,
