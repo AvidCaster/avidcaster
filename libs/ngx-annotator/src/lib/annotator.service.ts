@@ -72,6 +72,10 @@ export class AnnotatorService implements OnDestroy {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
 
+    this.onStorageOb$ = fromEvent(this.uix.window, 'storage').pipe(
+      filter((event: StorageEvent) => !!event.newValue)
+    );
+
     this.claimSlice();
     this.subState();
     this.subStorage();
