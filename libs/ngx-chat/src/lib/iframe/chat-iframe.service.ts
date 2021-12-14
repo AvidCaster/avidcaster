@@ -23,7 +23,6 @@ import {
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   ChatSupportedSites,
-  defaultChatTest,
 } from '../chat.default';
 import {
   ChatDbCollectionType,
@@ -36,7 +35,7 @@ import {
   ChatMessageUpstreamAction,
   ChatState,
 } from '../chat.model';
-import { getIndexedDbDocKey, openOverlayWindowScreen, storageBroadcast } from '../util/chat.util';
+import { openOverlayWindowScreen, storageBroadcast } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
 
@@ -84,6 +83,9 @@ export class ChatIframeService implements OnDestroy {
     this.chatDb.config.debug = false;
   }
 
+  // prune the db to keep it from growing too large
+  // iframe process is responsible and since we may have multiple chats
+  // we randomize the pruning to avoid all iframe processes from pruning at once
   private async pruneDb(collection: ChatDbCollectionType) {
     const doRemove = Math.random() <= 0.2;
     if (doRemove) {
