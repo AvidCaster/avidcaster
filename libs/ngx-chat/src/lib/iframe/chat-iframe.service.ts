@@ -76,6 +76,38 @@ export class ChatIframeService implements OnDestroy {
   }
 
   /**
+   * Listen for messages from the chat state observable
+   */
+  private subChatState(): void {
+    const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
+    stateSub$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state: ChatState) => {
+          this.state = state;
+        },
+      });
+  }
+
+  /**
+   * Listen to messages on the local storage
+   */
+  private subOnStorage() {
+    this.zone.runOutsideAngular(() => {
+      this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
+        next: (event: StorageEvent) => {
+          if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
+            return this.handleNewOverlayResponseEvent();
+          }
+        },
+      });
+    });
+  }
+
+  /**
    * Create an IndexedDB
    */
   private initIndexedDB() {
@@ -104,6 +136,11 @@ export class ChatIframeService implements OnDestroy {
     }
   }
 
+  /**
+   * Store the message in indexed db for the overlay process to retrieve
+   * @param host the host of the message, e.g. twitch, youtube
+   * @param chat the chat message
+   */
   private async addNewChatMessageToDb(host: ChatMessageHosts, chat: ChatMessageItem) {
     chat.id = uuid_v4();
     chat.streamId = this.streamId;
@@ -123,20 +160,10 @@ export class ChatIframeService implements OnDestroy {
     this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
   }
 
-  private subChatState(): void {
-    const stateSub$ = this.store.select$<ChatState>(this.nameSpace);
-    stateSub$
-      .pipe(
-        filter((state) => !!state),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (state: ChatState) => {
-          this.state = state;
-        },
-      });
-  }
-
+  /**
+   * Subscribes to the message event from the host, e.g. twitch, youtube
+   * We receive the message out of the zone context to avoid over-rendering
+   */
   private subOnMessage() {
     this.zone.runOutsideAngular(() => {
       this.uix.onMessage$
@@ -184,11 +211,18 @@ export class ChatIframeService implements OnDestroy {
     });
   }
 
+  /**
+   * We have heard from overlay process, we get ready to process messages
+   * @param host the host of the message, e.g. twitch, youtube
+   */
   private setNorthBoundObserverReady(host: ChatMessageHosts) {
     this.hostReadyOb$.next({ host, ready: true });
     this.logger.info(`Observer is ready for ${this.currentHost}`);
   }
 
+  /**
+   * Ping the host to see if it is alive
+   */
   private pingNorthBoundHost() {
     const data = {
       type: ChatMessageDirection.NorthBound,
@@ -198,6 +232,10 @@ export class ChatIframeService implements OnDestroy {
     this.uix.window.parent.postMessage(data, '*');
   }
 
+  /**
+   * Let the host know what to latch onto and send down to us
+   * @param host the host of the message, e.g. twitch, youtube
+   */
   private setNorthBoundSelector(host: ChatMessageHosts) {
     const data = {
       type: ChatMessageDirection.NorthBound,
@@ -208,6 +246,11 @@ export class ChatIframeService implements OnDestroy {
     this.uix.window.parent.postMessage(data, '*');
   }
 
+  /**
+   * We are running in a default iframe, appended to the "body" of the host's DOM
+   * Let the host know where to attached the new copy of the iframe to, and remove the old one
+   * @param host the host of the message, e.g. twitch, youtube
+   */
   private setNorthBoundIframe(host: ChatMessageHosts) {
     const data = {
       type: ChatMessageDirection.NorthBound,
@@ -221,6 +264,12 @@ export class ChatIframeService implements OnDestroy {
     }, 1000);
   }
 
+  /**
+   * Ping the overlay process to see if it is alive and ready to receive messages
+   * We wait for the response to arrive within a specified amount of time
+   * If we don't receive a response within that time, we assume the overlay process not there
+   * If so we spawn a new overlay process (window)
+   */
   broadcastOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'iframe' }));
@@ -231,18 +280,9 @@ export class ChatIframeService implements OnDestroy {
     }, 1000);
   }
 
-  private subOnStorage() {
-    this.zone.runOutsideAngular(() => {
-      this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
-        next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
-            return this.handleNewOverlayResponseEvent();
-          }
-        },
-      });
-    });
-  }
-
+  /**
+   * We have heard from the overlay process, we get ready to process messages
+   */
   private handleNewOverlayResponseEvent() {
     // no one is listening, we can safely open a new overlay screen
     clearTimeout(this.awaitOverlayResponseTimeoutHandler);
@@ -251,6 +291,9 @@ export class ChatIframeService implements OnDestroy {
     this.logger.info('Overlay response received');
   }
 
+  /**
+   * Trigger a clean up, as we are doing our of context and we are no longer needed
+   */
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
