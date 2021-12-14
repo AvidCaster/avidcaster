@@ -112,7 +112,7 @@ export class ChatIframeService implements OnDestroy {
    */
   private initIndexedDB() {
     this.chatDb = new Localbase(this.nameSpace);
-    // this.chatDb.config.debug = false;
+    this.chatDb.config.debug = false;
   }
 
   // prune the db to keep it from growing too large
