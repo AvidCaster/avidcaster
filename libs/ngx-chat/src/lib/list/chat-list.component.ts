@@ -20,6 +20,7 @@ import { ChatService } from '../chat.service';
 })
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<boolean>();
+  chatList: ChatMessageItem[] = [];
   welcomeChat = welcomeChat();
 
   constructor(
@@ -38,10 +39,12 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   updateChatList(): void {
     this.chatService.chatTable$.pipe(takeUntil(this.destroyed$)).subscribe({
-      next: () => {
+      next: (chats) => {
         if (this.chatService.state.autoScrollEnabled) {
-          setTimeout(() => this.cdR.markForCheck(), 0);
-          setTimeout(() => this.scrollToBottom(), 100);
+          this.chatList = chats;
+
+          this.cdR.detectChanges();
+          this.scrollToBottom();
         }
       },
     });

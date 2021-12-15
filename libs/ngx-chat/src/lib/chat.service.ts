@@ -41,6 +41,7 @@ import {
 import { ChatMessageFilterType, ChatMessageItem, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
 import { primaryChatFilter, secondaryChatFilter, storageBroadcast } from './util/chat.util';
+import { ChatMessageType } from '..';
 
 @Injectable()
 export class ChatService implements OnDestroy {
@@ -171,16 +172,29 @@ export class ChatService implements OnDestroy {
 
   private subToTables() {
     this.chatTable$ = this.state$.pipe(
-      switchMap((state) => this.database.chatLiveQuery(ChatMessageFilterType[state.filterOption])),
-      map((chats: ChatMessageItem[]) => chats.map((chat) => primaryChatFilter(chat, this.state))),
-      map((chats: ChatMessageItem[]) => chats.map((chat) => secondaryChatFilter(chat, this.state))),
-      map((chats: ChatMessageItem[]) => chats.filter((chat) => chat?.id).slice(this.sliceLimit)),
+      switchMap((state) => this.database.chatLiveQuery(this.messageType(state))),
+      map((chats: ChatMessageItem[]) => chats?.map((chat) => primaryChatFilter(chat, this.state))),
+      map((chats: ChatMessageItem[]) =>
+        chats?.map((chat) => secondaryChatFilter(chat, this.state))
+      ),
+      map((chats: ChatMessageItem[]) => chats?.filter((chat) => chat?.id).slice(this.sliceLimit)),
       tap((chats: ChatMessageItem[]) => this.chatSelected(chats[chats.length - 1]))
     ) as Observable<ChatMessageItem[]>;
   }
 
+  messageType(state: ChatState): ChatMessageType {
+    switch (ChatMessageFilterType[state.filterOption]) {
+      case ChatMessageFilterType.Donation:
+        return ChatMessageType.Donation;
+      case ChatMessageFilterType.Membership:
+        return ChatMessageType.Membership;
+      default:
+        return ChatMessageType.Common;
+    }
+  }
+
   chatSelected(chat: ChatMessageItem) {
-    if (this.state.ffEnabled) {
+    if (chat?.id && this.state.ffEnabled) {
       this.chatSelectedOb$.next(chat);
     }
   }

@@ -72,12 +72,15 @@ export class ChatDB extends Dexie {
   }
 
   chatLiveQuery(messageType: ChatMessageType) {
-    return liveQuery(() =>
-      this.chatTable
-        .orderBy(':id')
-        .filter((chat) => chat.messageType === messageType)
-        .toArray()
-    );
+    if (messageType !== ChatMessageType.Common) {
+      return liveQuery(() =>
+        this.chatTable
+          .orderBy(':id')
+          .filter((chat) => chat.messageType === messageType)
+          .toArray()
+      );
+    }
+    return liveQuery(() => this.chatTable.orderBy(':id').toArray());
   }
 }
 
