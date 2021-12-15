@@ -1,15 +1,35 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div fxLayout="row" fxLayoutGap="10px">
-    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.CLEAR' | translate }}" color="warn">
-      <mat-icon svgIcon="recycle"></mat-icon>
+    <select
+      name="{{ getMessageListFilterName(currentListFilter) | translate }}"
+      id="filter-options"
+      [(ngModel)]="currentListFilter"
+      (ngModelChange)="setMessageListFilterOption(currentListFilter)"
+    >
+      <option *ngFor="let filter of getMessageListFilterOptions()" [value]="filter">
+        {{ getMessageListFilterName(filter) | translate }}
+      </option>
+    </select>
+
+    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.DONATION' | translate }}" color="accent">
+      <mat-icon svgIcon="hand-coin-outline"></mat-icon>
+    </button>
+    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.MEMBERSHIPS' | translate }}" color="accent">
+      <mat-icon svgIcon="account-multiple"></mat-icon>
+    </button>
+    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.COMMON' | translate }}" color="accent">
+      <mat-icon svgIcon="message-text"></mat-icon>
     </button>
   </div>
-  <div fxLayout="row" fxLayoutGap="10px">
-    <button mat-mini-fab color="accent" [disabled]="!chatService.state.autoScrollEnabled" (click)="toggleAutoScroll()">
-      <mat-icon svgIcon="pause"></mat-icon>
-    </button>
-    <button mat-mini-fab color="primary" [disabled]="chatService.state.autoScrollEnabled" (click)="toggleAutoScroll()">
-      <mat-icon svgIcon="arrow-down"></mat-icon>
+  <div fxLayout="row" fxLayoutGap="5px">
+    <button
+      matTooltipPosition="before"
+      matTooltip="{{ (chatService?.state?.autoScrollEnabled ? 'CHAT.PAUSE_SCROLL' : 'CHAT.PLAY_SCROLL') | translate }}"
+      mat-mini-fab
+      [color]="chatService.state.autoScrollEnabled ? 'warn' : 'accent'"
+      (click)="toggleAutoScroll()"
+    >
+      <mat-icon [svgIcon]="chatService.state.autoScrollEnabled ? 'pause' : 'arrow-down-bold'"></mat-icon>
     </button>
   </div>
   <div fxLayout="row" fxLayoutGap="10px">

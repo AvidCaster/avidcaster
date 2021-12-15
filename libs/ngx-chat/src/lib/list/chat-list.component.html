@@ -9,11 +9,3 @@
   </div>
   <fullerstack-chat-item *ngIf="chatList?.length < 1" class="chat-item" [chat]="welcomeChat"></fullerstack-chat-item>
 </div>
-<div class="chat-pause" fxLayout="row" fxLayoutGap="5px">
-  <button mat-mini-fab color="accent" [disabled]="!chatService.state.autoScrollEnabled" (click)="toggleAutoScroll()">
-    <mat-icon svgIcon="pause"></mat-icon>
-  </button>
-  <button mat-mini-fab color="warn" [disabled]="chatService.state.autoScrollEnabled" (click)="toggleAutoScroll()">
-    <mat-icon svgIcon="arrow-down"></mat-icon>
-  </button>
-</div>

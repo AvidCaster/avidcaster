@@ -24,12 +24,12 @@
     </div>
 
     <select
-      name="{{ getFilterName(currentFilter) | translate }}"
+      name="{{ getSecondaryFilterName(currentFilter) | translate }}"
       id="filter-options"
       [(ngModel)]="currentFilter"
-      (ngModelChange)="setFilterOption(currentFilter)"
+      (ngModelChange)="setSecondaryFilterOption(currentFilter)"
     >
-      <option *ngFor="let filter of getFilterOptions()" [value]="filter">{{ getFilterName(filter) | translate }}</option>
+      <option *ngFor="let filter of getSecondaryFilterOptions()" [value]="filter">{{ getSecondaryFilterName(filter) | translate }}</option>
     </select>
 
     <select

@@ -89,22 +89,12 @@ export interface ChatState {
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
-  primaryFilterOption: string;
-  filterOption: string;
+  primaryFilterOption: ChatMessagePrimaryFilterType;
+  secondaryFilterOption: ChatMessageSecondaryFilterType;
+  chatListOption: ChatMessageListFilterType;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
   iframePaused: boolean;
-}
-
-export enum ChatMessageFilterType {
-  None = 'none',
-  Host = 'host',
-  Author = 'author',
-  Donation = 'donation',
-  Membership = 'membership',
-  FilterBy = 'filterBy',
-  FilterOut = 'filterOut',
-  Highlight = 'highlight',
 }
 
 export enum ChatMessagePrimaryFilterType {
@@ -115,4 +105,19 @@ export enum ChatMessagePrimaryFilterType {
   StartWithQ = 'startWithQ',
   StartWithA = 'startWithA',
   StartWithFrom = 'startWithFrom',
+}
+
+export enum ChatMessageSecondaryFilterType {
+  None = 'none',
+  Host = 'host',
+  Author = 'author',
+  FilterBy = 'filterBy',
+  FilterOut = 'filterOut',
+  Highlight = 'highlight',
+}
+
+export enum ChatMessageListFilterType {
+  Common = 'common',
+  Donation = 'donation',
+  Membership = 'membership',
 }

@@ -8,6 +8,8 @@ import {
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, takeUntil } from 'rxjs';
 
+import { ChatListFilterOptions } from '../chat.default';
+import { ChatMessageListFilterType } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -18,6 +20,7 @@ import { ChatService } from '../chat.service';
 })
 export class StatsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+  currentListFilter = ChatMessageListFilterType.Common;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -26,13 +29,33 @@ export class StatsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.cdR.detectChanges();
-      },
-    });
+    this.subState();
 
     console.log('StatsComponent started ... ');
+  }
+
+  subState() {
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (state) => {
+        this.currentListFilter = state.chatListOption as ChatMessageListFilterType;
+        this.cdR.markForCheck();
+      },
+    });
+  }
+
+  getMessageListFilterOptions(): string[] {
+    return Object.keys(ChatMessageListFilterType);
+  }
+
+  getMessageListFilterName(filter: string): string {
+    let name = ChatMessageListFilterType[filter];
+    name = ChatListFilterOptions[name];
+    return name;
+  }
+
+  setMessageListFilterOption(filter: ChatMessageListFilterType) {
+    this.currentListFilter = filter;
+    this.chatService.setState({ chatListOption: filter });
   }
 
   toggleAutoScroll() {

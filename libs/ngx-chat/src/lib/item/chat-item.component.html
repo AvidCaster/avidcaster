@@ -17,7 +17,7 @@
     <div class="chat-item-author" fxLayout="column" fxLayoutAlign="center">{{ chat?.author }}</div>
 
     <div *ngIf="chat?.donation" fxLayout="column" fxLayoutAlign="center">
-      <mat-icon svgIcon="hand-coin" color="accent"></mat-icon>
+      <mat-icon svgIcon="hand-coin" color="info"></mat-icon>
     </div>
     <div *ngIf="chat?.donation" class="chat-item-donation" fxLayout="column" fxLayoutAlign="center">{{ chat?.donation }}</div>
 
@@ -27,7 +27,7 @@
     <div *ngIf="chat?.membership" class="chat-item-membership" fxLayout="column" fxLayoutAlign="center">{{ chat?.membership }}</div>
 
     <div fxLayout="column" fxLayoutAlign="center">
-      <mat-icon svgIcon="message-reply-text-outline" color="primary"></mat-icon>
+      <mat-icon svgIcon="message-reply-text-outline" color="info"></mat-icon>
     </div>
 
     <div class="chat-item-message" fxLayout="column" fxLayoutAlign="center">
@@ -38,7 +38,7 @@
   <div fxFlex="30px" class="chat-item-action" fxLayout="row" fxLayoutAlign="center">
     <mat-icon
       fxFlexAlign="center"
-      [color]="chat?.highlighted ? 'accent' : 'primary'"
+      [color]="chat?.highlighted ? 'accent' : 'green'"
       [svgIcon]="chat?.viewed ? 'eye-off-outline' : 'eye-outline'"
     ></mat-icon>
   </div>

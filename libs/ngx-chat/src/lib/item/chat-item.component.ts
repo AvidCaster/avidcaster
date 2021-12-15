@@ -23,7 +23,7 @@ export class ChatItemComponent {
       case 'youtube':
         return 'warn';
       case 'twitch':
-        return 'primary';
+        return 'info';
       default:
         return 'accent';
     }

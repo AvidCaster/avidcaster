@@ -1,7 +1,7 @@
 import { tryGet } from '@fullerstack/agx-util';
 import Dexie, { liveQuery } from 'dexie';
 
-import { ChatMessageItem, ChatMessageType } from '../chat.model';
+import { ChatMessageItem, ChatMessageListFilterType, ChatMessageType } from '../chat.model';
 
 export class ChatDB extends Dexie {
   tableName = 'messages';
@@ -71,8 +71,8 @@ export class ChatDB extends Dexie {
     });
   }
 
-  chatLiveQuery(messageType: ChatMessageType) {
-    if (messageType !== ChatMessageType.Common) {
+  chatLiveQuery(messageType: ChatMessageListFilterType) {
+    if (messageType !== ChatMessageListFilterType.Common) {
       return liveQuery(() =>
         this.chatTable
           .orderBy(':id')

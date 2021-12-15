@@ -15,6 +15,10 @@
   color: rgb(0, 0, 0);
 }
 
+.mat-gold {
+  color: #ffb300;
+}
+
 // Secondary Theme
 .fs-theme-dark {
   @include angular-material-theme($dark-theme);
@@ -29,6 +33,10 @@
 
   .mat-inverse {
     color: rgb(255, 255, 255);
+  }
+
+  .mat-gold {
+    color: #ffb300;
   }
 }
 

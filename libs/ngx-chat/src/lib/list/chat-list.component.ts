@@ -30,20 +30,23 @@ export class ChatListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.cdR.detectChanges();
-      },
-    });
-
-    this.updateChatList();
+    this.subState();
+    this.subChatList();
   }
 
   trackById(index: number, chat: ChatMessageItem) {
     return `${index}-${chat?.id}`;
   }
 
-  updateChatList(): void {
+  subState() {
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.cdR.detectChanges();
+      },
+    });
+  }
+
+  subChatList(): void {
     this.chatService.chatTable$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chats) => {
         if (this.chatService.state.autoScrollEnabled) {
@@ -71,12 +74,9 @@ export class ChatListComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleAutoScroll() {
-    this.chatService.setState({ autoScrollEnabled: !this.chatService.state.autoScrollEnabled });
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.chatList = [];
   }
 }

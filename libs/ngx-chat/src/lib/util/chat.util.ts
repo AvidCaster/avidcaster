@@ -10,9 +10,9 @@ import { DeepReadonly } from 'ts-essentials';
 
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import {
-  ChatMessageFilterType,
   ChatMessageItem,
   ChatMessagePrimaryFilterType,
+  ChatMessageSecondaryFilterType,
   ChatState,
 } from '../chat.model';
 
@@ -41,42 +41,36 @@ export const secondaryChatFilter = (
     return undefined;
   }
 
-  switch (ChatMessageFilterType[state.filterOption]) {
-    case ChatMessageFilterType.Host: {
+  switch (ChatMessageSecondaryFilterType[state.secondaryFilterOption]) {
+    case ChatMessageSecondaryFilterType.Host: {
       return state.keywords.length < 1
         ? chat
         : state.keywords?.some((word) => chat?.host.toLowerCase() === word.toLowerCase())
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.Author: {
+    case ChatMessageSecondaryFilterType.Author: {
       return state.keywords.length < 1
         ? chat
         : state.keywords?.some((word) => chat?.author.includes(word))
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.Donation: {
-      return chat?.donation ? chat : undefined;
-    }
-    case ChatMessageFilterType.Membership: {
-      return chat?.membership ? chat : undefined;
-    }
-    case ChatMessageFilterType.FilterBy: {
+    case ChatMessageSecondaryFilterType.FilterBy: {
       return state.keywords.length < 1
         ? chat
         : state.keywords?.some((word) => chat?.message.includes(word))
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.FilterOut: {
+    case ChatMessageSecondaryFilterType.FilterOut: {
       return state.keywords.length < 1
         ? chat
         : !state.keywords?.some((word) => chat?.message.includes(word))
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.Highlight: {
+    case ChatMessageSecondaryFilterType.Highlight: {
       if (state.keywords?.some((word) => chat?.message.includes(word))) {
         chat.highlighted = true;
       } else {
@@ -84,7 +78,7 @@ export const secondaryChatFilter = (
       }
       return chat;
     }
-    case ChatMessageFilterType.None:
+    case ChatMessageSecondaryFilterType.None:
     default:
       break;
   }
@@ -132,24 +126,12 @@ export const primaryChatFilter = (
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.None:
+    case ChatMessagePrimaryFilterType.None:
     default:
       break;
   }
   return chat;
 };
-
-// export const getIndexedDbDocKey = (state: ChatState): string => {
-//   switch (ChatMessageFilterType[state.filterOption]) {
-//     case ChatMessageFilterType.Donation:
-//       return ChatDbCollectionType.Donation;
-//     case ChatMessageFilterType.Membership:
-//       return ChatDbCollectionType.Membership;
-//     default:
-//       break;
-//   }
-//   return ChatDbCollectionType.Regular;
-// };
 
 /**
  * Open a window to the chat overlay screen

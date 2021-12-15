@@ -11,9 +11,10 @@ import { cloneDeep as ldDeepClone } from 'lodash-es';
 
 import {
   ChatConfig,
-  ChatMessageFilterType,
   ChatMessageItem,
+  ChatMessageListFilterType,
   ChatMessagePrimaryFilterType,
+  ChatMessageSecondaryFilterType,
   ChatMessageType,
   ChatState,
 } from './chat.model';
@@ -71,15 +72,16 @@ export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-t
 export const CHAT_DEFAULT_AVATAR = './assets/images/misc/avatar-default-red.png';
 export const CHAT_DEFAULT_LOGO = './assets/images/misc/avidcaster-chat-x128.png';
 
-const DefaultChatState = {
+const DefaultChatState: ChatState = {
   signature: '',
   isLtR: true,
   audioEnabled: false,
   fireworksEnabled: true,
   fireworksPlay: false,
   keywords: [],
-  filterOption: '',
-  primaryFilterOption: '',
+  chatListOption: ChatMessageListFilterType.Common,
+  primaryFilterOption: ChatMessagePrimaryFilterType.None,
+  secondaryFilterOption: ChatMessageSecondaryFilterType.None,
   ffEnabled: false,
   autoScrollEnabled: true,
   iframePaused: false,
@@ -128,17 +130,6 @@ export const welcomeChat = (): ChatMessageItem => {
   return ldDeepClone(WelcomeChat);
 };
 
-export const ChatFilterOptions = {
-  [ChatMessageFilterType.None]: _('FILTER.NONE'),
-  [ChatMessageFilterType.Host]: _('FILTER.HOST'),
-  [ChatMessageFilterType.Author]: _('FILTER.AUTHOR'),
-  [ChatMessageFilterType.Donation]: _('FILTER.DONATION'),
-  [ChatMessageFilterType.Membership]: _('FILTER.MEMBERSHIP'),
-  [ChatMessageFilterType.FilterBy]: _('FILTER.BY'),
-  [ChatMessageFilterType.FilterOut]: _('FILTER.OUT'),
-  [ChatMessageFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
-};
-
 export const ChatPrimaryFilterOptions = {
   [ChatMessagePrimaryFilterType.None]: _('FILTER.NONE'),
   [ChatMessagePrimaryFilterType.MiniumWordOne]: _('FILTER.MINIUM_WORD_ONE'),
@@ -147,6 +138,21 @@ export const ChatPrimaryFilterOptions = {
   [ChatMessagePrimaryFilterType.StartWithQ]: _('FILTER.START_WITH_Q'),
   [ChatMessagePrimaryFilterType.StartWithA]: _('FILTER.START_WITH_A'),
   [ChatMessagePrimaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
+};
+
+export const ChatSecondaryFilterOptions = {
+  [ChatMessageSecondaryFilterType.None]: _('FILTER.NONE'),
+  [ChatMessageSecondaryFilterType.Host]: _('FILTER.HOST'),
+  [ChatMessageSecondaryFilterType.Author]: _('FILTER.AUTHOR'),
+  [ChatMessageSecondaryFilterType.FilterBy]: _('FILTER.BY'),
+  [ChatMessageSecondaryFilterType.FilterOut]: _('FILTER.OUT'),
+  [ChatMessageSecondaryFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
+};
+
+export const ChatListFilterOptions = {
+  [ChatMessageType.Common]: _('CHAT.FILTER_LIST.COMMON'),
+  [ChatMessageType.Donation]: _('CHAT.FILTER_LIST.DONATION'),
+  [ChatMessageType.Membership]: _('CHAT.FILTER_LIST.MEMBERSHIP'),
 };
 
 // chat display limit (visible / scrollable)
