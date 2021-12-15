@@ -204,8 +204,8 @@ export class ChatService implements OnDestroy {
     if (chat?.id) {
       if (!this.state.ffEnabled) {
         chat.viewed = true;
+        chatDb.updateMessage(chat);
       }
-      chatDb.updateMessage(chat);
       this.chatSelectedOb$.next(chat);
     }
   }

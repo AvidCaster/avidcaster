@@ -1,5 +1,5 @@
 import { tryGet } from '@fullerstack/agx-util';
-import Dexie from 'dexie';
+import Dexie, { liveQuery } from 'dexie';
 
 import { ChatMessageItem, ChatMessageType } from '../chat.model';
 
@@ -63,8 +63,14 @@ export class ChatDB extends Dexie {
     });
   }
 
-  chatLiveQuery(chatType: ChatMessageType, limit: number) {
-    return this.chatTable.where('messageType').equals(chatType).limit(limit).toArray();
+  chatLiveQuery(messageType: ChatMessageType, limit: number) {
+    return liveQuery(() =>
+      chatDb.chatTable
+        .orderBy(':id')
+        .filter((chat) => chat.messageType === messageType)
+        .limit(limit)
+        .toArray()
+    );
   }
 }
 
