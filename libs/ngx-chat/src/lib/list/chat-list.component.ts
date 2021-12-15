@@ -19,7 +19,7 @@ import { ChatService } from '../chat.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatListComponent implements OnInit, OnDestroy {
-  private destroyed$ = new Subject<boolean>();
+  private destroy$ = new Subject<boolean>();
   chatList: ChatMessageItem[] = [];
   welcomeChat = welcomeChat();
 
@@ -30,6 +30,12 @@ export class ChatListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.cdR.detectChanges();
+      },
+    });
+
     this.updateChatList();
   }
 
@@ -38,7 +44,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   updateChatList(): void {
-    this.chatService.chatTable$.pipe(takeUntil(this.destroyed$)).subscribe({
+    this.chatService.chatTable$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chats) => {
         if (this.chatService.state.autoScrollEnabled) {
           this.chatList = chats;
@@ -70,7 +76,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

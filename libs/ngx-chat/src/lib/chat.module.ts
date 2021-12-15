@@ -25,6 +25,7 @@ import { ChatListComponent } from './list/chat-list.component';
 import { ChatMenuComponent } from './menu/chat-menu.component';
 import { ChatOverlayComponent } from './overlay/chat-overlay.component';
 import { ChatSelectedComponent } from './selected/chat-selected.component';
+import { StatsComponent } from './stats/chat-stats.component';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { ChatSelectedComponent } from './selected/chat-selected.component';
     ChatOverlayComponent,
     ChatSelectedComponent,
     ChatMenuComponent,
+    StatsComponent,
   ],
   providers: [ChatService],
 })

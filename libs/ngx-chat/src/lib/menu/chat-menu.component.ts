@@ -39,7 +39,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   currentMinWords = 0;
 
   constructor(
-    readonly chR: ChangeDetectorRef,
+    readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
     readonly chatService: ChatService
   ) {}
@@ -50,7 +50,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
-        this.chR.markForCheck();
+        this.cdR.markForCheck();
       },
     });
 
@@ -70,7 +70,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
         this.currentFilter = state.filterOption as ChatMessageFilterType;
         this.currentPrimaryFilter = state.primaryFilterOption as ChatMessagePrimaryFilterType;
         this.currentKeywords = state.keywords.join(' ');
-        this.chR.markForCheck();
+        this.cdR.markForCheck();
       },
     });
   }
@@ -154,16 +154,6 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   toggleFastForward() {
     this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
-  }
-
-  toggleFullscreen() {
-    this.chatService.pauseIframe(true);
-    setTimeout(() => {
-      this.chatService.layout.toggleFullscreen();
-    }, 100);
-    setTimeout(() => {
-      this.chatService.pauseIframe(false);
-    }, 1000);
   }
 
   ngOnDestroy(): void {

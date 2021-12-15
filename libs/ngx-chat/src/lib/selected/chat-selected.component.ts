@@ -30,7 +30,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   slideInState = 0;
 
   constructor(
-    readonly chR: ChangeDetectorRef,
+    readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
     readonly chatService: ChatService
   ) {}
@@ -42,13 +42,13 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         if (!this.chatService.state.ffEnabled) {
           this.slideInState++;
         }
-        this.chR.markForCheck();
+        this.cdR.detectChanges();
       },
     });
 
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.chR.markForCheck();
+        this.cdR.detectChanges();
       },
     });
 

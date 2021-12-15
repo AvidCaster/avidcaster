@@ -3,8 +3,12 @@
     <fullerstack-chat-list></fullerstack-chat-list>
   </div>
   <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
-    <div class="chat-control">
-      <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxLayoutGap="20px" class="chat-control">
+      <div fxLayoutAlign="space-around center">
+        <fullerstack-chat-stats> </fullerstack-chat-stats>
+      </div>
+      <mat-divider></mat-divider>
+      <div fxLayoutAlign="space-around center">
         <fullerstack-chat-menu> </fullerstack-chat-menu>
       </div>
     </div>

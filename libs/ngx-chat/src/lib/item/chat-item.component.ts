@@ -14,7 +14,7 @@ export class ChatItemComponent {
     this.chat.viewed = value;
   }
   @Input() chat: ChatMessageItem;
-  private destroyed$ = new Subject<boolean>();
+  private destroy$ = new Subject<boolean>();
 
   constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
 

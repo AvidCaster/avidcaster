@@ -15,8 +15,8 @@
   left: 0;
   min-width: 100vw;
   width: 100vw;
-  min-height: calc(66.66vh - 40px) !important;
-  height: calc(66.66vh - 40px) !important;
+  min-height: calc(66.66vh - 80px) !important;
+  height: calc(66.66vh - 80px) !important;
 }
 
 #chat-overlay-box {
@@ -27,16 +27,17 @@
   overflow: hidden;
   min-width: 100vw;
   width: 100%;
-  min-height: calc(33.33vh + 40px) !important;
-  height: calc(33.33vh + 40px) !important;
+  min-height: calc(33.33vh + 80px) !important;
+  height: calc(33.33vh + 80px) !important;
   background: #000;
   color: #fff;
 }
 
 .chat-control {
   top: 2px;
-  padding: 5px;
   margin-bottom: 15px !important;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .mat-divider {
@@ -46,6 +47,7 @@
 }
 
 .chat-overlay {
+  padding-top: 5px;
   height: 100%;
 }
 
@@ -60,5 +62,5 @@
 #chat-fireworks {
   position: absolute;
   z-index: 10;
-  top: 50px;
+  top: 100px;
 }
