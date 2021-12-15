@@ -43,6 +43,7 @@ export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
   private state: ChatState;
+  database = chatDb;
   private hostReadyOb$ = new BehaviorSubject<ChatHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
@@ -114,7 +115,7 @@ export class ChatIframeService implements OnDestroy {
       }
     }
 
-    await chatDb.pruneMessageTable(
+    await this.database.pruneMessageTable(
       ChatMessageType.Common,
       CHAT_MESSAGE_LIST_BUFFER_SIZE,
       CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE
@@ -131,7 +132,7 @@ export class ChatIframeService implements OnDestroy {
     chat.timestamp = new Date().getTime();
     chat.prefix = this.prefix || this.streamId;
 
-    await chatDb.addMessage(chat);
+    await this.database.addMessage(chat);
     this.pruneDb(chat);
   }
 

@@ -53,6 +53,7 @@ export class ChatService implements OnDestroy {
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
   state: DeepReadonly<ChatState> = defaultChatState();
   state$: Observable<ChatState>;
+  database = chatDb;
   private destroy$ = new Subject<boolean>();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
@@ -176,14 +177,20 @@ export class ChatService implements OnDestroy {
       switchMap((state) => {
         switch (ChatMessageFilterType[state.filterOption]) {
           case ChatMessageFilterType.Donation:
-            return chatDb.chatLiveQuery(ChatMessageType.Donation, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+            return this.database.chatLiveQuery(
+              ChatMessageType.Donation,
+              CHAT_MESSAGE_LIST_DISPLAY_LIMIT
+            );
           case ChatMessageFilterType.Membership:
-            return chatDb.chatLiveQuery(
+            return this.database.chatLiveQuery(
               ChatMessageType.Membership,
               CHAT_MESSAGE_LIST_DISPLAY_LIMIT
             );
           default:
-            return chatDb.chatLiveQuery(ChatMessageType.Common, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+            return this.database.chatLiveQuery(
+              ChatMessageType.Common,
+              CHAT_MESSAGE_LIST_DISPLAY_LIMIT
+            );
         }
       }),
       map((chats: ChatMessageItem[]) => {
@@ -201,13 +208,7 @@ export class ChatService implements OnDestroy {
   }
 
   chatSelected(chat: ChatMessageItem) {
-    if (chat?.id) {
-      if (!this.state.ffEnabled) {
-        chat.viewed = true;
-        chatDb.updateMessage(chat);
-      }
-      this.chatSelectedOb$.next(chat);
-    }
+    this.chatSelectedOb$.next(chat);
   }
 
   loadTestChat() {
