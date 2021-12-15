@@ -39,7 +39,7 @@ import {
   defaultChatTest,
 } from './chat.default';
 import { ChatMessageFilterType, ChatMessageItem, ChatMessageType, ChatState } from './chat.model';
-import { chatDb } from './util/chat.db';
+import { chatDatabaseInstance } from './util/chat.db';
 import {
   filterChatMessageItem,
   primaryFilterChatMessageItem,
@@ -53,7 +53,7 @@ export class ChatService implements OnDestroy {
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
   state: DeepReadonly<ChatState> = defaultChatState();
   state$: Observable<ChatState>;
-  database = chatDb;
+  database = chatDatabaseInstance;
   private destroy$ = new Subject<boolean>();
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();

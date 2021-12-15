@@ -45,7 +45,7 @@ export class ChatDB extends Dexie {
     tryGet(async () => {
       const count = await this.chatTable.where('messageType').equals(messageType).count();
       if (count >= listSize + offset) {
-        await chatDb.chatTable
+        await this.chatTable
           .orderBy(':id')
           .filter((chat) => chat.messageType === messageType)
           .reverse()
@@ -57,7 +57,7 @@ export class ChatDB extends Dexie {
 
   async resetDatabase() {
     tryGet(async () => {
-      await chatDb.transaction('rw', this.tableName, () => {
+      await this.transaction('rw', this.tableName, () => {
         this.chatTable.clear();
       });
     });
@@ -65,7 +65,7 @@ export class ChatDB extends Dexie {
 
   chatLiveQuery(messageType: ChatMessageType, limit: number) {
     return liveQuery(() =>
-      chatDb.chatTable
+      this.chatTable
         .orderBy(':id')
         .filter((chat) => chat.messageType === messageType)
         .limit(limit)
@@ -74,4 +74,4 @@ export class ChatDB extends Dexie {
   }
 }
 
-export const chatDb = new ChatDB();
+export const chatDatabaseInstance = new ChatDB();

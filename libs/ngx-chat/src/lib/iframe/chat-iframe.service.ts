@@ -33,7 +33,7 @@ import {
   ChatState,
   ChatUpstreamAction,
 } from '../chat.model';
-import { chatDb } from '../util/chat.db';
+import { chatDatabaseInstance } from '../util/chat.db';
 import { openOverlayWindowScreen, storageBroadcast } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
@@ -43,7 +43,7 @@ export class ChatIframeService implements OnDestroy {
   private nameSpace = 'CHAT';
   private destroy$ = new Subject<boolean>();
   private state: ChatState;
-  database = chatDb;
+  database = chatDatabaseInstance;
   private hostReadyOb$ = new BehaviorSubject<ChatHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
