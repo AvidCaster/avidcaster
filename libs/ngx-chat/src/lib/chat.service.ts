@@ -38,13 +38,9 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import { ChatMessageFilterType, ChatMessageItem, ChatMessageType, ChatState } from './chat.model';
+import { ChatMessageFilterType, ChatMessageItem, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
-import {
-  filterChatMessageItem,
-  primaryFilterChatMessageItem,
-  storageBroadcast,
-} from './util/chat.util';
+import { primaryChatFilter, secondaryChatFilter, storageBroadcast } from './util/chat.util';
 
 @Injectable()
 export class ChatService implements OnDestroy {
@@ -58,6 +54,7 @@ export class ChatService implements OnDestroy {
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
   chatTable$: Observable<ChatMessageItem[]>;
+  sliceLimit = -1 * CHAT_MESSAGE_LIST_DISPLAY_LIMIT;
 
   constructor(
     readonly zone: NgZone,
@@ -174,41 +171,18 @@ export class ChatService implements OnDestroy {
 
   private subToTables() {
     this.chatTable$ = this.state$.pipe(
-      switchMap((state) => {
-        switch (ChatMessageFilterType[state.filterOption]) {
-          case ChatMessageFilterType.Donation:
-            return this.database.chatLiveQuery(
-              ChatMessageType.Donation,
-              CHAT_MESSAGE_LIST_DISPLAY_LIMIT
-            );
-          case ChatMessageFilterType.Membership:
-            return this.database.chatLiveQuery(
-              ChatMessageType.Membership,
-              CHAT_MESSAGE_LIST_DISPLAY_LIMIT
-            );
-          default:
-            return this.database.chatLiveQuery(
-              ChatMessageType.Common,
-              CHAT_MESSAGE_LIST_DISPLAY_LIMIT
-            );
-        }
-      }),
-      map((chats: ChatMessageItem[]) => {
-        return chats.map((chat) => {
-          const filteredChat = primaryFilterChatMessageItem(chat, this.state as ChatState);
-          return filterChatMessageItem(filteredChat, this.state as ChatState);
-        });
-      }),
-      tap((chats: ChatMessageItem[]) => {
-        if (this.state.ffEnabled) {
-          this.chatSelected(chats[chats.length - 1]);
-        }
-      })
+      switchMap((state) => this.database.chatLiveQuery(ChatMessageFilterType[state.filterOption])),
+      map((chats: ChatMessageItem[]) => chats.map((chat) => primaryChatFilter(chat, this.state))),
+      map((chats: ChatMessageItem[]) => chats.map((chat) => secondaryChatFilter(chat, this.state))),
+      map((chats: ChatMessageItem[]) => chats.filter((chat) => chat?.id).slice(this.sliceLimit)),
+      tap((chats: ChatMessageItem[]) => this.chatSelected(chats[chats.length - 1]))
     ) as Observable<ChatMessageItem[]>;
   }
 
   chatSelected(chat: ChatMessageItem) {
-    this.chatSelectedOb$.next(chat);
+    if (this.state.ffEnabled) {
+      this.chatSelectedOb$.next(chat);
+    }
   }
 
   loadTestChat() {

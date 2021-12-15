@@ -6,6 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+import { DeepReadonly } from 'ts-essentials';
+
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import {
   ChatMessageFilterType,
@@ -31,9 +33,9 @@ export const includesEmoji = (str: string): boolean => {
  * @param state chat state
  * @returns chat message item or undefined
  */
-export const filterChatMessageItem = (
+export const secondaryChatFilter = (
   chat: ChatMessageItem,
-  state: ChatState
+  state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
   if (!chat || !chat?.message) {
     return undefined;
@@ -95,9 +97,9 @@ export const filterChatMessageItem = (
  * @param state chat state
  * @returns chat message item or undefined
  */
-export const primaryFilterChatMessageItem = (
+export const primaryChatFilter = (
   chat: ChatMessageItem,
-  state: ChatState
+  state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
   if (!chat || !chat?.message) {
     return undefined;

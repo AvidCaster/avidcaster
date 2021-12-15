@@ -22,7 +22,9 @@ export class ChatDB extends Dexie {
    * @param chat chat message item
    */
   async addMessage(chat: ChatMessageItem) {
-    await this.chatTable.add(chat);
+    this.transaction('rw', this.chatTable, async () => {
+      await this.chatTable.add(chat);
+    });
   }
 
   /**
@@ -30,29 +32,35 @@ export class ChatDB extends Dexie {
    * @param chat chat to update
    */
   updateMessage(chat: ChatMessageItem) {
-    tryGet(async () => await this.chatTable.update(chat.id, chat));
+    return this.transaction('rw', this.chatTable, async () => {
+      await this.chatTable.update(chat.id, chat);
+    });
   }
 
   deleteMessage(chat: ChatMessageItem) {
-    tryGet(async () => await this.chatTable.delete(chat?.id));
+    this.transaction('rw', this.chatTable, async () => {
+      await this.chatTable.delete(chat.id);
+    });
   }
 
   deleteMessages(chatIds: number[]) {
-    tryGet(() => chatIds.map(async (id) => await this.chatTable.delete(id)));
+    this.transaction('rw', this.chatTable, async () => {
+      chatIds.map(async (id) => await this.chatTable.delete(id));
+    });
   }
 
   async pruneMessageTable(messageType: ChatMessageType, listSize: number, offset = 25) {
-    tryGet(async () => {
-      const count = await this.chatTable.where('messageType').equals(messageType).count();
-      if (count >= listSize + offset) {
+    const count = await this.chatTable.where('messageType').equals(messageType).count();
+    if (count >= listSize + offset) {
+      this.transaction('rw', this.chatTable, async () => {
         await this.chatTable
           .orderBy(':id')
           .filter((chat) => chat.messageType === messageType)
           .reverse()
           .offset(listSize)
           .delete();
-      }
-    });
+      });
+    }
   }
 
   async resetDatabase() {
@@ -63,12 +71,11 @@ export class ChatDB extends Dexie {
     });
   }
 
-  chatLiveQuery(messageType: ChatMessageType, limit: number) {
+  chatLiveQuery(messageType: ChatMessageType) {
     return liveQuery(() =>
       this.chatTable
         .orderBy(':id')
         .filter((chat) => chat.messageType === messageType)
-        .limit(limit)
         .toArray()
     );
   }
