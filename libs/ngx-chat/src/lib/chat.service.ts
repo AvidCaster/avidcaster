@@ -176,11 +176,14 @@ export class ChatService implements OnDestroy {
       switchMap((state) => {
         switch (ChatMessageFilterType[state.filterOption]) {
           case ChatMessageFilterType.Donation:
-            return chatDb.liveQuery(ChatMessageType.Donation, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+            return chatDb.chatLiveQuery(ChatMessageType.Donation, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
           case ChatMessageFilterType.Membership:
-            return chatDb.liveQuery(ChatMessageType.Membership, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+            return chatDb.chatLiveQuery(
+              ChatMessageType.Membership,
+              CHAT_MESSAGE_LIST_DISPLAY_LIMIT
+            );
           default:
-            return chatDb.liveQuery(ChatMessageType.Common, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
+            return chatDb.chatLiveQuery(ChatMessageType.Common, CHAT_MESSAGE_LIST_DISPLAY_LIMIT);
         }
       }),
       map((chats: ChatMessageItem[]) => {

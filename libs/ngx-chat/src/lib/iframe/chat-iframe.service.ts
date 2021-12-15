@@ -107,22 +107,18 @@ export class ChatIframeService implements OnDestroy {
   // iframe process is responsible and since we may have multiple chats
   // we randomize the pruning to avoid all iframe processes from pruning at once
   private async pruneDb(chat: ChatMessageItem) {
-    const randomizeRemove = Math.random() * 100 <= 10;
-
-    if (randomizeRemove) {
-      let dbTable = ChatMessageType.Common;
-      if (chat.membership) {
-        dbTable = ChatMessageType.Membership;
-      } else if (chat.donation) {
-        dbTable = ChatMessageType.Donation;
+    if (chat.messageType === ChatMessageType.Common) {
+      const randomizeRemove = Math.random() * 100 <= 10;
+      if (!randomizeRemove) {
+        return;
       }
-
-      await chatDb.pruneMessageTable(
-        CHAT_MESSAGE_LIST_BUFFER_SIZE,
-        dbTable,
-        CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE
-      );
     }
+
+    await chatDb.pruneMessageTable(
+      ChatMessageType.Common,
+      CHAT_MESSAGE_LIST_BUFFER_SIZE,
+      CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE
+    );
   }
 
   /**
@@ -136,7 +132,6 @@ export class ChatIframeService implements OnDestroy {
     chat.prefix = this.prefix || this.streamId;
 
     await chatDb.addMessage(chat);
-    this.logger.debug(`[${this.nameSpace}] add chat: ${chat.id}`);
     this.pruneDb(chat);
   }
 

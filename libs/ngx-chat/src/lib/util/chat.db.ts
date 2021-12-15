@@ -1,70 +1,70 @@
+import { tryGet } from '@fullerstack/agx-util';
 import Dexie from 'dexie';
 
 import { ChatMessageItem, ChatMessageType } from '../chat.model';
 
 export class ChatDB extends Dexie {
+  tableName = 'messages';
+
   constructor() {
     super('AvidCasterChatDB');
     this.version(3).stores({
-      [ChatMessageType.Common]: '++id',
-      [ChatMessageType.Donation]: '++id',
-      [ChatMessageType.Membership]: '++id',
+      [this.tableName]: '++id, messageType',
     });
   }
 
+  get chatTable() {
+    return this.table(this.tableName);
+  }
+
   /**
-   * Add a new chat message to the specific table
+   * Add a new chat message to the chat table
    * @param chat chat message item
    */
-  async addMessage(chat: ChatMessageItem, tableType = ChatMessageType.Common) {
-    await this.table(tableType).add(chat);
+  async addMessage(chat: ChatMessageItem) {
+    await this.chatTable.add(chat);
   }
 
   /**
-   * Update a chat message in the specified table
+   * Update a chat message in the chat table
    * @param chat chat to update
    */
-  async updateMessage(chat: ChatMessageItem, tableType = ChatMessageType.Common) {
-    await this.table(tableType).add(chat);
+  updateMessage(chat: ChatMessageItem) {
+    tryGet(async () => await this.chatTable.update(chat.id, chat));
   }
 
-  async deleteMessage(chat: ChatMessageItem, tableType = ChatMessageType.Common) {
-    await this.table(tableType).delete(chat?.id);
+  deleteMessage(chat: ChatMessageItem) {
+    tryGet(async () => await this.chatTable.delete(chat?.id));
   }
 
-  async deleteMessages(ids: number[], tableType = ChatMessageType.Common) {
-    ids?.map(async (id) => await this.table(tableType).delete(id));
+  deleteMessages(chatIds: number[]) {
+    tryGet(() => chatIds.map(async (id) => await this.chatTable.delete(id)));
   }
 
-  async pruneMessageTable(listSize: number, tableType: ChatMessageType, offset = 25) {
-    const count = await chatDb.table(tableType).count();
-    if (count >= listSize + offset) {
-      const chats = await chatDb
-        .table(tableType)
-        .orderBy(':id')
-        .reverse()
-        .offset(listSize)
-        .toArray();
-      chats?.map(async (chat) => await chatDb.table(tableType).delete(chat.id));
-    }
+  async pruneMessageTable(messageType: ChatMessageType, listSize: number, offset = 25) {
+    tryGet(async () => {
+      const count = await this.chatTable.where('messageType').equals(messageType).count();
+      if (count >= listSize + offset) {
+        await chatDb.chatTable
+          .orderBy(':id')
+          .filter((chat) => chat.messageType === messageType)
+          .reverse()
+          .offset(listSize)
+          .delete();
+      }
+    });
   }
 
   async resetDatabase() {
-    await chatDb.transaction(
-      'rw',
-      ChatMessageType.Common,
-      ChatMessageType.Donation,
-      ChatMessageType.Membership,
-      () => {
-        this.table(ChatMessageType.Common).clear();
-        this.table(ChatMessageType.Donation).clear();
-        this.table(ChatMessageType.Membership).clear();
-      }
-    );
+    tryGet(async () => {
+      await chatDb.transaction('rw', this.tableName, () => {
+        this.chatTable.clear();
+      });
+    });
   }
 
-  liveQuery(tableType: ChatMessageType, limit: number) {
-    return this.table(tableType).limit(limit).toArray();
+  chatLiveQuery(chatType: ChatMessageType, limit: number) {
+    return this.chatTable.where('messageType').equals(chatType).limit(limit).toArray();
   }
 }
 
