@@ -89,6 +89,8 @@
   "COMMON.CURRENT_EMAIL": "Your current email",
   "COMMON.CURSOR": "Cursor",
   "COMMON.DARK": "Dark Theme",
+  "COMMON.LIGHT": "Light Theme",
+  "COMMON.TOGGLE_THEME": "Toggle Theme",
   "COMMON.DELETE": "Delete",
   "COMMON.DELETE_YOUR_ACCOUNT": "Delete your account",
   "COMMON.DIR_LTR": "Left to Right",

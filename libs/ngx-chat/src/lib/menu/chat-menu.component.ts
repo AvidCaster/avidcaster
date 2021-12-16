@@ -7,8 +7,9 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
 
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
@@ -27,10 +28,12 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
   audioPlay = false;
+  isDarkTheme = false;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
+    readonly layout: LayoutService,
     readonly chatService: ChatService
   ) {}
 
@@ -48,11 +51,19 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   subState() {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.cdR.markForCheck();
-      },
-    });
+    this.chatService.state$
+      .pipe(
+        debounceTime(1),
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state) => {
+          this.isDarkTheme = state.isDarkTheme;
+          this.layout.setDarkTheme(this.isDarkTheme);
+          this.cdR.markForCheck();
+        },
+      });
   }
 
   clearMessage() {
@@ -97,6 +108,10 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.chatService.pauseIframe(false);
     }, 1000);
+  }
+
+  toggleTheme(isDarkTheme: boolean) {
+    this.chatService.setState({ isDarkTheme });
   }
 
   ngOnDestroy(): void {
