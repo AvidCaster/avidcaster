@@ -5,8 +5,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, takeUntil } from 'rxjs';
+import { ConfirmationDialogService } from '@fullerstack/ngx-shared';
+import { Subject, first, takeUntil } from 'rxjs';
 
 import { ChatListFilterOptions } from '../chat.default';
 import { ChatMessageListFilterType } from '../chat.model';
@@ -17,6 +19,7 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-stats.component.html',
   styleUrls: ['./chat-stats.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ConfirmationDialogService],
 })
 export class StatsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -25,6 +28,7 @@ export class StatsComponent implements OnInit, OnDestroy {
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
+    readonly confirm: ConfirmationDialogService,
     readonly chatService: ChatService
   ) {}
 
@@ -70,6 +74,21 @@ export class StatsComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.chatService.pauseIframe(false);
     }, 1000);
+  }
+
+  sessionReset() {
+    const title = _('CHAT.RESET_CHAT_SESSION');
+    const info = _('WARN.CHAT.SESSION_RESET');
+    this.confirm
+      .confirmation(title, info)
+      .pipe(first(), takeUntil(this.destroy$))
+      .subscribe({
+        next: (accepted: boolean) => {
+          if (accepted) {
+            this.chatService.database.resetDatabase();
+          }
+        },
+      });
   }
 
   ngOnDestroy(): void {

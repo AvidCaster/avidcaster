@@ -29,6 +29,7 @@
   "CHAT.FILTER_LIST.DONATION": "Donation list",
   "CHAT.FILTER_LIST.MEMBERSHIP": "Membership list",
   "CHAT.FAST_FORWARD": "Fast Forward",
+  "CHAT.SESSION_RESET": "Session reset",
   "CHAT.FF_DISABLED": "Disable Fast Forward",
   "CHAT.FF_ENABLED": "Enable Fast Forward",
   "CHAT.HIGHLIGHT_WORDS": "Highlight words",
@@ -46,6 +47,7 @@
   "CHAT.ALL": "All chats",
   "CHAT.SETUP_DESC": "Chat overlay setup",
   "CHAT.TEST": "Test Chat",
+  "CHAT.RESET_CHAT_SESSION": "Reset chat session",
   "CHEERS.DISABLE": "Disable Cheers",
   "CHEERS.ENABLE": "Enable Cheers",
   "CHEERS.START": "Start Cheers",
@@ -340,5 +342,6 @@
   "WARN.IRREVERSIBLE_ACTION": "Please note that this action cannot be undone",
   "WARN.UNVERIFIED_ACCOUNT": "Account is not verified.  Some features may require account verification",
   "WARN.USER.EMAIL_CHANGE.FAILURE": "Failed to change account's email",
-  "WARN.USER.VERIFICATION_FAILURE": "Failed to verify user"
+  "WARN.USER.VERIFICATION_FAILURE": "Failed to verify user",
+  "WARN.CHAT.SESSION_RESET": "You are about to reset your session and clear your buffer"
 }
