@@ -86,6 +86,8 @@ export class ChatService implements OnDestroy {
     });
 
     this.subToTables();
+
+    this.uix.addClassToBody('no-scroll');
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
   }
 

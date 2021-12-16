@@ -37,6 +37,10 @@ body {
   background-color: #ffffff;
 }
 
+.no-scroll {
+  overflow: hidden !important;
+}
+
 .annotation-canvas {
   position: fixed;
   display: block;
