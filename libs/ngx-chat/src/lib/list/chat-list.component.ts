@@ -35,7 +35,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   trackById(index: number, chat: ChatMessageItem) {
-    return `${index}-${chat?.id}`;
+    return chat?.id;
   }
 
   subState() {
