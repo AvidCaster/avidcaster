@@ -23,13 +23,13 @@ import {
 import { ChatService } from '../chat.service';
 
 @Component({
-  selector: 'fullerstack-chat-stats',
-  templateUrl: './chat-stats.component.html',
-  styleUrls: ['./chat-stats.component.scss'],
+  selector: 'fullerstack-chat-filter',
+  templateUrl: './chat-filter.component.html',
+  styleUrls: ['./chat-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConfirmationDialogService],
 })
-export class StatsComponent implements OnInit, OnDestroy {
+export class ChatFilterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   private keywordsOb$ = new Subject<string>();
   primaryFilter = ChatMessagePrimaryFilterType.None;
@@ -49,7 +49,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.subState();
     this.subKeywords();
 
-    console.log('StatsComponent started ... ');
+    console.log('ChatFilterComponent started ... ');
   }
 
   subKeywords() {
@@ -139,16 +139,6 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   toggleAutoScroll() {
     this.chatService.setState({ autoScrollEnabled: !this.chatService.state.autoScrollEnabled });
-  }
-
-  toggleFullscreen() {
-    this.chatService.pauseIframe(true);
-    setTimeout(() => {
-      this.chatService.layout.toggleFullscreen();
-    }, 100);
-    setTimeout(() => {
-      this.chatService.pauseIframe(false);
-    }, 1000);
   }
 
   sessionReset() {

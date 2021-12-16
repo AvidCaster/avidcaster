@@ -75,6 +75,22 @@
     >
       <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
     </button>
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
+      mat-mini-fab
+      (click)="toggleFullscreen()"
+    >
+      <mat-icon [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
+    </button>
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ 'COMMON.HOME' | translate }}"
+      mat-mini-fab
+      (click)="chatService.layout.auth.goTo('/')"
+    >
+      <mat-icon svgIcon="home"></mat-icon>
+    </button>
   </div>
 </div>
 <audio #audioTag preload="auto" src="./assets/audio/yelling-yay.mp3" class="chat-audio"></audio>

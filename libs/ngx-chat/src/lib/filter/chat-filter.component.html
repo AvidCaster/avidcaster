@@ -72,22 +72,5 @@
     >
       <mat-icon [svgIcon]="chatService.state.autoScrollEnabled ? 'pause' : 'arrow-down-bold'"></mat-icon>
     </button>
-
-    <button
-      matTooltipPosition="after"
-      matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
-      mat-mini-fab
-      (click)="toggleFullscreen()"
-    >
-      <mat-icon color="primary" [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
-    </button>
-    <button
-      matTooltipPosition="after"
-      matTooltip="{{ 'COMMON.HOME' | translate }}"
-      mat-mini-fab
-      (click)="chatService.layout.auth.goTo('/')"
-    >
-      <mat-icon color="primary" svgIcon="home"></mat-icon>
-    </button>
   </div>
 </div>
