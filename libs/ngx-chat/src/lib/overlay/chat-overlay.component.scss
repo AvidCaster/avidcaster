@@ -46,5 +46,9 @@
 
 #chat-fireworks {
   position: absolute;
+  width: 100vw;
+  min-height: 33.33vh;
+  height: 33.33vh;
+  max-height: 33.33vh;
   z-index: 10;
 }

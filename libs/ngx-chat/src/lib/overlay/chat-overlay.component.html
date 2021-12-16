@@ -18,5 +18,7 @@
   <div id="chat-selected" [class.chat-invisible]="!(chatService.chatSelected$ | async)?.author">
     <fullerstack-chat-selected></fullerstack-chat-selected>
   </div>
-  <fullerstack-fireworks [action]="chatService.state.fireworksPlay" id="chat-fireworks"></fullerstack-fireworks>
+  <div id="chat-fireworks" [class.chat-invisible]="!chatService.state.fireworksEnabled">
+    <fullerstack-fireworks [action]="chatService.state.fireworksPlay"></fullerstack-fireworks>
+  </div>
 </div>
