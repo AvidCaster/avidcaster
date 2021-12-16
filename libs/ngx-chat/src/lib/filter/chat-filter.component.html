@@ -65,12 +65,23 @@
   <div fxLayout="row" fxLayoutGap="10px">
     <button
       matTooltipPosition="before"
-      matTooltip="{{ (chatService?.state?.autoScrollEnabled ? 'CHAT.PAUSE_SCROLL' : 'CHAT.PLAY_SCROLL') | translate }}"
+      matTooltip="{{ 'CHAT.PAUSE_SCROLL' | translate }}"
       mat-mini-fab
-      [color]="chatService.state.autoScrollEnabled ? 'warn' : 'accent'"
+      color="accent"
+      [disabled]="!chatService.state.autoScrollEnabled"
       (click)="toggleAutoScroll()"
     >
-      <mat-icon [svgIcon]="chatService.state.autoScrollEnabled ? 'pause' : 'arrow-down-bold'"></mat-icon>
+      <mat-icon svgIcon="pause"></mat-icon>
+    </button>
+    <button
+      matTooltipPosition="before"
+      matTooltip="{{ 'CHAT.PLAY_SCROLL' | translate }}"
+      mat-mini-fab
+      color="accent"
+      [disabled]="chatService.state.autoScrollEnabled"
+      (click)="toggleAutoScroll()"
+    >
+      <mat-icon svgIcon="arrow-down-bold"></mat-icon>
     </button>
   </div>
 </div>
