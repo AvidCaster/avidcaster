@@ -7,7 +7,8 @@
       color="warn"
       (click)="sessionReset()"
     >
-      <mat-icon svgIcon="delete-empty"></mat-icon>
+      <mat-icon svgIcon="trash-can-outline"></mat-icon>
+      <mat-icon svgIcon="database-outline"></mat-icon>
     </button>
 
     <select
@@ -75,7 +76,7 @@
     <button
       matTooltipPosition="after"
       matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
-      mat-icon-button
+      mat-mini-fab
       (click)="toggleFullscreen()"
     >
       <mat-icon color="primary" [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
@@ -83,7 +84,7 @@
     <button
       matTooltipPosition="after"
       matTooltip="{{ 'COMMON.HOME' | translate }}"
-      mat-icon-button
+      mat-mini-fab
       (click)="chatService.layout.auth.goTo('/')"
     >
       <mat-icon color="primary" svgIcon="home"></mat-icon>
