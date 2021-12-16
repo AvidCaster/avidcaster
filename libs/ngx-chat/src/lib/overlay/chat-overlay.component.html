@@ -1,11 +1,11 @@
-<div id="chat-overlay-header">
+<div id="chat-overlay-header" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <fullerstack-chat-list></fullerstack-chat-list>
 </div>
 <div id="chat-overlay-middle">
   <div fxLayout="column" fxLayoutGap="5px">
     <mat-divider></mat-divider>
     <div fxLayoutAlign="space-around center">
-      <fullerstack-chat-stats> </fullerstack-chat-stats>
+      <fullerstack-chat-filter> </fullerstack-chat-filter>
     </div>
     <mat-divider></mat-divider>
     <div fxLayoutAlign="space-around center">

@@ -19,13 +19,13 @@ import { chatRoutes } from './chat.routes';
 import { ChatService } from './chat.service';
 import { ChatOverviewComponent } from './doc/overview/chat-overview.component';
 import { ChatSetupComponent } from './doc/setup/chat-setup.component';
+import { ChatFilterComponent } from './filter/chat-filter.component';
 import { ChatIframeComponent } from './iframe/chat-iframe.component';
 import { ChatItemComponent } from './item/chat-item.component';
 import { ChatListComponent } from './list/chat-list.component';
 import { ChatMenuComponent } from './menu/chat-menu.component';
 import { ChatOverlayComponent } from './overlay/chat-overlay.component';
 import { ChatSelectedComponent } from './selected/chat-selected.component';
-import { StatsComponent } from './stats/chat-stats.component';
 
 @NgModule({
   imports: [
@@ -46,7 +46,7 @@ import { StatsComponent } from './stats/chat-stats.component';
     ChatOverlayComponent,
     ChatSelectedComponent,
     ChatMenuComponent,
-    StatsComponent,
+    ChatFilterComponent,
   ],
   providers: [ChatService],
 })

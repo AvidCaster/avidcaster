@@ -7,15 +7,11 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
 
-import { ChatPrimaryFilterOptions, ChatSecondaryFilterOptions } from '../chat.default';
-import {
-  ChatMessageItem,
-  ChatMessagePrimaryFilterType,
-  ChatMessageSecondaryFilterType,
-} from '../chat.model';
+import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -30,17 +26,14 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.$player = ref.nativeElement;
   }
   private destroy$ = new Subject<boolean>();
-  private keywordsOb$ = new Subject<string>();
   chat: ChatMessageItem;
-  currentFilter = ChatMessageSecondaryFilterType.None;
-  currentPrimaryFilter = ChatMessagePrimaryFilterType.None;
-  currentKeywords = '';
   audioPlay = false;
-  currentMinWords = 0;
+  isDarkTheme = false;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
+    readonly layout: LayoutService,
     readonly chatService: ChatService
   ) {}
 
@@ -54,74 +47,23 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.keywordsOb$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe({
-      next: (keywords) => {
-        this.currentKeywords = keywords;
-        this.chatService.setState({ keywords: keywords.split(' ').filter((word) => !!word) });
-      },
-    });
-
     this.logger.debug('ChatMenuComponent initialized');
   }
 
   subState() {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (state) => {
-        this.currentFilter = state.secondaryFilterOption as ChatMessageSecondaryFilterType;
-        this.currentPrimaryFilter = state.primaryFilterOption as ChatMessagePrimaryFilterType;
-        this.currentKeywords = state.keywords.join(' ');
-        this.cdR.markForCheck();
-      },
-    });
-  }
-
-  isHighlight() {
-    const isHighlight =
-      ChatMessageSecondaryFilterType[this.currentFilter] ===
-      ChatMessageSecondaryFilterType.Highlight;
-    return isHighlight;
-  }
-
-  isFilter() {
-    const isFilter =
-      ChatMessageSecondaryFilterType[this.currentFilter] !==
-        ChatMessageSecondaryFilterType.Highlight &&
-      ChatMessageSecondaryFilterType[this.currentFilter] !== ChatMessageSecondaryFilterType.None;
-    return isFilter;
-  }
-
-  getSecondaryFilterOptions(): string[] {
-    return Object.keys(ChatMessageSecondaryFilterType);
-  }
-
-  getSecondaryFilterName(filter: string): string {
-    let name = ChatMessageSecondaryFilterType[filter];
-    name = ChatSecondaryFilterOptions[name];
-    return name;
-  }
-
-  setSecondaryFilterOption(filter: ChatMessageSecondaryFilterType) {
-    this.currentFilter = filter;
-    this.chatService.setState({ secondaryFilterOption: filter });
-  }
-
-  setKeywords(keywords: string) {
-    this.keywordsOb$.next(keywords);
-  }
-
-  getPrimaryFilterOptions(): string[] {
-    return Object.keys(ChatMessagePrimaryFilterType);
-  }
-
-  getPrimaryFilterName(filter: string): string {
-    let name = ChatMessagePrimaryFilterType[filter];
-    name = ChatPrimaryFilterOptions[name];
-    return name;
-  }
-
-  setPrimaryFilterOption(filter: ChatMessagePrimaryFilterType) {
-    this.currentPrimaryFilter = filter;
-    this.chatService.setState({ primaryFilterOption: filter });
+    this.chatService.state$
+      .pipe(
+        debounceTime(1),
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state) => {
+          this.isDarkTheme = state.isDarkTheme;
+          this.layout.setDarkTheme(this.isDarkTheme);
+          this.cdR.markForCheck();
+        },
+      });
   }
 
   clearMessage() {
@@ -156,6 +98,20 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   toggleFastForward() {
     this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
+  }
+
+  toggleFullscreen() {
+    this.chatService.pauseIframe(true);
+    setTimeout(() => {
+      this.chatService.layout.toggleFullscreen();
+    }, 100);
+    setTimeout(() => {
+      this.chatService.pauseIframe(false);
+    }, 1000);
+  }
+
+  toggleTheme(isDarkTheme: boolean) {
+    this.chatService.setState({ isDarkTheme });
   }
 
   ngOnDestroy(): void {

@@ -32,6 +32,10 @@ button {
   visibility: hidden;
 }
 
+.chat-light-theme {
+  color: #fafafa;
+}
+
 [dir='rtl'] {
   .chat-filter-icon {
     margin-left: 0 !important;

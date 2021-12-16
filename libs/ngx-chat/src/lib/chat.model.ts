@@ -95,6 +95,7 @@ export interface ChatState {
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
   iframePaused: boolean;
+  isDarkTheme: boolean;
 }
 
 export enum ChatMessagePrimaryFilterType {

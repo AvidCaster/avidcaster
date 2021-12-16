@@ -227,7 +227,7 @@ export class ChatService implements OnDestroy {
   private handleNewStateEvent(event: StorageEvent) {
     const storageState = sanitizeJsonStringOrObject<ChatState>(event?.newValue);
     const state = this.sanitizeState(storageState);
-    if (state.signature !== this.state.signature) {
+    if (!!state.signature || state.signature !== this.state.signature) {
       this.setState({ ...defaultChatState(), ...state });
     }
   }
