@@ -8,6 +8,7 @@
 
 import { AnnotatorConfig } from '@fullerstack/ngx-annotator';
 import { AuthConfig } from '@fullerstack/ngx-auth';
+import { ChatConfig } from '@fullerstack/ngx-chat';
 import { ApplicationConfig } from '@fullerstack/ngx-config';
 import { GqlConfig } from '@fullerstack/ngx-gql';
 import { I18nConfig } from '@fullerstack/ngx-i18n';
@@ -96,6 +97,10 @@ const annotator: AnnotatorConfig = {
   logState: true,
 } as const;
 
+const chat: ChatConfig = {
+  logState: true,
+} as const;
+
 export const environment: Readonly<ApplicationConfig> = {
   version: '0.0.1',
   production: true,
@@ -109,4 +114,5 @@ export const environment: Readonly<ApplicationConfig> = {
   store,
   layout,
   annotator,
+  chat,
 };

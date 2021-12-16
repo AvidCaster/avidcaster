@@ -18,12 +18,7 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared';
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
-import {
-  cloneDeep as ldDeepClone,
-  isEqual as ldIsEqual,
-  mergeWith as ldMergeWith,
-  pick as ldPick,
-} from 'lodash-es';
+import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
 import { Observable, Subject, filter, map, switchMap, takeUntil, tap } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
@@ -116,7 +111,7 @@ export class ChatService implements OnDestroy {
     sanitized = ldMergeWith(defaultChatState(), sanitized, (dest, src) =>
       Array.isArray(dest) ? src : undefined
     );
-    return sanitized;
+    return signObject(sanitized);
   }
 
   /**
@@ -124,7 +119,7 @@ export class ChatService implements OnDestroy {
    */
   private initState() {
     const storageState = this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
-    const state = this.sanitizeState(storageState);
+    const state = { ...this.state, ...this.sanitizeState(storageState) };
     this.store.setState(this.claimId, state);
   }
 
@@ -147,16 +142,16 @@ export class ChatService implements OnDestroy {
           this.state = { ...defaultChatState(), ...newState };
 
           if (!this.isRunningInIframeContext) {
-            const currentStateInStorage = this.sanitizeState(
-              this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY)
-            );
-
-            const hasStateChanged = !ldIsEqual(currentStateInStorage, newState);
-            if (hasStateChanged) {
-              this.uix.localStorage.setItem(
-                CHAT_STORAGE_STATE_KEY,
-                JSON.stringify(signObject(this.state))
-              );
+            const localStorageStateSnapshot = this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
+            if (!localStorageStateSnapshot) {
+              const stringifiedState = JSON.stringify(this.state as ChatState);
+              this.uix.localStorage.setItem(CHAT_STORAGE_STATE_KEY, stringifiedState);
+            } else {
+              const localStorageState = this.sanitizeState(localStorageStateSnapshot);
+              if (localStorageState.signature !== this.state.signature) {
+                const stringifiedState = JSON.stringify(this.state as ChatState);
+                this.uix.localStorage.setItem(CHAT_STORAGE_STATE_KEY, stringifiedState);
+              }
             }
           }
         },
