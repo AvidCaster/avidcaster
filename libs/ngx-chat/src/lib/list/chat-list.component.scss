@@ -13,14 +13,12 @@
   cursor: pointer;
 }
 
-.chat-pause {
-  z-index: 2;
-  text-align: center;
-  bottom: 39vh;
-  left: 50vw;
-  position: fixed;
+.chat-highlighted {
+  border: 1px solid #ffb300;
 }
 
-.chat-highlighted {
-  border: 1px dashed #ffb300;
+.mat-icon {
+  font-size: 100px;
+  height: 100px;
+  width: 100px;
 }

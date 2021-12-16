@@ -9,10 +9,10 @@
 import { Routes } from '@angular/router';
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 
+import { ChatOverviewComponent } from './doc/overview/chat-overview.component';
+import { ChatSetupComponent } from './doc/setup/chat-setup.component';
 import { ChatIframeComponent } from './iframe/chat-iframe.component';
 import { ChatOverlayComponent } from './overlay/chat-overlay.component';
-import { ChatOverviewComponent } from './overview/chat-overview.component';
-import { ChatSetupComponent } from './setup/chat-setup.component';
 
 export const chatRoutes: Routes = [
   {

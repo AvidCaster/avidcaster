@@ -6,11 +6,13 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
+import { DeepReadonly } from 'ts-essentials';
+
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import {
-  ChatMessageFilterType,
   ChatMessageItem,
   ChatMessagePrimaryFilterType,
+  ChatMessageSecondaryFilterType,
   ChatState,
 } from '../chat.model';
 
@@ -31,50 +33,44 @@ export const includesEmoji = (str: string): boolean => {
  * @param state chat state
  * @returns chat message item or undefined
  */
-export const filterChatMessageItem = (
+export const secondaryChatFilter = (
   chat: ChatMessageItem,
-  state: ChatState
+  state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
   if (!chat || !chat?.message) {
     return undefined;
   }
 
-  switch (ChatMessageFilterType[state.filterOption]) {
-    case ChatMessageFilterType.Host: {
+  switch (ChatMessageSecondaryFilterType[state.secondaryFilterOption]) {
+    case ChatMessageSecondaryFilterType.Host: {
       return state.keywords.length < 1
         ? chat
         : state.keywords?.some((word) => chat?.host.toLowerCase() === word.toLowerCase())
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.Author: {
+    case ChatMessageSecondaryFilterType.Author: {
       return state.keywords.length < 1
         ? chat
         : state.keywords?.some((word) => chat?.author.includes(word))
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.Donation: {
-      return chat?.donation ? chat : undefined;
-    }
-    case ChatMessageFilterType.Membership: {
-      return chat?.membership ? chat : undefined;
-    }
-    case ChatMessageFilterType.FilterBy: {
+    case ChatMessageSecondaryFilterType.FilterBy: {
       return state.keywords.length < 1
         ? chat
         : state.keywords?.some((word) => chat?.message.includes(word))
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.FilterOut: {
+    case ChatMessageSecondaryFilterType.FilterOut: {
       return state.keywords.length < 1
         ? chat
         : !state.keywords?.some((word) => chat?.message.includes(word))
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.Highlight: {
+    case ChatMessageSecondaryFilterType.Highlight: {
       if (state.keywords?.some((word) => chat?.message.includes(word))) {
         chat.highlighted = true;
       } else {
@@ -82,7 +78,7 @@ export const filterChatMessageItem = (
       }
       return chat;
     }
-    case ChatMessageFilterType.None:
+    case ChatMessageSecondaryFilterType.None:
     default:
       break;
   }
@@ -95,9 +91,9 @@ export const filterChatMessageItem = (
  * @param state chat state
  * @returns chat message item or undefined
  */
-export const primaryFilterChatMessageItem = (
+export const primaryChatFilter = (
   chat: ChatMessageItem,
-  state: ChatState
+  state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
   if (!chat || !chat?.message) {
     return undefined;
@@ -130,7 +126,7 @@ export const primaryFilterChatMessageItem = (
         ? chat
         : undefined;
     }
-    case ChatMessageFilterType.None:
+    case ChatMessagePrimaryFilterType.None:
     default:
       break;
   }
@@ -153,4 +149,9 @@ export const openOverlayWindowScreen = (
     '_blank',
     `width=${width},height=${height},left=100,top=100`
   );
+};
+
+export const storageBroadcast = (storageObj: Storage, key: string, value: string): void => {
+  storageObj?.setItem(key, value);
+  storageObj?.removeItem(key);
 };

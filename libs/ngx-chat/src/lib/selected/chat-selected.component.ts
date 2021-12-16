@@ -14,7 +14,7 @@ import {
   CHAT_TWITCH_DEFAULT_AVATAR,
   CHAT_YOUTUBE_DEFAULT_AVATAR,
 } from '../chat.default';
-import { ChatMessageHosts, ChatMessageItem } from '../chat.model';
+import { ChatHosts, ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -30,32 +30,32 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   slideInState = 0;
 
   constructor(
-    readonly chR: ChangeDetectorRef,
+    readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
     readonly chatService: ChatService
   ) {}
 
   ngOnInit(): void {
-    this.chatService.chatSelected$.pipe(throttleTime(1000), takeUntil(this.destroy$)).subscribe({
+    this.chatService.chatSelected$.pipe(throttleTime(100), takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
         if (!this.chatService.state.ffEnabled) {
           this.slideInState++;
         }
-        this.chR.markForCheck();
+        this.cdR.detectChanges();
       },
     });
 
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.chR.markForCheck();
+        this.cdR.detectChanges();
       },
     });
 
     this.logger.debug('ChatSelectedComponent started ... ');
   }
 
-  getHostImage(host: ChatMessageHosts): string {
+  getHostImage(host: ChatHosts): string {
     switch (host) {
       case 'youtube':
       case 'twitch':
@@ -77,7 +77,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  onImageError(event, host: ChatMessageHosts) {
+  onImageError(event, host: ChatHosts) {
     switch (host) {
       case 'youtube':
         event.target.src = CHAT_YOUTUBE_DEFAULT_AVATAR;

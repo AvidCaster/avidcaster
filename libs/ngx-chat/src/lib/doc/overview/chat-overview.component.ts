@@ -8,7 +8,7 @@
 
 import { Component } from '@angular/core';
 
-import { ChatService } from '../chat.service';
+import { ChatService } from '../../chat.service';
 
 @Component({
   selector: 'fullerstack-chat-overview',

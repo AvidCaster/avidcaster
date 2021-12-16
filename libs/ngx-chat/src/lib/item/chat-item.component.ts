@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { ChatMessageHosts, ChatMessageItem } from '../chat.model';
+import { ChatHosts, ChatMessageItem, ChatMessageListFilterType } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -9,27 +9,40 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
 })
-export class ChatItemComponent {
+export class ChatItemComponent implements OnDestroy {
+  @Input() last = false;
   @Input() set viewed(value: boolean) {
     this.chat.viewed = value;
   }
   @Input() chat: ChatMessageItem;
-  private destroyed$ = new Subject<boolean>();
+  private destroy$ = new Subject<boolean>();
 
   constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
 
-  getHostColor(host: ChatMessageHosts): string {
+  get isMembershipList(): boolean {
+    return this.chatService.state.chatListOption === ChatMessageListFilterType.Membership;
+  }
+
+  get isDonationList(): boolean {
+    return this.chatService.state.chatListOption === ChatMessageListFilterType.Donation;
+  }
+
+  get isCommonList(): boolean {
+    return this.chatService.state.chatListOption === ChatMessageListFilterType.Common;
+  }
+
+  getHostColor(host: ChatHosts): string {
     switch (host) {
       case 'youtube':
         return 'warn';
       case 'twitch':
-        return 'primary';
+        return 'info';
       default:
         return 'accent';
     }
   }
 
-  getHostImage(host: ChatMessageHosts): string {
+  getHostImage(host: ChatHosts): string {
     switch (host) {
       case 'youtube':
       case 'twitch':
@@ -40,8 +53,17 @@ export class ChatItemComponent {
   }
 
   onClick(): void {
-    this.chat.viewed = true;
-    this.chatService.chatSelected(this.chat);
+    if (!this.chat.viewed) {
+      this.chat.viewed = true;
+      this.chatService.database.updateMessage(this.chat);
+    }
+    const wasClicked = true;
+    this.chatService.chatSelected(this.chat, wasClicked);
     this.cdR.markForCheck();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

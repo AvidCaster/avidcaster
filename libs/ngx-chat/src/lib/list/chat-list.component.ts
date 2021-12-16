@@ -19,7 +19,8 @@ import { ChatService } from '../chat.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatListComponent implements OnInit, OnDestroy {
-  private destroyed$ = new Subject<boolean>();
+  private destroy$ = new Subject<boolean>();
+  chatList: ChatMessageItem[] = [];
   welcomeChat = welcomeChat();
 
   constructor(
@@ -29,19 +30,29 @@ export class ChatListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.updateChatList();
+    this.subState();
+    this.subChatList();
   }
 
   trackById(index: number, chat: ChatMessageItem) {
-    return chat?.id;
+    return `${index}-${chat?.id}`;
   }
 
-  updateChatList(): void {
-    this.chatService.chatList$.pipe(takeUntil(this.destroyed$)).subscribe({
+  subState() {
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
+        this.cdR.detectChanges();
+      },
+    });
+  }
+
+  subChatList(): void {
+    this.chatService.chatTable$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (chats) => {
         if (this.chatService.state.autoScrollEnabled) {
-          setTimeout(() => this.cdR.markForCheck(), 0);
-          setTimeout(() => this.scrollToBottom(), 100);
+          this.chatList = chats;
+          this.cdR.detectChanges();
+          setTimeout(() => this.scrollToBottom(), 10);
         }
       },
     });
@@ -63,12 +74,9 @@ export class ChatListComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleAutoScroll() {
-    this.chatService.setState({ autoScrollEnabled: !this.chatService.state.autoScrollEnabled });
-  }
-
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    this.destroy$.next(true);
+    this.destroy$.complete();
+    this.chatList = [];
   }
 }

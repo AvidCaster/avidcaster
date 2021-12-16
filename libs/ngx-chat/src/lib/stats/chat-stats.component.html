@@ -1,0 +1,63 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+  <div fxLayout="row" fxLayoutGap="10px">
+    <button
+      mat-raised-button
+      matTooltipPosition="before"
+      matTooltip="{{ 'CHAT.SESSION_RESET' | translate }}"
+      color="warn"
+      (click)="sessionReset()"
+    >
+      <mat-icon svgIcon="delete-empty"></mat-icon>
+    </button>
+
+    <select
+      name="{{ getMessageListFilterName(currentListFilter) | translate }}"
+      id="filter-options"
+      [(ngModel)]="currentListFilter"
+      (ngModelChange)="setMessageListFilterOption(currentListFilter)"
+    >
+      <option *ngFor="let filter of getMessageListFilterOptions()" [value]="filter">
+        {{ getMessageListFilterName(filter) | translate }}
+      </option>
+    </select>
+
+    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.DONATION' | translate }}" color="accent">
+      <mat-icon svgIcon="hand-coin-outline"></mat-icon>
+    </button>
+    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.MEMBERSHIP' | translate }}" color="accent">
+      <mat-icon svgIcon="account-multiple"></mat-icon>
+    </button>
+    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.COMMON' | translate }}" color="accent">
+      <mat-icon svgIcon="message-text"></mat-icon>
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="5px">
+    <button
+      matTooltipPosition="before"
+      matTooltip="{{ (chatService?.state?.autoScrollEnabled ? 'CHAT.PAUSE_SCROLL' : 'CHAT.PLAY_SCROLL') | translate }}"
+      mat-mini-fab
+      [color]="chatService.state.autoScrollEnabled ? 'warn' : 'accent'"
+      (click)="toggleAutoScroll()"
+    >
+      <mat-icon [svgIcon]="chatService.state.autoScrollEnabled ? 'pause' : 'arrow-down-bold'"></mat-icon>
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
+      mat-icon-button
+      (click)="toggleFullscreen()"
+    >
+      <mat-icon color="primary" [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
+    </button>
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ 'COMMON.HOME' | translate }}"
+      mat-icon-button
+      (click)="chatService.layout.auth.goTo('/')"
+    >
+      <mat-icon color="primary" svgIcon="home"></mat-icon>
+    </button>
+  </div>
+</div>

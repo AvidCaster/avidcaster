@@ -24,7 +24,7 @@ export class ChatOverlayComponent implements OnInit {
 
   constructor(
     readonly zone: NgZone,
-    readonly chR: ChangeDetectorRef,
+    readonly cdR: ChangeDetectorRef,
     readonly elR: ElementRef,
     readonly logger: LoggerService,
     readonly chatService: ChatService
@@ -43,7 +43,7 @@ export class ChatOverlayComponent implements OnInit {
   selectedChatSubscription(): void {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.chR.markForCheck();
+        this.cdR.markForCheck();
       },
     });
   }

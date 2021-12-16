@@ -11,9 +11,11 @@ import { cloneDeep as ldDeepClone } from 'lodash-es';
 
 import {
   ChatConfig,
-  ChatMessageFilterType,
   ChatMessageItem,
+  ChatMessageListFilterType,
   ChatMessagePrimaryFilterType,
+  ChatMessageSecondaryFilterType,
+  ChatMessageType,
   ChatState,
 } from './chat.model';
 
@@ -60,7 +62,6 @@ export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_OVERLAY_SCREEN_UR
 
 export const CHAT_STORAGE_KEY_PREFIX = 'avidcaster-chat';
 export const CHAT_STORAGE_BROADCAST_KEY_PREFIX = `${CHAT_STORAGE_KEY_PREFIX}-broadcast`;
-export const CHAT_STORAGE_MESSAGE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-message`;
 export const CHAT_STORAGE_MESSAGE_HEARTBEAT_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-heartbeat`;
 export const CHAT_STORAGE_OVERLAY_REQUEST_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-request`;
 export const CHAT_STORAGE_OVERLAY_RESPONSE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-response`;
@@ -71,15 +72,16 @@ export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-t
 export const CHAT_DEFAULT_AVATAR = './assets/images/misc/avatar-default-red.png';
 export const CHAT_DEFAULT_LOGO = './assets/images/misc/avidcaster-chat-x128.png';
 
-const DefaultChatState = {
+const DefaultChatState: ChatState = {
   signature: '',
   isLtR: true,
   audioEnabled: false,
   fireworksEnabled: true,
   fireworksPlay: false,
   keywords: [],
-  filterOption: '',
-  primaryFilterOption: '',
+  chatListOption: ChatMessageListFilterType.Common,
+  primaryFilterOption: ChatMessagePrimaryFilterType.None,
+  secondaryFilterOption: ChatMessageSecondaryFilterType.None,
   ffEnabled: false,
   autoScrollEnabled: true,
   iframePaused: false,
@@ -93,14 +95,14 @@ export const defaultChatState = (): ChatState => {
  * Default configuration - Layout module
  */
 const DefaultChatTest: ChatMessageItem = {
-  id: '1234334455',
+  id: 1,
   author: 'Mike Tyson',
   message: 'My dog loves lives loves his bag, same one since puppy',
   html: 'My dog loves lives loves his bag, same one since puppy',
   avatarUrl: CHAT_YOUTUBE_DEFAULT_AVATAR,
   badgeUrl: '',
   donation: '$100',
-  messageType: 'text-message',
+  messageType: ChatMessageType.Donation,
   host: 'youtube',
   streamId: 'NfG9ApM_yTE',
   timestamp: 1639013100520,
@@ -119,24 +121,13 @@ const WelcomeChat: ChatMessageItem = {
   message: 'Welcome to AvidCaster chat overlay!',
   html: 'Welcome to AvidCaster chat overlay!',
   avatarUrl: CHAT_DEFAULT_LOGO,
-  messageType: 'welcome-message',
+  messageType: ChatMessageType.Common,
   streamId: 'avidcaster',
   prefix: 'avidcaster',
 };
 
 export const welcomeChat = (): ChatMessageItem => {
   return ldDeepClone(WelcomeChat);
-};
-
-export const ChatFilterOptions = {
-  [ChatMessageFilterType.None]: _('FILTER.NONE'),
-  [ChatMessageFilterType.Host]: _('FILTER.HOST'),
-  [ChatMessageFilterType.Author]: _('FILTER.AUTHOR'),
-  [ChatMessageFilterType.Donation]: _('FILTER.DONATION'),
-  [ChatMessageFilterType.Membership]: _('FILTER.MEMBERSHIP'),
-  [ChatMessageFilterType.FilterBy]: _('FILTER.BY'),
-  [ChatMessageFilterType.FilterOut]: _('FILTER.OUT'),
-  [ChatMessageFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
 };
 
 export const ChatPrimaryFilterOptions = {
@@ -149,6 +140,24 @@ export const ChatPrimaryFilterOptions = {
   [ChatMessagePrimaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
 };
 
-export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 50;
-export const CHAT_MESSAGE_IFRAME_DISPATCHED_SIZE = 50;
-export const CHAT_MESSAGE_IFRAME_HEARTBEAT_IN_SECONDS = 5 * 1000;
+export const ChatSecondaryFilterOptions = {
+  [ChatMessageSecondaryFilterType.None]: _('FILTER.NONE'),
+  [ChatMessageSecondaryFilterType.Host]: _('FILTER.HOST'),
+  [ChatMessageSecondaryFilterType.Author]: _('FILTER.AUTHOR'),
+  [ChatMessageSecondaryFilterType.FilterBy]: _('FILTER.BY'),
+  [ChatMessageSecondaryFilterType.FilterOut]: _('FILTER.OUT'),
+  [ChatMessageSecondaryFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
+};
+
+export const ChatListFilterOptions = {
+  [ChatMessageType.Common]: _('CHAT.FILTER_LIST.COMMON'),
+  [ChatMessageType.Donation]: _('CHAT.FILTER_LIST.DONATION'),
+  [ChatMessageType.Membership]: _('CHAT.FILTER_LIST.MEMBERSHIP'),
+};
+
+// chat display limit (visible / scrollable)
+export const CHAT_MESSAGE_LIST_DISPLAY_LIMIT = 50;
+// chat buffer, to keep
+export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 100;
+// extra buffer offset, allow buffer size to grow before trimming it
+export const CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE = 25;

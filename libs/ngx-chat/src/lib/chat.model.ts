@@ -16,20 +16,20 @@ export interface ChatConfig {
   [id: string]: any;
 }
 
-export type ChatMessageHosts = 'youtube' | 'twitch';
+export type ChatHosts = 'youtube' | 'twitch';
 
-export interface ChatMessageHostReady {
-  host?: ChatMessageHosts;
+export interface ChatHostReady {
+  host?: ChatHosts;
   ready: boolean;
 }
 
-export enum ChatMessageDownstreamAction {
+export enum ChatDownstreamAction {
   pong = 'pong',
   chat = 'chat',
   ready = 'ready',
 }
 
-export enum ChatMessageUpstreamAction {
+export enum ChatUpstreamAction {
   iframe = 'iframe',
   ping = 'ping',
   observe = 'observe',
@@ -40,8 +40,14 @@ export enum ChatMessageDirection {
   SouthBound = 'avidcaster-chat-south-bound',
 }
 
+export enum ChatMessageType {
+  Common = 'common',
+  Donation = 'donation',
+  Membership = 'membership',
+}
+
 export interface ChatMessage {
-  host?: ChatMessageHosts;
+  host?: ChatHosts;
   author?: string;
   avatarUrl?: string;
   badgeUrl?: string;
@@ -49,11 +55,11 @@ export interface ChatMessage {
   html?: string;
   donation?: string;
   membership?: string;
-  messageType?: string;
+  messageType?: ChatMessageType;
 }
 
 export interface ChatMessageItem extends ChatMessage {
-  id?: string;
+  id?: number;
   timestamp?: number;
   prefix?: string;
   streamId?: string;
@@ -68,9 +74,9 @@ export interface ChatMessageData {
 
 export interface ChatMessageEvent {
   type: ChatMessageDirection;
-  host: ChatMessageHosts;
+  host: ChatHosts;
   streamId: string;
-  action: ChatMessageUpstreamAction | ChatMessageDownstreamAction;
+  action: ChatUpstreamAction | ChatDownstreamAction;
   payload: ChatMessageData;
 }
 
@@ -83,22 +89,12 @@ export interface ChatState {
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
-  primaryFilterOption: string;
-  filterOption: string;
+  primaryFilterOption: ChatMessagePrimaryFilterType;
+  secondaryFilterOption: ChatMessageSecondaryFilterType;
+  chatListOption: ChatMessageListFilterType;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
   iframePaused: boolean;
-}
-
-export enum ChatMessageFilterType {
-  None = 'none',
-  Host = 'host',
-  Author = 'author',
-  Donation = 'donation',
-  Membership = 'membership',
-  FilterBy = 'filterBy',
-  FilterOut = 'filterOut',
-  Highlight = 'highlight',
 }
 
 export enum ChatMessagePrimaryFilterType {
@@ -109,4 +105,19 @@ export enum ChatMessagePrimaryFilterType {
   StartWithQ = 'startWithQ',
   StartWithA = 'startWithA',
   StartWithFrom = 'startWithFrom',
+}
+
+export enum ChatMessageSecondaryFilterType {
+  None = 'none',
+  Host = 'host',
+  Author = 'author',
+  FilterBy = 'filterBy',
+  FilterOut = 'filterOut',
+  Highlight = 'highlight',
+}
+
+export enum ChatMessageListFilterType {
+  Common = 'common',
+  Donation = 'donation',
+  Membership = 'membership',
 }
