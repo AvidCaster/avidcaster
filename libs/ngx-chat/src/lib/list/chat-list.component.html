@@ -1,11 +1,10 @@
 <div id="chat-list" *ngIf="!chatService.state.ffEnabled" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
-  <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index; let last = last" class="chat-item">
+  <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index" class="chat-item">
     <fullerstack-chat-item
       *ngIf="chat?.author && (chat?.html || chat?.message)"
       [class.chat-highlighted]="chat?.highlighted"
       class="chat-item"
       [chat]="chat"
-      [last]="last"
     ></fullerstack-chat-item>
   </div>
   <fullerstack-chat-item *ngIf="chatList?.length < 1" class="chat-item" [chat]="welcomeChat"></fullerstack-chat-item>

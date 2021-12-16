@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subject, filter, takeUntil } from 'rxjs';
 
-import { ChatHosts, ChatMessageItem, ChatMessageListFilterType } from '../chat.model';
+import { ChatHosts, ChatMessageItem, ChatMessageListFilterType, ChatState } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -9,26 +9,29 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
 })
-export class ChatItemComponent implements OnDestroy {
-  @Input() last = false;
+export class ChatItemComponent implements OnInit, OnDestroy {
   @Input() set viewed(value: boolean) {
     this.chat.viewed = value;
   }
   @Input() chat: ChatMessageItem;
   private destroy$ = new Subject<boolean>();
+  isMembershipList = false;
+  isDonationList = false;
+  isCommonList = true;
 
   constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
 
-  get isMembershipList(): boolean {
-    return this.chatService.state.chatListOption === ChatMessageListFilterType.Membership;
-  }
-
-  get isDonationList(): boolean {
-    return this.chatService.state.chatListOption === ChatMessageListFilterType.Donation;
-  }
-
-  get isCommonList(): boolean {
-    return this.chatService.state.chatListOption === ChatMessageListFilterType.Common;
+  ngOnInit(): void {
+    this.chatService.state$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((state: ChatState) => {
+        this.isMembershipList = state.chatListOption === ChatMessageListFilterType.Membership;
+        this.isDonationList = state.chatListOption === ChatMessageListFilterType.Donation;
+        this.isCommonList = state.chatListOption === ChatMessageListFilterType.Common;
+      });
   }
 
   getHostColor(host: ChatHosts): string {
