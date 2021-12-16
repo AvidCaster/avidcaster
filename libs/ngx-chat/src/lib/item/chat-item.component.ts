@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { ChatHosts, ChatMessageItem } from '../chat.model';
+import { ChatHosts, ChatMessageItem, ChatMessageListFilterType } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
 })
-export class ChatItemComponent {
+export class ChatItemComponent implements OnDestroy {
   @Input() last = false;
   @Input() set viewed(value: boolean) {
     this.chat.viewed = value;
@@ -18,6 +18,18 @@ export class ChatItemComponent {
   private destroy$ = new Subject<boolean>();
 
   constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
+
+  get isMembershipList(): boolean {
+    return this.chatService.state.chatListOption === ChatMessageListFilterType.Membership;
+  }
+
+  get isDonationList(): boolean {
+    return this.chatService.state.chatListOption === ChatMessageListFilterType.Donation;
+  }
+
+  get isCommonList(): boolean {
+    return this.chatService.state.chatListOption === ChatMessageListFilterType.Common;
+  }
 
   getHostColor(host: ChatHosts): string {
     switch (host) {
@@ -41,9 +53,17 @@ export class ChatItemComponent {
   }
 
   onClick(): void {
-    this.chat.viewed = true;
-    this.chatService.database.updateMessage(this.chat);
-    this.chatService.chatSelected(this.chat);
+    if (!this.chat.viewed) {
+      this.chat.viewed = true;
+      this.chatService.database.updateMessage(this.chat);
+    }
+    const wasClicked = true;
+    this.chatService.chatSelected(this.chat, wasClicked);
     this.cdR.markForCheck();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
