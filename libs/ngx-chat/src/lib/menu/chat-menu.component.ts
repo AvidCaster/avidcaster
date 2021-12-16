@@ -8,14 +8,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
-import { ChatPrimaryFilterOptions, ChatSecondaryFilterOptions } from '../chat.default';
-import {
-  ChatMessageItem,
-  ChatMessagePrimaryFilterType,
-  ChatMessageSecondaryFilterType,
-} from '../chat.model';
+import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({

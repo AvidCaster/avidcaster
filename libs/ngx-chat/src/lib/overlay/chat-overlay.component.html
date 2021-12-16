@@ -1,4 +1,4 @@
-<div id="chat-overlay-header">
+<div id="chat-overlay-header" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <fullerstack-chat-list></fullerstack-chat-list>
 </div>
 <div id="chat-overlay-middle">
