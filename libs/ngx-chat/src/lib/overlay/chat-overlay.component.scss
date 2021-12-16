@@ -1,71 +1,50 @@
-#chat-outer-box {
-  position: relative;
-  display: block !important;
-  top: -2px;
+:host {
+  display: block;
   left: 0;
   min-width: 100%;
   min-height: 100%;
+  overflow: hidden;
   font-family: Helvetica, Geneva, Verdana, Arial, sans-serif;
 }
 
-#chat-list-box {
-  position: relative;
-  display: block !important;
-  top: 0;
-  left: 0;
+#chat-overlay-header {
   min-width: 100vw;
   width: 100vw;
-  min-height: calc(66.66vh - 80px) !important;
-  height: calc(66.66vh - 80px) !important;
+  height: calc(65vh - 90px);
+  min-height: calc(65vh - 90px);
+  max-height: calc(65vh - 90px);
+  // border: 1px solid red;
+  overflow-y: scroll;
 }
 
-#chat-overlay-box {
-  position: fixed;
-  display: block !important;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  min-width: 100vw;
-  width: 100%;
-  min-height: calc(33.33vh + 80px) !important;
-  height: calc(33.33vh + 80px) !important;
+#chat-overlay-middle {
+  width: 100vw;
+  min-height: 91px;
+  height: 91px;
+  // border: 1px solid red;
+  padding: 1px 0 11px 0;
+}
+
+#chat-overlay-footer {
+  width: 100vw;
+  min-height: 33.33vh;
+  height: 33.33vh;
+  max-height: 33.33vh;
   background: #000;
   color: #fff;
+  // border: 1px solid red;
 }
 
-.chat-control {
-  top: 2px;
-  margin-bottom: 15px !important;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.mat-divider {
-  border-top-color: #fff;
-  margin-bottom: 5px !important;
-  margin-top: -15px;
-}
-
-.chat-overlay {
-  padding-top: 5px;
-  height: 100%;
-}
-
-.chat-selected {
-  padding: 0 50px;
-}
-
-.chat-selected-hide {
+.chat-invisible {
   visibility: hidden;
+}
+
+#chat-selected {
+  position: absolute;
+  padding: 15px 50px 15px 50px;
 }
 
 #chat-fireworks {
   position: absolute;
   z-index: 10;
-  top: 100px;
-}
-
-.example-button-row button,
-.example-button-row a {
-  margin-right: 8px;
 }

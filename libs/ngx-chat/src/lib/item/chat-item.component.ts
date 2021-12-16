@@ -10,6 +10,7 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./chat-item.component.scss'],
 })
 export class ChatItemComponent {
+  @Input() last = false;
   @Input() set viewed(value: boolean) {
     this.chat.viewed = value;
   }

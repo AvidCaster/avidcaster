@@ -36,6 +36,7 @@
   </div>
   <div fxFlex></div>
   <div fxFlex="30px" class="chat-item-action" fxLayout="row" fxLayoutAlign="center">
+    <mat-icon fxFlexAlign="center" *ngIf="last" svgIcon="sort-bool-ascending-variant"></mat-icon>
     <mat-icon
       fxFlexAlign="center"
       [color]="chat?.highlighted ? 'accent' : 'green'"

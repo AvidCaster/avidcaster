@@ -1,27 +1,22 @@
-<div id="chat-outer-box" fxLayout="column" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
-  <div id="chat-list-box" fxLayout="row">
-    <fullerstack-chat-list></fullerstack-chat-list>
-  </div>
-  <div id="chat-overlay-box" fxLayout="column" fxLayoutGap="20px">
-    <div fxLayout="column" fxLayoutGap="20px" class="chat-control">
-      <div fxLayoutAlign="space-around center">
-        <fullerstack-chat-stats> </fullerstack-chat-stats>
-      </div>
-      <mat-divider></mat-divider>
-      <div fxLayoutAlign="space-around center">
-        <fullerstack-chat-menu> </fullerstack-chat-menu>
-      </div>
+<div id="chat-overlay-header">
+  <fullerstack-chat-list></fullerstack-chat-list>
+</div>
+<div id="chat-overlay-middle">
+  <div fxLayout="column" fxLayoutGap="5px">
+    <mat-divider></mat-divider>
+    <div fxLayoutAlign="space-around center">
+      <fullerstack-chat-stats> </fullerstack-chat-stats>
     </div>
     <mat-divider></mat-divider>
-    <div class="chat-overlay">
-      <div class="chat-selected" [class.chat-selected-hide]="!(chatService.chatSelected$ | async)?.author">
-        <fullerstack-chat-selected></fullerstack-chat-selected>
-      </div>
-      <fullerstack-fireworks
-        *ngIf="chatService.state.fireworksEnabled"
-        [action]="chatService.state.fireworksPlay"
-        id="chat-fireworks"
-      ></fullerstack-fireworks>
+    <div fxLayoutAlign="space-around center">
+      <fullerstack-chat-menu> </fullerstack-chat-menu>
     </div>
+    <mat-divider></mat-divider>
   </div>
+</div>
+<div id="chat-overlay-footer">
+  <div id="chat-selected" [class.chat-invisible]="!(chatService.chatSelected$ | async)?.author">
+    <fullerstack-chat-selected></fullerstack-chat-selected>
+  </div>
+  <fullerstack-fireworks [action]="chatService.state.fireworksPlay" id="chat-fireworks"></fullerstack-fireworks>
 </div>
