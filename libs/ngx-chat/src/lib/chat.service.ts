@@ -38,15 +38,9 @@ import {
   defaultChatState,
   defaultChatTest,
 } from './chat.default';
-import {
-  ChatMessageItem,
-  ChatMessageListFilterType,
-  ChatMessageSecondaryFilterType,
-  ChatState,
-} from './chat.model';
+import { ChatMessageItem, ChatMessageListFilterType, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
 import { primaryChatFilter, secondaryChatFilter, storageBroadcast } from './util/chat.util';
-import { ChatMessageType } from '..';
 
 @Injectable()
 export class ChatService implements OnDestroy {
