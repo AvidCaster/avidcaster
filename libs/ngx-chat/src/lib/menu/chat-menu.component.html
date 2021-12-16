@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
-  <div fxLayout="row" fxLayoutGap="5px" *ngLet="isHighlight() as isHighlight">
+  <div fxLayout="row" fxLayoutGap="5px">
     <button
       mat-raised-button
       [class.yt-cursor-default]="!chat?.author"
@@ -10,36 +10,6 @@
     >
       <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
     </button>
-    <input
-      type="text"
-      placeholder="{{ 'CHAT.KEYWORDS' | translate }}"
-      [(ngModel)]="currentKeywords"
-      (ngModelChange)="setKeywords(currentKeywords)"
-    />
-    <div fxLayout="column" fxLayoutAlign="center" class="chat-filter-icon">
-      <mat-icon
-        [color]="isHighlight ? 'accent' : 'warn'"
-        [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
-      ></mat-icon>
-    </div>
-
-    <select
-      name="{{ getSecondaryFilterName(currentFilter) | translate }}"
-      id="filter-options"
-      [(ngModel)]="currentFilter"
-      (ngModelChange)="setSecondaryFilterOption(currentFilter)"
-    >
-      <option *ngFor="let filter of getSecondaryFilterOptions()" [value]="filter">{{ getSecondaryFilterName(filter) | translate }}</option>
-    </select>
-
-    <select
-      name="{{ getPrimaryFilterName(currentPrimaryFilter) | translate }}"
-      id="filter-options"
-      [(ngModel)]="currentPrimaryFilter"
-      (ngModelChange)="setPrimaryFilterOption(currentPrimaryFilter)"
-    >
-      <option *ngFor="let filter of getPrimaryFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
-    </select>
 
     <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'primary' : 'warn'">
       <div fxLayout="row" fxLayoutGap="15px">

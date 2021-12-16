@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+<div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div fxLayout="row" fxLayoutGap="10px">
     <button
       mat-raised-button
@@ -11,27 +11,57 @@
     </button>
 
     <select
-      name="{{ getMessageListFilterName(currentListFilter) | translate }}"
+      name="{{ getListFilterName(listFilter) | translate }}"
       id="filter-options"
-      [(ngModel)]="currentListFilter"
-      (ngModelChange)="setMessageListFilterOption(currentListFilter)"
+      [(ngModel)]="listFilter"
+      (ngModelChange)="setListFilterOption(listFilter)"
     >
-      <option *ngFor="let filter of getMessageListFilterOptions()" [value]="filter">
-        {{ getMessageListFilterName(filter) | translate }}
+      <option *ngFor="let filter of getListFilterOptions()" [value]="filter">
+        {{ getListFilterName(filter) | translate }}
       </option>
     </select>
+    <div fxLayout="row" fxLayoutGap="5px" *ngLet="isHighlight() as isHighlight">
+      <input type="text" placeholder="{{ 'CHAT.KEYWORDS' | translate }}" [(ngModel)]="keywords" (ngModelChange)="setKeywords(keywords)" />
+      <div fxLayout="column" fxLayoutAlign="center" class="chat-filter-icon">
+        <mat-icon
+          [color]="isHighlight ? 'accent' : 'warn'"
+          [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
+        ></mat-icon>
+      </div>
 
-    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.DONATION' | translate }}" color="accent">
-      <mat-icon svgIcon="hand-coin-outline"></mat-icon>
-    </button>
-    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.MEMBERSHIP' | translate }}" color="accent">
-      <mat-icon svgIcon="account-multiple"></mat-icon>
-    </button>
-    <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.COMMON' | translate }}" color="accent">
-      <mat-icon svgIcon="message-text"></mat-icon>
-    </button>
+      <select
+        name="{{ getSecondaryFilterName(secondaryFilter) | translate }}"
+        id="filter-options"
+        [(ngModel)]="secondaryFilter"
+        (ngModelChange)="setSecondaryFilterOption(secondaryFilter)"
+      >
+        <option *ngFor="let filter of getSecondaryFilterOptions()" [value]="filter">
+          {{ getSecondaryFilterName(filter) | translate }}
+        </option>
+      </select>
+
+      <select
+        name="{{ getPrimaryFilterName(primaryFilter) | translate }}"
+        id="filter-options"
+        [(ngModel)]="primaryFilter"
+        (ngModelChange)="setPrimaryFilterOption(primaryFilter)"
+      >
+        <option *ngFor="let filter of getPrimaryFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
+      </select>
+      <!--
+      <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.DONATION' | translate }}" color="accent">
+        <mat-icon svgIcon="hand-coin-outline"></mat-icon>
+      </button>
+      <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.MEMBERSHIP' | translate }}" color="accent">
+        <mat-icon svgIcon="account-multiple"></mat-icon>
+      </button>
+      <button mat-raised-button matTooltipPosition="before" matTooltip="{{ 'CHAT.FILTER_LIST.COMMON' | translate }}" color="accent">
+        <mat-icon svgIcon="message-text"></mat-icon>
+      </button> -->
+    </div>
   </div>
-  <div fxLayout="row" fxLayoutGap="5px">
+  <div fxFlex></div>
+  <div fxLayout="row" fxLayoutGap="10px">
     <button
       matTooltipPosition="before"
       matTooltip="{{ (chatService?.state?.autoScrollEnabled ? 'CHAT.PAUSE_SCROLL' : 'CHAT.PLAY_SCROLL') | translate }}"
@@ -41,8 +71,7 @@
     >
       <mat-icon [svgIcon]="chatService.state.autoScrollEnabled ? 'pause' : 'arrow-down-bold'"></mat-icon>
     </button>
-  </div>
-  <div fxLayout="row" fxLayoutGap="10px">
+
     <button
       matTooltipPosition="after"
       matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
