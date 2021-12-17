@@ -27,76 +27,16 @@ export const includesEmoji = (str: string): boolean => {
   return EmojiRegexExp.test(str);
 };
 
-/**
- * Give a chat message item, return it if it matches the filters, or return undefined
- * @param chat incoming chat message
- * @param state chat state
- * @returns chat message item or undefined
- */
-export const secondaryChatFilter = (
-  chat: ChatMessageItem,
-  state: DeepReadonly<ChatState>
-): ChatMessageItem | undefined => {
-  if (!(chat || chat?.html || chat?.message)) {
-    return undefined;
-  }
-
-  switch (ChatMessageSecondaryFilterType[state.secondaryFilterOption]) {
-    case ChatMessageSecondaryFilterType.Host: {
-      return state.keywords.length < 1
-        ? chat
-        : state.keywords?.some((word) => chat?.host.toLowerCase() === word.toLowerCase())
-        ? chat
-        : undefined;
-    }
-    case ChatMessageSecondaryFilterType.Author: {
-      return state.keywords.length < 1
-        ? chat
-        : state.keywords?.some((word) => chat?.author.includes(word))
-        ? chat
-        : undefined;
-    }
-    case ChatMessageSecondaryFilterType.FilterBy: {
-      return state.keywords.length < 1
-        ? chat
-        : state.keywords?.some((word) => chat?.message.includes(word))
-        ? chat
-        : undefined;
-    }
-    case ChatMessageSecondaryFilterType.FilterOut: {
-      return state.keywords.length < 1
-        ? chat
-        : !state.keywords?.some((word) => chat?.message.includes(word))
-        ? chat
-        : undefined;
-    }
-    case ChatMessageSecondaryFilterType.Highlight: {
-      if (state.keywords?.some((word) => chat?.message.includes(word))) {
-        chat.highlighted = true;
-      } else {
-        chat.highlighted = false;
-      }
-      return chat;
-    }
-    case ChatMessageSecondaryFilterType.None:
-    default:
-      break;
-  }
-  return chat;
-};
-
-/**
- * Give a chat message item (iframe), return it if it matches the filters, or return undefined
- * @param chat incoming chat message
- * @param state chat state
- * @returns chat message item or undefined
- */
 export const primaryChatFilter = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
-  if (!(chat || chat?.html || chat?.message)) {
+  if (!chat || !chat?.message) {
     return undefined;
+  }
+
+  if (!state?.primaryFilterOption) {
+    return chat;
   }
 
   switch (ChatMessagePrimaryFilterType[state.primaryFilterOption]) {
@@ -127,6 +67,52 @@ export const primaryChatFilter = (
         : undefined;
     }
     case ChatMessagePrimaryFilterType.None:
+    default:
+      break;
+  }
+  return chat;
+};
+
+export const secondaryChatFilter = (
+  chat: ChatMessageItem,
+  state: DeepReadonly<ChatState>
+): ChatMessageItem | undefined => {
+  if (!chat || !chat?.message) {
+    return undefined;
+  }
+
+  if (state?.keywords?.length < 1) {
+    return chat;
+  }
+
+  if (!state?.secondaryFilterOption) {
+    return chat;
+  }
+
+  switch (ChatMessageSecondaryFilterType[state.secondaryFilterOption]) {
+    case ChatMessageSecondaryFilterType.Host: {
+      return state.keywords?.some((word) => chat?.host?.toLowerCase() === word.toLowerCase())
+        ? chat
+        : undefined;
+    }
+    case ChatMessageSecondaryFilterType.Author: {
+      return state.keywords?.some((word) => chat?.author?.includes(word)) ? chat : undefined;
+    }
+    case ChatMessageSecondaryFilterType.FilterBy: {
+      return state.keywords?.some((word) => chat?.message?.includes(word)) ? chat : undefined;
+    }
+    case ChatMessageSecondaryFilterType.FilterOut: {
+      return !state.keywords?.some((word) => chat?.message?.includes(word)) ? chat : undefined;
+    }
+    case ChatMessageSecondaryFilterType.Highlight: {
+      if (state.keywords?.some((word) => chat?.message?.includes(word))) {
+        chat.highlighted = true;
+      } else {
+        chat.highlighted = false;
+      }
+      return chat;
+    }
+    case ChatMessageSecondaryFilterType.None:
     default:
       break;
   }

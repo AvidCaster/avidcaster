@@ -8,6 +8,7 @@
 
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { tryGet } from '@fullerstack/agx-util';
 import {
   ApplicationConfig,
   ConfigService,
@@ -168,9 +169,11 @@ export class ChatService implements OnDestroy {
   private subToTables() {
     this.chatTable$ = this.state$.pipe(
       switchMap((state) => this.database.chatLiveQuery(this.messageListType(state))),
-      map((chats: ChatMessageItem[]) => chats?.map((chat) => primaryChatFilter(chat, this.state))),
       map((chats: ChatMessageItem[]) =>
-        chats?.map((chat) => secondaryChatFilter(chat, this.state))
+        chats?.map((chat) => tryGet(() => primaryChatFilter(chat, this.state)))
+      ),
+      map((chats: ChatMessageItem[]) =>
+        chats?.map((chat) => tryGet(() => secondaryChatFilter(chat, this.state)))
       ),
       map((chats: ChatMessageItem[]) => chats?.filter((chat) => chat?.id).slice(this.sliceLimit)),
       tap((chats: ChatMessageItem[]) => this.chatSelected(chats[chats.length - 1]))
