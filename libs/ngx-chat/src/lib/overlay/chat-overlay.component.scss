@@ -10,9 +10,9 @@
 #chat-overlay-header {
   min-width: 100vw;
   width: 100vw;
-  height: calc(65vh - 90px);
-  min-height: calc(65vh - 90px);
-  max-height: calc(65vh - 90px);
+  height: calc(50vh - 90px);
+  min-height: calc(50vh- 90px);
+  max-height: calc(50vh - 90px);
   // border: 1px solid red;
   overflow-y: scroll;
 }
@@ -27,9 +27,9 @@
 
 #chat-overlay-footer {
   width: 100vw;
-  min-height: 34vh;
-  height: 34vh;
-  max-height: 34vh;
+  min-height: 50vh;
+  height: 50vh;
+  max-height: 50vh;
   background: #000;
   color: #fff;
   // border: 1px solid red;
@@ -48,9 +48,9 @@
 #chat-fireworks {
   position: absolute;
   width: 100vw;
-  min-height: 33.33vh;
-  height: 33.33vh;
-  max-height: 33.33vh;
+  min-height: 50vh;
+  height: 50vh;
+  max-height: 50vh;
   z-index: 10;
 }
 
