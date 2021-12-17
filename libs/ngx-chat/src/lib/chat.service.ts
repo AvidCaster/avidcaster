@@ -159,11 +159,14 @@ export class ChatService implements OnDestroy {
   }
 
   setState(newState: Partial<ChatState>) {
-    this.store.setState(this.claimId, {
-      ...this.state,
-      ...newState,
-      iframePaused: false,
-    });
+    this.store.setState(
+      this.claimId,
+      signObject({
+        ...this.state,
+        ...newState,
+        iframePaused: false,
+      })
+    );
   }
 
   private subToTables() {
@@ -229,10 +232,13 @@ export class ChatService implements OnDestroy {
     // spacial case for iframe pause, we talk to store directly
     // everything else must go through this.setState()
     // to ensure we never fall into a paused state, unless in fullscreen transition
-    this.store.setState(this.claimId, {
-      ...this.state,
-      iframePaused,
-    });
+    this.store.setState(
+      this.claimId,
+      signObject({
+        ...this.state,
+        iframePaused,
+      })
+    );
   }
 
   cleanupBroadcastMessage() {
