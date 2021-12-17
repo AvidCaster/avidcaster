@@ -16,9 +16,9 @@ import {
 } from '@angular/animations';
 
 export const slideInAnimations: {
-  readonly slideIn: AnimationTriggerMetadata;
+  readonly slideInFromBottom: AnimationTriggerMetadata;
 } = {
-  slideIn: trigger('slideIn', [
+  slideInFromBottom: trigger('slideInFromBottom', [
     transition(
       '* => *',
       animate(

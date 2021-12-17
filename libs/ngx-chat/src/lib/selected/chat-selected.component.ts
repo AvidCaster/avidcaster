@@ -21,7 +21,7 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-selected',
   templateUrl: './chat-selected.component.html',
   styleUrls: ['./chat-selected.component.scss'],
-  animations: [slideInAnimations.slideIn],
+  animations: [slideInAnimations.slideInFromBottom],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatSelectedComponent implements OnInit, OnDestroy {

@@ -9,7 +9,7 @@
   [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'"
 >
   <div class="chat-item-info" fxLayout="row" fxLayoutGap="8px">
-    <div class="chat-item-avatar" fxLayout="row" fxLayoutGap="8px">
+    <div class="chat-item-avatar" fxLayout="row" fxLayoutGap="8px" [@slideInFromTop]="slideInState">
       <img [src]="chat?.avatarUrl" />
       <mat-icon [svgIcon]="chat?.host" [color]="getHostColor(chat?.host)"></mat-icon>
     </div>

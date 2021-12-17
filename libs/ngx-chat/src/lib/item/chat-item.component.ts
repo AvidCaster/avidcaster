@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { fadeAnimations } from '@fullerstack/ngx-shared';
 import { Subject, filter, takeUntil } from 'rxjs';
 
 import { ChatHosts, ChatMessageItem, ChatMessageListFilterType, ChatState } from '../chat.model';
@@ -15,9 +16,16 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-item',
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
+  animations: [fadeAnimations.fadeInSlow],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatItemComponent implements OnInit, OnDestroy {
+  slideInState = 0;
+  @Input() set last(value: boolean) {
+    if (value) {
+      this.slideInState++;
+    }
+  }
   @Input() set viewed(value: boolean) {
     this.chat.viewed = value;
   }

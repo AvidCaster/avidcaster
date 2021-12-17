@@ -16,9 +16,11 @@ import {
 } from '@angular/animations';
 
 export const FADE_ANIMATION_TIMING = '.5s cubic-bezier(0.4,0.0,0.2,1)';
+export const FADE_IN_ANIMATION_TIMING = '1.5s cubic-bezier(0.4,0.0,0.2,1)';
 
 export const fadeAnimations: {
   readonly fadeOutInSlow: AnimationTriggerMetadata;
+  readonly fadeInSlow: AnimationTriggerMetadata;
 } = {
   fadeOutInSlow: trigger('fadeOutInSlow', [
     transition(
@@ -27,6 +29,12 @@ export const fadeAnimations: {
         FADE_ANIMATION_TIMING,
         keyframes([style({ opacity: 1 }), style({ opacity: 0.95 }), style({ opacity: 1 })])
       )
+    ),
+  ]),
+  fadeInSlow: trigger('slideInFromTop', [
+    transition(
+      '* => *',
+      animate(FADE_IN_ANIMATION_TIMING, keyframes([style({ opacity: 0 }), style({ opacity: 1 })]))
     ),
   ]),
 };
