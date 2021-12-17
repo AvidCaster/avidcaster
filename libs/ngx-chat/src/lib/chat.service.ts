@@ -178,9 +178,10 @@ export class ChatService implements OnDestroy {
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => secondaryChatFilter(chat, this.state)))
       ),
-      map((chats: ChatMessageItem[]) => chats?.filter((chat) => chat?.id).slice(this.sliceLimit)),
-      tap((chats: ChatMessageItem[]) => this.chatSelected(chats[chats.length - 1]))
-    ) as Observable<ChatMessageItem[]>;
+      map((chats: ChatMessageItem[]) => chats?.filter((chat) => chat?.id)),
+      filter((chats: ChatMessageItem[]) => !!chats?.length),
+      tap((chats: ChatMessageItem[]) => this.chatSelected(chats[0]))
+    );
   }
 
   messageListType(state: ChatState): ChatMessageListFilterType {

@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subject, filter, takeUntil } from 'rxjs';
 
 import { ChatHosts, ChatMessageItem, ChatMessageListFilterType, ChatState } from '../chat.model';
@@ -8,6 +15,7 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-item',
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatItemComponent implements OnInit, OnDestroy {
   @Input() set viewed(value: boolean) {
@@ -31,6 +39,7 @@ export class ChatItemComponent implements OnInit, OnDestroy {
         this.isMembershipList = state.chatListOption === ChatMessageListFilterType.Membership;
         this.isDonationList = state.chatListOption === ChatMessageListFilterType.Donation;
         this.isCommonList = state.chatListOption === ChatMessageListFilterType.Common;
+        this.cdR.markForCheck();
       });
   }
 

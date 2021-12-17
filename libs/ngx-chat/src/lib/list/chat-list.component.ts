@@ -50,7 +50,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
         if (this.chatService.state.autoScrollEnabled) {
           this.chatList = chats;
           this.cdR.detectChanges();
-          setTimeout(() => this.scrollToBottom(), 10);
         }
       },
     });

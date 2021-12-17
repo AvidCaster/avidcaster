@@ -94,10 +94,11 @@ export class ChatDB extends Dexie {
             }
             return chat.messageType === messageType;
           })
+          .reverse()
           .toArray()
       );
     }
-    return liveQuery(() => this.chatTable.orderBy(':id').toArray());
+    return liveQuery(() => this.chatTable.orderBy(':id').reverse().toArray());
   }
 }
 
