@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { welcomeChat } from '../chat.default';
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
@@ -21,7 +20,6 @@ import { ChatService } from '../chat.service';
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   chatList: ChatMessageItem[] = [];
-  welcomeChat = welcomeChat();
 
   constructor(
     readonly cdR: ChangeDetectorRef,

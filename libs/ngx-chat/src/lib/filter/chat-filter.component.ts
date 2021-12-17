@@ -14,6 +14,7 @@ import {
   ChatListFilterOptions,
   ChatPrimaryFilterOptions,
   ChatSecondaryFilterOptions,
+  welcomeChat,
 } from '../chat.default';
 import {
   ChatMessageListFilterType,
@@ -148,9 +149,9 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
       .confirmation(title, info)
       .pipe(first(), takeUntil(this.destroy$))
       .subscribe({
-        next: (accepted: boolean) => {
+        next: async (accepted: boolean) => {
           if (accepted) {
-            this.chatService.database.resetDatabase();
+            await this.chatService.database.resetDatabase(welcomeChat());
           }
         },
       });

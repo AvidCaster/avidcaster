@@ -7,7 +7,6 @@
       [chat]="chat"
     ></fullerstack-chat-item>
   </div>
-  <fullerstack-chat-item *ngIf="chatList?.length < 1" class="chat-item" [chat]="welcomeChat"></fullerstack-chat-item>
 </div>
 <div id="chat-list" fxLayout="column" fxLayoutAlign="center" *ngIf="chatService.state.ffEnabled">
   <div fxLayout="row" fxLayoutAlign="center">

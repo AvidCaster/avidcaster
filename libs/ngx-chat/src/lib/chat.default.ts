@@ -92,27 +92,7 @@ export const defaultChatState = (): ChatState => {
   return ldDeepClone(DefaultChatState);
 };
 
-/**
- * Default configuration - Layout module
- */
-const DefaultChatTest: ChatMessageItem = {
-  id: 1,
-  author: 'Mike Tyson',
-  message: 'My dog loves lives loves his bag, same one since puppy',
-  html: 'My dog loves lives loves his bag, same one since puppy',
-  avatarUrl: CHAT_YOUTUBE_DEFAULT_AVATAR,
-  badgeUrl: '',
-  donation: '$100',
-  messageType: ChatMessageType.Donation,
-  host: 'youtube',
-  streamId: 'NfG9ApM_yTE',
-  timestamp: 1639013100520,
-  prefix: 'NfG9ApM_yTE',
-};
-
-export const defaultChatTest = (): ChatMessageItem => {
-  return ldDeepClone(DefaultChatTest);
-};
+export const CHAT_DEFAULT_PREFIX = 'avidcaster';
 
 /**
  * Default configuration - Layout module
@@ -123,8 +103,8 @@ const WelcomeChat: ChatMessageItem = {
   html: 'Welcome to AvidCaster chat overlay!',
   avatarUrl: CHAT_DEFAULT_LOGO,
   messageType: ChatMessageType.Common,
-  streamId: 'avidcaster',
-  prefix: 'avidcaster',
+  streamId: CHAT_DEFAULT_PREFIX,
+  prefix: CHAT_DEFAULT_PREFIX,
 };
 
 export const welcomeChat = (): ChatMessageItem => {

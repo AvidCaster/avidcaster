@@ -67,6 +67,13 @@ export interface ChatMessageItem extends ChatMessage {
   highlighted?: boolean;
 }
 
+export interface ChatMessageItemsIndexedQueryType {
+  id?: number;
+  messageType?: ChatMessageType;
+  prefix?: string;
+  author?: string;
+}
+
 export interface ChatMessageData {
   tagName: string;
   html: string;

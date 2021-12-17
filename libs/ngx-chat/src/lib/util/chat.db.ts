@@ -1,15 +1,21 @@
 import { tryGet } from '@fullerstack/agx-util';
 import Dexie, { liveQuery } from 'dexie';
 
-import { ChatMessageItem, ChatMessageListFilterType, ChatMessageType } from '../chat.model';
+import { CHAT_DEFAULT_PREFIX } from '../chat.default';
+import {
+  ChatMessageItem,
+  ChatMessageItemsIndexedQueryType,
+  ChatMessageListFilterType,
+  ChatMessageType,
+} from '../chat.model';
 
 export class ChatDB extends Dexie {
   tableName = 'messages';
 
   constructor() {
     super('AvidCasterChatDB');
-    this.version(3).stores({
-      [this.tableName]: '++id, messageType',
+    this.version(4).stores({
+      [this.tableName]: '++id, messageType, prefix, author',
     });
   }
 
@@ -17,11 +23,11 @@ export class ChatDB extends Dexie {
     return this.table(this.tableName);
   }
 
-  /**
-   * Add a new chat message to the chat table
-   * @param chat chat message item
-   */
-  async addMessage(chat: ChatMessageItem) {
+  getMessage(chat: ChatMessageItemsIndexedQueryType) {
+    return this.chatTable.get(chat);
+  }
+
+  addMessage(chat: ChatMessageItem) {
     this.transaction('rw', this.chatTable, async () => {
       await this.chatTable.add(chat);
     });
@@ -55,7 +61,12 @@ export class ChatDB extends Dexie {
       this.transaction('rw', this.chatTable, async () => {
         await this.chatTable
           .orderBy(':id')
-          .filter((chat) => chat.messageType === messageType)
+          .filter((chat) => {
+            if (chat.prefix === CHAT_DEFAULT_PREFIX) {
+              return false;
+            }
+            return chat.messageType === messageType;
+          })
           .reverse()
           .offset(listSize)
           .delete();
@@ -63,20 +74,26 @@ export class ChatDB extends Dexie {
     }
   }
 
-  async resetDatabase() {
+  async resetDatabase(welcomeChat: ChatMessageItem) {
     tryGet(async () => {
       await this.transaction('rw', this.tableName, () => {
         this.chatTable.clear();
+        this.addMessage(welcomeChat);
       });
     });
   }
 
-  chatLiveQuery(messageType: ChatMessageListFilterType) {
+  chatLiveQuery(messageType: ChatMessageListFilterType, includeGreeting = true) {
     if (messageType !== ChatMessageListFilterType.Common) {
       return liveQuery(() =>
         this.chatTable
           .orderBy(':id')
-          .filter((chat) => chat.messageType === messageType)
+          .filter((chat) => {
+            if (includeGreeting && chat.prefix === CHAT_DEFAULT_PREFIX) {
+              return true;
+            }
+            return chat.messageType === messageType;
+          })
           .toArray()
       );
     }

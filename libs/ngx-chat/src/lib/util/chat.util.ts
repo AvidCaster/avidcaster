@@ -37,7 +37,7 @@ export const secondaryChatFilter = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
-  if (!chat || !chat?.message) {
+  if (!(chat || chat?.html || chat?.message)) {
     return undefined;
   }
 
@@ -95,7 +95,7 @@ export const primaryChatFilter = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
-  if (!chat || !chat?.message) {
+  if (!(chat || chat?.html || chat?.message)) {
     return undefined;
   }
 

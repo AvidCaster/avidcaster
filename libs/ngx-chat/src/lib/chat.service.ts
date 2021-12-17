@@ -31,7 +31,6 @@ import {
   CHAT_URL_FULLSCREEN_LIST,
   defaultChatConfig,
   defaultChatState,
-  defaultChatTest,
 } from './chat.default';
 import { ChatMessageItem, ChatMessageListFilterType, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
@@ -193,10 +192,6 @@ export class ChatService implements OnDestroy {
     if (chat?.id && (clicked || this.state.ffEnabled)) {
       this.chatSelectedOb$.next(chat);
     }
-  }
-
-  loadTestChat() {
-    this.chatSelectedOb$.next(defaultChatTest());
   }
 
   clearMessage() {
