@@ -1,68 +1,40 @@
 <div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div fxLayout="row" fxLayoutGap="5px">
     <button
-      mat-raised-button
+      mat-mini-fab
       [class.yt-cursor-default]="!chat?.author"
       matTooltipPosition="before"
       matTooltip="{{ 'CHAT.CLEAR' | translate }}"
-      color="warn"
+      color="accent"
       (click)="clearMessage()"
     >
-      <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="trash-can-outline"></mat-icon>
-      <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="arrow-down-thick"></mat-icon>
+      <mat-icon [class.chat-icon-dim]="!chat?.author" [svgIcon]="!chat?.author ? 'delete-off' : 'delete-outline'"></mat-icon>
     </button>
 
-    <button mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'">
-      <div fxLayout="row" fxLayoutGap="15px">
-        <mat-icon
-          [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
-          matTooltipPosition="before"
-          matTooltip="{{
-            (chatService?.state?.fireworksEnabled ? (chatService?.state?.fireworksPlay ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '')
-              | translate
-          }}"
-          class="chat-icon-dim"
-          [svgIcon]="!chatService?.state?.fireworksEnabled || chatService?.state?.fireworksPlay ? 'firework-off' : 'firework'"
-          (click)="toggleFireworks()"
-        ></mat-icon>
-        <mat-icon
-          [svgIcon]="chatService?.state?.fireworksEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
-          (click)="toggleFireworksFlag()"
-        ></mat-icon>
-      </div>
+    <button mat-mini-fab [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'" (click)="toggleFireworksPlay()">
+      <mat-icon
+        [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
+        matTooltipPosition="before"
+        matTooltip="{{ (chatService?.state?.fireworksEnabled ? (fireworksPlay ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate }}"
+        [svgIcon]="!chatService?.state?.fireworksEnabled || fireworksPlay ? 'firework-off' : 'firework'"
+      ></mat-icon>
     </button>
-    <button mat-raised-button [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'">
-      <div fxLayout="row" fxLayoutGap="15px">
-        <mat-icon
-          [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
-          matTooltipPosition="before"
-          matTooltip="{{ (chatService?.state?.audioEnabled ? (audioPlay ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
-          [svgIcon]="!chatService?.state?.audioEnabled || audioPlay ? 'volume-off' : 'volume-high'"
-          (click)="toggleAudioPlay()"
-        ></mat-icon>
-        <mat-icon
-          matTooltipPosition="after"
-          matTooltip="{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}"
-          [svgIcon]="chatService?.state?.audioEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
-          (click)="toggleAudioFlag()"
-        ></mat-icon>
-      </div>
+
+    <button mat-mini-fab [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'" (click)="toggleAudioPlay()">
+      <mat-icon
+        [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
+        matTooltipPosition="before"
+        matTooltip="{{ (chatService?.state?.audioEnabled ? (audioPlay ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
+        [svgIcon]="!chatService?.state?.audioEnabled || audioPlay ? 'volume-off' : 'volume-high'"
+      ></mat-icon>
     </button>
-    <button mat-raised-button [color]="chatService?.state?.ffEnabled ? 'accent' : 'warn'">
-      <div fxLayout="row" fxLayoutGap="15px">
-        <mat-icon
-          [class.chat-icon-dim]="!chatService?.state?.ffEnabled"
-          matTooltipPosition="before"
-          matTooltip="{{ 'CHAT.FAST_FORWARD' | translate }}"
-          svgIcon="fast-forward"
-        ></mat-icon>
-        <mat-icon
-          matTooltipPosition="after"
-          matTooltip="{{ (chatService?.state?.ffEnabled ? 'CHAT.FF_DISABLED' : 'CHAT.FF_ENABLED') | translate }}"
-          [svgIcon]="chatService?.state?.ffEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'"
-          (click)="toggleFastForward()"
-        ></mat-icon>
-      </div>
+
+    <button mat-mini-fab color="accent" [disabled]="!chatService?.state?.ffEnabled" (click)="toggleFastForward()">
+      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.FF_ENABLE' | translate }}" svgIcon="snail"></mat-icon>
+    </button>
+
+    <button mat-mini-fab color="accent" [disabled]="chatService?.state?.ffEnabled" (click)="toggleFastForward()">
+      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.FF_DISABLE' | translate }}" svgIcon="rabbit"></mat-icon>
     </button>
   </div>
   <div fxFlex></div>
@@ -87,6 +59,16 @@
         <div fxLayout="row" fxLayoutAlign="start center" class="option-item" (click)="toggleDirection()">
           <span fxFlex>{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}</span>
           <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" class="option-item">
+          <span fxFlex>{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}</span>
+          <mat-slide-toggle color="primary" [(ngModel)]="isAudioEnabled" (change)="toggleAudio($event.checked)"></mat-slide-toggle>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" class="option-item">
+          <span fxFlex>{{ (chatService?.state?.fireworksEnabled ? 'FIREWORKS.ENABLE' : 'FIREWORKS.DISABLE') | translate }}</span>
+          <mat-slide-toggle color="primary" [(ngModel)]="isFireworksEnabled" (change)="toggleFireworks($event.checked)"></mat-slide-toggle>
         </div>
       </div>
     </mat-menu>
