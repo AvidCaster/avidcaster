@@ -63,6 +63,9 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (state) => {
           this.isDarkTheme = state.isDarkTheme;
+          this.isFireworksEnabled = state.fireworksEnabled;
+          this.fireworksPlay = state.fireworksPlay;
+          this.isAudioEnabled = state.audioEnabled;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
@@ -79,7 +82,10 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   toggleFireworks(isFireworksEnabled: boolean) {
     this.isFireworksEnabled = !isFireworksEnabled;
-    this.chatService.setState({ fireworksEnabled: !isFireworksEnabled });
+    this.chatService.setState({
+      fireworksEnabled: !isFireworksEnabled,
+      fireworksPlay: isFireworksEnabled ? false : this.chatService.state.fireworksPlay,
+    });
   }
 
   toggleFireworksPlay() {
