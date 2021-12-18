@@ -32,6 +32,7 @@
   "CHAT.SESSION_RESET": "Session reset",
   "CHAT.FF_DISABLE": "Disable Fast Forward",
   "CHAT.FF_ENABLE": "Enable Fast Forward",
+  "CHAT.ADJUST_VERTICAL": "Chat vertical position",
   "CHAT.HIGHLIGHT_WORDS": "Highlight words",
   "CHAT.KEYWORDS": "Keywords",
   "CHAT.MEMBERSHIPS": "Memberships",

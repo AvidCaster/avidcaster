@@ -126,6 +126,15 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.setState({ isDarkTheme });
   }
 
+  formatChatVerticalLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    console.log(value);
+
+    return value;
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
