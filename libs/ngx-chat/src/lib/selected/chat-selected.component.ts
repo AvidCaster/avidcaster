@@ -113,6 +113,18 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  getFallbackImage(chat: ChatMessageItem): string {
+    switch (chat?.host) {
+      case 'youtube':
+        return CHAT_YOUTUBE_DEFAULT_AVATAR;
+      case 'twitch':
+        return CHAT_TWITCH_DEFAULT_AVATAR;
+      default:
+        break;
+    }
+    return CHAT_DEFAULT_AVATAR;
+  }
+
   onImageError(event, host: ChatHosts) {
     switch (host) {
       case 'youtube':

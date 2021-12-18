@@ -7,7 +7,7 @@
 >
   <div class="chat-selected-image-fields" fxLayout="column">
     <div class="chat-selected-author-img">
-      <img width="160" height="160" src="{{ chat?.avatarUrl }}" (error)="onImageError($event, chat?.host)" />
+      <img width="160" height="160" src="{{ chat?.avatarUrl || getFallbackImage(chat) }}" (error)="onImageError($event, chat?.host)" />
     </div>
     <div class="chat-host-image" *ngIf="getHostImage(chat?.host) as hostImageSrc">
       <img [src]="hostImageSrc" />
