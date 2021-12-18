@@ -24,6 +24,7 @@ import { ChatIframeComponent } from './iframe/chat-iframe.component';
 import { ChatItemComponent } from './item/chat-item.component';
 import { ChatListComponent } from './list/chat-list.component';
 import { ChatMenuComponent } from './menu/chat-menu.component';
+import { ChatOptionsComponent } from './options/chat-options.component';
 import { ChatOverlayComponent } from './overlay/chat-overlay.component';
 import { ChatSelectedComponent } from './selected/chat-selected.component';
 
@@ -47,6 +48,7 @@ import { ChatSelectedComponent } from './selected/chat-selected.component';
     ChatSelectedComponent,
     ChatMenuComponent,
     ChatFilterComponent,
+    ChatOptionsComponent,
   ],
   providers: [ChatService],
 })
