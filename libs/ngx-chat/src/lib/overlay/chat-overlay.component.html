@@ -15,7 +15,11 @@
   </div>
 </div>
 <div id="chat-overlay-footer">
-  <div id="chat-selected" [class.chat-invisible]="!(chatService.chatSelected$ | async)?.author">
+  <div
+    id="chat-selected"
+    [ngStyle]="{ left: leftPosition, right: rightPosition }"
+    [class.chat-invisible]="!(chatService.chatSelected$ | async)?.author"
+  >
     <fullerstack-chat-selected></fullerstack-chat-selected>
   </div>
   <div id="chat-fireworks" [class.chat-invisible]="!chatService.state.fireworksEnabled">
