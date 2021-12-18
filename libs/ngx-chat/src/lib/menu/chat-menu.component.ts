@@ -27,8 +27,11 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
-  audioPlay = false;
   isDarkTheme = false;
+  audioPlay = false;
+  isAudioEnabled = false;
+  fireworksPlay = false;
+  isFireworksEnabled = false;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -60,6 +63,9 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (state) => {
           this.isDarkTheme = state.isDarkTheme;
+          this.isFireworksEnabled = state.fireworksEnabled;
+          this.fireworksPlay = state.fireworksPlay;
+          this.isAudioEnabled = state.audioEnabled;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
@@ -74,16 +80,22 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.setState({ isLtR: !this.chatService.state.isLtR });
   }
 
-  toggleFireworksFlag() {
-    this.chatService.setState({ fireworksEnabled: !this.chatService.state.fireworksEnabled });
+  toggleFireworks(isFireworksEnabled: boolean) {
+    this.isFireworksEnabled = !isFireworksEnabled;
+    this.chatService.setState({
+      fireworksEnabled: !isFireworksEnabled,
+      fireworksPlay: isFireworksEnabled ? false : this.chatService.state.fireworksPlay,
+    });
   }
 
-  toggleFireworks() {
+  toggleFireworksPlay() {
+    this.fireworksPlay = !this.fireworksPlay;
     this.chatService.setState({ fireworksPlay: !this.chatService.state.fireworksPlay });
   }
 
-  toggleAudioFlag() {
-    this.chatService.setState({ audioEnabled: !this.chatService.state.audioEnabled });
+  toggleAudio(isAudioEnabled: boolean) {
+    this.isAudioEnabled = isAudioEnabled;
+    this.chatService.setState({ audioEnabled: isAudioEnabled });
   }
 
   toggleAudioPlay() {
