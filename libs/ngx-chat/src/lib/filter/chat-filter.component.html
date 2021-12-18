@@ -70,6 +70,7 @@
       color="accent"
       [disabled]="chatService.state.autoScrollEnabled"
       (click)="toggleAutoScroll()"
+      [@wiggleIt]="resumeIconState"
     >
       <mat-icon svgIcon="arrow-down-bold"></mat-icon>
     </button>

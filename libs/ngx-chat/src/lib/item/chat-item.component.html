@@ -40,6 +40,7 @@
       fxFlexAlign="center"
       [color]="chat?.highlighted ? 'accent' : 'green'"
       [svgIcon]="chat?.viewed ? 'eye-off-outline' : 'eye-outline'"
+      [@slideInFromTop]="slideInState"
     ></mat-icon>
   </div>
 </div>

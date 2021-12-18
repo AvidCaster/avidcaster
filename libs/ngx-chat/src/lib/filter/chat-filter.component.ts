@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { ConfirmationDialogService } from '@fullerstack/ngx-shared';
-import { Subject, debounceTime, first, takeUntil } from 'rxjs';
+import { ConfirmationDialogService, shakeAnimations } from '@fullerstack/ngx-shared';
+import { Subject, debounceTime, filter, first, interval, takeUntil } from 'rxjs';
 
 import {
   ChatListFilterOptions,
@@ -29,6 +29,7 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./chat-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConfirmationDialogService],
+  animations: [shakeAnimations.wiggleIt],
 })
 export class ChatFilterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -38,6 +39,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   listFilter = ChatMessageListFilterType.Common;
   keywords = '';
   minWords = 0;
+  resumeIconState = 0;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -49,6 +51,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subState();
     this.subKeywords();
+    this.subWigglePause();
 
     console.log('ChatFilterComponent started ... ');
   }
@@ -72,6 +75,20 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
         this.cdR.markForCheck();
       },
     });
+  }
+
+  subWigglePause() {
+    interval(2000)
+      .pipe(
+        filter(() => !this.chatService.state.autoScrollEnabled),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          this.resumeIconState++;
+          this.cdR.markForCheck();
+        },
+      });
   }
 
   setKeywords(keywords: string) {
