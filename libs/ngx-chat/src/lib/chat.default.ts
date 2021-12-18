@@ -72,27 +72,6 @@ export const CHAT_TWITCH_DEFAULT_AVATAR = './assets/images/misc/avatar-default-t
 export const CHAT_DEFAULT_AVATAR = './assets/images/misc/avatar-default-red.png';
 export const CHAT_DEFAULT_LOGO = './assets/images/misc/avidcaster-chat-x128.png';
 
-const DefaultChatState: ChatState = {
-  signature: '',
-  isLtR: true,
-  audioEnabled: false,
-  fireworksEnabled: true,
-  fireworksPlay: false,
-  keywords: [],
-  chatListOption: ChatMessageListFilterType.Common,
-  primaryFilterOption: ChatMessagePrimaryFilterType.None,
-  secondaryFilterOption: ChatMessageSecondaryFilterType.None,
-  ffEnabled: false,
-  autoScrollEnabled: true,
-  iframePaused: false,
-  isDarkTheme: false,
-  chatVerticalPosition: 8,
-};
-
-export const defaultChatState = (): ChatState => {
-  return ldDeepClone(DefaultChatState);
-};
-
 export const CHAT_DEFAULT_PREFIX = 'avidcaster';
 
 /**
@@ -143,3 +122,31 @@ export const CHAT_MESSAGE_LIST_DISPLAY_LIMIT = 50;
 export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 100;
 // extra buffer offset, allow buffer size to grow before trimming it
 export const CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE = 25;
+
+// chat position slider max value
+export const CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE = 160;
+
+// default mid-level chat vertical position
+export const CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE =
+  CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE / 2;
+
+const DefaultChatState: ChatState = {
+  signature: '',
+  isLtR: true,
+  audioEnabled: false,
+  fireworksEnabled: true,
+  fireworksPlay: false,
+  keywords: [],
+  chatListOption: ChatMessageListFilterType.Common,
+  primaryFilterOption: ChatMessagePrimaryFilterType.None,
+  secondaryFilterOption: ChatMessageSecondaryFilterType.None,
+  ffEnabled: false,
+  autoScrollEnabled: true,
+  iframePaused: false,
+  isDarkTheme: false,
+  chatVerticalPosition: CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
+};
+
+export const defaultChatState = (): ChatState => {
+  return ldDeepClone(DefaultChatState);
+};

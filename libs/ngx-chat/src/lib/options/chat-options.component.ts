@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { BehaviorSubject, Subject, debounceTime, filter, takeUntil } from 'rxjs';
+import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
 
+import { CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE } from '../chat.default';
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
@@ -13,12 +14,11 @@ import { ChatService } from '../chat.service';
 })
 export class ChatOptionsComponent implements OnInit {
   private destroy$ = new Subject<boolean>();
-  private chatVerticalPosition$ = new BehaviorSubject<number>(0);
   chat: ChatMessageItem;
   isDarkTheme = false;
   isAudioEnabled = false;
   isFireworksEnabled = false;
-  chatVerticalPosition = 8;
+  defaultChatVerticalPosition = CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -29,7 +29,6 @@ export class ChatOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.subState();
-    this.subVerticalPosition();
     this.logger.debug('ChatOptionsComponent initialized');
   }
 
@@ -45,21 +44,10 @@ export class ChatOptionsComponent implements OnInit {
           this.isDarkTheme = state.isDarkTheme;
           this.isFireworksEnabled = state.fireworksEnabled;
           this.isAudioEnabled = state.audioEnabled;
-          this.chatVerticalPosition = state.chatVerticalPosition;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
       });
-  }
-
-  subVerticalPosition() {
-    this.chatVerticalPosition$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe({
-      next: (position) => {
-        this.chatVerticalPosition = position;
-        this.chatService.setState({ chatVerticalPosition: position });
-        this.cdR.markForCheck();
-      },
-    });
   }
 
   toggleDirection() {
@@ -83,11 +71,12 @@ export class ChatOptionsComponent implements OnInit {
     this.chatService.setState({ isDarkTheme });
   }
 
-  formatChatVerticalLabel(value: number) {
-    if (this.chatVerticalPosition !== value) {
-      this.chatVerticalPosition$.next(value);
-    }
+  handleChatVerticalPositionInput(value: number) {
+    this.chatService.setChatVerticalPosition(value);
+  }
 
-    return value;
+  handleChatVerticalPositionChange(value: number) {
+    const saveToState = true;
+    this.chatService.setChatVerticalPosition(value, saveToState);
   }
 }

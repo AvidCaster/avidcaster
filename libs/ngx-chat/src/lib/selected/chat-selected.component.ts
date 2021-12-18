@@ -12,6 +12,7 @@ import { Subject, takeUntil, throttleTime } from 'rxjs';
 import {
   CHAT_DEFAULT_AVATAR,
   CHAT_TWITCH_DEFAULT_AVATAR,
+  CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE,
   CHAT_YOUTUBE_DEFAULT_AVATAR,
 } from '../chat.default';
 import { ChatHosts, ChatMessageItem } from '../chat.model';
@@ -43,19 +44,29 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         if (!this.chatService.state.ffEnabled) {
           this.slideInState++;
         }
-        this.cdR.detectChanges();
+        this.cdR.markForCheck();
       },
     });
 
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
-        this.marginTop = `${160 / state.chatVerticalPosition}px`;
-        console.log(this.marginTop);
-        this.cdR.detectChanges();
+        this.calculateChatMarginTop(state.chatVerticalPosition);
+        this.cdR.markForCheck();
+      },
+    });
+
+    this.chatService.chatVerticalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value) => {
+        this.calculateChatMarginTop(value);
+        this.cdR.markForCheck();
       },
     });
 
     this.logger.debug('ChatSelectedComponent started ... ');
+  }
+
+  calculateChatMarginTop(value: number) {
+    this.marginTop = `${CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE - value}px`;
   }
 
   getHostImage(host: ChatHosts): string {

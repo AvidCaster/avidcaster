@@ -28,12 +28,13 @@
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
     <span fxFlex>{{ 'CHAT.ADJUST_VERTICAL' | translate }}</span>
     <mat-slider
-      min="1"
-      max="16"
-      step=".5"
-      [value]="chatVerticalPosition"
       thumbLabel
-      [displayWith]="formatChatVerticalLabel.bind(this)"
+      step="1"
+      min="1"
+      [max]="defaultChatVerticalPosition"
+      [value]="chatService.chatVerticalPosition"
+      (input)="handleChatVerticalPositionInput($event.value)"
+      (change)="handleChatVerticalPositionChange($event.value)"
     ></mat-slider>
   </div>
 </div>
