@@ -104,6 +104,7 @@ export interface ChatState {
   iframePaused: boolean;
   isDarkTheme: boolean;
   chatVerticalPosition: number;
+  chatHorizontalPosition: number;
 }
 
 export enum ChatMessagePrimaryFilterType {

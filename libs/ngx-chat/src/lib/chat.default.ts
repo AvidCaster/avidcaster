@@ -123,12 +123,18 @@ export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 100;
 // extra buffer offset, allow buffer size to grow before trimming it
 export const CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE = 25;
 
-// chat position slider max value
+// chat vertical position slider max value
 export const CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE = 220;
 
-// default mid-level chat vertical position
+// default vertical mid-level chat vertical position
 export const CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE =
   CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE / 2;
+
+// chat position slider max value
+export const CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE = 100;
+
+// default horizontal mid-level chat horizontal position
+export const CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE = 10;
 
 const DefaultChatState: ChatState = {
   signature: '',
@@ -145,6 +151,7 @@ const DefaultChatState: ChatState = {
   iframePaused: false,
   isDarkTheme: false,
   chatVerticalPosition: CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
+  chatHorizontalPosition: CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
 };
 
 export const defaultChatState = (): ChatState => {

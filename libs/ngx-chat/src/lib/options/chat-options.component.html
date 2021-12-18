@@ -5,11 +5,17 @@
   [class.chat-light-theme]="isDarkTheme"
   [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'"
 >
+  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item" (click)="toggleDirection()">
+    <span fxFlex>{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}</span>
+    <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
+  </div>
+
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
     <span fxFlex>{{ 'COMMON.DARK' | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isDarkTheme" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
   </div>
 
+  <mat-divider></mat-divider>
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
     <span fxFlex>{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isAudioEnabled" (change)="toggleAudio($event.checked)"></mat-slide-toggle>
@@ -20,12 +26,9 @@
     <mat-slide-toggle color="primary" [(ngModel)]="isFireworksEnabled" (change)="toggleFireworks($event.checked)"></mat-slide-toggle>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item" (click)="toggleDirection()">
-    <span fxFlex>{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}</span>
-    <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
-  </div>
+  <mat-divider></mat-divider>
 
-  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
+  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item vertical-slider">
     <span fxFlex>{{ 'CHAT.ADJUST_VERTICAL' | translate }}</span>
     <mat-slider
       thumbLabel
@@ -35,6 +38,19 @@
       [value]="chatService.chatVerticalPosition"
       (input)="handleChatVerticalPositionInput($event.value)"
       (change)="handleChatVerticalPositionChange($event.value)"
+    ></mat-slider>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item horizontal-slider">
+    <span fxFlex>{{ 'CHAT.ADJUST_HORIZONTAL' | translate }}</span>
+    <mat-slider
+      thumbLabel
+      step="1"
+      min="1"
+      [max]="defaultChatHorizontalPosition"
+      [value]="chatService.chatHorizontalPosition"
+      (input)="handleChatHorizontalPositionInput($event.value)"
+      (change)="handleChatHorizontalPositionChange($event.value)"
     ></mat-slider>
   </div>
 </div>

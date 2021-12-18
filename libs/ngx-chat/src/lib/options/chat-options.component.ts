@@ -3,7 +3,10 @@ import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
 
-import { CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE } from '../chat.default';
+import {
+  CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE,
+  CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE,
+} from '../chat.default';
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
@@ -19,6 +22,7 @@ export class ChatOptionsComponent implements OnInit {
   isAudioEnabled = false;
   isFireworksEnabled = false;
   defaultChatVerticalPosition = CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE;
+  defaultChatHorizontalPosition = CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -78,5 +82,14 @@ export class ChatOptionsComponent implements OnInit {
   handleChatVerticalPositionChange(value: number) {
     const saveToState = true;
     this.chatService.setChatVerticalPosition(value, saveToState);
+  }
+
+  handleChatHorizontalPositionInput(value: number) {
+    this.chatService.setChatHorizontalPosition(value);
+  }
+
+  handleChatHorizontalPositionChange(value: number) {
+    const saveToState = true;
+    this.chatService.setChatHorizontalPosition(value, saveToState);
   }
 }

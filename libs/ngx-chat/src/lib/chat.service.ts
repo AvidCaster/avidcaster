@@ -24,6 +24,7 @@ import { BehaviorSubject, Observable, Subject, filter, map, switchMap, takeUntil
 import { DeepReadonly } from 'ts-essentials';
 
 import {
+  CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_IFRAME_URL,
   CHAT_MESSAGE_LIST_DISPLAY_LIMIT,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
@@ -60,12 +61,19 @@ export class ChatService implements OnDestroy {
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
 
-  // chat position
+  // chat vertical position
   chatVerticalPosition = CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
   private chatVerticalPositionOb$ = new BehaviorSubject<number>(
     CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE
   );
   chatVerticalPosition$ = this.chatVerticalPositionOb$.asObservable();
+
+  // chat horizontal position
+  chatHorizontalPosition = CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
+  private chatHorizontalPositionOb$ = new BehaviorSubject<number>(
+    CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE
+  );
+  chatHorizontalPosition$ = this.chatVerticalPositionOb$.asObservable();
 
   constructor(
     readonly zone: NgZone,
@@ -157,9 +165,11 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
 
-          // set the vertical position
+          // set chat positions
           this.setChatVerticalPosition(this.state.chatVerticalPosition);
+          this.setChatHorizontalPosition(this.state.chatHorizontalPosition);
 
+          // store state in local storage
           if (!this.isRunningInIframeContext) {
             const localStorageStateSnapshot = this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
             if (!localStorageStateSnapshot) {
@@ -276,6 +286,14 @@ export class ChatService implements OnDestroy {
       this.setState({ chatVerticalPosition: value });
     }
     this.chatVerticalPositionOb$.next(value);
+  }
+
+  setChatHorizontalPosition(value: number, saveToState = false) {
+    this.chatHorizontalPosition = value;
+    if (saveToState) {
+      this.setState({ chatHorizontalPosition: value });
+    }
+    this.chatHorizontalPositionOb$.next(value);
   }
 
   ngOnDestroy() {
