@@ -124,7 +124,7 @@ export const CHAT_MESSAGE_LIST_BUFFER_SIZE = 100;
 export const CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE = 25;
 
 // chat position slider max value
-export const CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE = 160;
+export const CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE = 220;
 
 // default mid-level chat vertical position
 export const CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE =
