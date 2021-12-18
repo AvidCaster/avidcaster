@@ -81,9 +81,9 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   toggleFireworks(isFireworksEnabled: boolean) {
-    this.isFireworksEnabled = !isFireworksEnabled;
+    this.isFireworksEnabled = isFireworksEnabled;
     this.chatService.setState({
-      fireworksEnabled: !isFireworksEnabled,
+      fireworksEnabled: isFireworksEnabled,
       fireworksPlay: isFireworksEnabled ? false : this.chatService.state.fireworksPlay,
     });
   }
