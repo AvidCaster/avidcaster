@@ -28,6 +28,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
   slideInState = 0;
+  marginTop = '100px';
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -47,7 +48,9 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     });
 
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
+      next: (state) => {
+        this.marginTop = `${160 / state.chatVerticalPosition}px`;
+        console.log(this.marginTop);
         this.cdR.detectChanges();
       },
     });

@@ -18,7 +18,7 @@ export class ChatOptionsComponent implements OnInit {
   isDarkTheme = false;
   isAudioEnabled = false;
   isFireworksEnabled = false;
-  chatVerticalPositionValue = 0;
+  chatVerticalPosition = 8;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -29,6 +29,7 @@ export class ChatOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.subState();
+    this.subVerticalPosition();
     this.logger.debug('ChatOptionsComponent initialized');
   }
 
@@ -44,10 +45,21 @@ export class ChatOptionsComponent implements OnInit {
           this.isDarkTheme = state.isDarkTheme;
           this.isFireworksEnabled = state.fireworksEnabled;
           this.isAudioEnabled = state.audioEnabled;
+          this.chatVerticalPosition = state.chatVerticalPosition;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
       });
+  }
+
+  subVerticalPosition() {
+    this.chatVerticalPosition$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe({
+      next: (position) => {
+        this.chatVerticalPosition = position;
+        this.chatService.setState({ chatVerticalPosition: position });
+        this.cdR.markForCheck();
+      },
+    });
   }
 
   toggleDirection() {
@@ -72,12 +84,10 @@ export class ChatOptionsComponent implements OnInit {
   }
 
   formatChatVerticalLabel(value: number) {
-    console.log(value);
-    if (value >= 1000) {
-      value = Math.round(value / 1000);
+    if (this.chatVerticalPosition !== value) {
+      this.chatVerticalPosition$.next(value);
     }
-    this.chatVerticalPositionValue = value;
-    this.chatVerticalPosition$ ? this.chatVerticalPosition$.next(value) : null;
+
     return value;
   }
 }

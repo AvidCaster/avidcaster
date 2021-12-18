@@ -86,7 +86,7 @@ const DefaultChatState: ChatState = {
   autoScrollEnabled: true,
   iframePaused: false,
   isDarkTheme: false,
-  chatVerticalPosition: 0,
+  chatVerticalPosition: 8,
 };
 
 export const defaultChatState = (): ChatState => {
