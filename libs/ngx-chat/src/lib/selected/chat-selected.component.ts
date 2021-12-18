@@ -29,7 +29,11 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
   slideInState = 0;
+
+  // vertical and horizontal position of the chat
   marginTop = '100px';
+  paddingRight = '0px';
+  paddingLeft = '0px';
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -51,6 +55,7 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         this.calculateChatMarginTop(state.chatVerticalPosition);
+        this.calculateChatPadding(state.chatHorizontalPosition);
         this.cdR.markForCheck();
       },
     });
@@ -62,11 +67,28 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
       },
     });
 
+    this.chatService.chatHorizontalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value) => {
+        this.calculateChatPadding(value);
+        this.cdR.markForCheck();
+      },
+    });
+
     this.logger.debug('ChatSelectedComponent started ... ');
   }
 
   calculateChatMarginTop(value: number) {
     this.marginTop = `${CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE - value}px`;
+  }
+
+  calculateChatPadding(value: number) {
+    if (this.chatService.state.isLtR) {
+      this.paddingLeft = `${value}px`;
+      this.paddingRight = '0px';
+    } else {
+      this.paddingRight = `${value}px`;
+      this.paddingLeft = '0px';
+    }
   }
 
   getHostImage(host: ChatHosts): string {

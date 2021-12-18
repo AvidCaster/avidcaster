@@ -73,7 +73,7 @@ export class ChatService implements OnDestroy {
   private chatHorizontalPositionOb$ = new BehaviorSubject<number>(
     CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE
   );
-  chatHorizontalPosition$ = this.chatVerticalPositionOb$.asObservable();
+  chatHorizontalPosition$ = this.chatHorizontalPositionOb$.asObservable();
 
   constructor(
     readonly zone: NgZone,

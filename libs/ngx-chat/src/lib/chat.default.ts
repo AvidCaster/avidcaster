@@ -131,10 +131,10 @@ export const CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE =
   CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE / 2;
 
 // chat position slider max value
-export const CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE = 100;
+export const CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE = 300;
 
-// default horizontal mid-level chat horizontal position
-export const CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE = 10;
+// default horizontal position
+export const CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE = 1;
 
 const DefaultChatState: ChatState = {
   signature: '',
