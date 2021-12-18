@@ -12,7 +12,7 @@
       <mat-icon [class.chat-icon-dim]="!chat?.author" svgIcon="arrow-down-thick"></mat-icon>
     </button>
 
-    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'">
+    <button mat-raised-button [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'">
       <div fxLayout="row" fxLayoutGap="15px">
         <mat-icon
           [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
@@ -31,7 +31,7 @@
         ></mat-icon>
       </div>
     </button>
-    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'">
+    <button mat-raised-button [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'">
       <div fxLayout="row" fxLayoutGap="15px">
         <mat-icon
           [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
@@ -48,7 +48,7 @@
         ></mat-icon>
       </div>
     </button>
-    <button class="chat-multi-button" mat-raised-button [color]="chatService?.state?.ffEnabled ? 'accent' : 'warn'">
+    <button mat-raised-button [color]="chatService?.state?.ffEnabled ? 'accent' : 'warn'">
       <div fxLayout="row" fxLayoutGap="15px">
         <mat-icon
           [class.chat-icon-dim]="!chatService?.state?.ffEnabled"
@@ -68,26 +68,29 @@
   <div fxFlex></div>
   <div fxLayout="row" fxLayoutGap="10px">
     <button
-      class="chat-multi-button"
       color="accent"
-      mat-raised-button
+      mat-mini-fab
       matTooltipPosition="before"
       matTooltip="{{ 'COMMON.TOGGLE_THEME' | translate }}"
+      [matMenuTriggerFor]="chatOptions"
     >
-      <div fxLayout="row" fxLayoutGap="15px">
-        <mat-icon svgIcon="circle" [class.chat-light-theme]="chatService?.state?.isDarkTheme"></mat-icon>
-        <mat-slide-toggle color="primary" [(ngModel)]="isDarkTheme" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
-      </div>
+      <mat-icon svgIcon="cog"></mat-icon>
     </button>
 
-    <button
-      matTooltipPosition="after"
-      matTooltip="{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}"
-      mat-mini-fab
-      (click)="toggleDirection()"
-    >
-      <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
-    </button>
+    <mat-menu #chatOptions="matMenu">
+      <div fxLayout="column" fxLayoutGap="10px" (click)="$event.stopPropagation()" [class.chat-light-theme]="isDarkTheme">
+        <div fxLayout="row" fxLayoutAlign="start center" class="option-item">
+          <span fxFlex>{{ 'COMMON.DARK' | translate }}</span>
+          <mat-slide-toggle color="primary" [(ngModel)]="isDarkTheme" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" class="option-item" (click)="toggleDirection()">
+          <span fxFlex>{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}</span>
+          <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
+        </div>
+      </div>
+    </mat-menu>
+
     <button
       matTooltipPosition="after"
       matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
