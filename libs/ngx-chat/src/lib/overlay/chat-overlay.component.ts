@@ -21,6 +21,8 @@ import { ChatService } from '../chat.service';
 export class ChatOverlayComponent implements OnInit {
   private onStorageOb$: Observable<Event>;
   private destroy$ = new Subject<boolean>();
+  leftPosition = '0';
+  rightPosition = 'unset';
 
   constructor(
     readonly zone: NgZone,
@@ -36,11 +38,27 @@ export class ChatOverlayComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('ChatOverlayComponent.ngOnInit');
-    this.storageSubscription();
-    this.selectedChatSubscription();
+    this.subStorage();
+    this.subSelectedChat();
+    this.subState();
   }
 
-  selectedChatSubscription(): void {
+  subState(): void {
+    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (state) => {
+        if (state.isLtR) {
+          this.leftPosition = '0';
+          this.rightPosition = 'unset';
+        } else {
+          this.leftPosition = 'unset';
+          this.rightPosition = '0';
+        }
+        this.cdR.markForCheck();
+      },
+    });
+  }
+
+  subSelectedChat(): void {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.cdR.markForCheck();
@@ -48,7 +66,7 @@ export class ChatOverlayComponent implements OnInit {
     });
   }
 
-  private storageSubscription() {
+  private subStorage() {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {

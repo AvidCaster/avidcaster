@@ -27,11 +27,8 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
-  isDarkTheme = false;
   audioPlay = false;
-  isAudioEnabled = false;
   fireworksPlay = false;
-  isFireworksEnabled = false;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -62,11 +59,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (state) => {
-          this.isDarkTheme = state.isDarkTheme;
-          this.isFireworksEnabled = state.fireworksEnabled;
           this.fireworksPlay = state.fireworksPlay;
-          this.isAudioEnabled = state.audioEnabled;
-          this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
       });
@@ -76,26 +69,9 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.clearMessage();
   }
 
-  toggleDirection() {
-    this.chatService.setState({ isLtR: !this.chatService.state.isLtR });
-  }
-
-  toggleFireworks(isFireworksEnabled: boolean) {
-    this.isFireworksEnabled = isFireworksEnabled;
-    this.chatService.setState({
-      fireworksEnabled: isFireworksEnabled,
-      fireworksPlay: isFireworksEnabled ? false : this.chatService.state.fireworksPlay,
-    });
-  }
-
   toggleFireworksPlay() {
     this.fireworksPlay = !this.fireworksPlay;
     this.chatService.setState({ fireworksPlay: !this.chatService.state.fireworksPlay });
-  }
-
-  toggleAudio(isAudioEnabled: boolean) {
-    this.isAudioEnabled = isAudioEnabled;
-    this.chatService.setState({ audioEnabled: isAudioEnabled });
   }
 
   toggleAudioPlay() {
@@ -120,10 +96,6 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.chatService.pauseIframe(false);
     }, 1000);
-  }
-
-  toggleTheme(isDarkTheme: boolean) {
-    this.chatService.setState({ isDarkTheme });
   }
 
   ngOnDestroy(): void {

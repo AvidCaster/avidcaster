@@ -12,6 +12,7 @@ import { Subject, takeUntil, throttleTime } from 'rxjs';
 import {
   CHAT_DEFAULT_AVATAR,
   CHAT_TWITCH_DEFAULT_AVATAR,
+  CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE,
   CHAT_YOUTUBE_DEFAULT_AVATAR,
 } from '../chat.default';
 import { ChatHosts, ChatMessageItem } from '../chat.model';
@@ -29,6 +30,11 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   chat: ChatMessageItem;
   slideInState = 0;
 
+  // vertical and horizontal position of the chat
+  marginTop = '100px';
+  paddingRight = '0px';
+  paddingLeft = '0px';
+
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
@@ -42,17 +48,47 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         if (!this.chatService.state.ffEnabled) {
           this.slideInState++;
         }
-        this.cdR.detectChanges();
+        this.cdR.markForCheck();
       },
     });
 
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.cdR.detectChanges();
+      next: (state) => {
+        this.calculateChatMarginTop(state.chatVerticalPosition);
+        this.calculateChatPadding(state.chatHorizontalPosition);
+        this.cdR.markForCheck();
+      },
+    });
+
+    this.chatService.chatVerticalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value) => {
+        this.calculateChatMarginTop(value);
+        this.cdR.markForCheck();
+      },
+    });
+
+    this.chatService.chatHorizontalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value) => {
+        this.calculateChatPadding(value);
+        this.cdR.markForCheck();
       },
     });
 
     this.logger.debug('ChatSelectedComponent started ... ');
+  }
+
+  calculateChatMarginTop(value: number) {
+    this.marginTop = `${CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE - value}px`;
+  }
+
+  calculateChatPadding(value: number) {
+    if (this.chatService.state.isLtR) {
+      this.paddingLeft = `${value}px`;
+      this.paddingRight = '0px';
+    } else {
+      this.paddingRight = `${value}px`;
+      this.paddingLeft = '0px';
+    }
   }
 
   getHostImage(host: ChatHosts): string {

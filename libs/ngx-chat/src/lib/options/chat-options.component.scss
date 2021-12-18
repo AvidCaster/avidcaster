@@ -1,0 +1,21 @@
+.chat-light-theme {
+  ::ng-deep * {
+    color: #fff !important;
+  }
+  ::ng-deep .mat-slide-toggle-thumb {
+    background-color: orange !important;
+  }
+}
+
+.chat-option-item {
+  padding: 10 px;
+  cursor: pointer;
+}
+
+.vertical-slider {
+  margin-top: -11px;
+}
+
+.horizontal-slider {
+  margin-top: -28px;
+}

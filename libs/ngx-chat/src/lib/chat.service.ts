@@ -20,16 +20,18 @@ import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared'
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
-import { Observable, Subject, filter, map, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, map, switchMap, takeUntil, tap } from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import {
+  CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_IFRAME_URL,
   CHAT_MESSAGE_LIST_DISPLAY_LIMIT,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   CHAT_STORAGE_STATE_KEY,
   CHAT_URL_FULLSCREEN_LIST,
+  CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   defaultChatConfig,
   defaultChatState,
 } from './chat.default';
@@ -41,15 +43,37 @@ import { primaryChatFilter, secondaryChatFilter, storageBroadcast } from './util
 export class ChatService implements OnDestroy {
   private nameSpace = 'CHAT';
   private claimId: string;
-  options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
-  state: DeepReadonly<ChatState> = defaultChatState();
-  state$: Observable<ChatState>;
-  database = chatDatabaseInstance;
   private destroy$ = new Subject<boolean>();
-  private chatSelectedOb$ = new Subject<ChatMessageItem>();
-  chatSelected$ = this.chatSelectedOb$.asObservable();
+
+  // environment, options
+  options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
+
+  // database object
+  database = chatDatabaseInstance;
   chatTable$: Observable<ChatMessageItem[]>;
   sliceLimit = -1 * CHAT_MESSAGE_LIST_DISPLAY_LIMIT;
+
+  // chat state
+  state: DeepReadonly<ChatState> = defaultChatState();
+  state$: Observable<ChatState>;
+
+  // selected chat
+  private chatSelectedOb$ = new Subject<ChatMessageItem>();
+  chatSelected$ = this.chatSelectedOb$.asObservable();
+
+  // chat vertical position
+  chatVerticalPosition = CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
+  private chatVerticalPositionOb$ = new BehaviorSubject<number>(
+    CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE
+  );
+  chatVerticalPosition$ = this.chatVerticalPositionOb$.asObservable();
+
+  // chat horizontal position
+  chatHorizontalPosition = CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
+  private chatHorizontalPositionOb$ = new BehaviorSubject<number>(
+    CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE
+  );
+  chatHorizontalPosition$ = this.chatHorizontalPositionOb$.asObservable();
 
   constructor(
     readonly zone: NgZone,
@@ -141,6 +165,11 @@ export class ChatService implements OnDestroy {
         next: (newState) => {
           this.state = { ...defaultChatState(), ...newState };
 
+          // set chat positions
+          this.setChatVerticalPosition(this.state.chatVerticalPosition);
+          this.setChatHorizontalPosition(this.state.chatHorizontalPosition);
+
+          // store state in local storage
           if (!this.isRunningInIframeContext) {
             const localStorageStateSnapshot = this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
             if (!localStorageStateSnapshot) {
@@ -249,6 +278,22 @@ export class ChatService implements OnDestroy {
         this.uix.localStorage.removeItem(key);
       }
     });
+  }
+
+  setChatVerticalPosition(value: number, saveToState = false) {
+    this.chatVerticalPosition = value;
+    if (saveToState) {
+      this.setState({ chatVerticalPosition: value });
+    }
+    this.chatVerticalPositionOb$.next(value);
+  }
+
+  setChatHorizontalPosition(value: number, saveToState = false) {
+    this.chatHorizontalPosition = value;
+    if (saveToState) {
+      this.setState({ chatHorizontalPosition: value });
+    }
+    this.chatHorizontalPositionOb$.next(value);
   }
 
   ngOnDestroy() {

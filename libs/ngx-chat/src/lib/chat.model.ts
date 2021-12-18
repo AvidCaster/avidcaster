@@ -103,6 +103,8 @@ export interface ChatState {
   autoScrollEnabled: boolean;
   iframePaused: boolean;
   isDarkTheme: boolean;
+  chatVerticalPosition: number;
+  chatHorizontalPosition: number;
 }
 
 export enum ChatMessagePrimaryFilterType {

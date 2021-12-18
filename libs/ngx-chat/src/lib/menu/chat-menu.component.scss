@@ -32,25 +32,11 @@ button {
   visibility: hidden;
 }
 
-.chat-light-theme {
-  ::ng-deep * {
-    color: #fff !important;
-  }
-  ::ng-deep .mat-slide-toggle-thumb {
-    background-color: orange !important;
-  }
-}
-
 ::ng-deep.mat-menu-panel {
   min-width: 200px !important;
   min-height: 200px !important;
   margin-top: -201px !important;
   padding: 15px;
-}
-
-.option-item {
-  padding: 10 px;
-  cursor: pointer;
 }
 
 [dir='rtl'] {
