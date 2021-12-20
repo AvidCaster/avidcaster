@@ -15,8 +15,11 @@ export const rgbToHex = (r: number, g: number, b: number): string => {
 };
 
 // get a unique random color from list of colors
-export const getRandomColor = (): string => {
-  const color = AnnotatorColors[randomInteger(0, AnnotatorColors.length - 1)];
+export const getRandomColor = (lastColor?: string): string => {
+  let color = AnnotatorColors[randomInteger(0, AnnotatorColors.length - 1)];
+  if (color === lastColor) {
+    color = AnnotatorColors[randomInteger(0, AnnotatorColors.length - 1)];
+  }
   return color;
 };
 
@@ -102,8 +105,9 @@ export const randomizeCanvasPixelColor = (
   const fourRandomPixel = getRandomPoints(canvasEl, 20);
 
   // set the color of 4 random pixels to a random color
+  let randomColor: string;
   fourRandomPixel.map((point) => {
-    const randomColor = getRandomColor();
+    randomColor = getRandomColor(randomColor);
     setCanvasPixelColor(ctx, point, randomColor);
   });
 
