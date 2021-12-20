@@ -25,6 +25,7 @@ import { EMPTY, Observable, Subject, filter, fromEvent, merge, takeUntil } from 
 import { DeepReadonly } from 'ts-essentials';
 
 import {
+  ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH,
   ANNOTATOR_URL_FULLSCREEN_LIST,
   defaultAnnotatorConfig,
   defaultAnnotatorState,
@@ -209,7 +210,9 @@ export class AnnotatorService implements OnDestroy {
       attributes: {
         lineCap: this.state.lineCap,
         lineJoin: this.state.lineJoin,
-        lineWidth: this.state.eraser ? this.state.lineWidth + 10 : this.state.lineWidth,
+        lineWidth: this.state.eraser
+          ? this.state.lineWidth + ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH
+          : this.state.lineWidth,
         strokeStyle: this.state.eraser ? this.state.bgColor : this.state.strokeStyle,
       },
       eraser: this.state.eraser,
