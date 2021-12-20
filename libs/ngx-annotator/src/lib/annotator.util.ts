@@ -196,6 +196,6 @@ export const downloadPng = async (
       type: 'base64',
     })
     .then(function (content) {
-      windowObj.location.href = 'data:application/zip;base64,' + content;
+      windowObj.location.assign('data:application/zip;base64,' + content);
     });
 };
