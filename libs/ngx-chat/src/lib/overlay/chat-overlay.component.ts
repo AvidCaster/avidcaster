@@ -41,6 +41,7 @@ export class ChatOverlayComponent implements OnInit {
     this.subStorage();
     this.subSelectedChat();
     this.subState();
+    this.chatService.uix.addClassToBody('no-scroll');
   }
 
   subState(): void {
