@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   NgZone,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
@@ -18,7 +19,7 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./chat-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatOverlayComponent implements OnInit {
+export class ChatOverlayComponent implements OnInit, OnDestroy {
   private onStorageOb$: Observable<Event>;
   private destroy$ = new Subject<boolean>();
   leftPosition = '0';
@@ -41,7 +42,7 @@ export class ChatOverlayComponent implements OnInit {
     this.subStorage();
     this.subSelectedChat();
     this.subState();
-    this.chatService.uix.addClassToBody('no-scroll');
+    this.chatService.uix.addClassToBody('chat-overlay');
   }
 
   subState(): void {
@@ -79,5 +80,11 @@ export class ChatOverlayComponent implements OnInit {
         },
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.chatService.uix.removeClassFromBody('chat-overlay');
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

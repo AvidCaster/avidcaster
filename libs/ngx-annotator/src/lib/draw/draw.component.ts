@@ -37,9 +37,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private trashedLines: Line[] = [];
   private lines: Line[] = [];
 
-  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {
-    this.uix.addClassToBody('annotation-canvas');
-  }
+  constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
   ngOnInit() {
     this.svgEl = this.svg?.nativeElement;
@@ -55,6 +53,8 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.redoSub();
     this.stateSub();
     this.uix.preventOnTouchMove();
+
+    this.uix.addClassToBody('annotation-draw');
   }
 
   private trashSub() {

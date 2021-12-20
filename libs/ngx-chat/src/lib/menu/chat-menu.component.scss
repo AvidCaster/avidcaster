@@ -32,7 +32,7 @@ button {
   visibility: hidden;
 }
 
-::ng-deep.mat-menu-panel {
+::ng-deep.chat-overlay .mat-menu-panel {
   min-width: 200px !important;
   min-height: 200px !important;
   margin-top: -270px !important;
