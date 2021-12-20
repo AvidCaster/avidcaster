@@ -135,6 +135,7 @@ export class MenuComponent implements OnDestroy {
 
   saveCanvas() {
     this.saveIconState++;
+    this.annotation.triggerSave();
     console.log('save canvas');
   }
 

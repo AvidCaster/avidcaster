@@ -20,6 +20,7 @@ import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
+import { downloadPng } from '../annotator.util';
 
 @Component({
   selector: 'fullerstack-draw',
@@ -52,6 +53,7 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.undoSub();
     this.redoSub();
     this.stateSub();
+    this.saveSub();
     this.uix.preventOnTouchMove();
 
     this.uix.addClassToBody('annotation-draw');
@@ -124,6 +126,14 @@ export class DrawComponent implements OnInit, OnDestroy {
           .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
       }
     }
+  }
+
+  private saveSub() {
+    this.annotation.save$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        downloadPng(this.uix.window, this.canvasEl);
+      },
+    });
   }
 
   private stateSub() {

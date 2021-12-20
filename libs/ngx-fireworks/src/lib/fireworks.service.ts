@@ -22,8 +22,8 @@ export class FireworksService implements OnDestroy {
   private width: number;
   private height: number;
 
-  private interval: number;
-  private rafInterval: number;
+  private interval;
+  private rafInterval;
 
   constructor(readonly logger: LoggerService) {
     this.logger.debug('FireworksService Started! ... ');
