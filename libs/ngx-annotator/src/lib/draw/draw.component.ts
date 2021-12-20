@@ -229,6 +229,6 @@ export class DrawComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-    this.uix.removeClassFromBody('annotation-canvas');
+    this.uix.removeClassFromBody('annotation-draw');
   }
 }
