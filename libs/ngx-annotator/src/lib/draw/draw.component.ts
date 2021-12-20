@@ -131,7 +131,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private saveSub() {
     this.annotation.save$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        downloadPng(this.uix.window, this.canvasEl);
+        downloadPng(this.uix.window, this.canvasEl, this.ctx);
       },
     });
   }
