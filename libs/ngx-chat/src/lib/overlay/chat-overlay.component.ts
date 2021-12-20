@@ -83,8 +83,9 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.chatService.uix.removeClassFromBody('chat-overlay');
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.chatService.uix.removeClassFromBody('chat-overlay');
+    this.chatService.uix.removeAttrFromBody('style');
   }
 }

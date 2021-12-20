@@ -230,5 +230,6 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
     this.uix.removeClassFromBody('annotation-draw');
+    this.uix.removeAttrFromBody('style');
   }
 }
