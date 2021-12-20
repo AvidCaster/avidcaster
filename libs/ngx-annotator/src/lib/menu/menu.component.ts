@@ -11,7 +11,7 @@ import { rotationAnimations, shakeAnimations } from '@fullerstack/ngx-shared';
 import { UixService } from '@fullerstack/ngx-uix';
 import { Subject } from 'rxjs';
 
-import { AnnotatorColors } from '../annotator.default';
+import { ANNOTATOR_LINE_WIDTH_OPTIONS, AnnotatorColors } from '../annotator.default';
 import { AnnotatorService } from '../annotator.service';
 
 @Component({
@@ -23,15 +23,17 @@ import { AnnotatorService } from '../annotator.service';
 export class MenuComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
+  // state change for icons that need wiggle animation
   trashIconState = 1;
   undoIconState = 1;
   redoIconState = 1;
   cursorIconState = 1;
+  saveIconState = 1;
   eraserIconState = 'forth';
 
   isFullscreen = false;
 
-  lineWithValues: number[] = [2, 3, 4, 5, 6, 8];
+  lineWithValues = ANNOTATOR_LINE_WIDTH_OPTIONS;
 
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
@@ -129,6 +131,11 @@ export class MenuComponent implements OnDestroy {
   toggleCursor() {
     this.cursorIconState++;
     this.annotation.setState({ cursor: !this.annotation.state.cursor });
+  }
+
+  saveCanvas() {
+    this.saveIconState++;
+    this.annotation.triggerSave();
   }
 
   ngOnDestroy() {

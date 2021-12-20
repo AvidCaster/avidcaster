@@ -25,6 +25,7 @@ import { EMPTY, Observable, Subject, filter, fromEvent, merge, takeUntil } from 
 import { DeepReadonly } from 'ts-essentials';
 
 import {
+  ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH,
   ANNOTATOR_URL_FULLSCREEN_LIST,
   defaultAnnotatorConfig,
   defaultAnnotatorState,
@@ -46,12 +47,14 @@ export class AnnotatorService implements OnDestroy {
   state: DeepReadonly<AnnotatorState> = defaultAnnotatorState();
   stateSub$: Observable<AnnotatorState>;
   private onStorageOb$: Observable<Event>;
-  private undoObs$ = new Subject<void>();
-  private redoObs$ = new Subject<void>();
-  private trashObs$ = new Subject<void>();
-  undo$ = this.undoObs$.asObservable();
-  redo$ = this.redoObs$.asObservable();
-  trash$ = this.trashObs$.asObservable();
+  private undoOb$ = new Subject<void>();
+  private redoOb$ = new Subject<void>();
+  private trashOb$ = new Subject<void>();
+  private saveOb$ = new Subject<void>();
+  undo$ = this.undoOb$.asObservable();
+  redo$ = this.redoOb$.asObservable();
+  trash$ = this.trashOb$.asObservable();
+  save$ = this.saveOb$.asObservable();
   private destroy$ = new Subject<boolean>();
   private lastUrl: string;
 
@@ -174,15 +177,15 @@ export class AnnotatorService implements OnDestroy {
   }
 
   undo() {
-    this.undoObs$.next();
+    this.undoOb$.next();
   }
 
   redo() {
-    this.redoObs$.next();
+    this.redoOb$.next();
   }
 
   trash() {
-    this.trashObs$.next();
+    this.trashOb$.next();
   }
 
   /**
@@ -209,7 +212,9 @@ export class AnnotatorService implements OnDestroy {
       attributes: {
         lineCap: this.state.lineCap,
         lineJoin: this.state.lineJoin,
-        lineWidth: this.state.eraser ? this.state.lineWidth + 10 : this.state.lineWidth,
+        lineWidth: this.state.eraser
+          ? this.state.lineWidth + ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH
+          : this.state.lineWidth,
         strokeStyle: this.state.eraser ? this.state.bgColor : this.state.strokeStyle,
       },
       eraser: this.state.eraser,
@@ -443,6 +448,10 @@ export class AnnotatorService implements OnDestroy {
 
   isBackgroundWhite() {
     return this.state.bgColor === '#ffffff';
+  }
+
+  triggerSave() {
+    this.saveOb$.next();
   }
 
   ngOnDestroy() {

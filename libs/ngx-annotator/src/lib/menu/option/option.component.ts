@@ -95,5 +95,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.layout.uix.removeClassFromBody('menu-background-white');
+    this.layout.uix.removeClassFromBody('menu-background-black');
   }
 }

@@ -136,10 +136,6 @@ export class UixService implements OnDestroy {
     }
   }
 
-  addClassToBody(className: string): void {
-    this.document.body.classList.add(className);
-  }
-
   removeClass(el: HTMLElement, className: string): void {
     if (el.classList) {
       el.classList.remove(className);
@@ -148,8 +144,28 @@ export class UixService implements OnDestroy {
     }
   }
 
+  addClassToBody(className: string): void {
+    this.document.body.classList.add(className);
+  }
+
+  addAttr(el: HTMLElement, attrName: string, attrValue: string): void {
+    el.setAttribute(attrName, attrValue);
+  }
+
+  removeAttr(el: HTMLElement, attrName: string): void {
+    el.removeAttribute(attrName);
+  }
+
   removeClassFromBody(className: string): void {
     this.document.body.classList.remove(className);
+  }
+
+  addAttrToBody(attrName: string, attrValue: string): void {
+    this.document.body.setAttribute(attrName, attrValue);
+  }
+
+  removeAttrFromBody(attrName: string): void {
+    this.document.body.removeAttribute(attrName);
   }
 
   refreshPage() {

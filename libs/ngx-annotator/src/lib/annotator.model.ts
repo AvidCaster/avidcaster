@@ -26,6 +26,7 @@ export type ButtonType =
   | 'showLineWidth'
   | 'showEraser'
   | 'showCursor'
+  | 'showSave'
   | 'showFullscreen'
   | 'showRefresh';
 
@@ -60,6 +61,7 @@ export interface AnnotatorState extends LineAttributes {
   showLineWidth: boolean;
   showEraser: boolean;
   showCursor: boolean;
+  showSave: boolean;
   showFullscreen: boolean;
   showRefresh: boolean;
 }

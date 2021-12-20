@@ -130,6 +130,19 @@
     ></mat-icon>
   </button>
 
+  <button
+    *ngIf="annotation.state.showSave"
+    mat-icon-button
+    class="quick-menu-button material-icons"
+    [@wiggleIt]="saveIconState"
+    (click)="saveCanvas()"
+  >
+    <mat-icon
+      class="clickable-menu-icon"
+      svgIcon="download-circle-outline"
+    ></mat-icon>
+  </button>
+
   <button *ngIf="annotation.state.showFullscreen" mat-icon-button class="quick-menu-button material-icons" (click)="toggleFullscreen()">
     <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
   </button>

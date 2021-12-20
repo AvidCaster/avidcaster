@@ -69,6 +69,11 @@ export class ShowMenuComponent implements OnDestroy {
       label: _('COMMON.CURSOR'),
     },
     {
+      type: 'showSave',
+      icon: 'download-circle-outline',
+      label: _('COMMON.SAVE'),
+    },
+    {
       type: 'showFullscreen',
       icon: 'arrow-expand-all',
       label: _('COMMON.FULLSCREEN'),

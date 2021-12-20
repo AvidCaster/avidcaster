@@ -43,6 +43,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   showLineColor: true,
   showEraser: true,
   showCursor: true,
+  showSave: true,
   showFullscreen: true,
   showRefresh: true,
 };
@@ -80,3 +81,6 @@ export const defaultLine = (): Line => {
 
 export const ANNOTATOR_DRAW_URL = '/annotate/draw';
 export const ANNOTATOR_URL_FULLSCREEN_LIST = [ANNOTATOR_DRAW_URL];
+
+export const ANNOTATOR_LINE_WIDTH_OPTIONS = [2, 3, 4, 5, 6, 8];
+export const ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH = 15;
