@@ -127,8 +127,4 @@ export enum ChatMessageSecondaryFilterType {
   Highlight = 'highlight',
 }
 
-export enum ChatMessageListFilterType {
-  Common = 'common',
-  Donation = 'donation',
-  Membership = 'membership',
-}
+export type ChatMessageListFilterType = 'common' | 'donation' | 'membership';

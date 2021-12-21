@@ -12,7 +12,6 @@ import { cloneDeep as ldDeepClone } from 'lodash-es';
 import {
   ChatConfig,
   ChatMessageItem,
-  ChatMessageListFilterType,
   ChatMessagePrimaryFilterType,
   ChatMessageSecondaryFilterType,
   ChatMessageType,
@@ -111,9 +110,9 @@ export const ChatSecondaryFilterOptions = {
 };
 
 export const ChatListFilterOptions = {
-  [ChatMessageType.Common]: _('CHAT.FILTER_LIST.COMMON'),
-  [ChatMessageType.Donation]: _('CHAT.FILTER_LIST.DONATION'),
-  [ChatMessageType.Membership]: _('CHAT.FILTER_LIST.MEMBERSHIP'),
+  common: _('CHAT.FILTER_LIST.COMMON'),
+  donation: _('CHAT.FILTER_LIST.DONATION'),
+  membership: _('CHAT.FILTER_LIST.MEMBERSHIP'),
 };
 
 // chat display limit (visible / scrollable)
@@ -143,7 +142,7 @@ const DefaultChatState: ChatState = {
   fireworksEnabled: true,
   fireworksPlay: false,
   keywords: [],
-  chatListOption: ChatMessageListFilterType.Common,
+  chatListOption: 'common',
   primaryFilterOption: ChatMessagePrimaryFilterType.None,
   secondaryFilterOption: ChatMessageSecondaryFilterType.None,
   ffEnabled: false,

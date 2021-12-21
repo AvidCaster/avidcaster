@@ -35,7 +35,7 @@ import {
   defaultChatConfig,
   defaultChatState,
 } from './chat.default';
-import { ChatMessageItem, ChatMessageListFilterType, ChatState } from './chat.model';
+import { ChatMessageItem, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
 import { primaryChatFilter, secondaryChatFilter, storageBroadcast } from './util/chat.util';
 
@@ -199,7 +199,7 @@ export class ChatService implements OnDestroy {
 
   private subToTables() {
     this.chatTable$ = this.state$.pipe(
-      switchMap((state) => this.database.chatLiveQuery(this.messageListType(state))),
+      switchMap((state) => this.database.chatLiveQuery(state.chatListOption)),
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => primaryChatFilter(chat, this.state)))
       ),
@@ -210,17 +210,6 @@ export class ChatService implements OnDestroy {
       filter((chats: ChatMessageItem[]) => !!chats?.length),
       tap((chats: ChatMessageItem[]) => this.chatSelected(chats[0]))
     );
-  }
-
-  messageListType(state: ChatState): ChatMessageListFilterType {
-    switch (ChatMessageListFilterType[state.chatListOption]) {
-      case ChatMessageListFilterType.Donation:
-        return ChatMessageListFilterType.Donation;
-      case ChatMessageListFilterType.Membership:
-        return ChatMessageListFilterType.Membership;
-      default:
-        return ChatMessageListFilterType.Common;
-    }
   }
 
   chatSelected(chat: ChatMessageItem, clicked = false) {

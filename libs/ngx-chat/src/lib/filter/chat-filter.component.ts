@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
+import { I18nService, i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { ConfirmationDialogService, shakeAnimations } from '@fullerstack/ngx-shared';
 import { Subject, debounceTime, filter, first, interval, takeUntil } from 'rxjs';
@@ -36,7 +36,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   private keywordsOb$ = new Subject<string>();
   primaryFilter = ChatMessagePrimaryFilterType.None;
   secondaryFilter = ChatMessageSecondaryFilterType.None;
-  listFilter = ChatMessageListFilterType.Common;
+  listFilter: ChatMessageListFilterType = 'common';
   keywords = '';
   minWords = 0;
   resumeIconState = 0;
@@ -44,6 +44,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
+    readonly i18n: I18nService,
     readonly confirm: ConfirmationDialogService,
     readonly chatService: ChatService
   ) {}
@@ -68,9 +69,9 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   subState() {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
-        this.listFilter = state.chatListOption as ChatMessageListFilterType;
-        this.secondaryFilter = state.secondaryFilterOption as ChatMessageSecondaryFilterType;
-        this.primaryFilter = state.primaryFilterOption as ChatMessagePrimaryFilterType;
+        this.listFilter = state.chatListOption;
+        this.secondaryFilter = state.secondaryFilterOption;
+        this.primaryFilter = state.primaryFilterOption;
         this.keywords = state.keywords.join(' ');
         this.cdR.markForCheck();
       },
@@ -111,12 +112,11 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   getListFilterOptions(): string[] {
-    return Object.keys(ChatMessageListFilterType);
+    return Object.keys(ChatListFilterOptions);
   }
 
   getListFilterName(filter: string): string {
-    let name = ChatMessageListFilterType[filter];
-    name = ChatListFilterOptions[name];
+    const name = ChatListFilterOptions[filter];
     return name;
   }
 
