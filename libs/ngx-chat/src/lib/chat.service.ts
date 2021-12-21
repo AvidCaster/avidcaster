@@ -207,8 +207,11 @@ export class ChatService implements OnDestroy {
         chats?.map((chat) => tryGet(() => searchByKeywords(chat, this.state)))
       ),
       map((chats: ChatMessageItem[]) => chats?.filter((chat) => chat?.id)),
-      filter((chats: ChatMessageItem[]) => !!chats?.length),
-      tap((chats: ChatMessageItem[]) => this.chatSelected(chats[0]))
+      tap((chats: ChatMessageItem[]) => {
+        if (chats?.length) {
+          this.chatSelected(chats[0]);
+        }
+      })
     );
   }
 
