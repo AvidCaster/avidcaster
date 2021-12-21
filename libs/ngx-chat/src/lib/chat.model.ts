@@ -96,9 +96,9 @@ export interface ChatState {
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
-  primaryFilterOption: ChatMessagePrimaryFilterType;
-  secondaryFilterOption: ChatMessageSecondaryFilterType;
-  chatListOption: ChatMessageListFilterType;
+  primaryFilter: ChatMessagePrimaryFilterType;
+  keywordsFilter: ChatMessageKeywordsFilterType;
+  listFilter: ChatMessageListFilterType;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
   iframePaused: boolean;
@@ -108,27 +108,21 @@ export interface ChatState {
   demoEnabled: boolean;
 }
 
-export enum ChatMessagePrimaryFilterType {
-  None = 'none',
-  MiniumWordOne = 'atLeastOneWord',
-  MiniumWordTwo = 'atLeastTwoWords',
-  MiniumWordThree = 'atLeastThreeWords',
-  StartWithQ = 'startWithQ',
-  StartWithA = 'startWithA',
-  StartWithFrom = 'startWithFrom',
-}
+export type ChatMessagePrimaryFilterType =
+  | 'none'
+  | 'atLeastOneWord'
+  | 'atLeastTwoWords'
+  | 'atLeastThreeWords'
+  | 'startsWithQ'
+  | 'startsWithA'
+  | 'startsWithFrom';
 
-export enum ChatMessageSecondaryFilterType {
-  None = 'none',
-  Host = 'host',
-  Author = 'author',
-  FilterBy = 'filterBy',
-  FilterOut = 'filterOut',
-  Highlight = 'highlight',
-}
+export type ChatMessageKeywordsFilterType =
+  | 'none'
+  | 'host'
+  | 'author'
+  | 'filterBy'
+  | 'filterOut'
+  | 'highlight';
 
-export enum ChatMessageListFilterType {
-  Common = 'common',
-  Donation = 'donation',
-  Membership = 'membership',
-}
+export type ChatMessageListFilterType = 'common' | 'donation' | 'membership';

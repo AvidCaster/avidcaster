@@ -15,9 +15,9 @@
       name="{{ getListFilterName(listFilter) | translate }}"
       id="filter-options"
       [(ngModel)]="listFilter"
-      (ngModelChange)="setListFilterOption(listFilter)"
+      (ngModelChange)="setListFilter(listFilter)"
     >
-      <option *ngFor="let filter of getListFilterOptions()" [value]="filter">
+      <option *ngFor="let filter of getListFilter()" [value]="filter">
         {{ getListFilterName(filter) | translate }}
       </option>
     </select>
@@ -26,28 +26,28 @@
       <div fxLayout="column" fxLayoutAlign="center" class="chat-filter-icon">
         <mat-icon
           [color]="isHighlight ? 'accent' : 'warn'"
-          [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
+          [svgIcon]="isHighlight ? 'flashlight' : isKeywordsFilter() ? 'filter' : 'filter-off'"
         ></mat-icon>
       </div>
 
       <select
-        name="{{ getSecondaryFilterName(secondaryFilter) | translate }}"
+        name="{{ getKeywordsFilterName(keywordsFilter) | translate }}"
         id="filter-options"
-        [(ngModel)]="secondaryFilter"
-        (ngModelChange)="setSecondaryFilterOption(secondaryFilter)"
+        [(ngModel)]="keywordsFilter"
+        (ngModelChange)="setKeywordsFilter(keywordsFilter)"
       >
-        <option *ngFor="let filter of getSecondaryFilterOptions()" [value]="filter">
-          {{ getSecondaryFilterName(filter) | translate }}
-        </option>
+        <option *ngFor="let filter of getKeywordsFilter()" [value]="filter">{{ getKeywordsFilterName(filter) | translate }}</option>
       </select>
 
       <select
         name="{{ getPrimaryFilterName(primaryFilter) | translate }}"
         id="filter-options"
         [(ngModel)]="primaryFilter"
-        (ngModelChange)="setPrimaryFilterOption(primaryFilter)"
+        (ngModelChange)="setPrimaryFilter(primaryFilter)"
       >
-        <option *ngFor="let filter of getPrimaryFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
+        <option *ngFor="let filter of getPrimaryFilter()" [value]="filter">
+          {{ getPrimaryFilterName(filter) | translate }}
+        </option>
       </select>
     </div>
   </div>

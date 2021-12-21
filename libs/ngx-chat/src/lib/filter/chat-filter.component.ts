@@ -5,21 +5,21 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
+import { I18nService, i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { ConfirmationDialogService, shakeAnimations } from '@fullerstack/ngx-shared';
 import { Subject, debounceTime, filter, first, interval, takeUntil } from 'rxjs';
 
 import {
+  ChatKeywordsFilterOptions,
   ChatListFilterOptions,
   ChatPrimaryFilterOptions,
-  ChatSecondaryFilterOptions,
   welcomeChat,
 } from '../chat.default';
 import {
+  ChatMessageKeywordsFilterType,
   ChatMessageListFilterType,
   ChatMessagePrimaryFilterType,
-  ChatMessageSecondaryFilterType,
 } from '../chat.model';
 import { ChatService } from '../chat.service';
 
@@ -34,9 +34,9 @@ import { ChatService } from '../chat.service';
 export class ChatFilterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   private keywordsOb$ = new Subject<string>();
-  primaryFilter = ChatMessagePrimaryFilterType.None;
-  secondaryFilter = ChatMessageSecondaryFilterType.None;
-  listFilter = ChatMessageListFilterType.Common;
+  primaryFilter: ChatMessagePrimaryFilterType = 'none';
+  keywordsFilter: ChatMessageKeywordsFilterType = 'none';
+  listFilter: ChatMessageListFilterType = 'common';
   keywords = '';
   minWords = 0;
   resumeIconState = 0;
@@ -44,6 +44,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
+    readonly i18n: I18nService,
     readonly confirm: ConfirmationDialogService,
     readonly chatService: ChatService
   ) {}
@@ -68,9 +69,9 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   subState() {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
-        this.listFilter = state.chatListOption as ChatMessageListFilterType;
-        this.secondaryFilter = state.secondaryFilterOption as ChatMessageSecondaryFilterType;
-        this.primaryFilter = state.primaryFilterOption as ChatMessagePrimaryFilterType;
+        this.listFilter = state.listFilter;
+        this.primaryFilter = state.primaryFilter;
+        this.keywordsFilter = state.keywordsFilter;
         this.keywords = state.keywords.join(' ');
         this.cdR.markForCheck();
       },
@@ -96,63 +97,53 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   isHighlight() {
-    const isHighlight =
-      ChatMessageSecondaryFilterType[this.secondaryFilter] ===
-      ChatMessageSecondaryFilterType.Highlight;
-    return isHighlight;
+    return this.keywordsFilter === 'highlight';
   }
 
-  isFilter() {
-    const isFilter =
-      ChatMessageSecondaryFilterType[this.secondaryFilter] !==
-        ChatMessageSecondaryFilterType.Highlight &&
-      ChatMessageSecondaryFilterType[this.secondaryFilter] !== ChatMessageSecondaryFilterType.None;
-    return isFilter;
+  isKeywordsFilter() {
+    return this.keywordsFilter !== 'none' && this.keywordsFilter !== 'highlight';
   }
 
-  getListFilterOptions(): string[] {
-    return Object.keys(ChatMessageListFilterType);
+  //  list filters
+  getListFilter(): string[] {
+    return Object.keys(ChatListFilterOptions);
   }
 
   getListFilterName(filter: string): string {
-    let name = ChatMessageListFilterType[filter];
-    name = ChatListFilterOptions[name];
-    return name;
+    return ChatListFilterOptions[filter];
   }
 
-  setListFilterOption(filter: ChatMessageListFilterType) {
+  setListFilter(filter: ChatMessageListFilterType) {
     this.listFilter = filter;
-    this.chatService.setState({ chatListOption: filter });
+    this.chatService.setState({ listFilter: filter });
   }
 
-  getPrimaryFilterOptions(): string[] {
-    return Object.keys(ChatMessagePrimaryFilterType);
+  // primary options
+  getKeywordsFilter(): string[] {
+    return Object.keys(ChatKeywordsFilterOptions);
+  }
+
+  getKeywordsFilterName(filter: string): string {
+    return ChatKeywordsFilterOptions[filter];
+  }
+
+  setKeywordsFilter(filter: ChatMessageKeywordsFilterType) {
+    this.keywordsFilter = filter;
+    this.chatService.setState({ keywordsFilter: filter });
+  }
+
+  // secondary options
+  getPrimaryFilter(): string[] {
+    return Object.keys(ChatPrimaryFilterOptions);
   }
 
   getPrimaryFilterName(filter: string): string {
-    let name = ChatMessagePrimaryFilterType[filter];
-    name = ChatPrimaryFilterOptions[name];
-    return name;
+    return ChatPrimaryFilterOptions[filter];
   }
 
-  setPrimaryFilterOption(filter: ChatMessagePrimaryFilterType) {
+  setPrimaryFilter(filter: ChatMessagePrimaryFilterType) {
     this.primaryFilter = filter;
-    this.chatService.setState({ primaryFilterOption: filter });
-  }
-
-  getSecondaryFilterOptions(): string[] {
-    return Object.keys(ChatMessageSecondaryFilterType);
-  }
-
-  getSecondaryFilterName(filter: string): string {
-    let name = ChatMessageSecondaryFilterType[filter];
-    name = ChatSecondaryFilterOptions[name];
-    return name;
-  }
-
-  setSecondaryFilterOption(filter: ChatMessageSecondaryFilterType) {
-    this.secondaryFilter = filter;
-    this.chatService.setState({ secondaryFilterOption: filter });
+    this.chatService.setState({ primaryFilter: filter });
   }
 
   toggleAutoScroll() {

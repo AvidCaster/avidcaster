@@ -84,7 +84,7 @@ export class ChatDB extends Dexie {
   }
 
   chatLiveQuery(messageType: ChatMessageListFilterType, includeGreeting = true) {
-    if (messageType !== ChatMessageListFilterType.Common) {
+    if (messageType !== 'common') {
       return liveQuery(() =>
         this.chatTable
           .orderBy(':id')

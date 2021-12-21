@@ -11,8 +11,8 @@ import { DeepReadonly } from 'ts-essentials';
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
 import {
   ChatMessageItem,
+  ChatMessageKeywordsFilterType,
   ChatMessagePrimaryFilterType,
-  ChatMessageSecondaryFilterType,
   ChatState,
 } from '../chat.model';
 
@@ -27,7 +27,7 @@ export const includesEmoji = (str: string): boolean => {
   return EmojiRegexExp.test(str);
 };
 
-export const primaryChatFilter = (
+export const searchByPrimaryFilter = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
@@ -35,45 +35,45 @@ export const primaryChatFilter = (
     return undefined;
   }
 
-  if (!state?.primaryFilterOption) {
+  if (!state?.primaryFilter) {
     return chat;
   }
 
-  switch (ChatMessagePrimaryFilterType[state.primaryFilterOption]) {
-    case ChatMessagePrimaryFilterType.MiniumWordOne: {
+  switch (state.primaryFilter as ChatMessagePrimaryFilterType) {
+    case 'atLeastOneWord': {
       return chat?.message?.split(' ')?.length >= 1 ? chat : undefined;
     }
-    case ChatMessagePrimaryFilterType.MiniumWordTwo: {
+    case 'atLeastTwoWords': {
       return chat?.message?.split(' ').length >= 2 ? chat : undefined;
     }
-    case ChatMessagePrimaryFilterType.MiniumWordThree: {
+    case 'atLeastThreeWords': {
       return chat?.message.split(' ')?.length >= 3 ? chat : undefined;
     }
-    case ChatMessagePrimaryFilterType.StartWithQ: {
+    case 'startsWithQ': {
       return chat?.message?.toUpperCase().startsWith('Q:')
         ? chat
         : chat?.message?.toUpperCase().startsWith('QA:')
         ? chat
         : undefined;
     }
-    case ChatMessagePrimaryFilterType.StartWithA: {
+    case 'startsWithA': {
       return chat?.message?.toUpperCase().startsWith('A:') ? chat : undefined;
     }
-    case ChatMessagePrimaryFilterType.StartWithFrom: {
+    case 'startsWithFrom': {
       return chat?.message?.toUpperCase().startsWith('FROM:')
         ? chat
         : chat?.message?.toUpperCase().startsWith('HELLO FROM')
         ? chat
         : undefined;
     }
-    case ChatMessagePrimaryFilterType.None:
+    case 'none':
     default:
       break;
   }
   return chat;
 };
 
-export const secondaryChatFilter = (
+export const searchByKeywords = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
@@ -85,26 +85,26 @@ export const secondaryChatFilter = (
     return chat;
   }
 
-  if (!state?.secondaryFilterOption) {
+  if (!state?.keywordsFilter) {
     return chat;
   }
 
-  switch (ChatMessageSecondaryFilterType[state.secondaryFilterOption]) {
-    case ChatMessageSecondaryFilterType.Host: {
+  switch (state.keywordsFilter as ChatMessageKeywordsFilterType) {
+    case 'host': {
       return state.keywords?.some((word) => chat?.host?.toLowerCase() === word.toLowerCase())
         ? chat
         : undefined;
     }
-    case ChatMessageSecondaryFilterType.Author: {
+    case 'author': {
       return state.keywords?.some((word) => chat?.author?.includes(word)) ? chat : undefined;
     }
-    case ChatMessageSecondaryFilterType.FilterBy: {
+    case 'filterBy': {
       return state.keywords?.some((word) => chat?.message?.includes(word)) ? chat : undefined;
     }
-    case ChatMessageSecondaryFilterType.FilterOut: {
+    case 'filterOut': {
       return !state.keywords?.some((word) => chat?.message?.includes(word)) ? chat : undefined;
     }
-    case ChatMessageSecondaryFilterType.Highlight: {
+    case 'highlight': {
       if (state.keywords?.some((word) => chat?.message?.includes(word))) {
         chat.highlighted = true;
       } else {
@@ -112,7 +112,7 @@ export const secondaryChatFilter = (
       }
       return chat;
     }
-    case ChatMessageSecondaryFilterType.None:
+    case 'none':
     default:
       break;
   }

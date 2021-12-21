@@ -9,7 +9,7 @@ import {
 import { fadeAnimations } from '@fullerstack/ngx-shared';
 import { Subject, filter, takeUntil } from 'rxjs';
 
-import { ChatHosts, ChatMessageItem, ChatMessageListFilterType, ChatState } from '../chat.model';
+import { ChatHosts, ChatMessageItem, ChatState } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -44,9 +44,9 @@ export class ChatItemComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((state: ChatState) => {
-        this.isMembershipList = state.chatListOption === ChatMessageListFilterType.Membership;
-        this.isDonationList = state.chatListOption === ChatMessageListFilterType.Donation;
-        this.isCommonList = state.chatListOption === ChatMessageListFilterType.Common;
+        this.isMembershipList = state.listFilter === 'membership';
+        this.isDonationList = state.listFilter === 'donation';
+        this.isCommonList = state.listFilter === 'common';
         this.cdR.markForCheck();
       });
   }
