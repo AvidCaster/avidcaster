@@ -15,9 +15,9 @@
       name="{{ getListFilterName(listFilter) | translate }}"
       id="filter-options"
       [(ngModel)]="listFilter"
-      (ngModelChange)="setListFilterOption(listFilter)"
+      (ngModelChange)="setListFilter(listFilter)"
     >
-      <option *ngFor="let filter of getListFilterOptions()" [value]="filter">
+      <option *ngFor="let filter of getListFilter()" [value]="filter">
         {{ getListFilterName(filter) | translate }}
       </option>
     </select>
@@ -31,6 +31,15 @@
       </div>
 
       <select
+        name="{{ getKeywordsFilterName(keywordsFilter) | translate }}"
+        id="filter-options"
+        [(ngModel)]="keywordsFilter"
+        (ngModelChange)="setKeywordsFilter(keywordsFilter)"
+      >
+        <option *ngFor="let filter of getKeywordsFilter()" [value]="filter">{{ getKeywordsFilterName(filter) | translate }}</option>
+      </select>
+
+      <select
         name="{{ getPrimaryFilterName(primaryFilter) | translate }}"
         id="filter-options"
         [(ngModel)]="primaryFilter"
@@ -39,15 +48,6 @@
         <option *ngFor="let filter of getPrimaryFilter()" [value]="filter">
           {{ getPrimaryFilterName(filter) | translate }}
         </option>
-      </select>
-
-      <select
-        name="{{ getKeywordsFilterName(keywordsFilter) | translate }}"
-        id="filter-options"
-        [(ngModel)]="keywordsFilter"
-        (ngModelChange)="setKeywordsFilter(keywordsFilter)"
-      >
-        <option *ngFor="let filter of getKeywordsFilter()" [value]="filter">{{ getKeywordsFilterName(filter) | translate }}</option>
       </select>
     </div>
   </div>

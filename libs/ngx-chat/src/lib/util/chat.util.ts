@@ -9,7 +9,12 @@
 import { DeepReadonly } from 'ts-essentials';
 
 import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
-import { ChatMessageItem, ChatState } from '../chat.model';
+import {
+  ChatMessageItem,
+  ChatMessageKeywordsFilterType,
+  ChatMessagePrimaryFilterType,
+  ChatState,
+} from '../chat.model';
 
 export const isSiteSupported = (site: string): boolean => {
   return Object.keys(ChatSupportedSites).includes(site);
@@ -34,7 +39,7 @@ export const searchByPrimaryFilter = (
     return chat;
   }
 
-  switch (state.primaryFilter) {
+  switch (state.primaryFilter as ChatMessagePrimaryFilterType) {
     case 'atLeastOneWord': {
       return chat?.message?.split(' ')?.length >= 1 ? chat : undefined;
     }
@@ -84,7 +89,7 @@ export const searchByKeywords = (
     return chat;
   }
 
-  switch (state.keywordsFilter) {
+  switch (state.keywordsFilter as ChatMessageKeywordsFilterType) {
     case 'host': {
       return state.keywords?.some((word) => chat?.host?.toLowerCase() === word.toLowerCase())
         ? chat

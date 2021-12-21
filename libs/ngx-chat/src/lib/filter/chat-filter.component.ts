@@ -105,7 +105,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   //  list filters
-  getListFilterOptions(): string[] {
+  getListFilter(): string[] {
     return Object.keys(ChatListFilterOptions);
   }
 
@@ -113,7 +113,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     return ChatListFilterOptions[filter];
   }
 
-  setListFilterOption(filter: ChatMessageListFilterType) {
+  setListFilter(filter: ChatMessageListFilterType) {
     this.listFilter = filter;
     this.chatService.setState({ listFilter: filter });
   }
