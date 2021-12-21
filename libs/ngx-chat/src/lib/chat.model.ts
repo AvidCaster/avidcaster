@@ -96,8 +96,8 @@ export interface ChatState {
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
-  primaryFilterOption: ChatMessagePrimaryFilterType;
-  secondaryFilterOption: ChatMessageSecondaryFilterType;
+  keywordsFilterOption: ChatMessagePrimaryFilterType;
+  primaryFilterOption: ChatMessageSecondaryFilterType;
   chatListOption: ChatMessageListFilterType;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;

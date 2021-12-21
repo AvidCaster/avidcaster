@@ -34,9 +34,9 @@
         name="{{ getSecondaryFilterName(secondaryFilter) | translate }}"
         id="filter-options"
         [(ngModel)]="secondaryFilter"
-        (ngModelChange)="setSecondaryFilterOption(secondaryFilter)"
+        (ngModelChange)="setprimaryFilterOption(secondaryFilter)"
       >
-        <option *ngFor="let filter of getSecondaryFilterOptions()" [value]="filter">
+        <option *ngFor="let filter of getprimaryFilterOptions()" [value]="filter">
           {{ getSecondaryFilterName(filter) | translate }}
         </option>
       </select>
@@ -45,9 +45,9 @@
         name="{{ getPrimaryFilterName(primaryFilter) | translate }}"
         id="filter-options"
         [(ngModel)]="primaryFilter"
-        (ngModelChange)="setPrimaryFilterOption(primaryFilter)"
+        (ngModelChange)="setkeywordsFilterOption(primaryFilter)"
       >
-        <option *ngFor="let filter of getPrimaryFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
+        <option *ngFor="let filter of getkeywordsFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
       </select>
     </div>
   </div>

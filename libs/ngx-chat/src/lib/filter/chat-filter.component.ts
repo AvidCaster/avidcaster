@@ -11,9 +11,9 @@ import { ConfirmationDialogService, shakeAnimations } from '@fullerstack/ngx-sha
 import { Subject, debounceTime, filter, first, interval, takeUntil } from 'rxjs';
 
 import {
+  ChatKeywordsFilterOptions,
   ChatListFilterOptions,
-  ChatPrimaryFilterOptions,
-  ChatSecondaryFilterOptions,
+  ChatprimaryFilterOptions,
   welcomeChat,
 } from '../chat.default';
 import {
@@ -70,8 +70,8 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         this.listFilter = state.chatListOption;
-        this.secondaryFilter = state.secondaryFilterOption;
-        this.primaryFilter = state.primaryFilterOption;
+        this.secondaryFilter = state.primaryFilterOption;
+        this.primaryFilter = state.keywordsFilterOption;
         this.keywords = state.keywords.join(' ');
         this.cdR.markForCheck();
       },
@@ -119,31 +119,31 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   // primary options
-  getPrimaryFilterOptions(): string[] {
-    return Object.keys(ChatPrimaryFilterOptions);
+  getkeywordsFilterOptions(): string[] {
+    return Object.keys(ChatKeywordsFilterOptions);
   }
 
   getPrimaryFilterName(filter: string): string {
-    return ChatPrimaryFilterOptions[filter];
+    return ChatKeywordsFilterOptions[filter];
   }
 
-  setPrimaryFilterOption(filter: ChatMessagePrimaryFilterType) {
+  setkeywordsFilterOption(filter: ChatMessagePrimaryFilterType) {
     this.primaryFilter = filter;
-    this.chatService.setState({ primaryFilterOption: filter });
+    this.chatService.setState({ keywordsFilterOption: filter });
   }
 
   // secondary options
-  getSecondaryFilterOptions(): string[] {
-    return Object.keys(ChatSecondaryFilterOptions);
+  getprimaryFilterOptions(): string[] {
+    return Object.keys(ChatprimaryFilterOptions);
   }
 
   getSecondaryFilterName(filter: string): string {
-    return ChatSecondaryFilterOptions[filter];
+    return ChatprimaryFilterOptions[filter];
   }
 
-  setSecondaryFilterOption(filter: ChatMessageSecondaryFilterType) {
+  setprimaryFilterOption(filter: ChatMessageSecondaryFilterType) {
     this.secondaryFilter = filter;
-    this.chatService.setState({ secondaryFilterOption: filter });
+    this.chatService.setState({ primaryFilterOption: filter });
   }
 
   toggleAutoScroll() {

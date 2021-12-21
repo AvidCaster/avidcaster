@@ -83,7 +83,7 @@ export const welcomeChat = (): ChatMessageItem => {
   return ldDeepClone(WelcomeChat);
 };
 
-export const ChatPrimaryFilterOptions = {
+export const ChatKeywordsFilterOptions = {
   none: _('FILTER.NONE'),
   atLeastOneWord: _('FILTER.MINIUM_WORD_ONE'),
   miniumWordTwo: _('FILTER.MINIUM_WORD_TWO'),
@@ -93,7 +93,7 @@ export const ChatPrimaryFilterOptions = {
   startWithFrom: _('FILTER.START_WITH_FROM'),
 };
 
-export const ChatSecondaryFilterOptions = {
+export const ChatprimaryFilterOptions = {
   none: _('FILTER.NONE'),
   host: _('FILTER.HOST'),
   author: _('FILTER.AUTHOR'),
@@ -136,8 +136,8 @@ const DefaultChatState: ChatState = {
   fireworksPlay: false,
   keywords: [],
   chatListOption: 'common',
+  keywordsFilterOption: 'none',
   primaryFilterOption: 'none',
-  secondaryFilterOption: 'none',
   ffEnabled: false,
   autoScrollEnabled: true,
   iframePaused: false,
