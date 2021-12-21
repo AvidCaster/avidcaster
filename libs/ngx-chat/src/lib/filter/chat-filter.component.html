@@ -31,23 +31,23 @@
       </div>
 
       <select
-        name="{{ getSecondaryFilterName(secondaryFilter) | translate }}"
+        name="{{ getPrimaryFilterName(secondaryFilter) | translate }}"
         id="filter-options"
         [(ngModel)]="secondaryFilter"
-        (ngModelChange)="setprimaryFilterOption(secondaryFilter)"
+        (ngModelChange)="setPrimaryFilter(secondaryFilter)"
       >
-        <option *ngFor="let filter of getprimaryFilterOptions()" [value]="filter">
-          {{ getSecondaryFilterName(filter) | translate }}
+        <option *ngFor="let filter of getPrimaryFilter()" [value]="filter">
+          {{ getPrimaryFilterName(filter) | translate }}
         </option>
       </select>
 
       <select
-        name="{{ getPrimaryFilterName(primaryFilter) | translate }}"
+        name="{{ getKeywordsFilterName(primaryFilter) | translate }}"
         id="filter-options"
         [(ngModel)]="primaryFilter"
-        (ngModelChange)="setkeywordsFilterOption(primaryFilter)"
+        (ngModelChange)="setKeywordsFilter(primaryFilter)"
       >
-        <option *ngFor="let filter of getkeywordsFilterOptions()" [value]="filter">{{ getPrimaryFilterName(filter) | translate }}</option>
+        <option *ngFor="let filter of getKeywordsFilter()" [value]="filter">{{ getKeywordsFilterName(filter) | translate }}</option>
       </select>
     </div>
   </div>

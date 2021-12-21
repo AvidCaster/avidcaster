@@ -13,7 +13,7 @@ import { Subject, debounceTime, filter, first, interval, takeUntil } from 'rxjs'
 import {
   ChatKeywordsFilterOptions,
   ChatListFilterOptions,
-  ChatprimaryFilterOptions,
+  ChatPrimaryFilterOptions,
   welcomeChat,
 } from '../chat.default';
 import {
@@ -119,29 +119,29 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   // primary options
-  getkeywordsFilterOptions(): string[] {
+  getKeywordsFilter(): string[] {
     return Object.keys(ChatKeywordsFilterOptions);
   }
 
-  getPrimaryFilterName(filter: string): string {
+  getKeywordsFilterName(filter: string): string {
     return ChatKeywordsFilterOptions[filter];
   }
 
-  setkeywordsFilterOption(filter: ChatMessagePrimaryFilterType) {
+  setKeywordsFilter(filter: ChatMessagePrimaryFilterType) {
     this.primaryFilter = filter;
     this.chatService.setState({ keywordsFilterOption: filter });
   }
 
   // secondary options
-  getprimaryFilterOptions(): string[] {
-    return Object.keys(ChatprimaryFilterOptions);
+  getPrimaryFilter(): string[] {
+    return Object.keys(ChatPrimaryFilterOptions);
   }
 
-  getSecondaryFilterName(filter: string): string {
-    return ChatprimaryFilterOptions[filter];
+  getPrimaryFilterName(filter: string): string {
+    return ChatPrimaryFilterOptions[filter];
   }
 
-  setprimaryFilterOption(filter: ChatMessageSecondaryFilterType) {
+  setPrimaryFilter(filter: ChatMessageSecondaryFilterType) {
     this.secondaryFilter = filter;
     this.chatService.setState({ primaryFilterOption: filter });
   }

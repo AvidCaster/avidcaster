@@ -93,7 +93,7 @@ export const ChatKeywordsFilterOptions = {
   startWithFrom: _('FILTER.START_WITH_FROM'),
 };
 
-export const ChatprimaryFilterOptions = {
+export const ChatPrimaryFilterOptions = {
   none: _('FILTER.NONE'),
   host: _('FILTER.HOST'),
   author: _('FILTER.AUTHOR'),
