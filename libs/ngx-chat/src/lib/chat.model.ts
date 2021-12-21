@@ -96,9 +96,9 @@ export interface ChatState {
   fireworksEnabled: boolean;
   fireworksPlay: boolean;
   keywords: string[];
-  keywordsFilterOption: ChatMessagePrimaryFilterType;
-  primaryFilterOption: ChatMessageSecondaryFilterType;
-  chatListOption: ChatMessageListFilterType;
+  primaryFilter: ChatMessagePrimaryFilterType;
+  keywordsFilter: ChatMessageKeywordsFilterType;
+  listFilter: ChatMessageListFilterType;
   ffEnabled: boolean;
   autoScrollEnabled: boolean;
   iframePaused: boolean;
@@ -117,7 +117,7 @@ export type ChatMessagePrimaryFilterType =
   | 'startsWithA'
   | 'startsWithFrom';
 
-export type ChatMessageSecondaryFilterType =
+export type ChatMessageKeywordsFilterType =
   | 'none'
   | 'host'
   | 'author'

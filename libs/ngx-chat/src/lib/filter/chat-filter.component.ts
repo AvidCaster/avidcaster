@@ -17,9 +17,9 @@ import {
   welcomeChat,
 } from '../chat.default';
 import {
+  ChatMessageKeywordsFilterType,
   ChatMessageListFilterType,
   ChatMessagePrimaryFilterType,
-  ChatMessageSecondaryFilterType,
 } from '../chat.model';
 import { ChatService } from '../chat.service';
 
@@ -35,7 +35,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   private keywordsOb$ = new Subject<string>();
   primaryFilter: ChatMessagePrimaryFilterType = 'none';
-  secondaryFilter: ChatMessageSecondaryFilterType = 'none';
+  keywordsFilter: ChatMessageKeywordsFilterType = 'none';
   listFilter: ChatMessageListFilterType = 'common';
   keywords = '';
   minWords = 0;
@@ -69,9 +69,9 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   subState() {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
-        this.listFilter = state.chatListOption;
-        this.secondaryFilter = state.primaryFilterOption;
-        this.primaryFilter = state.keywordsFilterOption;
+        this.listFilter = state.listFilter;
+        this.primaryFilter = state.primaryFilter;
+        this.keywordsFilter = state.keywordsFilter;
         this.keywords = state.keywords.join(' ');
         this.cdR.markForCheck();
       },
@@ -97,11 +97,11 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   isHighlight() {
-    return this.secondaryFilter === 'highlight';
+    return this.keywordsFilter === 'highlight';
   }
 
-  isFilter() {
-    return this.secondaryFilter !== 'none' && this.secondaryFilter !== 'highlight';
+  isKeywordsFilter() {
+    return this.keywordsFilter !== 'none' && this.keywordsFilter !== 'highlight';
   }
 
   //  list filters
@@ -115,7 +115,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
 
   setListFilterOption(filter: ChatMessageListFilterType) {
     this.listFilter = filter;
-    this.chatService.setState({ chatListOption: filter });
+    this.chatService.setState({ listFilter: filter });
   }
 
   // primary options
@@ -127,9 +127,9 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     return ChatKeywordsFilterOptions[filter];
   }
 
-  setKeywordsFilter(filter: ChatMessagePrimaryFilterType) {
-    this.primaryFilter = filter;
-    this.chatService.setState({ keywordsFilterOption: filter });
+  setKeywordsFilter(filter: ChatMessageKeywordsFilterType) {
+    this.keywordsFilter = filter;
+    this.chatService.setState({ keywordsFilter: filter });
   }
 
   // secondary options
@@ -141,9 +141,9 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     return ChatPrimaryFilterOptions[filter];
   }
 
-  setPrimaryFilter(filter: ChatMessageSecondaryFilterType) {
-    this.secondaryFilter = filter;
-    this.chatService.setState({ primaryFilterOption: filter });
+  setPrimaryFilter(filter: ChatMessagePrimaryFilterType) {
+    this.primaryFilter = filter;
+    this.chatService.setState({ primaryFilter: filter });
   }
 
   toggleAutoScroll() {

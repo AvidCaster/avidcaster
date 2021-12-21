@@ -44,9 +44,9 @@ export class ChatItemComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((state: ChatState) => {
-        this.isMembershipList = state.chatListOption === 'membership';
-        this.isDonationList = state.chatListOption === 'donation';
-        this.isCommonList = state.chatListOption === 'common';
+        this.isMembershipList = state.listFilter === 'membership';
+        this.isDonationList = state.listFilter === 'donation';
+        this.isCommonList = state.listFilter === 'common';
         this.cdR.markForCheck();
       });
   }

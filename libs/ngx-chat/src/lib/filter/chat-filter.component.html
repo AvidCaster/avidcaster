@@ -26,15 +26,15 @@
       <div fxLayout="column" fxLayoutAlign="center" class="chat-filter-icon">
         <mat-icon
           [color]="isHighlight ? 'accent' : 'warn'"
-          [svgIcon]="isHighlight ? 'flashlight' : isFilter() ? 'filter' : 'filter-off'"
+          [svgIcon]="isHighlight ? 'flashlight' : isKeywordsFilter() ? 'filter' : 'filter-off'"
         ></mat-icon>
       </div>
 
       <select
-        name="{{ getPrimaryFilterName(secondaryFilter) | translate }}"
+        name="{{ getPrimaryFilterName(primaryFilter) | translate }}"
         id="filter-options"
-        [(ngModel)]="secondaryFilter"
-        (ngModelChange)="setPrimaryFilter(secondaryFilter)"
+        [(ngModel)]="primaryFilter"
+        (ngModelChange)="setPrimaryFilter(primaryFilter)"
       >
         <option *ngFor="let filter of getPrimaryFilter()" [value]="filter">
           {{ getPrimaryFilterName(filter) | translate }}
@@ -42,10 +42,10 @@
       </select>
 
       <select
-        name="{{ getKeywordsFilterName(primaryFilter) | translate }}"
+        name="{{ getKeywordsFilterName(keywordsFilter) | translate }}"
         id="filter-options"
-        [(ngModel)]="primaryFilter"
-        (ngModelChange)="setKeywordsFilter(primaryFilter)"
+        [(ngModel)]="keywordsFilter"
+        (ngModelChange)="setKeywordsFilter(keywordsFilter)"
       >
         <option *ngFor="let filter of getKeywordsFilter()" [value]="filter">{{ getKeywordsFilterName(filter) | translate }}</option>
       </select>

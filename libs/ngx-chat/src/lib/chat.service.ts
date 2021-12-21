@@ -37,7 +37,7 @@ import {
 } from './chat.default';
 import { ChatMessageItem, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
-import { primaryChatFilter, secondaryChatFilter, storageBroadcast } from './util/chat.util';
+import { searchByKeywords, searchByPrimaryFilter, storageBroadcast } from './util/chat.util';
 
 @Injectable()
 export class ChatService implements OnDestroy {
@@ -199,12 +199,12 @@ export class ChatService implements OnDestroy {
 
   private subToTables() {
     this.chatTable$ = this.state$.pipe(
-      switchMap((state) => this.database.chatLiveQuery(state.chatListOption)),
+      switchMap((state) => this.database.chatLiveQuery(state.listFilter)),
       map((chats: ChatMessageItem[]) =>
-        chats?.map((chat) => tryGet(() => primaryChatFilter(chat, this.state)))
+        chats?.map((chat) => tryGet(() => searchByPrimaryFilter(chat, this.state)))
       ),
       map((chats: ChatMessageItem[]) =>
-        chats?.map((chat) => tryGet(() => secondaryChatFilter(chat, this.state)))
+        chats?.map((chat) => tryGet(() => searchByKeywords(chat, this.state)))
       ),
       map((chats: ChatMessageItem[]) => chats?.filter((chat) => chat?.id)),
       filter((chats: ChatMessageItem[]) => !!chats?.length),

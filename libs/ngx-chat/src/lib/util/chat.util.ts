@@ -22,7 +22,7 @@ export const includesEmoji = (str: string): boolean => {
   return EmojiRegexExp.test(str);
 };
 
-export const primaryChatFilter = (
+export const searchByPrimaryFilter = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
@@ -30,11 +30,11 @@ export const primaryChatFilter = (
     return undefined;
   }
 
-  if (!state?.keywordsFilterOption) {
+  if (!state?.primaryFilter) {
     return chat;
   }
 
-  switch (state.keywordsFilterOption) {
+  switch (state.primaryFilter) {
     case 'atLeastOneWord': {
       return chat?.message?.split(' ')?.length >= 1 ? chat : undefined;
     }
@@ -68,7 +68,7 @@ export const primaryChatFilter = (
   return chat;
 };
 
-export const secondaryChatFilter = (
+export const searchByKeywords = (
   chat: ChatMessageItem,
   state: DeepReadonly<ChatState>
 ): ChatMessageItem | undefined => {
@@ -80,11 +80,11 @@ export const secondaryChatFilter = (
     return chat;
   }
 
-  if (!state?.primaryFilterOption) {
+  if (!state?.keywordsFilter) {
     return chat;
   }
 
-  switch (state.primaryFilterOption) {
+  switch (state.keywordsFilter) {
     case 'host': {
       return state.keywords?.some((word) => chat?.host?.toLowerCase() === word.toLowerCase())
         ? chat
