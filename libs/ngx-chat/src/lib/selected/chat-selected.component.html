@@ -12,7 +12,7 @@
         height="160"
         src="{{ chat?.avatarUrl || getFallbackImage(chat) }}"
         (error)="onImageError($event, chat?.host)"
-        [class.blur-effect-3]="chatService.state.demoEnabled"
+        [class.blur-effect-4]="chatService.state.demoEnabled"
       />
     </div>
     <div class="chat-host-image" *ngIf="getHostImage(chat?.host) as hostImageSrc">
