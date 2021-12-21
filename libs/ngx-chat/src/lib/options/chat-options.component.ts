@@ -23,6 +23,7 @@ export class ChatOptionsComponent implements OnInit {
   isFireworksEnabled = false;
   defaultChatVerticalPosition = CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE;
   defaultChatHorizontalPosition = CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE;
+  isDemoMode = false;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -48,6 +49,7 @@ export class ChatOptionsComponent implements OnInit {
           this.isDarkTheme = state.isDarkTheme;
           this.isFireworksEnabled = state.fireworksEnabled;
           this.isAudioEnabled = state.audioEnabled;
+          this.isDemoMode = state.demoEnabled;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
@@ -86,6 +88,10 @@ export class ChatOptionsComponent implements OnInit {
 
   handleChatHorizontalPositionInput(value: number) {
     this.chatService.setChatHorizontalPosition(value);
+  }
+
+  toggleDemoMode(value: boolean) {
+    this.chatService.setState({ demoEnabled: value });
   }
 
   handleChatHorizontalPositionChange(value: number) {

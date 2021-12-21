@@ -11,6 +11,11 @@
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
+    <span fxFlex>{{ 'COMMON.DEMO_MODE' | translate }}</span>
+    <mat-slide-toggle color="primary" [(ngModel)]="isDemoMode" (change)="toggleDemoMode($event.checked)"></mat-slide-toggle>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
     <span fxFlex>{{ 'COMMON.DARK' | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isDarkTheme" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
   </div>

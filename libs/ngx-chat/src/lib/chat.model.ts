@@ -105,6 +105,7 @@ export interface ChatState {
   isDarkTheme: boolean;
   chatVerticalPosition: number;
   chatHorizontalPosition: number;
+  demoEnabled: boolean;
 }
 
 export enum ChatMessagePrimaryFilterType {

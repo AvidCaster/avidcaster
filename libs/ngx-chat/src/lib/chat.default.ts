@@ -152,6 +152,7 @@ const DefaultChatState: ChatState = {
   isDarkTheme: false,
   chatVerticalPosition: CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   chatHorizontalPosition: CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
+  demoEnabled: false,
 };
 
 export const defaultChatState = (): ChatState => {
