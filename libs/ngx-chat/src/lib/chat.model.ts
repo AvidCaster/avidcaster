@@ -108,23 +108,21 @@ export interface ChatState {
   demoEnabled: boolean;
 }
 
-export enum ChatMessagePrimaryFilterType {
-  None = 'none',
-  MiniumWordOne = 'atLeastOneWord',
-  MiniumWordTwo = 'atLeastTwoWords',
-  MiniumWordThree = 'atLeastThreeWords',
-  StartWithQ = 'startWithQ',
-  StartWithA = 'startWithA',
-  StartWithFrom = 'startWithFrom',
-}
+export type ChatMessagePrimaryFilterType =
+  | 'none'
+  | 'atLeastOneWord'
+  | 'atLeastTwoWords'
+  | 'atLeastThreeWords'
+  | 'startsWithQ'
+  | 'startsWithA'
+  | 'startsWithFrom';
 
-export enum ChatMessageSecondaryFilterType {
-  None = 'none',
-  Host = 'host',
-  Author = 'author',
-  FilterBy = 'filterBy',
-  FilterOut = 'filterOut',
-  Highlight = 'highlight',
-}
+export type ChatMessageSecondaryFilterType =
+  | 'none'
+  | 'host'
+  | 'author'
+  | 'filterBy'
+  | 'filterOut'
+  | 'highlight';
 
 export type ChatMessageListFilterType = 'common' | 'donation' | 'membership';

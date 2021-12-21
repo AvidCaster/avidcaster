@@ -9,14 +9,7 @@
 import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { cloneDeep as ldDeepClone } from 'lodash-es';
 
-import {
-  ChatConfig,
-  ChatMessageItem,
-  ChatMessagePrimaryFilterType,
-  ChatMessageSecondaryFilterType,
-  ChatMessageType,
-  ChatState,
-} from './chat.model';
+import { ChatConfig, ChatMessageItem, ChatMessageType, ChatState } from './chat.model';
 
 /**
  * Default configuration - Layout module
@@ -91,22 +84,22 @@ export const welcomeChat = (): ChatMessageItem => {
 };
 
 export const ChatPrimaryFilterOptions = {
-  [ChatMessagePrimaryFilterType.None]: _('FILTER.NONE'),
-  [ChatMessagePrimaryFilterType.MiniumWordOne]: _('FILTER.MINIUM_WORD_ONE'),
-  [ChatMessagePrimaryFilterType.MiniumWordTwo]: _('FILTER.MINIUM_WORD_TWO'),
-  [ChatMessagePrimaryFilterType.MiniumWordThree]: _('FILTER.MINIUM_WORD_THREE'),
-  [ChatMessagePrimaryFilterType.StartWithQ]: _('FILTER.START_WITH_Q'),
-  [ChatMessagePrimaryFilterType.StartWithA]: _('FILTER.START_WITH_A'),
-  [ChatMessagePrimaryFilterType.StartWithFrom]: _('FILTER.START_WITH_FROM'),
+  none: _('FILTER.NONE'),
+  atLeastOneWord: _('FILTER.MINIUM_WORD_ONE'),
+  miniumWordTwo: _('FILTER.MINIUM_WORD_TWO'),
+  miniumWordThree: _('FILTER.MINIUM_WORD_THREE'),
+  startWithQ: _('FILTER.START_WITH_Q'),
+  startWithA: _('FILTER.START_WITH_A'),
+  startWithFrom: _('FILTER.START_WITH_FROM'),
 };
 
 export const ChatSecondaryFilterOptions = {
-  [ChatMessageSecondaryFilterType.None]: _('FILTER.NONE'),
-  [ChatMessageSecondaryFilterType.Host]: _('FILTER.HOST'),
-  [ChatMessageSecondaryFilterType.Author]: _('FILTER.AUTHOR'),
-  [ChatMessageSecondaryFilterType.FilterBy]: _('FILTER.BY'),
-  [ChatMessageSecondaryFilterType.FilterOut]: _('FILTER.OUT'),
-  [ChatMessageSecondaryFilterType.Highlight]: _('FILTER.HIGHLIGHT'),
+  none: _('FILTER.NONE'),
+  host: _('FILTER.HOST'),
+  author: _('FILTER.AUTHOR'),
+  filterBy: _('FILTER.BY'),
+  filterOut: _('FILTER.OUT'),
+  highlight: _('FILTER.HIGHLIGHT'),
 };
 
 export const ChatListFilterOptions = {
@@ -143,8 +136,8 @@ const DefaultChatState: ChatState = {
   fireworksPlay: false,
   keywords: [],
   chatListOption: 'common',
-  primaryFilterOption: ChatMessagePrimaryFilterType.None,
-  secondaryFilterOption: ChatMessageSecondaryFilterType.None,
+  primaryFilterOption: 'none',
+  secondaryFilterOption: 'none',
   ffEnabled: false,
   autoScrollEnabled: true,
   iframePaused: false,

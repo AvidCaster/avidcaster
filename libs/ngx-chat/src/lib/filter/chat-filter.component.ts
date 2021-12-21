@@ -34,8 +34,8 @@ import { ChatService } from '../chat.service';
 export class ChatFilterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   private keywordsOb$ = new Subject<string>();
-  primaryFilter = ChatMessagePrimaryFilterType.None;
-  secondaryFilter = ChatMessageSecondaryFilterType.None;
+  primaryFilter: ChatMessagePrimaryFilterType = 'none';
+  secondaryFilter: ChatMessageSecondaryFilterType = 'none';
   listFilter: ChatMessageListFilterType = 'common';
   keywords = '';
   minWords = 0;
@@ -97,27 +97,20 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   isHighlight() {
-    const isHighlight =
-      ChatMessageSecondaryFilterType[this.secondaryFilter] ===
-      ChatMessageSecondaryFilterType.Highlight;
-    return isHighlight;
+    return this.secondaryFilter === 'highlight';
   }
 
   isFilter() {
-    const isFilter =
-      ChatMessageSecondaryFilterType[this.secondaryFilter] !==
-        ChatMessageSecondaryFilterType.Highlight &&
-      ChatMessageSecondaryFilterType[this.secondaryFilter] !== ChatMessageSecondaryFilterType.None;
-    return isFilter;
+    return this.secondaryFilter !== 'none' && this.secondaryFilter !== 'highlight';
   }
 
+  //  list filters
   getListFilterOptions(): string[] {
     return Object.keys(ChatListFilterOptions);
   }
 
   getListFilterName(filter: string): string {
-    const name = ChatListFilterOptions[filter];
-    return name;
+    return ChatListFilterOptions[filter];
   }
 
   setListFilterOption(filter: ChatMessageListFilterType) {
@@ -125,14 +118,13 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     this.chatService.setState({ chatListOption: filter });
   }
 
+  // primary options
   getPrimaryFilterOptions(): string[] {
-    return Object.keys(ChatMessagePrimaryFilterType);
+    return Object.keys(ChatPrimaryFilterOptions);
   }
 
   getPrimaryFilterName(filter: string): string {
-    let name = ChatMessagePrimaryFilterType[filter];
-    name = ChatPrimaryFilterOptions[name];
-    return name;
+    return ChatPrimaryFilterOptions[filter];
   }
 
   setPrimaryFilterOption(filter: ChatMessagePrimaryFilterType) {
@@ -140,14 +132,13 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     this.chatService.setState({ primaryFilterOption: filter });
   }
 
+  // secondary options
   getSecondaryFilterOptions(): string[] {
-    return Object.keys(ChatMessageSecondaryFilterType);
+    return Object.keys(ChatSecondaryFilterOptions);
   }
 
   getSecondaryFilterName(filter: string): string {
-    let name = ChatMessageSecondaryFilterType[filter];
-    name = ChatSecondaryFilterOptions[name];
-    return name;
+    return ChatSecondaryFilterOptions[filter];
   }
 
   setSecondaryFilterOption(filter: ChatMessageSecondaryFilterType) {
