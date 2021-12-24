@@ -24,16 +24,6 @@ The following image is the control panel used by the admin/owner of the YouTube 
 <img src="./assets/images/howto//OverlayAdmin.png" alt="Admin Overlay" style="margin: 0 auto; width:100%;"/>
 </p>
 
-# `Features`
-
-### `Admin - Chat Overlay Controller`
-
-The following image is the control panel and its details
-
-<p align="center">
-<img src="./assets/images/howto/OverlayAdminDetails.png" alt="Admin Overlay Details" style="margin: 0 auto; width:100%;"/>
-</p>
-
 ### `Admin Features`
 
 - Direction
