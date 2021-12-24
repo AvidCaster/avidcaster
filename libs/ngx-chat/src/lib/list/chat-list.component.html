@@ -1,16 +1,33 @@
-<div id="chat-list" *ngIf="!chatService.state.ffEnabled" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
-  <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index; let last = last" class="chat-item">
-    <fullerstack-chat-item
-      *ngIf="chat?.author && (chat?.html || chat?.message)"
-      [class.chat-highlighted]="chat?.highlighted"
-      class="chat-item"
-      [chat]="chat"
-      [last]="last"
-    ></fullerstack-chat-item>
+<div *ngLet="chatService.chatTable$ | async as chatList">
+  <div id="chat-list" *ngIf="!chatService.state.ffEnabled" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+    <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index; let last = last" class="chat-item">
+      <fullerstack-chat-item
+        *ngIf="chat?.author && (chat?.html || chat?.message)"
+        [class.chat-highlighted]="chat?.highlighted"
+        class="chat-item"
+        [chat]="chat"
+        [last]="last"
+      ></fullerstack-chat-item>
+    </div>
   </div>
-</div>
-<div id="chat-list" fxLayout="column" fxLayoutAlign="center" *ngIf="chatService.state.ffEnabled">
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-icon svgIcon="rabbit"></mat-icon>
+  <div
+    id="chat-list-fast"
+    fxLayout="column"
+    fxLayoutGap="50px"
+    *ngIf="chatService.state.ffEnabled && chatList?.length"
+    [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'"
+  >
+    <div class="chat-item" *ngLet="chatList[0] as chat">
+      <fullerstack-chat-item
+        *ngIf="chat?.author && (chat?.html || chat?.message)"
+        [class.chat-highlighted]="chat?.highlighted"
+        class="chat-item"
+        [chat]="chat"
+      ></fullerstack-chat-item>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="center">
+      <mat-icon svgIcon="rabbit"></mat-icon>
+    </div>
   </div>
 </div>

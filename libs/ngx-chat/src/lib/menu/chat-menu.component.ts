@@ -43,7 +43,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chat) => {
         this.chat = chat;
-        this.cdR.markForCheck();
+        // this.cdR.markForCheck();
       },
     });
 
