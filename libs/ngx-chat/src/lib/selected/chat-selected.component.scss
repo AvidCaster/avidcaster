@@ -35,10 +35,16 @@
   margin-left: 106px;
 }
 
-.chat-selected-author-img img {
-  background: #ffb300;
+.chat-selected-author-img {
+  background: #222222;
   border-radius: 50%;
   border: 5px solid #ffb300;
+}
+
+.chat-selected-author-img img {
+  border-radius: 50%;
+  border: 5px solid #222222;
+  margin-top: 1px;
 }
 
 @keyframes play-rotate {
