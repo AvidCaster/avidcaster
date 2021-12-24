@@ -216,8 +216,10 @@ export class ChatService implements OnDestroy {
   }
 
   chatSelected(chat: ChatMessageItem, clicked = false) {
-    if (chat?.id && (clicked || this.state.ffEnabled)) {
-      this.chatSelectedOb$.next(chat);
+    if (chat?.id) {
+      if (clicked || this.state.ffEnabled) {
+        this.chatSelectedOb$.next(chat);
+      }
     }
   }
 
