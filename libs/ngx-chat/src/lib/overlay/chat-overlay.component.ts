@@ -45,7 +45,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     this.subSelectedChat();
     this.subState();
     this.subScrollEvent();
-    this.chatService.uix.addClassToBody('chat-overlay');
+    this.addAttrStyles();
   }
 
   private subState(): void {
@@ -110,10 +110,17 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
       });
   }
 
+  addAttrStyles(): void {
+    this.chatService.uix.addClassToBody('chat-overlay');
+  }
+
+  removeAttrStyles(): void {
+    this.chatService.uix.removeClassFromBody('chat-overlay');
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.chatService.uix.removeClassFromBody('chat-overlay');
-    this.chatService.uix.removeAttrFromBody('style');
+    this.removeAttrStyles();
   }
 }

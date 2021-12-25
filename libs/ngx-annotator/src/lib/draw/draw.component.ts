@@ -54,9 +54,7 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.redoSub();
     this.stateSub();
     this.saveSub();
-    this.uix.preventOnTouchMove();
-
-    this.uix.addClassToBody('annotation-draw');
+    this.addAttrStyles();
   }
 
   private trashSub() {
@@ -226,10 +224,17 @@ export class DrawComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  addAttrStyles(): void {
+    this.uix.addClassToBody('annotation-draw');
+  }
+
+  removeAttrStyles(): void {
+    this.uix.removeClassFromBody('annotation-draw');
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-    this.uix.removeClassFromBody('annotation-draw');
-    this.uix.removeAttrFromBody('style');
+    this.removeAttrStyles();
   }
 }
