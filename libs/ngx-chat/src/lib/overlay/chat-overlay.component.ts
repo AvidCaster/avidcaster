@@ -6,9 +6,10 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, filter, fromEvent, map, takeUntil } from 'rxjs';
 
 import { CHAT_STORAGE_OVERLAY_REQUEST_KEY } from '../chat.default';
 import { ChatService } from '../chat.service';
@@ -20,6 +21,7 @@ import { ChatService } from '../chat.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatOverlayComponent implements OnInit, OnDestroy {
+  @ViewChild('scrollableList', { static: true }) scrollableList: ElementRef;
   private onStorageOb$: Observable<Event>;
   private destroy$ = new Subject<boolean>();
   leftPosition = '0';
@@ -42,10 +44,11 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     this.subStorage();
     this.subSelectedChat();
     this.subState();
+    this.subScrollEvent();
     this.chatService.uix.addClassToBody('chat-overlay');
   }
 
-  subState(): void {
+  private subState(): void {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         if (state.isLtR) {
@@ -60,7 +63,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     });
   }
 
-  subSelectedChat(): void {
+  private subSelectedChat(): void {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.cdR.markForCheck();
@@ -80,6 +83,25 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
         },
       });
     });
+  }
+
+  private subScrollEvent(): void {
+    fromEvent(this.scrollableList.nativeElement, 'scroll')
+      .pipe(
+        map(() => this.scrollableList.nativeElement.scrollTop > 0),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          const isScrolling = this.scrollableList.nativeElement.scrollTop > 0;
+          if (isScrolling && this.chatService.state.autoScrollEnabled) {
+            this.chatService.setState({ autoScrollEnabled: false });
+          } else if (!isScrolling && !this.chatService.state.autoScrollEnabled) {
+            this.chatService.setState({ autoScrollEnabled: true });
+          }
+        },
+      });
   }
 
   ngOnDestroy(): void {
