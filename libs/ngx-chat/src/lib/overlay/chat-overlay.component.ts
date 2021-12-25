@@ -112,10 +112,16 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
 
   addAttrStyles(): void {
     this.chatService.uix.addClassToBody('chat-overlay');
+    const drawerEl = this.chatService.uix.window.document.querySelector('.mat-drawer-content');
+    // set hidden overflow on drawer
+    this.chatService.uix.addClass(drawerEl as HTMLElement, 'no-scroll');
   }
 
   removeAttrStyles(): void {
     this.chatService.uix.removeClassFromBody('chat-overlay');
+    const drawerEl = this.chatService.uix.window.document.querySelector('.mat-drawer-content');
+    // unset hidden overflow on drawer
+    this.chatService.uix.removeClass(drawerEl as HTMLElement, 'no-scroll');
   }
 
   ngOnDestroy(): void {
