@@ -44,8 +44,10 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
+        if (this.chat?.id !== chatItem?.id) {
+          this.slideInState++;
+        }
         this.chat = chatItem;
-        this.slideInState++;
         this.cdR.markForCheck();
       },
     });
