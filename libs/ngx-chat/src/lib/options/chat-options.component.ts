@@ -64,7 +64,6 @@ export class ChatOptionsComponent implements OnInit {
     this.isFireworksEnabled = isFireworksEnabled;
     this.chatService.setState({
       fireworksEnabled: isFireworksEnabled,
-      fireworksPlay: isFireworksEnabled ? false : this.chatService.state.fireworksPlay,
     });
   }
 

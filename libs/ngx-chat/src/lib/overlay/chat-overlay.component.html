@@ -23,6 +23,6 @@
     <fullerstack-chat-selected></fullerstack-chat-selected>
   </div>
   <div id="chat-fireworks" [class.chat-invisible]="!chatService.state.fireworksEnabled">
-    <fullerstack-fireworks [action]="chatService.state.fireworksPlay"></fullerstack-fireworks>
+    <fullerstack-fireworks [action]="chatService.isFireworksPlaying"></fullerstack-fireworks>
   </div>
 </div>

@@ -11,21 +11,25 @@
       <mat-icon [class.chat-icon-dim]="!chat?.author" [svgIcon]="!chat?.author ? 'delete-off' : 'delete-outline'"></mat-icon>
     </button>
 
-    <button mat-mini-fab [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'" (click)="toggleFireworksPlay()">
+    <button mat-mini-fab [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'" (click)="chatService.setFireworksPlayStatus()">
       <mat-icon
         [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
         matTooltipPosition="before"
-        matTooltip="{{ (chatService?.state?.fireworksEnabled ? (fireworksPlay ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate }}"
-        [svgIcon]="!chatService?.state?.fireworksEnabled || fireworksPlay ? 'firework-off' : 'firework'"
+        matTooltip="{{
+          (chatService?.state?.fireworksEnabled ? (chatService.isFireworksPlaying ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate
+        }}"
+        [svgIcon]="!chatService?.state?.fireworksEnabled || chatService.isFireworksPlaying ? 'firework-off' : 'firework'"
       ></mat-icon>
     </button>
 
-    <button mat-mini-fab [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'" (click)="toggleAudioPlay()">
+    <button mat-mini-fab [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'" (click)="chatService.setAudioPlayStatus()">
       <mat-icon
         [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
         matTooltipPosition="before"
-        matTooltip="{{ (chatService?.state?.audioEnabled ? (audioPlay ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate }}"
-        [svgIcon]="!chatService?.state?.audioEnabled || audioPlay ? 'volume-off' : 'volume-high'"
+        matTooltip="{{
+          (chatService?.state?.audioEnabled ? (chatService.isAudioPlaying ? 'CHEERS.STOP' : 'CHEERS.START') : '') | translate
+        }}"
+        [svgIcon]="!chatService?.state?.audioEnabled || chatService.isAudioPlaying ? 'volume-off' : 'volume-high'"
       ></mat-icon>
     </button>
 

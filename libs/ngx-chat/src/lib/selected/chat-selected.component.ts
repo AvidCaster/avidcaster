@@ -99,13 +99,16 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     }
   }
 
-  getHoraryImage(chat: ChatMessageItem): string {
-    if (chat?.donation) {
-      return `./assets/images/misc/spin-orange-2x.png`;
-    } else if (chat?.membership) {
-      return `./assets/images/misc/spin-green-2x.png`;
-    } else if (this.chatService.state.fireworksEnabled && this.chatService.state.fireworksPlay) {
-      return `./assets/images/misc/spin-orange-2x.png`;
+  getFireworksImage(chat: ChatMessageItem): string {
+    switch (chat?.messageType) {
+      case 'donation':
+        return './assets/images/misc/spin-orange-2x.png';
+      case 'membership':
+        return './assets/images/misc/spin-green-2x.png';
+    }
+
+    if (this.chatService.isFireworksPlaying) {
+      return './assets/images/misc/spin-orange-2x.png';
     }
 
     return '';

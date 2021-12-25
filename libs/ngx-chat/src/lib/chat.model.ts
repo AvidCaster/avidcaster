@@ -92,7 +92,6 @@ export interface ChatState {
   isLtR: boolean;
   audioEnabled: boolean;
   fireworksEnabled: boolean;
-  fireworksPlay: boolean;
   keywords: string[];
   primaryFilter: ChatMessagePrimaryFilterType;
   keywordsFilter: ChatMessageKeywordsFilterType;
