@@ -1,4 +1,4 @@
-<div *ngLet="chatService.chatTable$ | async as chatList">
+<div *ngLet="chatService.chatTable$ | async as chatList" fxLayout="column" fxLayoutAlign="center">
   <div id="chat-list" *ngIf="!chatService.state.ffEnabled" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
     <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index; let last = last" class="chat-item">
       <fullerstack-chat-item
@@ -10,6 +10,7 @@
       ></fullerstack-chat-item>
     </div>
   </div>
+
   <div
     id="chat-list-fast"
     fxLayout="column"
@@ -26,7 +27,7 @@
       ></fullerstack-chat-item>
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="center">
+    <div class="chat-rabbit" fxLayout="row" fxLayoutAlign="center">
       <mat-icon svgIcon="rabbit"></mat-icon>
     </div>
   </div>

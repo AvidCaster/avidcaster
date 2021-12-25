@@ -49,18 +49,24 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   }
 
   private subState(): void {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (state) => {
-        if (state.isLtR) {
-          this.leftPosition = '0';
-          this.rightPosition = 'unset';
-        } else {
-          this.leftPosition = 'unset';
-          this.rightPosition = '0';
-        }
-        this.cdR.markForCheck();
-      },
-    });
+    this.chatService.state$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state) => {
+          if (state.isLtR) {
+            this.leftPosition = '0';
+            this.rightPosition = 'unset';
+          } else {
+            this.leftPosition = 'unset';
+            this.rightPosition = '0';
+          }
+
+          this.cdR.markForCheck();
+        },
+      });
   }
 
   private subSelectedChat(): void {

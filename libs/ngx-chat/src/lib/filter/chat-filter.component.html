@@ -51,28 +51,19 @@
       </select>
     </div>
   </div>
-  <div fxFlex></div>
-  <div fxLayout="row" fxLayoutGap="10px">
+  <div fxFlex>
     <button
-      matTooltipPosition="before"
-      matTooltip="{{ 'CHAT.PAUSE_SCROLL' | translate }}"
-      mat-mini-fab
-      color="accent"
-      [disabled]="!chatService.state.autoScrollEnabled"
-      (click)="toggleAutoScroll()"
-    >
-      <mat-icon svgIcon="pause"></mat-icon>
-    </button>
-    <button
+      *ngIf="!chatService.state.autoScrollEnabled"
+      class="chat-auto-scroll"
       matTooltipPosition="before"
       matTooltip="{{ 'CHAT.PLAY_SCROLL' | translate }}"
       mat-mini-fab
       color="accent"
-      [disabled]="chatService.state.autoScrollEnabled"
       (click)="toggleAutoScroll()"
       [@wiggleIt]="resumeIconState"
     >
-      <mat-icon svgIcon="arrow-down-bold"></mat-icon>
+      <mat-icon svgIcon="arrow-up-bold"></mat-icon>
     </button>
   </div>
+  <div fxLayout="row" fxLayoutGap="10px"></div>
 </div>

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ChatMessageItem } from '../chat.model';
+import { ChatMessageItem, ChatState } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -19,6 +19,7 @@ import { ChatService } from '../chat.service';
 })
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+  state: ChatState;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -36,7 +37,11 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   subState() {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
+      next: (state) => {
+        if (!this.state?.autoScrollEnabled && state.autoScrollEnabled) {
+          this.scrollToTop();
+        }
+        this.state = state;
         this.cdR.detectChanges();
       },
     });

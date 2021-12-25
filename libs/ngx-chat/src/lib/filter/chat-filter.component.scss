@@ -4,3 +4,10 @@
   padding-left: 20px;
   padding-right: 20px;
 }
+
+.chat-auto-scroll {
+  position: absolute;
+  left: 50%;
+  z-index: 2;
+  margin-top: -75px;
+}
