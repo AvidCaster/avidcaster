@@ -5,7 +5,7 @@
       [class.yt-cursor-default]="!chat?.author"
       matTooltipPosition="before"
       matTooltip="{{ 'CHAT.CLEAR' | translate }}"
-      color="accent"
+      color="warn"
       (click)="clearMessage()"
     >
       <mat-icon [class.chat-icon-dim]="!chat?.author" [svgIcon]="!chat?.author ? 'delete-off' : 'delete-outline'"></mat-icon>
