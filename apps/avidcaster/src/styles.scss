@@ -21,6 +21,7 @@
 @import 'libs/agx-assets/src/lib/styles/utils/links';
 @import 'libs/agx-assets/src/lib/styles/utils/forms';
 @import 'libs/agx-assets/src/lib/styles/utils/text';
+@import 'libs/agx-assets/src/lib/styles/utils/touch';
 @import 'libs/agx-assets/src/lib/styles/utils/scroll';
 @import 'libs/agx-assets/src/lib/styles/utils/misc';
 @import 'libs/agx-assets/src/lib/styles/utils/lists';
@@ -51,7 +52,7 @@ body {
 }
 
 .annotation-draw {
-  touch-action: manipulation;
+  touch-action: none;
 }
 
 .menu-background-black .mat-menu-panel {
