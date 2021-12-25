@@ -66,6 +66,8 @@
   "COMMON.ACTIONS": "Actions",
   "COMMON.ACTIVE_SESSIONS_RESET": "Reset all active sessions",
   "COMMON.ADMIN": "Admin",
+  "COMMON.PAUSE": "Pause",
+  "COMMON.RESUME": "Resume",
   "COMMON.ALERT": "Alert",
   "COMMON.ANALYZE": "Analyze",
   "COMMON.ANNOTATE": "Annotate",
