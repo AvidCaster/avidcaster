@@ -35,7 +35,7 @@ export enum ChatUpstreamAction {
   observe = 'observe',
 }
 
-export enum ChatMessageDirection {
+export enum ChatScreenDirection {
   NorthBound = 'avidcaster-chat-north-bound',
   SouthBound = 'avidcaster-chat-south-bound',
 }
@@ -80,14 +80,12 @@ export interface ChatMessageData {
 }
 
 export interface ChatMessageEvent {
-  type: ChatMessageDirection;
+  type: ChatScreenDirection;
   host: ChatHosts;
   streamId: string;
   action: ChatUpstreamAction | ChatDownstreamAction;
   payload: ChatMessageData;
 }
-
-export enum ChatMessageFilter {}
 
 export interface ChatState {
   signature: string;
