@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
-import { Subject, takeUntil, throttleTime } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 import {
   CHAT_DEFAULT_AVATAR,
@@ -42,12 +42,10 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.chatService.chatSelected$.pipe(throttleTime(100), takeUntil(this.destroy$)).subscribe({
+    this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (chatItem: ChatMessageItem) => {
         this.chat = chatItem;
-        if (!this.chatService.state.ffEnabled) {
-          this.slideInState++;
-        }
+        this.slideInState++;
         this.cdR.markForCheck();
       },
     });
@@ -101,13 +99,16 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
     }
   }
 
-  getHoraryImage(chat: ChatMessageItem): string {
-    if (chat?.donation) {
-      return `./assets/images/misc/spin-orange-2x.png`;
-    } else if (chat?.membership) {
-      return `./assets/images/misc/spin-green-2x.png`;
-    } else if (this.chatService.state.fireworksEnabled && this.chatService.state.fireworksPlay) {
-      return `./assets/images/misc/spin-orange-2x.png`;
+  getFireworksImage(chat: ChatMessageItem): string {
+    switch (chat?.messageType) {
+      case 'donation':
+        return './assets/images/misc/spin-orange-2x.png';
+      case 'membership':
+        return './assets/images/misc/spin-green-2x.png';
+    }
+
+    if (this.chatService.isFireworksPlaying) {
+      return './assets/images/misc/spin-orange-2x.png';
     }
 
     return '';

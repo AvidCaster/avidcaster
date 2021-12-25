@@ -51,28 +51,50 @@
       </select>
     </div>
   </div>
-  <div fxFlex></div>
-  <div fxLayout="row" fxLayoutGap="10px">
+  <div fxFlex>
     <button
-      matTooltipPosition="before"
-      matTooltip="{{ 'CHAT.PAUSE_SCROLL' | translate }}"
-      mat-mini-fab
-      color="accent"
-      [disabled]="!chatService.state.autoScrollEnabled"
-      (click)="toggleAutoScroll()"
-    >
-      <mat-icon svgIcon="pause"></mat-icon>
-    </button>
-    <button
+      *ngIf="!chatService.state.autoScrollEnabled"
+      class="chat-auto-scroll"
       matTooltipPosition="before"
       matTooltip="{{ 'CHAT.PLAY_SCROLL' | translate }}"
       mat-mini-fab
       color="accent"
-      [disabled]="chatService.state.autoScrollEnabled"
       (click)="toggleAutoScroll()"
       [@wiggleIt]="resumeIconState"
     >
-      <mat-icon svgIcon="arrow-down-bold"></mat-icon>
+      <mat-icon svgIcon="arrow-up-bold"></mat-icon>
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <button
+      color="accent"
+      mat-mini-fab
+      matTooltipPosition="before"
+      matTooltip="{{ 'COMMON.TOGGLE_THEME' | translate }}"
+      [matMenuTriggerFor]="chatOptions"
+    >
+      <mat-icon svgIcon="cog"></mat-icon>
+    </button>
+
+    <mat-menu #chatOptions="matMenu">
+      <fullerstack-chat-options></fullerstack-chat-options>
+    </mat-menu>
+
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
+      mat-mini-fab
+      (click)="toggleFullscreen()"
+    >
+      <mat-icon [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
+    </button>
+    <button
+      matTooltipPosition="after"
+      matTooltip="{{ 'COMMON.HOME' | translate }}"
+      mat-mini-fab
+      (click)="chatService.layout.auth.goTo('/')"
+    >
+      <mat-icon svgIcon="home"></mat-icon>
     </button>
   </div>
 </div>

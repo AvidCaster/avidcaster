@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
+import { Subject, filter, takeUntil } from 'rxjs';
 
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
@@ -27,8 +27,6 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
-  audioPlay = false;
-  fireworksPlay = false;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -39,13 +37,8 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subState();
-
-    this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (chat) => {
-        this.chat = chat;
-        this.cdR.markForCheck();
-      },
-    });
+    this.subToggleAudioPlay();
+    this.subSelectedChat();
 
     this.logger.debug('ChatMenuComponent initialized');
   }
@@ -53,49 +46,44 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   subState() {
     this.chatService.state$
       .pipe(
-        debounceTime(1),
         filter((state) => !!state),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: (state) => {
-          this.fireworksPlay = state.fireworksPlay;
+        next: () => {
           this.cdR.markForCheck();
         },
       });
+  }
+
+  subSelectedChat() {
+    this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (chat) => {
+        this.chat = chat;
+        this.cdR.markForCheck();
+      },
+    });
   }
 
   clearMessage() {
     this.chatService.clearMessage();
   }
 
-  toggleFireworksPlay() {
-    this.fireworksPlay = !this.fireworksPlay;
-    this.chatService.setState({ fireworksPlay: !this.chatService.state.fireworksPlay });
-  }
-
-  toggleAudioPlay() {
-    this.audioPlay = !this.audioPlay;
-    if (this.chatService.state.audioEnabled && this.audioPlay) {
-      this.$player.currentTime = 0;
-      this.$player.play();
-    } else {
-      this.$player.pause();
-    }
+  subToggleAudioPlay() {
+    this.chatService.audioPlaying$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (play) => {
+        if (play) {
+          this.$player.currentTime = 0;
+          this.$player.play();
+        } else {
+          this.$player.pause();
+        }
+      },
+    });
   }
 
   toggleFastForward() {
     this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
-  }
-
-  toggleFullscreen() {
-    this.chatService.pauseIframe(true);
-    setTimeout(() => {
-      this.chatService.layout.toggleFullscreen();
-    }, 100);
-    setTimeout(() => {
-      this.chatService.pauseIframe(false);
-    }, 1000);
   }
 
   ngOnDestroy(): void {

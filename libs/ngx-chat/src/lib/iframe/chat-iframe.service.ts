@@ -26,10 +26,10 @@ import {
   ChatDownstreamAction,
   ChatHostReady,
   ChatHosts,
-  ChatMessageDirection,
   ChatMessageEvent,
   ChatMessageItem,
   ChatMessageType,
+  ChatScreenDirection,
   ChatState,
   ChatUpstreamAction,
 } from '../chat.model';
@@ -146,7 +146,7 @@ export class ChatIframeService implements OnDestroy {
         .pipe(throttleTime(10), takeUntil(this.destroy$))
         .subscribe((event: MessageEvent) => {
           const data = event.data as ChatMessageEvent;
-          if (data.type === ChatMessageDirection.SouthBound) {
+          if (data.type === ChatScreenDirection.SouthBound) {
             switch (data.action) {
               case ChatDownstreamAction.pong:
                 this.currentHost = data.host;
@@ -201,7 +201,7 @@ export class ChatIframeService implements OnDestroy {
    */
   private pingNorthBoundHost() {
     const data = {
-      type: ChatMessageDirection.NorthBound,
+      type: ChatScreenDirection.NorthBound,
       action: ChatUpstreamAction.ping,
     };
 
@@ -214,7 +214,7 @@ export class ChatIframeService implements OnDestroy {
    */
   private setNorthBoundSelector(host: ChatHosts) {
     const data = {
-      type: ChatMessageDirection.NorthBound,
+      type: ChatScreenDirection.NorthBound,
       action: ChatUpstreamAction.observe,
       payload: ChatSupportedSites[host].observer,
     };
@@ -229,7 +229,7 @@ export class ChatIframeService implements OnDestroy {
    */
   private setNorthBoundIframe(host: ChatHosts) {
     const data = {
-      type: ChatMessageDirection.NorthBound,
+      type: ChatScreenDirection.NorthBound,
       action: ChatUpstreamAction.iframe,
       payload: ChatSupportedSites[host].iframe,
     };

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ChatMessageItem } from '../chat.model';
+import { ChatMessageItem, ChatState } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { ChatService } from '../chat.service';
 })
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
-  chatList: ChatMessageItem[] = [];
+  state: ChatState;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -29,7 +29,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subState();
-    this.subChatList();
   }
 
   trackById(index: number, chat: ChatMessageItem) {
@@ -38,19 +37,12 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   subState() {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.cdR.detectChanges();
-      },
-    });
-  }
-
-  subChatList(): void {
-    this.chatService.chatTable$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (chats) => {
-        if (this.chatService.state.autoScrollEnabled) {
-          this.chatList = chats;
-          this.cdR.detectChanges();
+      next: (state) => {
+        if (!this.state?.autoScrollEnabled && state.autoScrollEnabled) {
+          this.scrollToTop();
         }
+        this.state = state;
+        this.cdR.detectChanges();
       },
     });
   }
@@ -74,6 +66,5 @@ export class ChatListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.chatList = [];
   }
 }

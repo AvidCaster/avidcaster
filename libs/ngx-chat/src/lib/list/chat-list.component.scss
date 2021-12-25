@@ -1,12 +1,9 @@
-#chat-list {
+#chat-list,
+#chat-list-fast {
   padding-right: 0;
   height: 100%;
   z-index: 1;
   padding: 0px;
-}
-
-.enable-manual-scroll {
-  overflow-y: scroll !important;
 }
 
 .chat-item {
@@ -17,7 +14,7 @@
   border: 1px solid #ffb300;
 }
 
-.mat-icon {
+.chat-rabbit .mat-icon {
   font-size: 100px;
   height: 100px;
   width: 100px;

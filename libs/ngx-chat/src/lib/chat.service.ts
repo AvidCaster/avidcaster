@@ -61,6 +61,16 @@ export class ChatService implements OnDestroy {
   private chatSelectedOb$ = new Subject<ChatMessageItem>();
   chatSelected$ = this.chatSelectedOb$.asObservable();
 
+  // fireworks play
+  isFireworksPlaying = false;
+  private fireworksPlayingOb$ = new Subject<boolean>();
+  fireworksPlaying$ = this.fireworksPlayingOb$.asObservable();
+
+  // audio play
+  isAudioPlaying = false;
+  private audioPlayingOb$ = new Subject<boolean>();
+  audioPlaying$ = this.audioPlayingOb$.asObservable();
+
   // chat vertical position
   chatVerticalPosition = CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
   private chatVerticalPositionOb$ = new BehaviorSubject<number>(
@@ -168,6 +178,14 @@ export class ChatService implements OnDestroy {
           this.setChatVerticalPosition(this.state.chatVerticalPosition);
           this.setChatHorizontalPosition(this.state.chatHorizontalPosition);
 
+          // set audio/fireworks playing status
+          if (!this.state.audioEnabled) {
+            this.setAudioPlayStatus(false);
+          }
+          if (!this.state.fireworksEnabled) {
+            this.setFireworksPlayStatus(false);
+          }
+
           // store state in local storage
           if (!this.isRunningInIframeContext) {
             const localStorageStateSnapshot = this.uix.localStorage.getItem(CHAT_STORAGE_STATE_KEY);
@@ -216,8 +234,10 @@ export class ChatService implements OnDestroy {
   }
 
   chatSelected(chat: ChatMessageItem, clicked = false) {
-    if (chat?.id && (clicked || this.state.ffEnabled)) {
-      this.chatSelectedOb$.next(chat);
+    if (chat?.id) {
+      if (clicked || this.state.ffEnabled) {
+        this.chatSelectedOb$.next(chat);
+      }
     }
   }
 
@@ -285,6 +305,24 @@ export class ChatService implements OnDestroy {
       this.setState({ chatHorizontalPosition: value });
     }
     this.chatHorizontalPositionOb$.next(value);
+  }
+
+  setFireworksPlayStatus(play?: boolean) {
+    if (play === undefined) {
+      this.isFireworksPlaying = !this.isFireworksPlaying;
+    } else {
+      this.isFireworksPlaying = play;
+    }
+    this.fireworksPlayingOb$.next(this.isFireworksPlaying);
+  }
+
+  setAudioPlayStatus(play?: boolean) {
+    if (play === undefined) {
+      this.isAudioPlaying = !this.isAudioPlaying;
+    } else {
+      this.isAudioPlaying = play;
+    }
+    this.audioPlayingOb$.next(this.isAudioPlaying);
   }
 
   ngOnDestroy() {

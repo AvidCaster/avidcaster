@@ -18,7 +18,7 @@
     <div class="chat-host-image" *ngIf="getHostImage(chat?.host) as hostImageSrc">
       <img [src]="hostImageSrc" />
       <div
-        *ngIf="getHoraryImage(chat) as horaryImageSrc"
+        *ngIf="getFireworksImage(chat) as horaryImageSrc"
         id="chat-special-animation"
         [ngStyle]="{ backgroundImage: 'url(' + horaryImageSrc + ')' }"
       ></div>

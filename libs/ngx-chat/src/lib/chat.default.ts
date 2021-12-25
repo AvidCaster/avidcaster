@@ -133,7 +133,6 @@ const DefaultChatState: ChatState = {
   isLtR: true,
   audioEnabled: false,
   fireworksEnabled: true,
-  fireworksPlay: false,
   keywords: [],
   listFilter: 'common',
   keywordsFilter: 'none',
