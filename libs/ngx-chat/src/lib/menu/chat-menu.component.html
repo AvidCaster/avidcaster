@@ -16,7 +16,7 @@
         [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
         matTooltipPosition="before"
         matTooltip="{{
-          (chatService?.state?.fireworksEnabled ? (chatService.isFireworksPlaying ? 'FIREWORKS.START' : 'FIREWORKS.STOP') : '') | translate
+          (chatService?.state?.fireworksEnabled ? (chatService.isFireworksPlaying ? 'FIREWORKS.STOP' : 'FIREWORKS.START') : '') | translate
         }}"
         [svgIcon]="!chatService?.state?.fireworksEnabled || chatService.isFireworksPlaying ? 'firework-off' : 'firework'"
       ></mat-icon>
@@ -36,11 +36,19 @@
   <div fxFlex></div>
   <div fxLayout="row" fxLayoutGap="10px">
     <button mat-mini-fab color="accent" [disabled]="!chatService?.state?.ffEnabled" (click)="toggleFastForward()">
-      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.FF_ENABLE' | translate }}" svgIcon="snail"></mat-icon>
+      <mat-icon
+        matTooltipPosition="before"
+        matTooltip="{{ (chatService?.state?.ffEnabled ? 'CHAT.FF_DISABLE' : '') | translate }}"
+        svgIcon="snail"
+      ></mat-icon>
     </button>
 
     <button mat-mini-fab color="accent" [disabled]="chatService?.state?.ffEnabled" (click)="toggleFastForward()">
-      <mat-icon matTooltipPosition="before" matTooltip="{{ 'CHAT.FF_DISABLE' | translate }}" svgIcon="rabbit"></mat-icon>
+      <mat-icon
+        matTooltipPosition="before"
+        matTooltip="{{ (!chatService?.state?.ffEnabled ? 'CHAT.FF_ENABLE' : '') | translate }}"
+        svgIcon="rabbit"
+      ></mat-icon>
     </button>
   </div>
 </div>
