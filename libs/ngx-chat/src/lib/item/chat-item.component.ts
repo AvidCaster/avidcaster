@@ -1,15 +1,17 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
+import { LoggerService } from '@fullerstack/ngx-logger';
 import { fadeAnimations } from '@fullerstack/ngx-shared';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { ChatHosts, ChatMessageItem, ChatState } from '../chat.model';
+import { ChatHosts, ChatMessageItem, ChatMessageListFilterType } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -19,36 +21,41 @@ import { ChatService } from '../chat.service';
   animations: [fadeAnimations.fadeInSlow],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatItemComponent implements OnInit, OnDestroy {
-  slideInState = 0;
-  @Input() set last(value: boolean) {
-    if (value) {
-      this.slideInState++;
-    }
-  }
-  @Input() set viewed(value: boolean) {
-    this.chat.viewed = value;
-  }
-  @Input() chat: ChatMessageItem;
+export class ChatItemComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$ = new Subject<boolean>();
-  isMembershipList = false;
-  isDonationList = false;
-  isCommonList = true;
 
-  constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
+  @Input() chat = {} as ChatMessageItem;
+  @Input() last = false;
+  @Input() listFilter: ChatMessageListFilterType = 'common';
+
+  // animation state
+  slideInState = 0;
+
+  constructor(readonly logger: LoggerService, readonly chatService: ChatService) {}
 
   ngOnInit(): void {
-    this.chatService.state$
-      .pipe(
-        filter((state) => !!state),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((state: ChatState) => {
-        this.isMembershipList = state.listFilter === 'membership';
-        this.isDonationList = state.listFilter === 'donation';
-        this.isCommonList = state.listFilter === 'common';
-        this.cdR.markForCheck();
-      });
+    this.logger.debug('ChatItemComponent.ngOnInit');
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // check if this is last message in the list
+    if (changes.last?.currentValue !== changes.last?.previousValue) {
+      if (!this.chatService.state.performanceMode) {
+        this.slideInState++;
+      }
+    }
+  }
+
+  get isCommonList(): boolean {
+    return this.listFilter === 'common';
+  }
+
+  get isMembershipList(): boolean {
+    return this.listFilter === 'membership';
+  }
+
+  get isDonationList(): boolean {
+    return this.listFilter === 'donation';
   }
 
   getHostColor(host: ChatHosts): string {
@@ -79,7 +86,6 @@ export class ChatItemComponent implements OnInit, OnDestroy {
     }
     const wasClicked = true;
     this.chatService.chatSelected(this.chat, wasClicked);
-    this.cdR.markForCheck();
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   Input,
   OnChanges,
@@ -14,7 +13,9 @@ import { Subject } from 'rxjs';
 
 import {
   CHAT_DEFAULT_AVATAR,
+  CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_TWITCH_DEFAULT_AVATAR,
+  CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE,
   CHAT_YOUTUBE_DEFAULT_AVATAR,
 } from '../chat.default';
@@ -32,9 +33,9 @@ export class ChatSelectedComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   // inputs
-  @Input() verticalPosition: number;
-  @Input() horizontalPosition: number;
-  @Input() chat: ChatMessageItem;
+  @Input() chat = {} as ChatMessageItem;
+  @Input() verticalPosition = CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
+  @Input() horizontalPosition = CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE;
 
   // animation state
   slideInState = 0;
@@ -44,11 +45,7 @@ export class ChatSelectedComponent implements OnInit, OnChanges, OnDestroy {
   paddingRight = '0px';
   paddingLeft = '0px';
 
-  constructor(
-    readonly cdR: ChangeDetectorRef,
-    readonly logger: LoggerService,
-    readonly chatService: ChatService
-  ) {}
+  constructor(readonly logger: LoggerService, readonly chatService: ChatService) {}
 
   ngOnInit(): void {
     this.logger.debug('ChatSelectedComponent started ... ');
