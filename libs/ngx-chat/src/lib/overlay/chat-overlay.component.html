@@ -14,13 +14,13 @@
     <mat-divider></mat-divider>
   </div>
 </div>
-<div id="chat-overlay-footer" [ngStyle]="{ backgroundColor: backgroundColor }">
-  <div
-    id="chat-selected"
-    [ngStyle]="{ left: leftPosition, right: rightPosition }"
-    [class.chat-invisible]="!(chatService.chatSelected$ | async)?.author"
-  >
-    <fullerstack-chat-selected></fullerstack-chat-selected>
+<div id="chat-overlay-footer" *ngLet="chatService.chatSelected$ | async as selectedChat" [ngStyle]="{ backgroundColor: backgroundColor }">
+  <div id="chat-selected" [ngStyle]="{ left: leftPosition, right: rightPosition }" [class.chat-invisible]="!selectedChat?.author">
+    <fullerstack-chat-selected
+      [chat]="selectedChat"
+      [verticalPosition]="chatService.chatVerticalPosition"
+      [horizontalPosition]="chatService.chatHorizontalPosition"
+    ></fullerstack-chat-selected>
   </div>
   <div id="chat-fireworks" [class.chat-invisible]="!chatService.state.fireworksEnabled">
     <fullerstack-fireworks [action]="chatService.isFireworksPlaying"></fullerstack-fireworks>

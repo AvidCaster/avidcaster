@@ -6,7 +6,8 @@
  * that can be found at http://neekware.com/license/PRI.html
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
 import { AuthService, DefaultAuthConfig } from '@fullerstack/ngx-auth';
@@ -35,9 +36,11 @@ export class SystemService implements OnDestroy {
   private routeDataSubject = new BehaviorSubject<Data>(null);
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;
   routeData$: Observable<Data>;
+  location: Location;
 
   constructor(
-    public router: Router,
+    @Inject(DOCUMENT) readonly document: Document,
+    readonly router: Router,
     readonly activatedRoute: ActivatedRoute,
     readonly title: Title,
     readonly meta: Meta,
@@ -50,6 +53,7 @@ export class SystemService implements OnDestroy {
     readonly auth: AuthService
   ) {
     this.routeData$ = this.routeDataSubject.asObservable();
+    this.location = this.document.defaultView.location;
 
     this.msg.reset();
 
@@ -59,6 +63,10 @@ export class SystemService implements OnDestroy {
       (dest, src) => (Array.isArray(dest) ? src : undefined)
     );
     this.enableRouteDataUpdates();
+  }
+
+  get currentUrl() {
+    return this.router.url || this.location.pathname;
   }
 
   private enableRouteDataUpdates() {

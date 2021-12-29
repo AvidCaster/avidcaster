@@ -2,12 +2,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
-import { Subject, distinctUntilKeyChanged, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import {
   CHAT_DEFAULT_AVATAR,
@@ -25,9 +28,15 @@ import { ChatService } from '../chat.service';
   animations: [slideInAnimations.slideInFromBottom],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatSelectedComponent implements OnInit, OnDestroy {
+export class ChatSelectedComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$ = new Subject<boolean>();
-  chat: ChatMessageItem;
+
+  // inputs
+  @Input() verticalPosition: number;
+  @Input() horizontalPosition: number;
+  @Input() chat: ChatMessageItem;
+
+  // animation state
   slideInState = 0;
 
   // vertical and horizontal position of the chat
@@ -42,53 +51,32 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subSelectedChat();
-    this.subState();
-    this.subPositions();
-
     this.logger.debug('ChatSelectedComponent started ... ');
   }
 
-  private subState(): void {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (state) => {
-        this.calculateChatMarginTop(state.chatVerticalPosition);
-        this.calculateChatPadding(state.chatHorizontalPosition);
-        this.cdR.markForCheck();
-      },
-    });
-  }
+  ngOnChanges(changes: SimpleChanges): void {
+    // check if vertical position is changed
+    if (
+      changes.verticalPosition &&
+      changes.verticalPosition.currentValue !== changes.verticalPosition.previousValue
+    ) {
+      this.calculateChatMarginTop(this.verticalPosition);
+    }
 
-  private subSelectedChat(): void {
-    this.chatService.chatSelected$
-      .pipe(distinctUntilKeyChanged('id'), takeUntil(this.destroy$))
-      .subscribe({
-        next: (chat: ChatMessageItem) => {
-          this.chat = chat;
-          if (this.chatService.state.performanceMode) {
-            this.cdR.detectChanges();
-          } else {
-            this.slideInState++;
-            this.cdR.markForCheck();
-          }
-        },
-      });
-  }
+    // check if horizontal position is changed
+    if (
+      changes.horizontalPosition &&
+      changes.horizontalPosition.currentValue !== changes.horizontalPosition.previousValue
+    ) {
+      this.calculateChatPadding(this.horizontalPosition);
+    }
 
-  subPositions(): void {
-    this.chatService.chatVerticalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (value) => {
-        this.calculateChatMarginTop(value);
-        this.cdR.markForCheck();
-      },
-    });
-
-    this.chatService.chatHorizontalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (value) => {
-        this.calculateChatPadding(value);
-        this.cdR.markForCheck();
-      },
-    });
+    // check if chat is changed
+    if (changes.chat && changes.chat.currentValue !== changes.chat.previousValue) {
+      if (!this.chatService.state.performanceMode) {
+        this.slideInState++;
+      }
+    }
   }
 
   calculateChatMarginTop(value: number) {
