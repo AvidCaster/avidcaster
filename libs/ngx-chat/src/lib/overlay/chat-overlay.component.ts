@@ -9,12 +9,22 @@ import {
   ViewChild,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Observable, Subject, distinctUntilChanged, filter, fromEvent, map, takeUntil } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
+  filter,
+  fromEvent,
+  map,
+  takeUntil,
+} from 'rxjs';
 
 import {
   CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
 } from '../chat.default';
+import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -46,11 +56,25 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('ChatOverlayComponent.ngOnInit');
     this.subStorage();
-    this.subSelectedChat();
     this.subState();
+    // this.subSelectedChat();
     this.subBackgroundColor();
     this.subScrollEvent();
     this.addAttrStyles();
+  }
+
+  private subStorage() {
+    this.zone.runOutsideAngular(() => {
+      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
+        next: (event: StorageEvent) => {
+          if (event.key === CHAT_STORAGE_OVERLAY_REQUEST_KEY) {
+            this.chatService.broadcastNewChatOverlayResponse();
+            this.chatService.layout.uix.window.focus();
+            this.logger.info('ChatOverlayComponent: Overlay Response Sent; Grabbing Focus!');
+          }
+        },
+      });
+    });
   }
 
   private subState(): void {
@@ -76,25 +100,17 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   }
 
   private subSelectedChat(): void {
-    this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.cdR.markForCheck();
-      },
-    });
-  }
-
-  private subStorage() {
-    this.zone.runOutsideAngular(() => {
-      this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
-        next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_OVERLAY_REQUEST_KEY) {
-            this.chatService.broadcastNewChatOverlayResponse();
-            this.chatService.layout.uix.window.focus();
-            this.logger.info('ChatOverlayComponent: Overlay Response Sent; Grabbing Focus!');
+    this.chatService.chatSelected$
+      .pipe(distinctUntilKeyChanged('id'), takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          if (this.chatService.state.performanceMode) {
+            this.cdR.detectChanges();
+          } else {
+            this.cdR.markForCheck();
           }
         },
       });
-    });
   }
 
   // live background color change

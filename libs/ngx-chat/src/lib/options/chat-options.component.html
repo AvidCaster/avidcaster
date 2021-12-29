@@ -6,7 +6,7 @@
   [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'"
 >
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item" (click)="toggleDirection()">
-    <span fxFlex>{{ (chatService.state.isLtR ? 'COMMON.DIR_LTR' : 'COMMON.DIR_RTL') | translate }}</span>
+    <span fxFlex>{{ (chatService.state.isLtR ? 'COMMON.DIR_RTL' : 'COMMON.DIR_LTR') | translate }}</span>
     <mat-icon [class.flip-horizontal]="chatService.state.isLtR" svgIcon="directions"></mat-icon>
   </div>
 
@@ -16,23 +16,30 @@
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
+    <span fxFlex>{{ 'COMMON.ENABLE_DARK' | translate }}</span>
+    <mat-slide-toggle color="primary" [(ngModel)]="isDarkTheme" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
     <span fxFlex>{{ 'COMMON.DEMO_MODE' | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isDemoMode" (change)="toggleDemoMode($event.checked)"></mat-slide-toggle>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
-    <span fxFlex>{{ 'COMMON.DARK' | translate }}</span>
-    <mat-slide-toggle color="primary" [(ngModel)]="isDarkTheme" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
+    <span fxFlex>{{ 'COMMON.PERFORMANCE_MODE' | translate }}</span>
+    <mat-slide-toggle color="primary" [(ngModel)]="isPerformanceMode" (change)="togglePerformanceMode($event.checked)"></mat-slide-toggle>
   </div>
 
   <mat-divider></mat-divider>
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
-    <span fxFlex>{{ (chatService?.state?.audioEnabled ? 'CHEERS.DISABLE' : 'CHEERS.ENABLE') | translate }}</span>
+    <span fxFlex>{{ 'CHEERS.ENABLE' | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isAudioEnabled" (change)="toggleAudio($event.checked)"></mat-slide-toggle>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
-    <span fxFlex>{{ (chatService?.state?.fireworksEnabled ? 'FIREWORKS.DISABLE' : 'FIREWORKS.ENABLE') | translate }}</span>
+    <span fxFlex>{{ 'FIREWORKS.ENABLE' | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isFireworksEnabled" (change)="toggleFireworks($event.checked)"></mat-slide-toggle>
   </div>
 

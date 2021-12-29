@@ -1,4 +1,4 @@
-<div *ngLet="chatService.chatTable$ | async as chatList" fxLayout="column" fxLayoutAlign="center">
+<div fxLayout="column" fxLayoutAlign="center">
   <div id="chat-list" *ngIf="!chatService.state.ffEnabled" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
     <div *ngFor="let chat of chatList; trackBy: trackById; let idx = index; let last = last" class="chat-item">
       <fullerstack-chat-item

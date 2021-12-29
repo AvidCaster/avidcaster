@@ -148,6 +148,7 @@ const DefaultChatState: ChatState = {
   chatHorizontalPosition: CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   demoEnabled: false,
   backgroundColor: CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
+  performanceMode: true,
 };
 
 export const defaultChatState = (): ChatState => {

@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 
 import { ChatMessageItem, ChatState } from '../chat.model';
 import { ChatService } from '../chat.service';
@@ -20,6 +20,7 @@ import { ChatService } from '../chat.service';
 export class ChatListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   state: ChatState;
+  chatList: ChatMessageItem[];
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -29,6 +30,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subState();
+    this.subChatList();
   }
 
   trackById(index: number, chat: ChatMessageItem) {
@@ -43,6 +45,19 @@ export class ChatListComponent implements OnInit, OnDestroy {
         }
         this.state = state;
         this.cdR.detectChanges();
+      },
+    });
+  }
+
+  subChatList() {
+    this.chatService.chatList$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe({
+      next: (chatList: ChatMessageItem[]) => {
+        this.chatList = chatList;
+        if (this.chatService.state.performanceMode) {
+          this.cdR.detectChanges();
+        } else {
+          this.cdR.markForCheck();
+        }
       },
     });
   }

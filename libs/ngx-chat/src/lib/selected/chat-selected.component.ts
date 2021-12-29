@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, distinctUntilKeyChanged, takeUntil } from 'rxjs';
 
 import {
   CHAT_DEFAULT_AVATAR,
@@ -42,16 +42,14 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.chatService.chatSelected$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (chatItem: ChatMessageItem) => {
-        if (this.chat?.id !== chatItem?.id) {
-          this.slideInState++;
-        }
-        this.chat = chatItem;
-        this.cdR.markForCheck();
-      },
-    });
+    this.subSelectedChat();
+    this.subState();
+    this.subPositions();
 
+    this.logger.debug('ChatSelectedComponent started ... ');
+  }
+
+  private subState(): void {
     this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (state) => {
         this.calculateChatMarginTop(state.chatVerticalPosition);
@@ -59,7 +57,25 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         this.cdR.markForCheck();
       },
     });
+  }
 
+  private subSelectedChat(): void {
+    this.chatService.chatSelected$
+      .pipe(distinctUntilKeyChanged('id'), takeUntil(this.destroy$))
+      .subscribe({
+        next: (chat: ChatMessageItem) => {
+          this.chat = chat;
+          if (this.chatService.state.performanceMode) {
+            this.cdR.detectChanges();
+          } else {
+            this.slideInState++;
+            this.cdR.markForCheck();
+          }
+        },
+      });
+  }
+
+  subPositions(): void {
     this.chatService.chatVerticalPosition$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         this.calculateChatMarginTop(value);
@@ -73,8 +89,6 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
         this.cdR.markForCheck();
       },
     });
-
-    this.logger.debug('ChatSelectedComponent started ... ');
   }
 
   calculateChatMarginTop(value: number) {

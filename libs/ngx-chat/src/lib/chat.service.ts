@@ -51,7 +51,7 @@ export class ChatService implements OnDestroy {
 
   // database object
   database = chatDatabaseInstance;
-  chatTable$: Observable<ChatMessageItem[]>;
+  chatList$: Observable<ChatMessageItem[]>;
   sliceLimit = -1 * CHAT_MESSAGE_LIST_DISPLAY_LIMIT;
 
   // chat state
@@ -223,7 +223,7 @@ export class ChatService implements OnDestroy {
   }
 
   private subToTables() {
-    this.chatTable$ = this.state$.pipe(
+    this.chatList$ = this.state$.pipe(
       switchMap((state) => this.database.chatLiveQuery(state.listFilter)),
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => searchByPrimaryFilter(chat, this.state)))

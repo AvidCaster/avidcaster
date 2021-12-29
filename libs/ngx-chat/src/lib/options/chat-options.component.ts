@@ -27,6 +27,7 @@ export class ChatOptionsComponent implements OnInit, OnDestroy {
   chatHorizontalPosition = CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE;
   chatBackgroundColor = CHAT_BACKGROUND_COLOR_DEFAULT_VALUE;
   isDemoMode = false;
+  isPerformanceMode = true;
 
   constructor(
     readonly cdR: ChangeDetectorRef,
@@ -96,6 +97,10 @@ export class ChatOptionsComponent implements OnInit, OnDestroy {
 
   toggleDemoMode(value: boolean) {
     this.chatService.setState({ demoEnabled: value });
+  }
+
+  togglePerformanceMode(value: boolean) {
+    this.chatService.setState({ performanceMode: value });
   }
 
   handleChatHorizontalPositionChange(value: number) {
