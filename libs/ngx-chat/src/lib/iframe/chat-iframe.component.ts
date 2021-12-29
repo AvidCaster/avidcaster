@@ -8,6 +8,7 @@
 
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
+import { SystemService } from '@fullerstack/ngx-system';
 import { Subject, takeUntil } from 'rxjs';
 
 import { ChatService } from '../chat.service';
@@ -26,6 +27,7 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
   constructor(
     readonly cdRef: ChangeDetectorRef,
     readonly logger: LoggerService,
+    readonly system: SystemService,
     readonly chatService: ChatService,
     readonly chatIframeService: ChatIframeService
   ) {}

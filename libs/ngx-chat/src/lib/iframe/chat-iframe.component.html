@@ -1,7 +1,11 @@
-<div id="chat-iframe-monitor" fxLayout="row" fxLayoutGap="10px">
-  <div><button (click)="openOverlay()">Open Overlay</button></div>
-  <div *ngIf="chatIframeService.streamId">( {{ chatIframeService.streamId }} )</div>
-  <div *ngIf="overlayOpenRequestInProgress">
-    <mat-spinner class="chat-iframe-spinner" color="accent" [diameter]="20"></mat-spinner>
+<div id="chat-iframe-monitor" fxLayout="column" fxLayoutGap="5px">
+  <div fxLayout="row" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="center"><img src="./assets/images/logos/logo-micro.png" /></div>
+    <div fxLayout="column" fxLayoutAlign="center"><button (click)="openOverlay()">Open Overlay</button></div>
+    <div fxLayout="column" fxLayoutAlign="center" *ngIf="chatIframeService.streamId">( {{ chatIframeService.streamId }} )</div>
+    <div fxLayout="column" fxLayoutAlign="center" *ngIf="overlayOpenRequestInProgress">
+      <mat-spinner class="chat-iframe-spinner" color="accent" [diameter]="20"></mat-spinner>
+    </div>
   </div>
+  <div id="chat-iframe-footer" fxLayout="column" fxLayoutAlign="center">{{ system.location.host }}</div>
 </div>
