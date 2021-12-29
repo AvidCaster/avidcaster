@@ -14,7 +14,7 @@
     <mat-divider></mat-divider>
   </div>
 </div>
-<div id="chat-overlay-footer">
+<div id="chat-overlay-footer" [ngStyle]="{ backgroundColor: backgroundColor }">
   <div
     id="chat-selected"
     [ngStyle]="{ left: leftPosition, right: rightPosition }"

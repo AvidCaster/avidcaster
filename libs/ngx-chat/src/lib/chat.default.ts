@@ -128,6 +128,9 @@ export const CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE = 300;
 // default horizontal position
 export const CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE = 1;
 
+// default background color
+export const CHAT_BACKGROUND_COLOR_DEFAULT_VALUE = '#000000';
+
 const DefaultChatState: ChatState = {
   signature: '',
   isLtR: true,
@@ -144,6 +147,7 @@ const DefaultChatState: ChatState = {
   chatVerticalPosition: CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   chatHorizontalPosition: CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   demoEnabled: false,
+  backgroundColor: CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
 };
 
 export const defaultChatState = (): ChatState => {

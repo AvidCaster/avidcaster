@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, debounceTime, filter, takeUntil } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 import {
+  CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
   CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE,
   CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE,
 } from '../chat.default';
@@ -15,14 +16,16 @@ import { ChatService } from '../chat.service';
   templateUrl: './chat-options.component.html',
   styleUrls: ['./chat-options.component.scss'],
 })
-export class ChatOptionsComponent implements OnInit {
+export class ChatOptionsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+  private backgroundColorDebounceOb$ = new Subject<string>();
   chat: ChatMessageItem;
   isDarkTheme = false;
   isAudioEnabled = false;
   isFireworksEnabled = false;
-  defaultChatVerticalPosition = CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE;
-  defaultChatHorizontalPosition = CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE;
+  chatVerticalPosition = CHAT_VERTICAL_POSITION_SLIDER_MAX_VALUE;
+  chatHorizontalPosition = CHAT_HORIZONTAL_POSITION_SLIDER_MAX_VALUE;
+  chatBackgroundColor = CHAT_BACKGROUND_COLOR_DEFAULT_VALUE;
   isDemoMode = false;
 
   constructor(
@@ -34,6 +37,7 @@ export class ChatOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.subState();
+    this.subBackgroundColorDebounce();
     this.logger.debug('ChatOptionsComponent initialized');
   }
 
@@ -50,6 +54,7 @@ export class ChatOptionsComponent implements OnInit {
           this.isFireworksEnabled = state.fireworksEnabled;
           this.isAudioEnabled = state.audioEnabled;
           this.isDemoMode = state.demoEnabled;
+          this.chatBackgroundColor = state.backgroundColor;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
         },
@@ -96,5 +101,28 @@ export class ChatOptionsComponent implements OnInit {
   handleChatHorizontalPositionChange(value: number) {
     const saveToState = true;
     this.chatService.setChatHorizontalPosition(value, saveToState);
+  }
+
+  // grab the background color from the input, for the purpose of live change
+  handleBackgroundColorChange(value: string) {
+    this.chatService.setChatBackgroundColor(value);
+    this.backgroundColorDebounceOb$.next(value);
+  }
+
+  // grab the background color from the input, for the purpose of saving it to the state
+  subBackgroundColorDebounce() {
+    this.backgroundColorDebounceOb$
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe({
+        next: (value) => {
+          const saveToState = true;
+          this.chatService.setChatBackgroundColor(value, saveToState);
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

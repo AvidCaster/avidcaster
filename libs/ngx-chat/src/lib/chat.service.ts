@@ -24,6 +24,7 @@ import { BehaviorSubject, Observable, Subject, filter, map, switchMap, takeUntil
 import { DeepReadonly } from 'ts-essentials';
 
 import {
+  CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
   CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_IFRAME_URL,
   CHAT_MESSAGE_LIST_DISPLAY_LIMIT,
@@ -84,6 +85,11 @@ export class ChatService implements OnDestroy {
     CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE
   );
   chatHorizontalPosition$ = this.chatHorizontalPositionOb$.asObservable();
+
+  // chat background color
+  chatBackgroundColor = CHAT_BACKGROUND_COLOR_DEFAULT_VALUE;
+  private chatBackgroundColorOb$ = new BehaviorSubject<string>(CHAT_BACKGROUND_COLOR_DEFAULT_VALUE);
+  chatBackgroundColor$ = this.chatBackgroundColorOb$.asObservable();
 
   constructor(
     readonly zone: NgZone,
@@ -177,6 +183,7 @@ export class ChatService implements OnDestroy {
           // set chat positions
           this.setChatVerticalPosition(this.state.chatVerticalPosition);
           this.setChatHorizontalPosition(this.state.chatHorizontalPosition);
+          this.setChatBackgroundColor(this.state.backgroundColor);
 
           // set audio/fireworks playing status
           if (!this.state.audioEnabled) {
@@ -305,6 +312,14 @@ export class ChatService implements OnDestroy {
       this.setState({ chatHorizontalPosition: value });
     }
     this.chatHorizontalPositionOb$.next(value);
+  }
+
+  setChatBackgroundColor(value: string, saveToState = false) {
+    this.chatBackgroundColor = value;
+    if (saveToState) {
+      this.setState({ backgroundColor: value });
+    }
+    this.chatBackgroundColorOb$.next(value);
   }
 
   setFireworksPlayStatus(play?: boolean) {

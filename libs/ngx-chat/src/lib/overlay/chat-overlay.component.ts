@@ -11,7 +11,10 @@ import {
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { Observable, Subject, distinctUntilChanged, filter, fromEvent, map, takeUntil } from 'rxjs';
 
-import { CHAT_STORAGE_OVERLAY_REQUEST_KEY } from '../chat.default';
+import {
+  CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
+  CHAT_STORAGE_OVERLAY_REQUEST_KEY,
+} from '../chat.default';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -26,6 +29,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   leftPosition = '0';
   rightPosition = 'unset';
+  backgroundColor = CHAT_BACKGROUND_COLOR_DEFAULT_VALUE;
 
   constructor(
     readonly zone: NgZone,
@@ -44,6 +48,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     this.subStorage();
     this.subSelectedChat();
     this.subState();
+    this.subBackgroundColor();
     this.subScrollEvent();
     this.addAttrStyles();
   }
@@ -64,6 +69,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
             this.rightPosition = '0';
           }
 
+          this.backgroundColor = state.backgroundColor;
           this.cdR.markForCheck();
         },
       });
@@ -88,6 +94,16 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
           }
         },
       });
+    });
+  }
+
+  // live background color change
+  private subBackgroundColor(): void {
+    this.chatService.chatBackgroundColor$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value) => {
+        this.backgroundColor = value;
+        this.cdR.markForCheck();
+      },
     });
   }
 

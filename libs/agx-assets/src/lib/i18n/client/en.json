@@ -34,6 +34,8 @@
   "CHAT.FF_ENABLE": "Enable Fast Forward",
   "CHAT.ADJUST_VERTICAL": "Chat vertical position",
   "CHAT.ADJUST_HORIZONTAL": "Chat horizontal position",
+  "CHAT.BACKGROUND_COLOR": "Background color",
+  "CHAT.SETTINGS": "Chat settings",
   "CHAT.HIGHLIGHT_WORDS": "Highlight words",
   "CHAT.KEYWORDS": "Keywords",
   "CHAT.MEMBERSHIPS": "Memberships",

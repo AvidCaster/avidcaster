@@ -11,6 +11,11 @@
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
+    <span fxFlex>{{ 'CHAT.BACKGROUND_COLOR' | translate }}</span>
+    <input class="color-input" type="color" [(ngModel)]="chatBackgroundColor" (ngModelChange)="handleBackgroundColorChange($event)" />
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="chat-option-item">
     <span fxFlex>{{ 'COMMON.DEMO_MODE' | translate }}</span>
     <mat-slide-toggle color="primary" [(ngModel)]="isDemoMode" (change)="toggleDemoMode($event.checked)"></mat-slide-toggle>
   </div>
@@ -39,7 +44,7 @@
       thumbLabel
       step="1"
       min="1"
-      [max]="defaultChatVerticalPosition"
+      [max]="chatVerticalPosition"
       [value]="chatService.chatVerticalPosition"
       (input)="handleChatVerticalPositionInput($event.value)"
       (change)="handleChatVerticalPositionChange($event.value)"
@@ -52,7 +57,7 @@
       thumbLabel
       step="1"
       min="1"
-      [max]="defaultChatHorizontalPosition"
+      [max]="chatHorizontalPosition"
       [value]="chatService.chatHorizontalPosition"
       (input)="handleChatHorizontalPositionInput($event.value)"
       (change)="handleChatHorizontalPositionChange($event.value)"

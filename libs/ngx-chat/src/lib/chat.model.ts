@@ -103,6 +103,7 @@ export interface ChatState {
   chatVerticalPosition: number;
   chatHorizontalPosition: number;
   demoEnabled: boolean;
+  backgroundColor: string;
 }
 
 export type ChatMessagePrimaryFilterType =
