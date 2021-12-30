@@ -1,6 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-around center" [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <div fxLayout="row" fxLayoutGap="5px">
     <button
+      [@wiggleIt]="trashIconState"
       mat-mini-fab
       [class.yt-cursor-default]="!chat?.author"
       matTooltipPosition="before"
@@ -11,8 +12,9 @@
       <mat-icon [class.chat-icon-dim]="!chat?.author" [svgIcon]="!chat?.author ? 'delete-off' : 'delete-outline'"></mat-icon>
     </button>
 
-    <button mat-mini-fab [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'" (click)="chatService.setFireworksPlayStatus()">
+    <button mat-mini-fab [color]="chatService?.state?.fireworksEnabled ? 'accent' : 'warn'" (click)="toggleFireworksPlay()">
       <mat-icon
+        [@wiggleIt]="fireworksIconState"
         [class.chat-icon-dim]="!chatService?.state?.fireworksEnabled"
         matTooltipPosition="before"
         matTooltip="{{
@@ -22,8 +24,9 @@
       ></mat-icon>
     </button>
 
-    <button mat-mini-fab [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'" (click)="chatService.setAudioPlayStatus()">
+    <button mat-mini-fab [color]="chatService?.state?.audioEnabled ? 'accent' : 'warn'" (click)="toggleAudioPlay()">
       <mat-icon
+        [@wiggleIt]="audioIconState"
         [class.chat-icon-dim]="!chatService?.state?.audioEnabled"
         matTooltipPosition="before"
         matTooltip="{{
@@ -41,6 +44,7 @@
         matTooltipPosition="before"
         matTooltip="{{ (chatService?.state?.ffEnabled ? 'CHAT.FF_DISABLE' : '') | translate }}"
         svgIcon="snail"
+        [@wiggleIt]="snailIconState"
       ></mat-icon>
     </button>
 
@@ -49,6 +53,7 @@
         matTooltipPosition="before"
         matTooltip="{{ (!chatService?.state?.ffEnabled ? 'CHAT.FF_ENABLE' : '') | translate }}"
         svgIcon="rabbit"
+        [@wiggleIt]="rabbitIconState"
       ></mat-icon>
     </button>
   </div>
