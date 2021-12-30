@@ -51,6 +51,8 @@
       </select>
     </div>
   </div>
+  <div [class.foobar]="logger.debug('filter')"></div>
+
   <div fxFlex>
     <button
       *ngIf="!chatService.state.autoScrollEnabled"

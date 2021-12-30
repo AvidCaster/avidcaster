@@ -224,10 +224,12 @@ export class ChatService implements OnDestroy {
 
   private subToTables() {
     this.chatList$ = this.state$.pipe(
+      filter((state) => !!state.signature),
       switchMap((state) => this.database.chatLiveQuery(state.listFilter)),
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => searchByPrimaryFilter(chat, this.state)))
       ),
+
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => searchByKeywords(chat, this.state)))
       ),

@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { slideInAnimations } from '@fullerstack/ngx-shared';
-import { Subject, distinctUntilKeyChanged, takeUntil } from 'rxjs';
+import { Subject, distinctUntilKeyChanged, filter, takeUntil } from 'rxjs';
 
 import {
   CHAT_DEFAULT_AVATAR,
@@ -61,7 +61,11 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
 
   private subSelectedChat(): void {
     this.chatService.chatSelected$
-      .pipe(distinctUntilKeyChanged('id'), takeUntil(this.destroy$))
+      .pipe(
+        filter((chat) => !!chat?.id),
+        distinctUntilKeyChanged('id'),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: (chat: ChatMessageItem) => {
           this.chat = chat;

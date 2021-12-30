@@ -9,22 +9,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import {
-  Observable,
-  Subject,
-  distinctUntilChanged,
-  distinctUntilKeyChanged,
-  filter,
-  fromEvent,
-  map,
-  takeUntil,
-} from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, filter, fromEvent, map, takeUntil } from 'rxjs';
 
 import {
   CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
 } from '../chat.default';
-import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -57,7 +47,6 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     console.log('ChatOverlayComponent.ngOnInit');
     this.subStorage();
     this.subState();
-    // this.subSelectedChat();
     this.subBackgroundColor();
     this.subScrollEvent();
     this.addAttrStyles();
@@ -95,20 +84,6 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
 
           this.backgroundColor = state.backgroundColor;
           this.cdR.markForCheck();
-        },
-      });
-  }
-
-  private subSelectedChat(): void {
-    this.chatService.chatSelected$
-      .pipe(distinctUntilKeyChanged('id'), takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          if (this.chatService.state.performanceMode) {
-            this.cdR.detectChanges();
-          } else {
-            this.cdR.markForCheck();
-          }
         },
       });
   }

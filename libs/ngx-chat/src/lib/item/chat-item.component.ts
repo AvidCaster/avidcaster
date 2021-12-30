@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { LoggerService } from '@fullerstack/ngx-logger';
 import { fadeAnimations } from '@fullerstack/ngx-shared';
 import { Subject, filter, takeUntil } from 'rxjs';
 
@@ -35,7 +36,11 @@ export class ChatItemComponent implements OnInit, OnDestroy {
   isDonationList = false;
   isCommonList = true;
 
-  constructor(readonly cdR: ChangeDetectorRef, readonly chatService: ChatService) {}
+  constructor(
+    readonly cdR: ChangeDetectorRef,
+    readonly logger: LoggerService,
+    readonly chatService: ChatService
+  ) {}
 
   ngOnInit(): void {
     this.chatService.state$
@@ -79,7 +84,7 @@ export class ChatItemComponent implements OnInit, OnDestroy {
     }
     const wasClicked = true;
     this.chatService.chatSelected(this.chat, wasClicked);
-    this.cdR.markForCheck();
+    this.cdR.detectChanges();
   }
 
   ngOnDestroy(): void {
