@@ -53,7 +53,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
           }
 
           this.state = state;
-          state.autoScrollEnabled ? this.cdR.reattach() : this.cdR.detach();
         },
       });
   }
