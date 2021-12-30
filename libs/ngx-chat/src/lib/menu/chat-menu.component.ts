@@ -80,6 +80,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.chatService.setAudioPlayStatus(false);
+          this.cdR.markForCheck();
         },
       });
 
