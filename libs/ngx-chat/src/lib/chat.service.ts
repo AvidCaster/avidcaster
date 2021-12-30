@@ -37,7 +37,6 @@ import {
   CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
   CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_IFRAME_URL,
-  CHAT_MESSAGE_LIST_DISPLAY_LIMIT,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
   CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
   CHAT_STORAGE_STATE_KEY,
@@ -66,7 +65,6 @@ export class ChatService implements OnDestroy {
   // database object
   database = chatDatabaseInstance;
   chatList$: Observable<ChatMessageItem[]>;
-  sliceLimit = -1 * CHAT_MESSAGE_LIST_DISPLAY_LIMIT;
 
   // chat state
   state: DeepReadonly<ChatState> = defaultChatState();
