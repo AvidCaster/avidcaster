@@ -12,7 +12,7 @@
         height="160"
         src="{{ chat?.avatarUrl || getFallbackImage(chat) }}"
         (error)="onImageError($event, chat?.host)"
-        [class.blur-effect-4]="chatService.state.demoEnabled"
+        [class.blur-effect-4]="chatService.state.demoMode"
       />
     </div>
     <div class="chat-host-image" *ngIf="getHostImage(chat?.host) as hostImageSrc">
@@ -27,7 +27,7 @@
   <div class="chat-selected-text-fields" fxLayout="column">
     <div fxLayout="row" fxLayoutGap="10px">
       <div fxLayout="row" class="chat-selected-author">
-        <span [class.blur-effect-4_5]="chatService.state.demoEnabled">{{ chat?.author }}</span>
+        <span [class.blur-effect-4_5]="chatService.state.demoMode">{{ chat?.author }}</span>
         <span *ngIf="chat?.donation" class="chat-selected-donation">
           <span>🌺</span>
           <span>{{ chat?.donation }}</span>

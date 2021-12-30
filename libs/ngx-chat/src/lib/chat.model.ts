@@ -96,13 +96,13 @@ export interface ChatState {
   primaryFilter: ChatMessagePrimaryFilterType;
   keywordsFilter: ChatMessageKeywordsFilterType;
   listFilter: ChatMessageListFilterType;
-  ffEnabled: boolean;
+  fastForwardMode: boolean;
   autoScrollEnabled: boolean;
   iframePaused: boolean;
   isDarkTheme: boolean;
   chatVerticalPosition: number;
   chatHorizontalPosition: number;
-  demoEnabled: boolean;
+  demoMode: boolean;
   backgroundColor: string;
   performanceMode: boolean;
 }

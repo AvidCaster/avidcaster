@@ -113,8 +113,8 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   toggleFastForward() {
-    this.chatService.state.ffEnabled ? this.snailIconState++ : this.rabbitIconState++;
-    this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
+    this.chatService.state.fastForwardMode ? this.snailIconState++ : this.rabbitIconState++;
+    this.chatService.setState({ fastForwardMode: !this.chatService.state.fastForwardMode });
   }
 
   ngOnDestroy(): void {

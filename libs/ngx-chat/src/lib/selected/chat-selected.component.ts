@@ -69,10 +69,13 @@ export class ChatSelectedComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (chat: ChatMessageItem) => {
           this.chat = chat;
+          if (!this.chatService.state.fastForwardMode) {
+            this.slideInState++;
+          }
+
           if (this.chatService.state.performanceMode) {
             this.cdR.detectChanges();
           } else {
-            this.slideInState++;
             this.cdR.markForCheck();
           }
         },

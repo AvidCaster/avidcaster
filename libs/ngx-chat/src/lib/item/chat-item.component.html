@@ -10,11 +10,11 @@
 >
   <div class="chat-item-info" fxLayout="row" fxLayoutGap="8px">
     <div class="chat-item-avatar" fxLayout="row" fxLayoutGap="8px" [@slideInFromTop]="slideInState">
-      <img [src]="chat?.avatarUrl" [class.blur-effect-1]="chatService.state.demoEnabled" />
+      <img [src]="chat?.avatarUrl" [class.blur-effect-1]="chatService.state.demoMode" />
       <mat-icon [svgIcon]="chat?.host" [color]="getHostColor(chat?.host)"></mat-icon>
     </div>
 
-    <div class="chat-item-author" fxLayout="column" fxLayoutAlign="center" [class.blur-effect-1_5]="chatService.state.demoEnabled">
+    <div class="chat-item-author" fxLayout="column" fxLayoutAlign="center" [class.blur-effect-1_5]="chatService.state.demoMode">
       {{ chat?.author }}
     </div>
 

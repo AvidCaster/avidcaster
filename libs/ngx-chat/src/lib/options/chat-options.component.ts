@@ -54,7 +54,7 @@ export class ChatOptionsComponent implements OnInit, OnDestroy {
           this.isDarkTheme = state.isDarkTheme;
           this.isFireworksEnabled = state.fireworksEnabled;
           this.isAudioEnabled = state.audioEnabled;
-          this.isDemoMode = state.demoEnabled;
+          this.isDemoMode = state.demoMode;
           this.chatBackgroundColor = state.backgroundColor;
           this.layout.setDarkTheme(this.isDarkTheme);
           this.cdR.markForCheck();
@@ -96,7 +96,7 @@ export class ChatOptionsComponent implements OnInit, OnDestroy {
   }
 
   toggleDemoMode(value: boolean) {
-    this.chatService.setState({ demoEnabled: value });
+    this.chatService.setState({ demoMode: value });
   }
 
   togglePerformanceMode(value: boolean) {

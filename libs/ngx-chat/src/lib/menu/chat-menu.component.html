@@ -38,19 +38,19 @@
   </div>
   <div fxFlex></div>
   <div fxLayout="row" fxLayoutGap="10px">
-    <button mat-mini-fab color="accent" [disabled]="!chatService?.state?.ffEnabled" (click)="toggleFastForward()">
+    <button mat-mini-fab color="accent" [disabled]="!chatService?.state?.fastForwardMode" (click)="toggleFastForward()">
       <mat-icon
         matTooltipPosition="before"
-        matTooltip="{{ (chatService?.state?.ffEnabled ? 'CHAT.FF_DISABLE' : '') | translate }}"
+        matTooltip="{{ (chatService?.state?.fastForwardMode ? 'CHAT.FF_DISABLE' : '') | translate }}"
         svgIcon="snail"
         [@wiggleIt]="snailIconState"
       ></mat-icon>
     </button>
 
-    <button mat-mini-fab color="accent" [disabled]="chatService?.state?.ffEnabled" (click)="toggleFastForward()">
+    <button mat-mini-fab color="accent" [disabled]="chatService?.state?.fastForwardMode" (click)="toggleFastForward()">
       <mat-icon
         matTooltipPosition="before"
-        matTooltip="{{ (!chatService?.state?.ffEnabled ? 'CHAT.FF_ENABLE' : '') | translate }}"
+        matTooltip="{{ (!chatService?.state?.fastForwardMode ? 'CHAT.FF_ENABLE' : '') | translate }}"
         svgIcon="rabbit"
         [@wiggleIt]="rabbitIconState"
       ></mat-icon>

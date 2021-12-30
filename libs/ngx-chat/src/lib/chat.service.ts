@@ -259,7 +259,7 @@ export class ChatService implements OnDestroy {
 
   chatSelected(chat: ChatMessageItem, clicked = false) {
     if (chat?.id) {
-      if (clicked || this.state.ffEnabled) {
+      if (clicked || this.state.fastForwardMode) {
         this.chatSelectedOb$.next(chat);
       }
     }
