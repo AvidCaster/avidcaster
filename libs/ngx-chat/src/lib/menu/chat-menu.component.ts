@@ -10,7 +10,7 @@ import {
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
 import { shakeAnimations } from '@fullerstack/ngx-shared';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { Subject, filter, fromEvent, takeUntil } from 'rxjs';
 
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
@@ -75,6 +75,14 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   }
 
   subAudio() {
+    fromEvent(this.$player, 'ended')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.chatService.setAudioPlayStatus(false);
+        },
+      });
+
     this.audioIconState++;
     this.chatService.audioPlaying$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (play) => {
