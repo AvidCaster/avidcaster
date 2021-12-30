@@ -45,6 +45,7 @@ import {
   CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   defaultChatConfig,
   defaultChatState,
+  defaultHostColor,
 } from './chat.default';
 import { ChatMessageItem, ChatState } from './chat.model';
 import { chatDatabaseInstance } from './util/chat.db';
@@ -55,6 +56,9 @@ export class ChatService implements OnDestroy {
   private nameSpace = 'CHAT';
   private claimId: string;
   private destroy$ = new Subject<boolean>();
+
+  // host color
+  hostColor = defaultHostColor();
 
   // environment, options
   options: DeepReadonly<ApplicationConfig> = DefaultApplicationConfig;

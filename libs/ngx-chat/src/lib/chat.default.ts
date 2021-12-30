@@ -154,3 +154,13 @@ const DefaultChatState: ChatState = {
 export const defaultChatState = (): ChatState => {
   return ldDeepClone(DefaultChatState);
 };
+
+const DefaultHostColor = {
+  youtube: 'warn',
+  twitch: 'info',
+  default: 'accent',
+};
+
+export const defaultHostColor = (): { [id: string]: string } => {
+  return ldDeepClone(DefaultHostColor);
+};
