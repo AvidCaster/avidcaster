@@ -20,7 +20,17 @@ import { sanitizeJsonStringOrObject, signObject } from '@fullerstack/ngx-shared'
 import { StoreService } from '@fullerstack/ngx-store';
 import { UixService } from '@fullerstack/ngx-uix';
 import { cloneDeep as ldDeepClone, mergeWith as ldMergeWith, pick as ldPick } from 'lodash-es';
-import { BehaviorSubject, Observable, Subject, filter, map, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  EMPTY,
+  Observable,
+  Subject,
+  filter,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { DeepReadonly } from 'ts-essentials';
 
 import {
@@ -225,7 +235,12 @@ export class ChatService implements OnDestroy {
   private subToTables() {
     this.chatList$ = this.state$.pipe(
       filter((state) => !!state.signature),
-      switchMap((state) => this.database.chatLiveQuery(state.listFilter)),
+      switchMap((state) => {
+        if (state.autoScrollEnabled) {
+          return this.database.chatLiveQuery(state.listFilter);
+        }
+        return EMPTY;
+      }),
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => searchByPrimaryFilter(chat, this.state)))
       ),
