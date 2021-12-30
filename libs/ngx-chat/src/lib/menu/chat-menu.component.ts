@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { LayoutService } from '@fullerstack/ngx-layout';
 import { LoggerService } from '@fullerstack/ngx-logger';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { shakeAnimations } from '@fullerstack/ngx-shared';
+import { Subject, filter, fromEvent, takeUntil } from 'rxjs';
 
 import { ChatMessageItem } from '../chat.model';
 import { ChatService } from '../chat.service';
@@ -18,6 +19,7 @@ import { ChatService } from '../chat.service';
   selector: 'fullerstack-chat-menu',
   templateUrl: './chat-menu.component.html',
   styleUrls: ['./chat-menu.component.scss'],
+  animations: [shakeAnimations.wiggleIt],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMenuComponent implements OnInit, OnDestroy {
@@ -28,6 +30,13 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   chat: ChatMessageItem;
 
+  // animation state for icons that need wiggle animation
+  trashIconState = 1;
+  fireworksIconState = 1;
+  audioIconState = 1;
+  snailIconState = 1;
+  rabbitIconState = 1;
+
   constructor(
     readonly cdR: ChangeDetectorRef,
     readonly logger: LoggerService,
@@ -37,7 +46,7 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subState();
-    this.subToggleAudioPlay();
+    this.subAudio();
     this.subSelectedChat();
 
     this.logger.debug('ChatMenuComponent initialized');
@@ -65,11 +74,16 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  clearMessage() {
-    this.chatService.clearMessage();
-  }
+  subAudio() {
+    fromEvent(this.$player, 'ended')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.chatService.setAudioPlayStatus(false);
+        },
+      });
 
-  subToggleAudioPlay() {
+    this.audioIconState++;
     this.chatService.audioPlaying$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (play) => {
         if (play) {
@@ -82,7 +96,23 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     });
   }
 
+  clearMessage() {
+    this.trashIconState++;
+    this.chatService.clearMessage();
+  }
+
+  toggleFireworksPlay() {
+    this.fireworksIconState++;
+    this.chatService.setFireworksPlayStatus();
+  }
+
+  toggleAudioPlay() {
+    this.audioIconState++;
+    this.chatService.setAudioPlayStatus();
+  }
+
   toggleFastForward() {
+    this.chatService.state.ffEnabled ? this.snailIconState++ : this.rabbitIconState++;
     this.chatService.setState({ ffEnabled: !this.chatService.state.ffEnabled });
   }
 

@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
+import { LoggerService } from '@fullerstack/ngx-logger';
+import { Subject, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 import { ChatMessageItem, ChatState } from '../chat.model';
 import { ChatService } from '../chat.service';
@@ -24,13 +25,15 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   constructor(
     readonly cdR: ChangeDetectorRef,
-    private elR: ElementRef,
+    readonly elR: ElementRef,
+    readonly logger: LoggerService,
     readonly chatService: ChatService
   ) {}
 
   ngOnInit(): void {
     this.subState();
     this.subChatList();
+    this.logger.debug(`ChatListComponent.ngOnInit()`);
   }
 
   trackById(index: number, chat: ChatMessageItem) {
@@ -38,15 +41,20 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   subState() {
-    this.chatService.state$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (state) => {
-        if (!this.state?.autoScrollEnabled && state.autoScrollEnabled) {
-          this.scrollToTop();
-        }
-        this.state = state;
-        this.cdR.detectChanges();
-      },
-    });
+    this.chatService.state$
+      .pipe(
+        filter((state) => !!state),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (state) => {
+          if (!this.state?.autoScrollEnabled && state.autoScrollEnabled) {
+            this.scrollToTop();
+          }
+
+          this.state = state;
+        },
+      });
   }
 
   subChatList() {
