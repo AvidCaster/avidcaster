@@ -33,6 +33,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subState();
     this.subChatList();
+    this.logger.debug(`ChatListComponent.ngOnInit()`);
   }
 
   trackById(index: number, chat: ChatMessageItem) {

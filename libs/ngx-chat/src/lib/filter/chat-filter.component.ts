@@ -54,7 +54,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
     this.subKeywords();
     this.subWigglePause();
 
-    console.log('ChatFilterComponent started ... ');
+    this.logger.debug('ChatFilterComponent initialized');
   }
 
   subKeywords() {

@@ -44,12 +44,13 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('ChatOverlayComponent.ngOnInit');
     this.subStorage();
     this.subState();
     this.subBackgroundColor();
     this.subScrollEvent();
     this.addAttrStyles();
+
+    this.logger.info('ChatOverlayComponent: Initialized');
   }
 
   private subStorage() {

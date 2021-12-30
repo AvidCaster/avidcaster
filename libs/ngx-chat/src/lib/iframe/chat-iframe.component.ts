@@ -35,7 +35,7 @@ export class ChatIframeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subHostReady();
     this.subOverlayReady();
-    this.logger.info('Chat monitoring started!');
+    this.logger.debug('Chat monitoring started!');
   }
 
   subHostReady() {

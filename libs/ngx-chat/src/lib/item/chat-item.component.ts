@@ -54,6 +54,8 @@ export class ChatItemComponent implements OnInit, OnDestroy {
         this.isCommonList = state.listFilter === 'common';
         this.cdR.markForCheck();
       });
+
+    // this.logger.debug(`ChatItemComponent.ngOnInit()`);
   }
 
   getHostColor(host: ChatHosts): string {
