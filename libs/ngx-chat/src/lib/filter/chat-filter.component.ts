@@ -115,7 +115,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
 
   setListFilter(filter: ChatMessageListFilterType) {
     this.listFilter = filter;
-    this.chatService.setState({ listFilter: filter });
+    this.chatService.setState({ listFilter: filter, autoScrollEnabled: true });
   }
 
   // primary options
