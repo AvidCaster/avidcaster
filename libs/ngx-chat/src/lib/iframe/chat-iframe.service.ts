@@ -16,6 +16,8 @@ import { UixService } from '@fullerstack/ngx-uix';
 import { BehaviorSubject, Subject, filter, takeUntil, throttleTime } from 'rxjs';
 
 import {
+  CHAT_DASHBOARD_DEFAULT_HEIGHT,
+  CHAT_DASHBOARD_DEFAULT_WIDTH,
   CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE,
   CHAT_MESSAGE_LIST_BUFFER_SIZE,
   CHAT_STORAGE_OVERLAY_REQUEST_KEY,
@@ -250,7 +252,11 @@ export class ChatIframeService implements OnDestroy {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'iframe' }));
     this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
-      openOverlayWindowScreen(this.uix.window);
+      openOverlayWindowScreen(
+        this.uix.window,
+        CHAT_DASHBOARD_DEFAULT_WIDTH,
+        CHAT_DASHBOARD_DEFAULT_HEIGHT
+      );
       this.awaitOverlayResponseTimeoutHandler = undefined;
       this.overlayReadyOb$.next(true);
     }, 1000);

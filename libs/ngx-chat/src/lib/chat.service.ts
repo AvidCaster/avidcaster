@@ -35,6 +35,9 @@ import { DeepReadonly } from 'ts-essentials';
 
 import {
   CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
+  CHAT_DASHBOARD_DEFAULT_HEIGHT,
+  CHAT_DASHBOARD_DEFAULT_TOP,
+  CHAT_DASHBOARD_DEFAULT_WIDTH,
   CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
   CHAT_IFRAME_URL,
   CHAT_STORAGE_BROADCAST_KEY_PREFIX,
@@ -133,6 +136,7 @@ export class ChatService implements OnDestroy {
     });
 
     this.subToTables();
+    this.centerNewChatDashboard();
 
     this.logger.info(`[${this.nameSpace}] ChatService ready ...`);
   }
@@ -246,7 +250,6 @@ export class ChatService implements OnDestroy {
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => searchByPrimaryFilter(chat, this.state)))
       ),
-
       map((chats: ChatMessageItem[]) =>
         chats?.map((chat) => tryGet(() => searchByKeywords(chat, this.state)))
       ),
@@ -306,6 +309,46 @@ export class ChatService implements OnDestroy {
         iframePaused,
       })
     );
+  }
+
+  private centerNewChatDashboard(defaultSize = true) {
+    if (!this.isRunningInIframeContext) {
+      // only center if not in iframe
+      const left = this.uix.window.screen.width / 2 - this.uix.window.top.outerWidth / 2;
+      const top = this.uix.window.top.screen.height / 2 - this.uix.window.top.outerHeight / 2;
+
+      this.uix.window.moveTo(left, top);
+
+      if (defaultSize) {
+        setTimeout(() => {
+          this.uix.window.resizeTo(CHAT_DASHBOARD_DEFAULT_WIDTH, CHAT_DASHBOARD_DEFAULT_HEIGHT);
+        }, 0);
+      }
+    }
+  }
+
+  private maxNewChatDashboard() {
+    // only center if not in iframe
+    if (!this.isRunningInIframeContext) {
+      this.uix.window.moveTo(0, CHAT_DASHBOARD_DEFAULT_TOP);
+
+      setTimeout(() => {
+        this.uix.window.resizeTo(
+          this.uix.window.screen.width,
+          this.uix.window.screen.height - CHAT_DASHBOARD_DEFAULT_TOP
+        );
+      }, 0);
+    }
+  }
+
+  toggleMaxScreen() {
+    const outerWidth = this.uix.window.top.outerWidth;
+
+    if (outerWidth > CHAT_DASHBOARD_DEFAULT_WIDTH) {
+      this.centerNewChatDashboard();
+    } else {
+      this.maxNewChatDashboard();
+    }
   }
 
   cleanupBroadcastMessage() {

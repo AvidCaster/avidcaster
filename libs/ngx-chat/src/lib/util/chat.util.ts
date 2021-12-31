@@ -127,13 +127,15 @@ export const searchByKeywords = (
  */
 export const openOverlayWindowScreen = (
   targetWindow: Window,
-  width = '1280',
-  height = '720'
+  width = 1280,
+  height = 720,
+  top = 100,
+  left = 100
 ): void => {
   targetWindow.open(
     CHAT_OVERLAY_SCREEN_URL,
     '_blank',
-    `width=${width},height=${height},left=100,top=100`
+    `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width},height=${height},left=${left},top=${top}`
   );
 };
 
