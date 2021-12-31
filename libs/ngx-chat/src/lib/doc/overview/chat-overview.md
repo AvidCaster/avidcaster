@@ -1,8 +1,8 @@
-# AvidCaster Chat Overlay <img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png">
+# AvidCaster Chat Overlay <a href="chat/overlay/screen"><img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png"></a>
 
 ## `Description`
 
-Avidcaster feature works with live stream hosts in providing a low-cost lower-third video chat overlay.
+Avidcaster feature works with live stream hosts in providing a low-cost lower-third [video chat overlay](chat/overlay/screen).
 
 ## `Overview`
 

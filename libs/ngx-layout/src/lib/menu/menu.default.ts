@@ -29,11 +29,11 @@ export const layoutMenuTree: MenuItem[] = [
         icon: 'cog',
         link: '/chat/overlay/setup',
       },
-      {
-        name: _('COMMON.SCREEN'),
-        icon: 'fit-to-screen',
-        link: '/chat/overlay/screen',
-      },
+      // { // available via chat overview
+      //   name: _('COMMON.SCREEN'),
+      //   icon: 'fit-to-screen',
+      //   link: '/chat/overlay/screen',
+      // },
     ],
   },
 ];

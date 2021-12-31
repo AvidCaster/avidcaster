@@ -1,8 +1,8 @@
-# Setup - `AvidCaster Chat Overlay` <img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png">
+# Setup - `AvidCaster Chat Overlay` <a href="chat/overlay/screen"><img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png"></a>
 
 ## `Description`
 
-`Avidcaster` chat overlay feature works with `chrome extensions` in providing a low-cost lower-third video chat overlay.
+`Avidcaster` chat overlay feature works with `chrome extensions` in providing a low-cost lower-third [video chat overlay](chat/overlay/screen).
 
 Supported chats: `YouTube` & `Twitch`.
 
