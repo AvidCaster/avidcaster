@@ -242,7 +242,7 @@ export class ChatService implements OnDestroy {
     this.chatList$ = this.state$.pipe(
       filter((state) => !!state.signature),
       switchMap((state) => {
-        if (state.autoScrollMode) {
+        if (state.autoScrollMode || state.fastForwardMode) {
           return this.database.chatLiveQuery(state.listFilter);
         }
         return EMPTY;
