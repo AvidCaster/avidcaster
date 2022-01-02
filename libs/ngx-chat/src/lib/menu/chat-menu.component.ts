@@ -112,9 +112,14 @@ export class ChatMenuComponent implements OnInit, OnDestroy {
     this.chatService.setAudioPlayStatus();
   }
 
-  toggleFastForward() {
-    this.chatService.state.fastForwardMode ? this.snailIconState++ : this.rabbitIconState++;
-    this.chatService.setState({ fastForwardMode: !this.chatService.state.fastForwardMode });
+  enableFastForward() {
+    this.rabbitIconState++;
+    this.chatService.setState({ fastForwardMode: true, autoScrollMode: false });
+  }
+
+  enableAutoScroll() {
+    this.snailIconState++;
+    this.chatService.setState({ fastForwardMode: false, autoScrollMode: true });
   }
 
   ngOnDestroy(): void {

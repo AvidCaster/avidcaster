@@ -81,7 +81,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   subWigglePause() {
     interval(2000)
       .pipe(
-        filter(() => !this.chatService.state.autoScrollEnabled),
+        filter(() => !this.chatService.state.autoScrollMode),
         takeUntil(this.destroy$)
       )
       .subscribe({
@@ -115,7 +115,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
 
   setListFilter(filter: ChatMessageListFilterType) {
     this.listFilter = filter;
-    this.chatService.setState({ listFilter: filter, autoScrollEnabled: true });
+    this.chatService.setState({ listFilter: filter, autoScrollMode: true });
   }
 
   // primary options
@@ -147,7 +147,7 @@ export class ChatFilterComponent implements OnInit, OnDestroy {
   }
 
   toggleAutoScroll() {
-    this.chatService.setState({ autoScrollEnabled: !this.chatService.state.autoScrollEnabled });
+    this.chatService.setState({ autoScrollMode: !this.chatService.state.autoScrollMode });
   }
 
   sessionReset() {

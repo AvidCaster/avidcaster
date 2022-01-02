@@ -109,10 +109,10 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           const isScrolling = this.scrollableList.nativeElement.scrollTop > 0;
-          if (isScrolling && this.chatService.state.autoScrollEnabled) {
-            this.chatService.setState({ autoScrollEnabled: false });
-          } else if (!isScrolling && !this.chatService.state.autoScrollEnabled) {
-            this.chatService.setState({ autoScrollEnabled: true });
+          if (isScrolling && this.chatService.state.autoScrollMode) {
+            this.chatService.setState({ autoScrollMode: false });
+          } else if (!isScrolling && !this.chatService.state.autoScrollMode) {
+            this.chatService.setState({ autoScrollMode: true });
           }
         },
       });

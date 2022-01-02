@@ -97,7 +97,7 @@ export interface ChatState {
   keywordsFilter: ChatMessageKeywordsFilterType;
   listFilter: ChatMessageListFilterType;
   fastForwardMode: boolean;
-  autoScrollEnabled: boolean;
+  autoScrollMode: boolean;
   iframePaused: boolean;
   isDarkTheme: boolean;
   chatVerticalPosition: number;

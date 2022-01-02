@@ -141,7 +141,7 @@ const DefaultChatState: ChatState = {
   keywordsFilter: 'none',
   primaryFilter: 'none',
   fastForwardMode: false,
-  autoScrollEnabled: true,
+  autoScrollMode: true,
   iframePaused: false,
   isDarkTheme: false,
   chatVerticalPosition: CHAT_VERTICAL_POSITION_MID_LEVEL_DEFAULT_VALUE,

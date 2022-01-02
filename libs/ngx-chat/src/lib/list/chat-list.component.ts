@@ -48,7 +48,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (state) => {
-          if (!this.state?.autoScrollEnabled && state.autoScrollEnabled) {
+          if (!this.state?.autoScrollMode && state.autoScrollMode) {
             this.scrollToTop();
           }
 

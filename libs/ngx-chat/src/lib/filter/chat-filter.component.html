@@ -54,7 +54,7 @@
 
   <div fxFlex>
     <button
-      *ngIf="!chatService.state.autoScrollEnabled"
+      *ngIf="!chatService.state.fastForwardMode && !chatService.state.autoScrollMode"
       class="chat-auto-scroll"
       matTooltipPosition="before"
       matTooltip="{{ 'COMMON.RESUME' | translate }}"
