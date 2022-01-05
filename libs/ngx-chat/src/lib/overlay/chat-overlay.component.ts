@@ -61,7 +61,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
             // we have received a request to open the chat overlay
             // we may not be in focus, so let's close this window
             // a new one will be spawned (workaround for .focus() not working)
-            this.chatService.layout.uix.window.close();
+            this.chatService.layout.uix.closeWindow();
           }
         },
       });

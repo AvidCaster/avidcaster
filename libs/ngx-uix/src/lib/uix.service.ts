@@ -168,8 +168,13 @@ export class UixService implements OnDestroy {
     this.document.body.removeAttribute(attrName);
   }
 
-  refreshPage() {
+  refreshWindow() {
     this.document.defaultView.location.reload();
+  }
+
+  closeWindow() {
+    window.opener = self; // make it believe it was opened by window.open()
+    this.window.close();
   }
 
   get inIframe(): boolean {

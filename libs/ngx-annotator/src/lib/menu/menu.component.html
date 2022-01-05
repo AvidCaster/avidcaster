@@ -137,17 +137,14 @@
     [@wiggleIt]="saveIconState"
     (click)="saveCanvas()"
   >
-    <mat-icon
-      class="clickable-menu-icon"
-      svgIcon="download-circle-outline"
-    ></mat-icon>
+    <mat-icon class="clickable-menu-icon" svgIcon="download-circle-outline"></mat-icon>
   </button>
 
   <button *ngIf="annotation.state.showFullscreen" mat-icon-button class="quick-menu-button material-icons" (click)="toggleFullscreen()">
     <mat-icon class="clickable-menu-icon" [svgIcon]="isFullscreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
   </button>
 
-  <button *ngIf="annotation.state.showRefresh" mat-icon-button class="quick-menu-button material-icons" (click)="uix.refreshPage()">
+  <button *ngIf="annotation.state.showRefresh" mat-icon-button class="quick-menu-button material-icons" (click)="uix.refreshWindow()">
     <mat-icon class="clickable-menu-icon" svgIcon="web-refresh"></mat-icon>
   </button>
 </div>
