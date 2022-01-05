@@ -49,7 +49,7 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     this.subBackgroundColor();
     this.subScrollEvent();
     this.addAttrStyles();
-
+    this.chatService.broadcastNewChatOverlayResponse();
     this.logger.info('ChatOverlayComponent: Initialized');
   }
 
@@ -58,9 +58,10 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
           if (event.key === CHAT_STORAGE_OVERLAY_REQUEST_KEY) {
-            this.chatService.broadcastNewChatOverlayResponse();
-            this.chatService.layout.uix.window.focus();
-            this.logger.info('ChatOverlayComponent: Overlay Response Sent; Grabbing Focus!');
+            // we have received a request to open the chat overlay
+            // we may not be in focus, so let's close this window
+            // a new one will be spawned (workaround for .focus() not working)
+            this.chatService.layout.uix.window.close();
           }
         },
       });

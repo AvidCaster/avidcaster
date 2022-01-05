@@ -22,6 +22,7 @@
   "APP.SUB_HEADLINE": "Annotation - Chat Overlay - Map Overlay",
   "BAD_USER_INPUT": "Invalid user input",
   "CHAT.CLEAR": "Clear Chat",
+  "CHAT.OPEN_DASHBOARD": "Open Chat Dashboard",
   "CHAT.DECLUTTER": "Declutter",
   "CHAT.DEFAULT_MESSAGE": "This is a sample chat with a long text and an emoji (😘) so we can test the message overlay",
   "CHAT.DONATIONS": "Donations",

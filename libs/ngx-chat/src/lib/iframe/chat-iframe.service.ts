@@ -50,7 +50,6 @@ export class ChatIframeService implements OnDestroy {
   hostReady$ = this.hostReadyOb$.asObservable();
   private overlayReadyOb$ = new Subject<boolean>();
   overlayReady$ = this.overlayReadyOb$.asObservable();
-  awaitOverlayResponseTimeoutHandler = undefined;
   dispatchedChatMessageIds: string[] = [];
   currentHost: ChatHosts;
   streamId: string;
@@ -251,13 +250,12 @@ export class ChatIframeService implements OnDestroy {
   broadcastOverlayRequest() {
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'iframe' }));
-    this.awaitOverlayResponseTimeoutHandler = setTimeout(() => {
+    setTimeout(() => {
       openOverlayWindowScreen(
         this.uix.window,
         CHAT_DASHBOARD_DEFAULT_WIDTH,
         CHAT_DASHBOARD_DEFAULT_HEIGHT
       );
-      this.awaitOverlayResponseTimeoutHandler = undefined;
       this.overlayReadyOb$.next(true);
     }, 1000);
   }
@@ -266,9 +264,6 @@ export class ChatIframeService implements OnDestroy {
    * We have heard from the overlay process, we get ready to process messages
    */
   private handleNewOverlayResponseEvent() {
-    // no one is listening, we can safely open a new overlay screen
-    clearTimeout(this.awaitOverlayResponseTimeoutHandler);
-    this.awaitOverlayResponseTimeoutHandler = undefined;
     this.overlayReadyOb$.next(true);
     this.logger.info('Overlay response received');
   }
