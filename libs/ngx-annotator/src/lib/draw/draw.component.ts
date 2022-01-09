@@ -206,7 +206,7 @@ export class DrawComponent implements OnInit, OnDestroy {
           if (pointAdded) {
             const from = line.points.length > 1 ? line.points[line.points.length - 2] : to;
 
-            // draw a temp line live on the foreground svg
+            // draw a temp line, 'live', on the foreground svg
             this.annotation.drawLineOnSVG(from, to, this.svgEl, line.attributes);
           }
         },
