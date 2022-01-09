@@ -189,9 +189,9 @@ export class DrawComponent implements OnInit, OnDestroy {
                 line = undefined;
               }
             }),
-            takeUntil(fromEvent(this.canvasEl, 'mouseup')),
-            takeUntil(fromEvent(this.canvasEl, 'mouseleave')),
-            takeUntil(fromEvent(this.canvasEl, 'touchend'))
+            takeUntil(
+              this.annotation.fromEvents(this.canvasEl, ['mouseup', 'mouseleave', 'touchend'])
+            )
           );
         }),
         takeUntil(this.destroy$)
