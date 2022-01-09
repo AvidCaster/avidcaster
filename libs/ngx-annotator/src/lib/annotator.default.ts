@@ -36,6 +36,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   vertical: true,
   reverse: false,
   eraser: false,
+  fader: false,
   showTrash: true,
   showUndo: true,
   showRedo: true,
@@ -64,6 +65,7 @@ export const defaultAnnotatorConfig = (): AnnotatorConfig => {
 };
 
 const DefaultLine: Line = {
+  timestamp: 0,
   points: [],
   attributes: {
     lineCap: DefaultAnnotatorState.lineCap,
@@ -76,7 +78,7 @@ const DefaultLine: Line = {
 };
 
 export const defaultLine = (): Line => {
-  return ldDeepClone(DefaultLine);
+  return ldDeepClone({ ...DefaultLine, timestamp: new Date().getTime() });
 };
 
 export const ANNOTATOR_DRAW_URL = '/annotate/draw';
@@ -84,3 +86,7 @@ export const ANNOTATOR_URL_FULLSCREEN_LIST = [ANNOTATOR_DRAW_URL];
 
 export const ANNOTATOR_LINE_WIDTH_OPTIONS = [2, 3, 4, 5, 6, 8];
 export const ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH = 15;
+
+export const ANNOTATOR_FADER_FREQUENCY_IN_MILLISECONDS = 70;
+export const ANNOTATOR_FADER_ALPHA_DELTA_STEP = 10;
+export const ANNOTATOR_FADER_KEEP_IN_SECONDS = 10 * 1000;
