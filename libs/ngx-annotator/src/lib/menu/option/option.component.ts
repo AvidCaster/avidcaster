@@ -68,10 +68,17 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
   }
 
   toggleFader(event: Event) {
+    const fader = !this.annotation.state.fader;
     event.stopPropagation();
     this.annotation.setState({
       ...this.annotation.state,
-      fader: !this.annotation.state.fader,
+      fader: fader,
+      showTrash: !fader,
+      showUndo: !fader,
+      showRedo: !fader,
+      showEraser: !fader,
+      showSave: fader ? false : this.annotation.state.showSave,
+      showCursor: fader ? false : this.annotation.state.showCursor,
     });
   }
 
