@@ -14,6 +14,26 @@ export const rgbToHex = (r: number, g: number, b: number): string => {
   return ((r << 16) | (g << 8) | b).toString(16);
 };
 
+// given hex color, return rgb color
+export const hexToRgb = (hexColor: string): number[] => {
+  return hexColor
+    .replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => '#' + r + r + g + g + b + b)
+    .substring(1)
+    .match(/.{2}/g)
+    .map((x) => parseInt(x, 16));
+};
+
+// given rgb and alpha return string rgba
+export const rgba = (r: number, g: number, b: number, a: number): string => {
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+};
+
+// given hex color and alpha return string rgba
+export const hexToRgba = (hexColor: string, alpha: number): string => {
+  const rgb = hexToRgb(hexColor);
+  return rgba(rgb[0], rgb[1], rgb[2], alpha);
+};
+
 // get a unique random color from list of colors
 export const getRandomColor = (lastColor?: string): string => {
   let color = AnnotatorColors[randomInteger(0, AnnotatorColors.length - 1)];
