@@ -73,6 +73,7 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     this.annotation.setState({
       ...this.annotation.state,
       fader: fader,
+      eraser: fader ? false : this.annotation.state.eraser,
       showTrash: !fader,
       showUndo: !fader,
       showRedo: !fader,

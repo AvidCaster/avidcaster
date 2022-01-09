@@ -26,6 +26,7 @@ import { DeepReadonly } from 'ts-essentials';
 
 import {
   ANNOTATOR_ERASER_LINE_WIDTH_EXTRA_WIDTH,
+  ANNOTATOR_FADER_ALPHA_DELTA_STEP,
   ANNOTATOR_URL_FULLSCREEN_LIST,
   defaultAnnotatorConfig,
   defaultAnnotatorState,
@@ -56,7 +57,6 @@ export class AnnotatorService implements OnDestroy {
   trash$ = this.trashOb$.asObservable();
   save$ = this.saveOb$.asObservable();
   private destroy$ = new Subject<boolean>();
-  private lastUrl: string;
 
   constructor(
     readonly router: Router,
@@ -421,6 +421,24 @@ export class AnnotatorService implements OnDestroy {
   resetCanvas(canvasEl: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
   }
+
+  /**
+   * Reduce the alpha by a given delta for a given canvas
+   * @param canvasEl canvas element
+   * @param ctx canvas context
+   * @param alphaDelta alpha delta reduction delta
+   */
+  reduceCanvasAlpha = (
+    canvasEl: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    alphaDelta = ANNOTATOR_FADER_ALPHA_DELTA_STEP
+  ) => {
+    const screenData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    for (let i = 3; i < screenData.data.length; i += 4) {
+      screenData.data[i] -= alphaDelta;
+    }
+    ctx.putImageData(screenData, 0, 0);
+  };
 
   /**
    * Returns coordinates of the mouse relative to the canvas

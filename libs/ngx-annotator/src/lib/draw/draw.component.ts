@@ -15,9 +15,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
-import { Subject } from 'rxjs';
+import { Subject, interval } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
+import {
+  ANNOTATOR_FADER_FREQUENCY_IN_MILLISECONDS,
+  ANNOTATOR_FADER_KEEP_IN_SECONDS,
+} from '../annotator.default';
 import { Line, Point } from '../annotator.model';
 import { AnnotatorService } from '../annotator.service';
 import { downloadPng } from '../annotator.util';
@@ -54,7 +58,21 @@ export class DrawComponent implements OnInit, OnDestroy {
     this.redoSub();
     this.stateSub();
     this.saveSub();
+    this.faderSub();
     this.addAttrStyles();
+  }
+
+  private faderSub() {
+    interval(ANNOTATOR_FADER_FREQUENCY_IN_MILLISECONDS)
+      .pipe(
+        filter(() => this.annotation.state.fader),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          this.annotation.reduceCanvasAlpha(this.canvasEl, this.ctx);
+        },
+      });
   }
 
   private trashSub() {
@@ -87,21 +105,13 @@ export class DrawComponent implements OnInit, OnDestroy {
       if (atLeastOneVisibleLineToUndo) {
         this.annotation.undoLastLine(this.lines);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.lines
-          .filter((line) => line.visible)
-          .forEach((line) => {
-            this.annotation.drawLineOnCanvas(line, this.ctx);
-          });
+        this.redrawLines();
       }
     } else if (this.trashedLines.length) {
       this.lines = this.trashedLines;
       this.trashedLines = [];
       this.annotation.resetCanvas(this.canvasEl, this.ctx);
-      this.lines
-        .filter((line) => line.visible)
-        .forEach((line) => {
-          this.annotation.drawLineOnCanvas(line, this.ctx);
-        });
+      this.redrawLines();
     }
   }
 
@@ -119,9 +129,7 @@ export class DrawComponent implements OnInit, OnDestroy {
       if (atLeastOneInvisibleLineToRedo) {
         this.annotation.redoLastLine(this.lines);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.lines
-          .filter((line) => line.visible)
-          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+        this.redrawLines();
       }
     }
   }
@@ -157,9 +165,7 @@ export class DrawComponent implements OnInit, OnDestroy {
         this.svgEl.setAttribute('width', `${size.x}px`);
         this.svgEl.setAttribute('height', `${size.y}px`);
         this.annotation.resetCanvas(this.canvasEl, this.ctx);
-        this.lines
-          .filter((line) => line.visible)
-          .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
+        this.redrawLines();
       },
     });
   }
@@ -180,6 +186,15 @@ export class DrawComponent implements OnInit, OnDestroy {
               if (line.points.length) {
                 // abandon hidden lines "the undo(s)" on any further update
                 this.lines = this.lines.filter((lineItem) => lineItem.visible).concat(line);
+
+                // if fader is on, remove the lines that have faded out already
+                if (this.annotation.state.fader) {
+                  const dateTime = new Date().getTime();
+                  this.lines = this.lines.filter((lineItem) => {
+                    // when in fader mode, only keep the lines that are under 10 seconds old
+                    return dateTime - lineItem.timestamp < ANNOTATOR_FADER_KEEP_IN_SECONDS;
+                  });
+                }
 
                 // draw the line on the background canvas
                 this.annotation.drawLineOnCanvas(line, this.ctx);
@@ -211,6 +226,13 @@ export class DrawComponent implements OnInit, OnDestroy {
           }
         },
       });
+  }
+
+  // redraw the lines on the background canvas
+  private redrawLines() {
+    this.lines
+      .filter((line) => line.visible)
+      .forEach((line) => this.annotation.drawLineOnCanvas(line, this.ctx));
   }
 
   get eraserCursorClass(): string {

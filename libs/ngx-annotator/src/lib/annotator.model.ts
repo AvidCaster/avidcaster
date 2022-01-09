@@ -73,6 +73,7 @@ export interface Point {
 }
 
 export interface Line {
+  timestamp: number;
   points: Point[];
   attributes: LineAttributes;
   visible?: boolean;
