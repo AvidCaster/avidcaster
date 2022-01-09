@@ -91,21 +91,39 @@ export const searchByKeywords = (
 
   switch (state.keywordsFilter as ChatMessageKeywordsFilterType) {
     case 'host': {
-      return state.keywords?.some((word) => chat?.host?.toLowerCase() === word.toLowerCase())
+      return state.keywords
+        .map((k) => k.toLowerCase())
+        ?.some((word) => chat?.host?.toLowerCase() === word)
         ? chat
         : undefined;
     }
     case 'author': {
-      return state.keywords?.some((word) => chat?.author?.includes(word)) ? chat : undefined;
+      return state.keywords
+        .map((k) => k.toLowerCase())
+        ?.some((word) => chat?.author?.toLowerCase().includes(word))
+        ? chat
+        : undefined;
     }
     case 'filterBy': {
-      return state.keywords?.some((word) => chat?.message?.includes(word)) ? chat : undefined;
+      return state.keywords
+        .map((k) => k.toLowerCase())
+        ?.some((word) => chat?.message?.toLowerCase().includes(word))
+        ? chat
+        : undefined;
     }
     case 'filterOut': {
-      return !state.keywords?.some((word) => chat?.message?.includes(word)) ? chat : undefined;
+      return !state.keywords
+        .map((k) => k.toLowerCase())
+        ?.some((word) => chat?.message?.toLowerCase().includes(word))
+        ? chat
+        : undefined;
     }
     case 'highlight': {
-      if (state.keywords?.some((word) => chat?.message?.includes(word))) {
+      if (
+        state.keywords
+          .map((k) => k.toLowerCase())
+          ?.some((word) => chat?.message?.toLowerCase().includes(word))
+      ) {
         chat.highlighted = true;
       } else {
         chat.highlighted = false;
@@ -131,8 +149,8 @@ export const openOverlayWindowScreen = (
   height = 720,
   top = 100,
   left = 100
-): void => {
-  targetWindow.open(
+): Window => {
+  return targetWindow.open(
     CHAT_OVERLAY_SCREEN_URL,
     '_blank',
     `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width},height=${height},left=${left},top=${top}`

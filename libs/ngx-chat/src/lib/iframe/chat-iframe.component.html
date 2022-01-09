@@ -2,12 +2,16 @@
   <div fxLayout="row" fxLayoutGap="10px">
     <div fxLayout="row" class="chat-dash-button" (click)="openOverlay()">
       <span> <img width="48" src="./assets/images/logos/logo-micro.png" /></span>
-      <button mat-raised-button color="accent">{{ 'CHAT.OPEN_DASHBOARD' | translate }}</button>
+      <div fxLayout="column" fxLayoutAlign="center">
+        <button mat-raised-button color="accent">{{ 'CHAT.OPEN_DASHBOARD' | translate }}</button>
+      </div>
     </div>
     <div fxLayout="column" fxLayoutAlign="center" *ngIf="chatIframeService.streamId">( {{ chatIframeService.streamId }} )</div>
     <div fxLayout="column" fxLayoutAlign="center" *ngIf="overlayOpenRequestInProgress">
       <mat-spinner class="chat-iframe-spinner" color="accent" [diameter]="20"></mat-spinner>
     </div>
   </div>
-  <div id="chat-iframe-footer" fxLayout="column" fxLayoutAlign="center">{{ system.location.host }}</div>
+  <div *ngIf="chatIframeService.popupBlocked" id="chat-iframe-footer" fxLayout="column" fxLayoutAlign="center">
+    {{ 'CHAT.POPUP_BLOCKED' | translate }}. <a href="{{ overlayPath }}" target="_blank">{{ system.location }}"</a>
+  </div>
 </div>

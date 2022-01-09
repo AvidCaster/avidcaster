@@ -54,6 +54,7 @@ export class ChatIframeService implements OnDestroy {
   currentHost: ChatHosts;
   streamId: string;
   prefix: string;
+  popupBlocked = false;
 
   constructor(
     readonly zone: NgZone,
@@ -248,15 +249,24 @@ export class ChatIframeService implements OnDestroy {
    * If so we spawn a new overlay process (window)
    */
   broadcastOverlayRequest() {
+    this.popupBlocked = false;
+
     const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
     storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'iframe' }));
+
     setTimeout(() => {
-      openOverlayWindowScreen(
+      const newWin = openOverlayWindowScreen(
         this.uix.window,
         CHAT_DASHBOARD_DEFAULT_WIDTH,
         CHAT_DASHBOARD_DEFAULT_HEIGHT
       );
-      this.overlayReadyOb$.next(true);
+
+      if (!newWin || newWin.closed || typeof newWin.closed == 'undefined') {
+        // popup blocked
+        this.popupBlocked = true;
+      } else {
+        this.overlayReadyOb$.next(true);
+      }
     }, 1000);
   }
 
