@@ -49,6 +49,12 @@
   <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
 
   <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
+    <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px" (click)="toggleFader($event)">
+      <mat-icon [svgIcon]="annotation.state.fader ? 'checkbox-marked' : 'checkbox-blank-outline'"></mat-icon>
+      <div fxFlex="auto" class="text">{{ 'ANNOTATOR.LINE_FADER' | translate }}</div>
+      <mat-icon svgIcon="circle-opacity"></mat-icon>
+    </div>
+
     <div
       class="selection-box"
       fxLayout="row"

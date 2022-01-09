@@ -67,6 +67,14 @@ export class MenuOptionComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleFader(event: Event) {
+    event.stopPropagation();
+    this.annotation.setState({
+      ...this.annotation.state,
+      fader: !this.annotation.state.fader,
+    });
+  }
+
   toggleBackgroundColor(event: Event) {
     event.stopPropagation();
     const bgColor = this.annotation.isBackgroundWhite() ? '#000000' : '#ffffff';

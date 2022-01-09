@@ -36,6 +36,7 @@ const DefaultAnnotatorState: AnnotatorState = {
   vertical: true,
   reverse: false,
   eraser: false,
+  fader: false,
   showTrash: true,
   showUndo: true,
   showRedo: true,

@@ -54,6 +54,7 @@ export interface AnnotatorState extends LineAttributes {
   vertical: boolean;
   reverse: boolean;
   eraser: boolean;
+  fader: boolean;
   showTrash: boolean;
   showUndo: boolean;
   showRedo: boolean;
