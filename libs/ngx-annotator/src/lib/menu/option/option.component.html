@@ -88,6 +88,9 @@
     </div>
   </mat-menu>
 
+  <div class="header">{{ 'COMMON.MISC' | translate }}</div>
+  <mat-divider class="mb0_5" [ngStyle]="{ 'border-top': '2px solid', 'border-color': annotation.state.menuColor }"></mat-divider>
+
   <div class="mb0_5" fxLayout="column" fxLayoutGap="5px">
     <div class="selection-box" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px" (click)="layout.auth.goTo('/')">
       <div fxFlex="auto" class="text">{{ 'COMMON.HOME' | translate }}</div>
