@@ -15,7 +15,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UixService } from '@fullerstack/ngx-uix';
-import { Subject, fromEvent } from 'rxjs';
+import { Subject } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Line, Point } from '../annotator.model';
