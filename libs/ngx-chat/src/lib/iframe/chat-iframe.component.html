@@ -3,7 +3,7 @@
     <div fxLayout="row" class="chat-dash-button" (click)="openOverlay()">
       <span> <img width="48" src="./assets/images/logos/logo-micro.png" /></span>
       <div fxLayout="column" fxLayoutAlign="center">
-        <button mat-raised-button color="accent">{{ 'CHAT.OPEN_DASHBOARD' | translate }}</button>
+        <button mat-raised-button color="accent">{{ 'CHAT.MANAGER.ADMIN.OPEN' | translate }}</button>
       </div>
     </div>
     <div fxLayout="column" fxLayoutAlign="center" *ngIf="chatIframeService.streamId">( {{ chatIframeService.streamId }} )</div>
