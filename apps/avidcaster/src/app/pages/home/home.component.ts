@@ -26,12 +26,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       title: _('PITCH.CHAT.MANAGER.TITLE'),
       description: _('PITCH.CHAT.MANAGER.DESCRIPTION'),
-      image: '/assets/images/misc/chat-manager-viewer.png',
+      image: '/assets/images/misc/chat-manager-overlay.png',
     },
     {
       title: _('PITCH.CHAT.MANAGER.ADMIN.TITLE'),
       description: _('PITCH.CHAT.MANAGER.ADMIN.DESCRIPTION'),
-      image: '/assets/images/misc/chat-manager-overlay.png',
+      image: '/assets/images/misc/chat-manager-admin.png',
     },
     {
       title: _('PITCH.ANNOTATE.TITLE'),
