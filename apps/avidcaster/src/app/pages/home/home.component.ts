@@ -24,14 +24,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   logoSize = 'large';
   pitchList = [
     {
-      title: _('PITCH.OVERLAY.TITLE'),
-      description: _('PITCH.OVERLAY.DESCRIPTION'),
-      image: '/assets/images/misc/overlay-viewer.png',
+      title: _('PITCH.CHAT.MANAGER.TITLE'),
+      description: _('PITCH.CHAT.MANAGER.DESCRIPTION'),
+      image: '/assets/images/misc/chat-manager-viewer.png',
     },
     {
-      title: _('PITCH.OVERLAY_ADMIN.TITLE'),
-      description: _('PITCH.OVERLAY_ADMIN.DESCRIPTION'),
-      image: '/assets/images/misc/overlay-admin.png',
+      title: _('PITCH.CHAT.MANAGER.ADMIN.TITLE'),
+      description: _('PITCH.CHAT.MANAGER.ADMIN.DESCRIPTION'),
+      image: '/assets/images/misc/chat-manager-overlay.png',
     },
     {
       title: _('PITCH.ANNOTATE.TITLE'),

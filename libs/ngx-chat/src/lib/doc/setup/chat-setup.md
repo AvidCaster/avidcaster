@@ -1,8 +1,8 @@
-# Setup - `AvidCaster Chat Overlay` <a href="chat/overlay/screen"><img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png"></a>
+# <a href="chat/manager/admin"><img style="margin-bottom: -6px" width="30" src="./assets/images/logos/logo-small.png"></a> `AvidCaster's Chat Manager - Setup`
 
 ## `Description`
 
-`Avidcaster` chat overlay feature works with `chrome extensions` in providing a low-cost lower-third [video chat overlay](chat/overlay/screen).
+`Avidcaster`'s chat manager works with `Google Chrome`, `Brave Browser`, `Chromium Browser` and `Microsoft Edge` extensions in providing a low-cost live chat management, as well as lower-third [video chat overlay](chat/manager/admin).
 
 Supported chats: `YouTube` & `Twitch`.
 
@@ -10,9 +10,13 @@ Supported chats: `YouTube` & `Twitch`.
 
 ## `Installation`
 
-Install the <a href="https://chrome.google.com/webstore/detail/avidcaster-chat-overlay/hjccfhnlacfanigjnfngjmeekjmnajng" target="_blank">Avidcaster Overlay Chat</a> extension.
+Install the <a href="https://chrome.google.com/webstore/detail/avidcaster-chat-overlay/hjccfhnlacfanigjnfngjmeekjmnajng" target="_blank">Avidcaster's Chat Manager</a> extension.
 
-## `Open YouTube Chat Overlay - Popup`
+## `Configure Ad, Popup blockers`
+
+Visit <a href="https://avidcaster.net" target="_blank">https://avidcaster.net</a>, and disable `ad` and `popup` blocker on `avidcaster.net` so it can process your incoming chats.
+
+## `Open YouTube Chat Manager - Popup`
 
 Open a your live YouTube stream and click on the Popup Chat button, as per the following image.
 
@@ -20,12 +24,12 @@ Open a your live YouTube stream and click on the Popup Chat button, as per the f
 <img src="./assets/images/howto/YoutubeChatPopup.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
-## `Open AvidCaster Chat Overlay - Popup`
+## `AvidCaster Chat Manager - Popup`
 
-Click on "Open Overlay" as per the following image.
+Click on "Open Chat Manager" as per the following image.
 
 <p>
-<img src="./assets/images/howto/OpenOverlay.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/ChatManagerDashboard.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
 ## `View AvidCaster Chat Overlay Admin `
@@ -33,7 +37,7 @@ Click on "Open Overlay" as per the following image.
 Overlay window will pop out as per the following image.
 
 <p>
-<img src="./assets/images/howto/OverlayAdmin.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/ChatManagerAdmin.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
 ## `YouTube Chat Overlay - Video Switcher Setup`
@@ -52,5 +56,5 @@ Play with the mask, clip/grain to fine tune as per your liking.
 YouTube Chat Overlay in action - Now go impress your audience.
 
 <p>
-<img src="./assets/images/howto/Overlay.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/ChatOverlay.png" style="margin: 0 auto; width:100%;"/>
 </p>

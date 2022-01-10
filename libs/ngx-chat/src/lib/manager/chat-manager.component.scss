@@ -7,7 +7,7 @@
   font-family: Helvetica, Geneva, Verdana, Arial, sans-serif;
 }
 
-#chat-overlay-header {
+#chat-manager-header {
   min-width: 100vw;
   width: 100vw;
   height: calc(50vh - 90px);
@@ -17,7 +17,7 @@
   overflow-y: scroll;
 }
 
-#chat-overlay-middle {
+#chat-manager-middle {
   width: 100vw;
   min-height: 91px;
   height: 91px;
@@ -25,7 +25,7 @@
   padding: 1px 0 11px 0;
 }
 
-#chat-overlay-footer {
+#chat-manager-footer {
   width: 100vw;
   min-height: 50vh;
   height: 50vh;

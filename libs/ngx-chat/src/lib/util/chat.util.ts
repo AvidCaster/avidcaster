@@ -8,7 +8,7 @@
 
 import { DeepReadonly } from 'ts-essentials';
 
-import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
+import { CHAT_MANAGER_ADMIN_URL, ChatSupportedSites } from '../chat.default';
 import {
   ChatMessageItem,
   ChatMessageKeywordsFilterType,
@@ -143,7 +143,7 @@ export const searchByKeywords = (
  * @param width width of the window
  * @param height high of the window
  */
-export const openOverlayWindowScreen = (
+export const openManagerAdmin = (
   targetWindow: Window,
   width = 1280,
   height = 720,
@@ -153,7 +153,7 @@ export const openOverlayWindowScreen = (
   const restrictedAttrs =
     'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, copyhistory=no';
   return targetWindow.open(
-    CHAT_OVERLAY_SCREEN_URL,
+    CHAT_MANAGER_ADMIN_URL,
     '_blank',
     `${restrictedAttrs}, width=${width},height=${height},left=${left},top=${top}`
   );

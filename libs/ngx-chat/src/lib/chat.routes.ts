@@ -12,7 +12,7 @@ import { i18nExtractor as _ } from '@fullerstack/ngx-i18n';
 import { ChatOverviewComponent } from './doc/overview/chat-overview.component';
 import { ChatSetupComponent } from './doc/setup/chat-setup.component';
 import { ChatIframeComponent } from './iframe/chat-iframe.component';
-import { ChatOverlayComponent } from './overlay/chat-overlay.component';
+import { ChatManagerAdminComponent } from './manager/chat-manager.component';
 
 export const chatRoutes: Routes = [
   {
@@ -29,7 +29,7 @@ export const chatRoutes: Routes = [
     },
   },
   {
-    path: 'overlay',
+    path: 'manager',
     children: [
       {
         path: '',
@@ -37,11 +37,11 @@ export const chatRoutes: Routes = [
         redirectTo: 'overview',
       },
       {
-        path: 'screen',
-        component: ChatOverlayComponent,
+        path: 'admin',
+        component: ChatManagerAdminComponent,
         data: {
-          title: _('CHAT.OVERLAY'),
-          description: _('CHAT.OVERLAY_DESC'),
+          title: _('CHAT.MANAGER_ADMIN'),
+          description: _('CHAT.MANAGER_ADMIN_DESC'),
         },
       },
       {
