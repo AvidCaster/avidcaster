@@ -8,7 +8,13 @@
 
 import { DeepReadonly } from 'ts-essentials';
 
-import { CHAT_OVERLAY_SCREEN_URL, ChatSupportedSites } from '../chat.default';
+import {
+  CHAT_DASHBOARD_DEFAULT_HEIGHT,
+  CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET,
+  CHAT_DASHBOARD_DEFAULT_WIDTH,
+  CHAT_OVERLAY_SCREEN_URL,
+  ChatSupportedSites,
+} from '../chat.default';
 import {
   ChatMessageItem,
   ChatMessageKeywordsFilterType,
@@ -155,6 +161,45 @@ export const openOverlayWindowScreen = (
     '_blank',
     `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width},height=${height},left=${left},top=${top}`
   );
+};
+
+/**
+ * Resize and center the chat overlay screen
+ * @param winDow Window object
+ */
+export const getDashboardCoordinates = (
+  winDow: Window
+): { width: number; height: number; top: number; left: number } => {
+  // coordinates of the chat dashboard
+  let top = 0;
+  let left = 0;
+
+  // we take all the width up to the default chat width
+  let width = CHAT_DASHBOARD_DEFAULT_WIDTH;
+  if (winDow.screen.availWidth <= CHAT_DASHBOARD_DEFAULT_WIDTH) {
+    width = winDow.screen.availWidth;
+  } else {
+    left = winDow.screen.availWidth / 2 - winDow.top.outerWidth / 2;
+  }
+
+  // we take all the height up to the default chat height minus the header (offset)
+  let height = CHAT_DASHBOARD_DEFAULT_HEIGHT;
+  if (winDow.screen.availHeight <= CHAT_DASHBOARD_DEFAULT_HEIGHT) {
+    height = winDow.screen.availHeight - CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+    top = CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET * 2;
+  } else {
+    top =
+      winDow.top.screen.availHeight / 2 -
+      winDow.top.outerHeight / 2 +
+      CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+  }
+
+  return {
+    width,
+    height,
+    top,
+    left,
+  };
 };
 
 export const storageBroadcast = (storageObj: Storage, key: string, value: string): void => {
