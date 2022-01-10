@@ -36,6 +36,7 @@ import { DeepReadonly } from 'ts-essentials';
 import {
   CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
   CHAT_DASHBOARD_DEFAULT_HEIGHT,
+  CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET,
   CHAT_DASHBOARD_DEFAULT_TOP,
   CHAT_DASHBOARD_DEFAULT_WIDTH,
   CHAT_HORIZONTAL_POSITION_MID_LEVEL_DEFAULT_VALUE,
@@ -311,19 +312,41 @@ export class ChatService implements OnDestroy {
     );
   }
 
-  private centerNewChatDashboard(defaultSize = true) {
+  private centerNewChatDashboard() {
     if (!this.isRunningInIframeContext) {
       // only center if not in iframe
-      const left = this.uix.window.screen.width / 2 - this.uix.window.top.outerWidth / 2;
-      const top = this.uix.window.top.screen.height / 2 - this.uix.window.top.outerHeight / 2;
+
+      // coordinates of the chat dashboard
+      let top = 0;
+      let left = 0;
+
+      // we take all the width up to the default chat width
+      let width = CHAT_DASHBOARD_DEFAULT_WIDTH;
+      if (this.uix.window.screen.availWidth <= CHAT_DASHBOARD_DEFAULT_WIDTH) {
+        width = this.uix.window.screen.availWidth;
+      } else {
+        left = this.uix.window.screen.availWidth / 2 - this.uix.window.top.outerWidth / 2;
+      }
+
+      // we take all the height up to the default chat height minus the header (offset)
+      let height = CHAT_DASHBOARD_DEFAULT_HEIGHT;
+      if (this.uix.window.screen.availHeight <= CHAT_DASHBOARD_DEFAULT_HEIGHT) {
+        height = this.uix.window.screen.availHeight - CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+        top = CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+      } else {
+        top =
+          this.uix.window.top.screen.availHeight / 2 -
+          this.uix.window.top.outerHeight / 2 +
+          CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+      }
+
+      console.log(top, left, width, height);
 
       this.uix.window.moveTo(left, top);
 
-      if (defaultSize) {
-        setTimeout(() => {
-          this.uix.window.resizeTo(CHAT_DASHBOARD_DEFAULT_WIDTH, CHAT_DASHBOARD_DEFAULT_HEIGHT);
-        }, 0);
-      }
+      setTimeout(() => {
+        this.uix.window.resizeTo(width, height);
+      }, 100);
     }
   }
 

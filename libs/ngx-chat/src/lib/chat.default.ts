@@ -169,3 +169,4 @@ export const CHAT_DASHBOARD_DEFAULT_WIDTH = 1920;
 export const CHAT_DASHBOARD_DEFAULT_HEIGHT = 1080;
 export const CHAT_DASHBOARD_DEFAULT_TOP = 20; // pixels
 export const CHAT_DASHBOARD_DEFAULT_LEFT = 20; // pixels
+export const CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET = 20; // pixels
