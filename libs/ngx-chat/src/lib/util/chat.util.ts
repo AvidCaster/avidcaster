@@ -150,10 +150,12 @@ export const openOverlayWindowScreen = (
   top = 100,
   left = 100
 ): Window => {
+  const restrictedAttrs =
+    'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, copyhistory=no';
   return targetWindow.open(
     CHAT_OVERLAY_SCREEN_URL,
     '_blank',
-    `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width},height=${height},left=${left},top=${top}`
+    `${restrictedAttrs}, width=${width},height=${height},left=${left},top=${top}`
   );
 };
 

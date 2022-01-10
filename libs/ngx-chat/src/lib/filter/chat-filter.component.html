@@ -81,14 +81,15 @@
       <fullerstack-chat-options></fullerstack-chat-options>
     </mat-menu>
 
-    <button
+    <!-- <button
       matTooltipPosition="after"
       matTooltip="{{ (chatService?.layout?.state?.isFullScreen ? 'COMMON.WINDOW_SCREEN' : 'COMMON.FULLSCREEN') | translate }}"
       mat-mini-fab
       (click)="toggleFullscreen()"
     >
       <mat-icon [svgIcon]="chatService.layout.state.isFullScreen ? 'arrow-collapse' : 'arrow-expand'"></mat-icon>
-    </button>
+    </button> -->
+
     <button
       matTooltipPosition="after"
       matTooltip="{{ 'COMMON.HOME' | translate }}"
