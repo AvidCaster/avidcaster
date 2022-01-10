@@ -41,6 +41,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private ctx: CanvasRenderingContext2D | undefined | null;
   private trashedLines: Line[] = [];
   private lines: Line[] = [];
+  private canFade = false;
 
   constructor(readonly uix: UixService, readonly annotation: AnnotatorService) {}
 
@@ -65,7 +66,7 @@ export class DrawComponent implements OnInit, OnDestroy {
   private faderSub() {
     interval(ANNOTATOR_FADER_FREQUENCY_IN_MILLISECONDS)
       .pipe(
-        filter(() => this.annotation.state.fader),
+        filter(() => this.annotation.state.fader && this.canFade),
         takeUntil(this.destroy$)
       )
       .subscribe({
@@ -181,6 +182,9 @@ export class DrawComponent implements OnInit, OnDestroy {
               if (!line) {
                 line = this.annotation.cloneLine();
               }
+
+              // fader should be disabled when drawing
+              this.canFade = false;
             }),
             finalize(() => {
               if (line.points.length) {
@@ -202,6 +206,9 @@ export class DrawComponent implements OnInit, OnDestroy {
                 // remove the temporary line from the foreground svg
                 this.svgEl.innerHTML = '';
                 line = undefined;
+
+                // fader can be enabled again now that the drawing is done
+                this.canFade = true;
               }
             }),
             takeUntil(
