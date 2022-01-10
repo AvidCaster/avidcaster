@@ -317,60 +317,15 @@ export class ChatService implements OnDestroy {
       // only center if not in iframe
 
       // coordinates of the chat dashboard
-      let top = 0;
-      let left = 0;
+      const cords = this.screenResizeCords();
 
-      // we take all the width up to the default chat width
-      let width = CHAT_DASHBOARD_DEFAULT_WIDTH;
-      if (this.uix.window.screen.availWidth <= CHAT_DASHBOARD_DEFAULT_WIDTH) {
-        width = this.uix.window.screen.availWidth;
-      } else {
-        left = this.uix.window.screen.availWidth / 2 - this.uix.window.top.outerWidth / 2;
-      }
+      console.log(cords);
 
-      // we take all the height up to the default chat height minus the header (offset)
-      let height = CHAT_DASHBOARD_DEFAULT_HEIGHT;
-      if (this.uix.window.screen.availHeight <= CHAT_DASHBOARD_DEFAULT_HEIGHT) {
-        height = this.uix.window.screen.availHeight - CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
-        top = CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
-      } else {
-        top =
-          this.uix.window.top.screen.availHeight / 2 -
-          this.uix.window.top.outerHeight / 2 +
-          CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
-      }
-
-      console.log(top, left, width, height);
-
-      this.uix.window.moveTo(left, top);
+      this.uix.window.resizeTo(cords.width, cords.height);
 
       setTimeout(() => {
-        this.uix.window.resizeTo(width, height);
-      }, 100);
-    }
-  }
-
-  private maxNewChatDashboard() {
-    // only center if not in iframe
-    if (!this.isRunningInIframeContext) {
-      this.uix.window.moveTo(0, CHAT_DASHBOARD_DEFAULT_TOP);
-
-      setTimeout(() => {
-        this.uix.window.resizeTo(
-          this.uix.window.screen.width,
-          this.uix.window.screen.height - CHAT_DASHBOARD_DEFAULT_TOP
-        );
-      }, 0);
-    }
-  }
-
-  toggleMaxScreen() {
-    const outerWidth = this.uix.window.top.outerWidth;
-
-    if (outerWidth > CHAT_DASHBOARD_DEFAULT_WIDTH) {
-      this.centerNewChatDashboard();
-    } else {
-      this.maxNewChatDashboard();
+        this.uix.window.moveTo(cords.left, cords.top);
+      }, 500);
     }
   }
 
@@ -423,6 +378,41 @@ export class ChatService implements OnDestroy {
       this.isAudioPlaying = play;
     }
     this.audioPlayingOb$.next(this.isAudioPlaying);
+  }
+
+  // this returns the proper cords for the dashboard, we running in its context
+  // used to resize and move the dashboard
+  screenResizeCords() {
+    // coordinates of the chat dashboard
+    let top = 0;
+    let left = 0;
+
+    // we take all the width up to the default chat width
+    let width = CHAT_DASHBOARD_DEFAULT_WIDTH;
+    if (this.uix.window.screen.availWidth <= CHAT_DASHBOARD_DEFAULT_WIDTH) {
+      width = this.uix.window.screen.availWidth;
+    } else {
+      left = this.uix.window.screen.availWidth / 2 - this.uix.window.top.outerWidth / 2;
+    }
+
+    // we take all the height up to the default chat height minus the header (offset)
+    let height = CHAT_DASHBOARD_DEFAULT_HEIGHT;
+    if (this.uix.window.screen.availHeight <= CHAT_DASHBOARD_DEFAULT_HEIGHT) {
+      height = this.uix.window.screen.availHeight - CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+      top = CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET * 2;
+    } else {
+      top =
+        this.uix.window.top.screen.availHeight / 2 -
+        this.uix.window.top.outerHeight / 2 +
+        CHAT_DASHBOARD_DEFAULT_HEIGHT_OFFSET;
+    }
+
+    return {
+      width,
+      height,
+      top,
+      left,
+    };
   }
 
   ngOnDestroy() {
