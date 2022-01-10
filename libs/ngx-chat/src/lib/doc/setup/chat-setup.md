@@ -14,7 +14,7 @@ Install the <a href="https://chrome.google.com/webstore/detail/avidcaster-chat-o
 
 ## `Configure Ad, Popup blockers`
 
-Visit <a href="https://avidcaster.net" target="_blank">https://avidcaster.net</a>, and disable `ad` and `popup` blocker on `avidcaster.net` so it can process your incoming chats.
+Visit <a href="https://avidcaster.net" target="_blank">https://avidcaster.net</a>, and **disable** **ad** and **popup** blocker on **avidcaster.net** so it can process your incoming chats.
 
 ## `Open YouTube Chat Manager - Popup`
 

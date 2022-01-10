@@ -22,15 +22,15 @@ export const layoutMenuTree: MenuItem[] = [
       {
         name: _('COMMON.OVERVIEW'),
         icon: 'magnify-expand',
-        link: '/chat/overlay/overview',
+        link: '/chat/manager/overview',
       },
       {
         name: _('COMMON.SETUP'),
         icon: 'cog',
-        link: '/chat/overlay/setup',
+        link: '/chat/manager/setup',
       },
       // { // available via chat overview
-      //   name: _('COMMON.SCREEN'),
+      //   name: _('COMMON.MANAGER_ADMIN'),
       //   icon: 'fit-to-screen',
       //   link: '/chat/manager/admin',
       // },
