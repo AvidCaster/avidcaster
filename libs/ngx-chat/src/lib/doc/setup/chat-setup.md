@@ -29,12 +29,12 @@ Open a your live YouTube stream and click on the Popup Chat button, as per the f
 Click on "Open Chat Manager" as per the following image.
 
 <p>
-<img src="./assets/images/howto/ChatManagerDashboard.png" style="margin: 0 auto; width:100%;"/>
+<img src="./assets/images/howto/ChatPopup.png" style="margin: 0 auto; width:100%;"/>
 </p>
 
-## `View AvidCaster Chat Overlay Admin `
+## `AvidCaster Chat Manager Admin Dashboard`
 
-Overlay window will pop out as per the following image.
+Chat Manager Admin Dashboard will pop out as per the following image.
 
 <p>
 <img src="./assets/images/howto/ChatManagerAdmin.png" style="margin: 0 auto; width:100%;"/>
