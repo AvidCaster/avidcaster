@@ -49,14 +49,14 @@ export const ChatSupportedSites = {
 };
 
 export const CHAT_IFRAME_URL = '/chat/iframe';
-export const CHAT_OVERLAY_SCREEN_URL = '/chat/overlay/screen';
-export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_OVERLAY_SCREEN_URL];
+export const CHAT_MANAGER_ADMIN_URL = '/chat/manager/admin';
+export const CHAT_URL_FULLSCREEN_LIST = [CHAT_IFRAME_URL, CHAT_MANAGER_ADMIN_URL];
 
 export const CHAT_STORAGE_KEY_PREFIX = 'avidcaster-chat';
 export const CHAT_STORAGE_BROADCAST_KEY_PREFIX = `${CHAT_STORAGE_KEY_PREFIX}-broadcast`;
 export const CHAT_STORAGE_MESSAGE_HEARTBEAT_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-heartbeat`;
-export const CHAT_STORAGE_OVERLAY_REQUEST_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-request`;
-export const CHAT_STORAGE_OVERLAY_RESPONSE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-overlay-response`;
+export const CHAT_STORAGE_MANAGER_IFRAME_REQUEST_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-iframe-request`;
+export const CHAT_STORAGE_MANAGER_ADMIN_RESPONSE_KEY = `${CHAT_STORAGE_BROADCAST_KEY_PREFIX}-admin-response`;
 export const CHAT_STORAGE_STATE_KEY = `${CHAT_STORAGE_KEY_PREFIX}-storage-state`;
 
 export const CHAT_YOUTUBE_DEFAULT_AVATAR = './assets/images/misc/avatar-default-youtube.png';
@@ -71,8 +71,8 @@ export const CHAT_DEFAULT_PREFIX = 'avidcaster';
  */
 const WelcomeChat: ChatMessageItem = {
   author: 'AvidCaster',
-  message: 'Welcome to AvidCaster chat overlay!',
-  html: 'Welcome to AvidCaster chat overlay!',
+  message: 'Welcome to AvidCaster Chat Manager Admin!',
+  html: 'Welcome to AvidCaster Chat Manager Admin!',
   avatarUrl: CHAT_DEFAULT_LOGO,
   messageType: ChatMessageType.Common,
   streamId: CHAT_DEFAULT_PREFIX,

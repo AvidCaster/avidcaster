@@ -11,7 +11,7 @@ import { LoggerService } from '@fullerstack/ngx-logger';
 import { SystemService } from '@fullerstack/ngx-system';
 import { Subject, takeUntil } from 'rxjs';
 
-import { CHAT_OVERLAY_SCREEN_URL } from '../chat.default';
+import { CHAT_MANAGER_ADMIN_URL } from '../chat.default';
 import { ChatService } from '../chat.service';
 import { ChatIframeService } from './chat-iframe.service';
 
@@ -24,7 +24,7 @@ import { ChatIframeService } from './chat-iframe.service';
 export class ChatIframeComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   overlayOpenRequestInProgress = false;
-  overlayPath = CHAT_OVERLAY_SCREEN_URL;
+  overlayPath = CHAT_MANAGER_ADMIN_URL;
 
   constructor(
     readonly cdRef: ChangeDetectorRef,

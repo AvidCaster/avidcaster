@@ -13,17 +13,17 @@ import { Observable, Subject, distinctUntilChanged, filter, fromEvent, map, take
 
 import {
   CHAT_BACKGROUND_COLOR_DEFAULT_VALUE,
-  CHAT_STORAGE_OVERLAY_REQUEST_KEY,
+  CHAT_STORAGE_MANAGER_IFRAME_REQUEST_KEY,
 } from '../chat.default';
 import { ChatService } from '../chat.service';
 
 @Component({
-  selector: 'fullerstack-chat-overlay',
-  templateUrl: './chat-overlay.component.html',
-  styleUrls: ['./chat-overlay.component.scss'],
+  selector: 'fullerstack-chat-manager',
+  templateUrl: './chat-manager.component.html',
+  styleUrls: ['./chat-manager.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatOverlayComponent implements OnInit, OnDestroy {
+export class ChatManagerAdminComponent implements OnInit, OnDestroy {
   @ViewChild('scrollableList', { static: true }) scrollableList: ElementRef;
   private onStorageOb$: Observable<Event>;
   private destroy$ = new Subject<boolean>();
@@ -49,16 +49,16 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
     this.subBackgroundColor();
     this.subScrollEvent();
     this.addAttrStyles();
-    this.chatService.broadcastNewChatOverlayResponse();
-    this.logger.info('ChatOverlayComponent: Initialized');
+    this.chatService.broadcastNewChatManagerResponse();
+    this.logger.info('ChatManagerAdminComponent: Initialized');
   }
 
   private subStorage() {
     this.zone.runOutsideAngular(() => {
       this.onStorageOb$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_OVERLAY_REQUEST_KEY) {
-            // we have received a request to open the chat overlay
+          if (event.key === CHAT_STORAGE_MANAGER_IFRAME_REQUEST_KEY) {
+            // we have received a request to open the chat manager
             // we may not be in focus, so let's close this window
             // a new one will be spawned (workaround for .focus() not working)
             this.chatService.layout.uix.closeWindow();
@@ -120,14 +120,14 @@ export class ChatOverlayComponent implements OnInit, OnDestroy {
   }
 
   addAttrStyles(): void {
-    this.chatService.uix.addClassToBody('chat-overlay');
+    this.chatService.uix.addClassToBody('chat-manager');
     const drawerEl = this.chatService.uix.window.document.querySelector('.mat-drawer-content');
     // set hidden overflow on drawer
     this.chatService.uix.addClass(drawerEl as HTMLElement, 'no-scroll');
   }
 
   removeAttrStyles(): void {
-    this.chatService.uix.removeClassFromBody('chat-overlay');
+    this.chatService.uix.removeClassFromBody('chat-manager');
     const drawerEl = this.chatService.uix.window.document.querySelector('.mat-drawer-content');
     // unset hidden overflow on drawer
     this.chatService.uix.removeClass(drawerEl as HTMLElement, 'no-scroll');

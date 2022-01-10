@@ -20,8 +20,8 @@ import {
   CHAT_DASHBOARD_DEFAULT_WIDTH,
   CHAT_MESSAGE_LIST_BUFFER_OFFSET_SIZE,
   CHAT_MESSAGE_LIST_BUFFER_SIZE,
-  CHAT_STORAGE_OVERLAY_REQUEST_KEY,
-  CHAT_STORAGE_OVERLAY_RESPONSE_KEY,
+  CHAT_STORAGE_MANAGER_ADMIN_RESPONSE_KEY,
+  CHAT_STORAGE_MANAGER_IFRAME_REQUEST_KEY,
   ChatSupportedSites,
 } from '../chat.default';
 import {
@@ -36,7 +36,7 @@ import {
   ChatUpstreamAction,
 } from '../chat.model';
 import { chatDatabaseInstance } from '../util/chat.db';
-import { openOverlayWindowScreen, storageBroadcast } from '../util/chat.util';
+import { openManagerAdmin, storageBroadcast } from '../util/chat.util';
 import { parseTwitchChat } from '../util/chat.util.twitch';
 import { parseYouTubeChat } from '../util/chat.util.youtube';
 
@@ -48,8 +48,8 @@ export class ChatIframeService implements OnDestroy {
   database = chatDatabaseInstance;
   private hostReadyOb$ = new BehaviorSubject<ChatHostReady>({ ready: false });
   hostReady$ = this.hostReadyOb$.asObservable();
-  private overlayReadyOb$ = new Subject<boolean>();
-  overlayReady$ = this.overlayReadyOb$.asObservable();
+  private chatManagerReadyOb$ = new Subject<boolean>();
+  overlayReady$ = this.chatManagerReadyOb$.asObservable();
   dispatchedChatMessageIds: string[] = [];
   currentHost: ChatHosts;
   streamId: string;
@@ -98,8 +98,8 @@ export class ChatIframeService implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.uix.onStorage$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (event: StorageEvent) => {
-          if (event.key === CHAT_STORAGE_OVERLAY_RESPONSE_KEY) {
-            return this.handleNewOverlayResponseEvent();
+          if (event.key === CHAT_STORAGE_MANAGER_ADMIN_RESPONSE_KEY) {
+            return this.handleNewManagerResponseEvent();
           }
         },
       });
@@ -125,7 +125,7 @@ export class ChatIframeService implements OnDestroy {
   }
 
   /**
-   * Store the message in indexed db for the overlay process to retrieve
+   * Store the message in indexed db for the manager process to retrieve
    * @param host the host of the message, e.g. twitch, youtube
    * @param chat the chat message
    */
@@ -190,7 +190,7 @@ export class ChatIframeService implements OnDestroy {
   }
 
   /**
-   * We have heard from overlay process, we get ready to process messages
+   * We have heard from manager process, we get ready to process messages
    * @param host the host of the message, e.g. twitch, youtube
    */
   private setNorthBoundObserverReady(host: ChatHosts) {
@@ -243,19 +243,19 @@ export class ChatIframeService implements OnDestroy {
   }
 
   /**
-   * Ping the overlay process to see if it is alive and ready to receive messages
+   * Ping the chat manager process to see if it is alive and ready to receive messages
    * We wait for the response to arrive within a specified amount of time
-   * If we don't receive a response within that time, we assume the overlay process not there
-   * If so we spawn a new overlay process (window)
+   * If we don't receive a response within that time, we assume the chat manager process not being there
+   * If so we spawn a new chat manager process (window)
    */
   broadcastOverlayRequest() {
     this.popupBlocked = false;
 
-    const key = CHAT_STORAGE_OVERLAY_REQUEST_KEY;
+    const key = CHAT_STORAGE_MANAGER_IFRAME_REQUEST_KEY;
     storageBroadcast(this.uix.localStorage, key, JSON.stringify({ from: 'iframe' }));
 
     setTimeout(() => {
-      const newWin = openOverlayWindowScreen(
+      const newWin = openManagerAdmin(
         this.uix.window,
         CHAT_DASHBOARD_DEFAULT_WIDTH,
         CHAT_DASHBOARD_DEFAULT_HEIGHT
@@ -265,17 +265,17 @@ export class ChatIframeService implements OnDestroy {
         // popup blocked
         this.popupBlocked = true;
       } else {
-        this.overlayReadyOb$.next(true);
+        this.chatManagerReadyOb$.next(true);
       }
     }, 1000);
   }
 
   /**
-   * We have heard from the overlay process, we get ready to process messages
+   * We have heard from the manager process, we get ready to process messages
    */
-  private handleNewOverlayResponseEvent() {
-    this.overlayReadyOb$.next(true);
-    this.logger.info('Overlay response received');
+  private handleNewManagerResponseEvent() {
+    this.chatManagerReadyOb$.next(true);
+    this.logger.info('Chat manager response received');
   }
 
   /**

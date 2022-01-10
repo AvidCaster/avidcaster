@@ -16,23 +16,23 @@ export const layoutMenuTree: MenuItem[] = [
     link: '/annotate/draw',
   },
   {
-    name: _('CHAT.OVERLAY'),
+    name: _('CHAT.MANAGER_ADMIN'),
     icon: 'message-text',
     children: [
       {
         name: _('COMMON.OVERVIEW'),
         icon: 'magnify-expand',
-        link: '/chat/overlay/overview',
+        link: '/chat/manager/overview',
       },
       {
         name: _('COMMON.SETUP'),
         icon: 'cog',
-        link: '/chat/overlay/setup',
+        link: '/chat/manager/setup',
       },
       // { // available via chat overview
-      //   name: _('COMMON.SCREEN'),
+      //   name: _('COMMON.MANAGER_ADMIN'),
       //   icon: 'fit-to-screen',
-      //   link: '/chat/overlay/screen',
+      //   link: '/chat/manager/admin',
       // },
     ],
   },

@@ -1,7 +1,7 @@
-<div id="chat-overlay-header" #scrollableList [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
+<div id="chat-manager-header" #scrollableList [dir]="chatService.state.isLtR ? 'ltr' : 'rtl'">
   <fullerstack-chat-list></fullerstack-chat-list>
 </div>
-<div id="chat-overlay-middle">
+<div id="chat-manager-middle">
   <div fxLayout="column" fxLayoutGap="5px">
     <mat-divider></mat-divider>
     <div fxLayoutAlign="space-around center">
@@ -14,7 +14,7 @@
     <mat-divider></mat-divider>
   </div>
 </div>
-<div id="chat-overlay-footer" [ngStyle]="{ backgroundColor: backgroundColor }">
+<div id="chat-manager-footer" [ngStyle]="{ backgroundColor: backgroundColor }">
   <div
     id="chat-selected"
     [ngStyle]="{ left: leftPosition, right: rightPosition }"
